@@ -1,0 +1,3 @@
+[submodule "mod/spm-headers"]
+	path = mod/spm-headers
+	url = https://github.com/SeekyCt/spm-headers.git

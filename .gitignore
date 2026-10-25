@@ -1,0 +1,22 @@
+# Nintendo data: never commit
+disc/
+*.iso
+*.wbfs
+*.dol
+*.rel
+*.bin
+!assets/**/*.bin
+
+# third-party reference repos (cloned separately)
+ref/
+
+# build output
+build/
+*.o
+*.d
+*.elf
+.ninja_*
+build.ninja
+__pycache__/
+*.pyc
+mod/out/

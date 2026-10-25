@@ -1,0 +1,100 @@
+"""Client side of the mod's mailbox (mod/include/mailbox.h). Keep the layout in sync with it."""
+
+import struct
+import time
+
+import dolphin_memory_engine as dme
+
+MAGIC = b"SPMAP_MAILBOX_v1"
+VERSION = 1
+RECV_SIZE = 16
+SENT_SIZE = 32
+
+MEM1_START = 0x80000000
+MEM1_SIZE = 0x01800000
+SCAN_CHUNK = 0x100000
+
+OFF_VERSION = 0x10
+OFF_MOD_STATE = 0x14
+OFF_RECV_COUNT = 0x18
+OFF_RECV_HANDLED = 0x1C
+OFF_RECV_ITEMS = 0x20
+OFF_SENT_COUNT = 0x40
+OFF_SENT_ACKED = 0x44
+OFF_SENT_LOCATIONS = 0x48
+
+STATE_NAMES = {0: "boot", 1: "title", 2: "in game"}
+
+
+class MailboxError(Exception):
+    pass
+
+
+class Mailbox:
+    def __init__(self):
+        self.addr = None
+
+    def connect(self, game_id: bytes = b"R8PE01"):
+        """Hooks Dolphin and finds the mailbox. Raises MailboxError if anything is missing."""
+        if not dme.is_hooked():
+            dme.hook()
+        if not dme.is_hooked():
+            raise MailboxError("Dolphin isn't running, or no game is loaded")
+        try:
+            found_id = dme.read_bytes(MEM1_START, 6)
+            if found_id != game_id:
+                raise MailboxError(f"Wrong game in Dolphin: {found_id!r}, expected {game_id!r}")
+            candidates = self._scan()
+            # the magic string also exists in the mod's constant data; the real mailbox has a version after it
+            versions = {addr: dme.read_word(addr + OFF_VERSION) for addr in candidates}
+        except RuntimeError as e:
+            # Dolphin closed or stopped the game mid-read
+            dme.un_hook()
+            raise MailboxError(f"Lost connection to Dolphin ({e})") from e
+        if not candidates:
+            raise MailboxError("Mod mailbox not found; is the mod loaded?")
+        matching = [addr for addr, v in versions.items() if v == VERSION]
+        if not matching:
+            raise MailboxError(f"Mod mailbox version {sorted(set(versions.values()))}, client expects {VERSION}")
+        self.addr = matching[0]
+
+    def _scan(self) -> list[int]:
+        """Every word-aligned address of MAGIC in MEM1."""
+        found = []
+        # chunks overlap by len(MAGIC) so a match can't straddle two reads
+        for start in range(MEM1_START, MEM1_START + MEM1_SIZE, SCAN_CHUNK):
+            size = min(SCAN_CHUNK + len(MAGIC), MEM1_START + MEM1_SIZE - start)
+            chunk = dme.read_bytes(start, size)
+            pos = chunk.find(MAGIC)
+            while pos != -1:
+                if (start + pos) % 4 == 0 and pos < SCAN_CHUNK:
+                    found.append(start + pos)
+                pos = chunk.find(MAGIC, pos + 1)
+        return found
+
+    def mod_state(self) -> int:
+        return dme.read_word(self.addr + OFF_MOD_STATE)
+
+    def give(self, item_id: int):
+        """Queues an item for the mod to give. Waits if the queue is full."""
+        while True:
+            count = dme.read_word(self.addr + OFF_RECV_COUNT)
+            handled = dme.read_word(self.addr + OFF_RECV_HANDLED)
+            if count - handled < RECV_SIZE:
+                break
+            time.sleep(0.05)
+        slot = self.addr + OFF_RECV_ITEMS + (count % RECV_SIZE) * 2
+        dme.write_bytes(slot, struct.pack(">H", item_id))
+        dme.write_word(self.addr + OFF_RECV_COUNT, count + 1)
+
+    def poll_sent(self) -> list[int]:
+        """Returns location ids reported since the last call, and acknowledges them."""
+        count = dme.read_word(self.addr + OFF_SENT_COUNT)
+        acked = dme.read_word(self.addr + OFF_SENT_ACKED)
+        locations = []
+        for i in range(acked, count):
+            slot = self.addr + OFF_SENT_LOCATIONS + (i % SENT_SIZE) * 4
+            locations.append(dme.read_word(slot))
+        if count != acked:
+            dme.write_word(self.addr + OFF_SENT_ACKED, count)
+        return locations
