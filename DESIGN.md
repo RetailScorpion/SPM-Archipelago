@@ -258,6 +258,32 @@ Disc extracted to `disc/DATA/` (game partition only). Reference repos are in `re
 - **Drawing text:** drawing from the seq main function only shows on the title screen; in maps the world is drawn over it. Use `dispEntry` on `CAM_ID_DEBUG_3D` (as spm-practice-codes does), though in-game notices should normally go through the game's own message system.
 - **Pickup reporting:** hooking `pouchAddItem` catches everything, including story events (a new file adds Mario through it). Real location checks have to be tied to specific events or world items, not to "an item was added".
 
+### Per-chapter story value experiment (mod 0.2-story): it works
+Implementation (`mod/source/storyvalue.cpp`): in the `SEQ_MAPCHANGE` init hook (`wp->p0` = destination map, before any of its scripts run), save `gp->gsw0` into the slot of the context being left, then load the slot of the context being entered.
+- Contexts come from the map prefix: `mac_` = hub, `he/mi/ta/sp/gn/wa/an/ls` = chapters 1–8, anything else = carry the value over.
+- The hub value is fixed, so anything a hub script writes is dropped (for example, the "entered the door" values).
+- Writing the real `gsw0`, not hooking `swByteGet`, means native code sees the same value as scripts.
+
+Tested in Dolphin, with the hub fixed at 65:
+| Step | Story values (hub / ch1 / ch2) | Result |
+|---|---|---|
+| Load save in Flipside | 65 / 11 / 66 | Pillar 1 has its heart, doors 1 and 2 open |
+| Gloam Valley first | ch2 66 → 67 → 68 → 69 | Tippi's intro, Door Key, locked door: all normal |
+| Return Pipe → Lineland | ch1 11 → 16 | Chapter 1 starts fresh; no flip until Bestovius |
+| Back to Gloam Valley | ch2 resumes at 69 | Door still unlocked, no intro cutscene |
+
+**Conclusion: chapters can be played out of order, and each keeps its own progress.** The core of §6 works.
+
+Problems found, all now design requirements:
+1. **Tippi is the "guide" (`guide.h`), not a Pixl.** The jump left guide `flag0` bit `0x80` (disable) set, so Tippi was gone everywhere. Clearing it brought her back after the next map change. The mod must force Tippi on (clear `0x80`) whenever she should be present. On US 1.0: `guideGetWork` = `0x8011EFD0`, guide work = `0x804CD398`.
+2. **Item 220 ("Tippi" Pixl) is an unused leftover.** Giving it adds a broken Tippi to the Pixl menu, and switching Pixls then crashes in `mot_pixl_change`. Never give it.
+3. **Flipping is gated by the story value (16 = Bestovius)**, per chapter: blocked in Ch1 at 11, allowed in Ch2 at 66+ without Bestovius. The `flip` option needs a hook on that check, driven by our own flag.
+4. **Chapter doors offer level select from the hub's value.** At 65, Chapter 1 counted as finished, so the door offered 1-1 to 1-4 although Chapter 1 was at 11. The mod has to decide what each door offers from that chapter's own progress.
+5. **Story items aren't given by the jump.** Peach, Thoreau, the Old Key and so on come from story events. In the randomizer they come from Archipelago anyway, but the start of a file must give everything the skipped prologue would (Tippi's guide flag, the Return Pipe).
+6. **Hub cutscenes keyed to earlier values don't run.** Merlon's Peach scene didn't trigger at 65. That's expected, and it's what the `open_hubs` flags are for.
+7. **The slots live in mod memory.** They reset when the game restarts. Next: keep them in the save file (unused GSW space), and make sure a save made in the hub stores the hub value.
+8. **Character items crash the world-item pickup.** Characters are added directly for now and need their own "joined" presentation.
+
 ### Useful tools found
 - `ref/spm-practice-codes`: warps, story-value editing and other debug features. Very useful for testing chapters out of order.
 - Skawo's Setup File Editor & Randomizer (linked from spm-docs): edits enemy and coin setups. It's not a progression randomizer, but it's useful for reading setup files.

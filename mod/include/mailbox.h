@@ -14,7 +14,7 @@
 namespace mod::mailbox {
 
 #define MAILBOX_MAGIC "SPMAP_MAILBOX_v1"
-#define MAILBOX_VERSION 1
+#define MAILBOX_VERSION 2
 #define MAILBOX_RECV_SIZE 16
 #define MAILBOX_SENT_SIZE 32
 
@@ -40,8 +40,11 @@ struct Mailbox
 /* 0x40 */ u32 sentCount;         // written by the mod
 /* 0x44 */ u32 sentAcked;         // written by the client
 /* 0x48 */ u32 sentLocations[MAILBOX_SENT_SIZE];
+
+    // debugging
+/* 0xC8 */ void * storyState;     // storyvalue::StoryState, for the client to display
 };
-static_assert(sizeof(Mailbox) == 0xC8);
+static_assert(sizeof(Mailbox) == 0xCC);
 
 extern Mailbox gMailbox;
 

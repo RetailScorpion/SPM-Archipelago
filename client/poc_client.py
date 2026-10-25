@@ -27,13 +27,25 @@ NAMED_ITEMS = {
 }
 
 
-def watch_pickups(mb: Mailbox, lock: threading.Lock):
+def format_story(context, slots, live):
+    where = {-1: "other map", 0: "hub"}.get(context, f"chapter {context}")
+    chapters = " ".join(f"{i}:{v}" for i, v in enumerate(slots) if i > 0)
+    return f"{where}, story value {live} | hub {slots[0]} | {chapters}"
+
+
+def watch(mb: Mailbox, lock: threading.Lock):
+    last_story = None
     while True:
         with lock:
             locations = mb.poll_sent()
+            story = mb.story_state()
         for loc in locations:
             item = loc - POC_LOCATION_BASE
             print(f"\n[game] picked up item {item} (location {loc:#x})\n> ", end="", flush=True)
+        # print on map changes (context) and on story progress within the current map
+        if story[0] != (last_story or (None,))[0] or story[2] != (last_story or (0, 0, None))[2]:
+            print(f"\n[story] {format_story(*story)}\n> ", end="", flush=True)
+            last_story = story
         time.sleep(0.25)
 
 
@@ -47,7 +59,7 @@ def main():
     print(f"Connected. Mailbox at {mb.addr:#010x}, mod state: {STATE_NAMES.get(mb.mod_state(), '?')}")
 
     lock = threading.Lock()
-    threading.Thread(target=watch_pickups, args=(mb, lock), daemon=True).start()
+    threading.Thread(target=watch, args=(mb, lock), daemon=True).start()
 
     while True:
         try:
@@ -62,6 +74,7 @@ def main():
         elif cmd == "state":
             with lock:
                 print(STATE_NAMES.get(mb.mod_state(), "?"))
+                print(format_story(*mb.story_state()))
         elif cmd == "give":
             item = NAMED_ITEMS.get(arg.replace(" ", ""))
             if item is None:

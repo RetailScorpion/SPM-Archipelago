@@ -6,7 +6,7 @@ import time
 import dolphin_memory_engine as dme
 
 MAGIC = b"SPMAP_MAILBOX_v1"
-VERSION = 1
+VERSION = 2
 RECV_SIZE = 16
 SENT_SIZE = 32
 
@@ -22,6 +22,11 @@ OFF_RECV_ITEMS = 0x20
 OFF_SENT_COUNT = 0x40
 OFF_SENT_ACKED = 0x44
 OFF_SENT_LOCATIONS = 0x48
+OFF_STORY_STATE = 0xC8
+
+STORY_SLOT_COUNT = 9
+GP_PTR = 0x8056D198  # US 1.0: pointer to SpmarioGlobals
+GSW0_OFFSET = 0x140
 
 STATE_NAMES = {0: "boot", 1: "title", 2: "in game"}
 
@@ -86,6 +91,14 @@ class Mailbox:
         slot = self.addr + OFF_RECV_ITEMS + (count % RECV_SIZE) * 2
         dme.write_bytes(slot, struct.pack(">H", item_id))
         dme.write_word(self.addr + OFF_RECV_COUNT, count + 1)
+
+    def story_state(self) -> tuple[int, list[int], int]:
+        """(context, slots, live story value). Context: -1 none, 0 hub, 1-8 chapter."""
+        ptr = dme.read_word(self.addr + OFF_STORY_STATE)
+        raw = dme.read_bytes(ptr, 4 * (1 + STORY_SLOT_COUNT))
+        context, *slots = struct.unpack(f">{1 + STORY_SLOT_COUNT}i", raw)
+        live = struct.unpack(">i", dme.read_bytes(dme.read_word(GP_PTR) + GSW0_OFFSET, 4))[0]
+        return context, slots, live
 
     def poll_sent(self) -> list[int]:
         """Returns location ids reported since the last call, and acknowledges them."""

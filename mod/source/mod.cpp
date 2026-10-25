@@ -8,6 +8,7 @@
 
 #include <common.h>
 #include <spm/fontmgr.h>
+#include <spm/item_data_ids.h>
 #include <spm/itemdrv.h>
 #include <spm/mario.h>
 #include <spm/mario_pouch.h>
@@ -18,10 +19,11 @@
 
 #include "mailbox.h"
 #include "patch.h"
+#include "storyvalue.h"
 
 namespace mod {
 
-#define MOD_VERSION "0.1-poc"
+#define MOD_VERSION "0.2-story"
 
 // Stand-in location ids for the proof of concept: picking up item X reports location POC_LOCATION_BASE + X
 #define POC_LOCATION_BASE 0x10000
@@ -50,11 +52,33 @@ static void drawText(const char * msg, f32 y, wii::gx::GXColor colour)
     item-get sequence. Only one at a time; it's committed in the mailbox once collected.
 */
 
+// Frames to wait after a delivery before the next one, so the previous item-get sequence has started
+#define RECV_COOLDOWN_FRAMES 30
+
+static s32 sRecvCooldown;
+
 static void spawnNextReceived()
 {
-    s32 itemId;
-    if (sSpawnedItem != -1 || !mailbox::peekReceived(&itemId))
+    if (sRecvCooldown > 0)
+    {
+        sRecvCooldown--;
         return;
+    }
+
+    // Only while the player has control: not during cutscenes, text boxes or another item-get
+    s32 itemId;
+    if (sSpawnedItem != -1 || spm::mario::marioCtrlOffChk() || spm::mario::marioKeyOffChk()
+        || !mailbox::peekReceived(&itemId))
+        return;
+
+    // Characters crash the world-item pickup (they're never world items in vanilla), so they're
+    // added directly for now; they'll need their own presentation
+    if (itemId >= ITEM_ID_CHAR_START && itemId < ITEM_ID_CHAR_MAX)
+    {
+        sSpawnedItem = itemId;
+        spm::mario_pouch::pouchAddItem(itemId);  // the hook commits it
+        return;
+    }
 
     wii::mtx::Vec3 & pos = spm::mario::marioGetPtr()->position;
     spm::itemdrv::itemEntry(RECV_ITEM_NAME, itemId, 0, pos.x, pos.y, pos.z, nullptr, 0);
@@ -69,6 +93,7 @@ static bool pouchAddItemHook(s32 itemId)
     {
         // Mario collected the item we spawned for the client
         sSpawnedItem = -1;
+        sRecvCooldown = RECV_COOLDOWN_FRAMES;
         mailbox::commitReceived();
         wii::os::OSReport("[spmap] delivered received item %d\n", itemId);
     }
@@ -109,6 +134,10 @@ static void seq_mapChangeInitHook(spm::seqdrv::SeqWork * wp)
         wii::os::OSReport("[spmap] received item %d not collected before map change, will respawn\n", sSpawnedItem);
         sSpawnedItem = -1;
     }
+
+    // wp->p0 is the map being loaded; none of its scripts have run yet
+    storyvalue::onMapChange(wp->p0);
+
     seq_mapChangeInitReal(wp);
 }
 
@@ -117,6 +146,8 @@ void main()
     wii::os::OSReport("[spmap] SPM Archipelago " MOD_VERSION " loaded\n");
 
     mailbox::init();
+    storyvalue::init();
+    mailbox::gMailbox.storyState = &storyvalue::gStory;
 
     seq_titleMainReal = spm::seqdef::seq_data[spm::seqdrv::SEQ_TITLE].main;
     spm::seqdef::seq_data[spm::seqdrv::SEQ_TITLE].main = seq_titleMainHook;
