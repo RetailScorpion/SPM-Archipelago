@@ -123,10 +123,24 @@ static void seq_titleMainHook(spm::seqdrv::SeqWork * wp)
     drawText("SPM Archipelago " MOD_VERSION, 200.0f, {255, 255, 255, 255});
 }
 
+// Debug warp requested by the client (for testing): change map like a door would
+static void handleWarpRequest()
+{
+    mailbox::Mailbox & mb = mailbox::gMailbox;
+    if (mb.warpRequest == 0 || spm::seqdrv::seqGetSeq() != spm::seqdrv::SEQ_GAME)
+        return;
+    mb.warpRequest = 0;
+    mb.warpMap[sizeof(mb.warpMap) - 1] = '\0';
+    mb.warpDoor[sizeof(mb.warpDoor) - 1] = '\0';
+    wii::os::OSReport("[spmap] debug warp to %s (%s)\n", mb.warpMap, mb.warpDoor);
+    spm::seqdrv::seqSetSeq(spm::seqdrv::SEQ_MAPCHANGE, mb.warpMap, mb.warpDoor[0] ? mb.warpDoor : nullptr);
+}
+
 static spm::seqdef::SeqFunc * seq_gameMainReal;
 static void seq_gameMainHook(spm::seqdrv::SeqWork * wp)
 {
     mailbox::gMailbox.modState = mailbox::STATE_IN_GAME;
+    handleWarpRequest();
     seq_gameMainReal(wp);
     storyvalue::sync();
     spawnNextReceived();

@@ -322,18 +322,18 @@ Found with Dolphin's debugger (memory breakpoints) and the new `tools/evtdis.py`
 - Five Pixls (Thoreau, Boomer, Slim, Carrie, Dottie) have vanilla **safety nets** (`party_hoken_NN`): if the section ends without the Pixl, the game gives it. **Decision (user): remove them entirely** in the randomizer; the join scene stays a normal (unmissable) location.
 - **Pixl join scenes vanish once the chapter's story value passes them** (found by tracing what starts each join): Thoreau needs GSW 0 < 25, Boomer < 72/73, Thudley < 108, Carrie < 123, Fleep < 145, Cudge < 192, Dottie < 209. Slim: no story-value gate found at the first level (probably a flag; check). Barry, Piccolo, Dashell: flag-based. With the safety nets removed, **the mod must replace each of these story-value checks with "join location not collected"** so the scene stays available. Confirm in-game for at least one (e.g. raise Chapter 1 past 25 without the Thoreau scene and check the basement chest still appears after the fix).
 - **Join rooms that trap you until the Pixl frees you must lose the trap** (the join location can hold any item). Thoreau's room (`he2_07`): iron bars close and the exit is locked until Thoreau throws you out; the mod skips both. Check every other join (cages, sealed rooms) for the same problem.
-- **Pixl join status** (reviewed one Pixl at a time with the user). Until a join's room is safe without its Pixl, the vanilla Pixl stays **locked to its own join location** (not shuffled). Ways to make a room safe: remove the trap (as for Thoreau), or require that Pixl in logic for the location (only safe if the Return Pipe works there, since players can still walk in out of logic). The trap itself is tied to the location flag, so once collected (or after piping out) it won't trap again.
+- **Pixl join status** (reviewed one Pixl at a time with the user). **Decision (user): all joins are shuffled**; a room that traps you without its Pixl is escaped with the Return Pipe (which you start with). Each room still needs a test that the Return Pipe works there. Other ways to make a room safe, if the pipe doesn't work: remove the trap (as for Thoreau), or require that Pixl in logic for the location (only safe if the Return Pipe works there, since players can still walk in out of logic). The trap itself is tied to the location flag, so once collected (or after piping out) it won't trap again.
 
   | Pixl | Gate patched | Trap | Status |
   |---|---|---|---|
   | Thoreau | yes | bars + locked exit: removed | **shuffled** (tested) |
-  | Boomer | yes (chest stage switch) | user: needs Boomer to leave | locked vanilla, to review |
-  | Slim | yes ("have Slim" check removed) | ? | locked vanilla, to review |
-  | Thudley | yes (scene stage switch) | ? (how is his pillar pounded before you have him?) | locked vanilla, to review |
-  | Carrie | yes | user: needs Carrie to leave | locked vanilla, to review |
-  | Fleep | yes (outhouse stage switch) | ? | locked vanilla, to review |
-  | Cudge | yes | exit pipe off at 189–192: removed | locked vanilla, to review |
-  | Dottie | yes | user: needs Dottie to leave | locked vanilla, to review |
+  | Boomer | yes (chest stage switch) | user: needs Boomer to leave | shuffled; test Return Pipe escape |
+  | Slim | yes ("have Slim" check removed) | ? | shuffled; test Return Pipe escape |
+  | Thudley | yes (scene stage switch) | ? (how is his pillar pounded before you have him?) | shuffled; test Return Pipe escape |
+  | Carrie | yes | user: needs Carrie to leave | shuffled; test Return Pipe escape |
+  | Fleep | yes (outhouse stage switch) | ? | shuffled; test Return Pipe escape |
+  | Cudge | yes | exit pipe off at 189–192: removed | shuffled; test Return Pipe escape |
+  | Dottie | yes | user: needs Dottie to leave | shuffled; test Return Pipe escape |
 - **Pit Keys** are dropped by a random enemy on each Pit floor and open that floor's door (the `dan_01` locks). **Leave the Pit Key system completely untouched.**
 - Pillar and chapter-clear scenes found for all 8 hearts (see `story_us0.json`).
 - **Still to find:** where the Crystal Ball, Random House Key and Cooking Disk 1 are given (probably main.dol scripts or NPC dialogue the scan doesn't cover).

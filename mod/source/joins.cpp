@@ -8,6 +8,7 @@
 
 #include "gamesyms.h"
 #include "joins.h"
+#include "mailbox.h"
 #include "savedata.h"
 #include "storyvalue.h"
 
@@ -118,7 +119,9 @@ static EVT_DEFINE_USER_FUNC(ap_join_gift)
     (void) isFirstCall;
     s32 item = spm::evtmgr_cmd::evtGetValue(evt, evt->pCurData[0]);
     spm::swdrv::swSet(AP_GSWF_JOIN(item));
-    spm::mario_pouch::pouchAddItem(item);
+    // Debug: act like a join holding another world's item, to test the rooms without the Pixl
+    if (!(mailbox::gMailbox.debugFlags & DEBUG_JOINS_GIVE_NOTHING))
+        spm::mario_pouch::pouchAddItem(item);
     wii::os::OSReport("[spmap] joins: location for Pixl %d collected\n", item);
     return 2;
 }

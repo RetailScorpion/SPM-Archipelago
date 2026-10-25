@@ -14,7 +14,10 @@
 namespace mod::mailbox {
 
 #define MAILBOX_MAGIC "SPMAP_MAILBOX_v1"
-#define MAILBOX_VERSION 2
+#define MAILBOX_VERSION 4
+
+// debugFlags bits
+#define DEBUG_JOINS_GIVE_NOTHING 0x1  // Pixl joins mark their location but don't give the Pixl
 #define MAILBOX_RECV_SIZE 16
 #define MAILBOX_SENT_SIZE 32
 
@@ -43,8 +46,12 @@ struct Mailbox
 
     // debugging
 /* 0xC8 */ void * storyState;     // storyvalue::StoryState, for the client to display
+/* 0xCC */ u32 warpRequest;       // client sets 1 after filling warpMap/warpDoor; the mod clears it
+/* 0xD0 */ char warpMap[16];      // map to change to
+/* 0xE0 */ char warpDoor[32];     // door to enter by; empty = the map's default spawn
+/* 0x100 */ u32 debugFlags;       // DEBUG_*, written by the client
 };
-static_assert(sizeof(Mailbox) == 0xCC);
+static_assert(sizeof(Mailbox) == 0x104);
 
 extern Mailbox gMailbox;
 
