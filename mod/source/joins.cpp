@@ -1,6 +1,9 @@
 #include <common.h>
 #include <evt_cmd.h>
+#include <spm/evt_door.h>
+#include <spm/evt_map.h>
 #include <spm/evt_pouch.h>
+#include <spm/evt_snd.h>
 #include <spm/evtmgr_cmd.h>
 #include <spm/mario_pouch.h>
 #include <spm/swdrv.h>
@@ -64,6 +67,20 @@ enum PatchKind
     STAGE,      // SWITCH(GSW(0)) -> SWITCH(GSW(AP_GSW_JOIN_STAGES + a))
     CASE_NEVER, // CASE_SMALL(a) -> CASE_SMALL(b), where b makes it unreachable
     HAVE_NEVER, // IF_NOT_EQUAL(LW(0), 0) -> IF_NOT_EQUAL(LW(0), LW(0)): never true
+    SKIP,       // USER_FUNC(sSkippable[b], ...) with a args -> USER_FUNC(ap_skip, ...): does nothing
+};
+
+// Functions a SKIP patch may replace
+enum Skippable
+{
+    DOOR_ENABLE_DISABLE,
+    SFX_3D,
+    MAP_PLAYANIM,
+};
+static const void * const sSkippable[] = {
+    reinterpret_cast<const void *>(spm::evt_door::evt_door_enable_disable_map_door_desc),
+    reinterpret_cast<const void *>(spm::evt_snd::evt_snd_sfxon_3d),
+    reinterpret_cast<const void *>(spm::evt_map::evt_map_playanim),
 };
 
 struct Patch
@@ -102,6 +119,14 @@ static const Patch sPatches[] = {
     {GATE, 0x7f4f0, 108, PIXL_THUDLEY, "Thudley: him"},
     {STAGE, 0x7f588, 1, 0, "Thudley: scene stage"},
     {GIFT, 0x7ef14, PIXL_THUDLEY, 0, "Thudley join"},
+    // ta2_04 is a dead end: bars close behind Mario and only ground-pounding the pile (needs Thudley)
+    // opens them, and the Return Pipe is always off there. The bars now never close or reopen; the
+    // pile still sets the story value to 108, so progress past here still needs Thudley
+    {SKIP, 0x7f050, 2, DOOR_ENABLE_DISABLE, "Thudley: door barred (trap)"},
+    {SKIP, 0x7f078, 4, SFX_3D, "Thudley: bars closing sound"},
+    {SKIP, 0x7f090, 3, MAP_PLAYANIM, "Thudley: bars closing"},
+    {SKIP, 0x7f360, 4, SFX_3D, "Thudley: bars opening sound"},
+    {SKIP, 0x7f378, 3, MAP_PLAYANIM, "Thudley: bars opening"},
 
     {GATE, 0x8f8a0, 123, PIXL_CARRIE, "Carrie: her and the cage"},
     {GIFT, 0x8f684, PIXL_CARRIE, 0, "Carrie join"},
@@ -131,6 +156,14 @@ static EVT_DEFINE_USER_FUNC(ap_join_gift)
     if (!(mailbox::gMailbox.debugFlags & DEBUG_JOINS_GIVE_NOTHING))
         spm::mario_pouch::pouchAddItem(item);
     wii::os::OSReport("[spmap] joins: location for Pixl %d collected\n", item);
+    return 2;
+}
+
+// ap_skip(...): stands in for a skipped call
+static EVT_DEFINE_USER_FUNC(ap_skip)
+{
+    (void) evt;
+    (void) isFirstCall;
     return 2;
 }
 
@@ -203,6 +236,13 @@ static void apply(const Patch & p)
             const s32 orig[] = {EVT_CMD(2, OP_IF_NOT_EQUAL), LW_VAR(0), 0};
             if (expect(at, orig, 3, p.what))
                 at[2] = LW_VAR(0);
+            break;
+        }
+        case SKIP:
+        {
+            const s32 orig[] = {EVT_CMD(p.a + 1, OP_USER_FUNC), reinterpret_cast<s32>(sSkippable[p.b])};
+            if (expect(at, orig, 2, p.what))
+                at[1] = reinterpret_cast<s32>(ap_skip);
             break;
         }
     }
