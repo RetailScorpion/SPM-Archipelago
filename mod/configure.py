@@ -6,9 +6,10 @@ Based on the build setup of SeekyCt's spm-practice-codes.
 Usage: py -3 configure.py [versions...]   (default: us0)
 Then:  ninja
 Needs: DEVKITPPC environment variable; elf2rel from pyelf2rel (found on PATH, in the
-Python user scripts folder, or via the ELF2REL environment variable).
+Python user scripts folder, or via the ELF2REL environment variable). ninja_syntax is bundled.
 """
 
+import glob
 import os
 import shutil
 import site
@@ -43,9 +44,13 @@ def find_elf2rel() -> str:
     if found:
         return found
     # pip --user installs scripts next to the user site-packages
-    scripts = os.path.join(os.path.dirname(site.getusersitepackages()), "Scripts", "elf2rel.exe")
-    assert os.path.exists(scripts), "Error: elf2rel not found; pip install pyelf2rel or set ELF2REL"
-    return scripts
+    candidates = [os.path.join(os.path.dirname(site.getusersitepackages()), "Scripts", "elf2rel.exe")]
+    candidates += sorted(glob.glob(os.path.join(os.environ.get("APPDATA", ""), "Python", "Python3*",
+                                                "Scripts", "elf2rel.exe")), reverse=True)
+    for path in candidates:
+        if os.path.exists(path):
+            return path
+    sys.exit("Error: elf2rel not found; pip install pyelf2rel or set ELF2REL")
 
 
 ELF2REL = find_elf2rel()
@@ -76,6 +81,9 @@ CFLAGS = " ".join([
     "$includes",
     "-ffunction-sections",
     "-fdata-sections",
+    # Loop induction variable optimisation can address a table from a base before its section
+    # (".rodata - 0x60c"); a REL can't encode negative relocation addends
+    "-fno-ivopts",
     "-g",
     "-O2",
     "-Wall",
@@ -129,6 +137,8 @@ def main(versions: List[str]):
            depfile="$out.d", deps="gcc", description="CXX $out")
     n.rule("ld", "$cc $in $ldflags -o $out -Wl,-Map,$map", description="LD $out")
     n.rule("elf2rel", "$elf2rel $in -s $lst", description="ELF2REL $out")
+    # spm-headers' symbols plus the mod's own (symbols/), as one lst
+    n.rule("mergelst", f'"{sys.executable}" -E merge_lst.py $out $in', description="LST $out")
     n.newline()
 
     for ver in versions:
@@ -145,7 +155,13 @@ def main(versions: List[str]):
                 variables={"map": mapfile})
 
         rel = os.path.join("$outdir", f"{ver}.rel")
-        lst = os.path.join("$spm_headers", "linker", f"spm.{'eu0' if ver == 'eu1' else ver}.lst")
+        lst_ver = 'eu0' if ver == 'eu1' else ver
+        lsts = [os.path.join("$spm_headers", "linker", f"spm.{lst_ver}.lst")]
+        own = os.path.join("symbols", f"spm.{lst_ver}.lst")
+        if os.path.exists(own):
+            lsts.append(own)
+        lst = os.path.join("$builddir", ver, "spm.lst")
+        n.build(lst, "mergelst", lsts, implicit="merge_lst.py")
         n.build(rel, "elf2rel", elf, implicit=lst, variables={"lst": lst})
         n.build(ver, "phony", rel)
         n.default(rel)

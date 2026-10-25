@@ -14,16 +14,20 @@
 #include <spm/mario_pouch.h>
 #include <spm/seqdef.h>
 #include <spm/seqdrv.h>
+#include <spm/spmario.h>
 #include <wii/gx.h>
 #include <wii/os.h>
 
+#include "doors.h"
+#include "flip.h"
 #include "mailbox.h"
 #include "patch.h"
 #include "storyvalue.h"
+#include "tippi.h"
 
 namespace mod {
 
-#define MOD_VERSION "0.2-story"
+#define MOD_VERSION "0.3-story"
 
 // Stand-in location ids for the proof of concept: picking up item X reports location POC_LOCATION_BASE + X
 #define POC_LOCATION_BASE 0x10000
@@ -113,6 +117,7 @@ static spm::seqdef::SeqFunc * seq_titleMainReal;
 static void seq_titleMainHook(spm::seqdrv::SeqWork * wp)
 {
     mailbox::gMailbox.modState = mailbox::STATE_TITLE;
+    storyvalue::resetContext();
     seq_titleMainReal(wp);
     drawText("SPM Archipelago " MOD_VERSION, 200.0f, {255, 255, 255, 255});
 }
@@ -122,6 +127,7 @@ static void seq_gameMainHook(spm::seqdrv::SeqWork * wp)
 {
     mailbox::gMailbox.modState = mailbox::STATE_IN_GAME;
     seq_gameMainReal(wp);
+    storyvalue::sync();
     spawnNextReceived();
 }
 
@@ -137,6 +143,7 @@ static void seq_mapChangeInitHook(spm::seqdrv::SeqWork * wp)
 
     // wp->p0 is the map being loaded; none of its scripts have run yet
     storyvalue::onMapChange(wp->p0);
+    tippi::onMapChange(storyvalue::gStory.context, spm::spmario::gp->gsw0);
 
     seq_mapChangeInitReal(wp);
 }
@@ -148,6 +155,8 @@ void main()
     mailbox::init();
     storyvalue::init();
     mailbox::gMailbox.storyState = &storyvalue::gStory;
+    doors::init();
+    flip::init();
 
     seq_titleMainReal = spm::seqdef::seq_data[spm::seqdrv::SEQ_TITLE].main;
     spm::seqdef::seq_data[spm::seqdrv::SEQ_TITLE].main = seq_titleMainHook;

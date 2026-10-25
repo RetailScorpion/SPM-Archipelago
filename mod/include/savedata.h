@@ -1,0 +1,29 @@
+#pragma once
+
+#include <common.h>
+
+/*
+    Randomizer data kept in the save file.
+
+    The whole SpmarioGlobals (GSW, GSWF) is written to the save, so the mod reserves ranges the game
+    never uses. A scan of every script in main.dol and relF, plus every native swByteGet/swSet call
+    and the coin flag table, found nothing above GSW 534 or GSWF 1327.
+*/
+
+namespace mod::savedata {
+
+// GSW bytes 1792-2047 (256 bytes)
+#define AP_GSW_BASE 1792
+#define AP_GSW_STORY_SLOTS (AP_GSW_BASE + 0)  // 8 chapters x 2 bytes (big-endian), 0 = chapter not started
+
+// GSWF flags 7168-8191 (1024 flags)
+#define AP_GSWF_BASE 7168
+#define AP_GSWF_FLIP (AP_GSWF_BASE + 0)  // Mario can flip
+
+// Vanilla flags the mod relies on
+#define GSWF_TIPPI_PRESENT 403  // written by the save code from the guide state, restored on load
+
+u8 getGswByte(s32 id);
+void setGswByte(s32 id, u8 value);
+
+}

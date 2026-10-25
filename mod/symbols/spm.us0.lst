@@ -1,0 +1,22 @@
+// Extra US 1.0 symbols found for the randomizer, merged with spm-headers' lst at build time.
+// relF entries are module,section,offset: section 1 = file offset - 0xdc, section 5 = file offset - 0xaf300
+// (offsets in the decompressed relF.rel; see DESIGN.md for how each was found)
+
+// main.dol
+8011EFD0:guideGetWork
+800E0E74:evt_door_select_entry
+800E1078:evt_door_select_set
+803D8468:door_enter_evt
+// In the "can the current character use their ability" check (0x80147A08): the
+// bl evtGetValue(GSW(0)) whose result blocks Mario's flip when 0 < value < 16
+80147AB4:mario_flip_story_check
+
+// relF: Flipside Tower dimension doors
+1,1,cb4:evt_mac_set_door_dest
+1,1,d4c:evt_mac_door_section_dest
+1,1,1074:evt_mac_door_info
+1,1,1174:evt_mac_door_objs
+1,1,1384:evt_mac_door_msgs
+1,5,9acc:mac_door_select_evt
+1,5,9d6c:mac_door_setup_evt
+1,5,1ad9c:mac_tower_run_door_setup
