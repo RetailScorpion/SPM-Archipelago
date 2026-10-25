@@ -51,12 +51,9 @@ extern const spm::evtmgr::EvtScriptCode mac_door_setup_evt[];
 // The RUN_CHILD_EVT(mac_door_setup_evt) instruction in the tower's init script (2 words)
 extern spm::evtmgr::EvtScriptCode mac_tower_run_door_setup[];
 
-// relF: Thoreau (1-2). Each points at a script instruction the mod patches (see joins.cpp).
-extern spm::evtmgr::EvtScriptCode he2_07_thoreau_gate_spawn[];  // IF_SMALL(GSW(0), 25): Thoreau and his chest
-extern spm::evtmgr::EvtScriptCode he2_07_thoreau_gate_lock[];   // IF_SMALL(GSW(0), 25): exit locked until Thoreau frees you
-extern spm::evtmgr::EvtScriptCode he2_07_thoreau_gate_bars[];   // IF_SMALL(GSW(0), 25): iron bars close behind Mario
-extern spm::evtmgr::EvtScriptCode he2_07_thoreau_join_gift[];   // USER_FUNC(evt_pouch_add_item, 221)
-extern spm::evtmgr::EvtScriptCode he2_03_thoreau_safety_net[];  // IF_EQUAL(LW(0), 0): give Thoreau at the end of 1-2
+// relF: start of section 5 (map scripts and data). Script patches are tables of offsets from here:
+// relF.rel file offset - 0xAF300 (see joins.cpp)
+extern spm::evtmgr::EvtScriptCode relF_section5[];
 
 }
 

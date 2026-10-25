@@ -15,6 +15,7 @@ namespace mod::savedata {
 // GSW bytes 1792-2047 (256 bytes)
 #define AP_GSW_BASE 1792
 #define AP_GSW_STORY_SLOTS (AP_GSW_BASE + 0)  // 8 chapters x 2 bytes (big-endian), 0 = chapter not started
+#define AP_GSW_JOIN_STAGES (AP_GSW_BASE + 16) // story value seen by patched join SWITCHes (joins.cpp)
 
 // GSWF flags 7168-8191 (1024 flags)
 #define AP_GSWF_BASE 7168

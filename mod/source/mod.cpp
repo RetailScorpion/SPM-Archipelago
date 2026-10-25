@@ -145,6 +145,7 @@ static void seq_mapChangeInitHook(spm::seqdrv::SeqWork * wp)
     // wp->p0 is the map being loaded; none of its scripts have run yet
     storyvalue::onMapChange(wp->p0);
     tippi::onMapChange(storyvalue::gStory.context, spm::spmario::gp->gsw0);
+    joins::onMapChange();
 
     seq_mapChangeInitReal(wp);
 }
