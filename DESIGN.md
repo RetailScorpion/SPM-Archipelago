@@ -159,6 +159,7 @@ v1 has a single "intended" logic: no tricks, no damage boosts. A `logic_difficul
 | `side_quests` | on / off | off | Piccolo trading sequence, NPC rewards in the hubs |
 | `catch_cards` | off / … | off | **Later.** 256 cards is a lot; maybe "every Nth card" |
 | `recipes` | off / on | off | **Later.** First cook of each recipe |
+| `coinsanity` | off / every_coin | off | **Design only, not implemented yet.** Every placed coin is a check (~900: ~600 spawned by map scripts, 299 from setup files; coin blocks to decide). See "Coinsanity" below |
 | `skip_cutscenes` | on / off | on | Skips the story interludes outside the chapters: Count Bleck & minions (story values 10, 54, 96), the memory flashbacks after Chapters 1–7 (57, 98, 126, 174, 221, 287, 354), the Peach intermission (55–56) and the Luigi intermission (97). Off: they play after the chapter that triggers them. Scenes with checks (the Ch4 Helmet interlude, the Underwhere) always play |
 | `traps` | 0–100% of filler | 0 | Poison Shroom, Sleepy Sheep, Mistake |
 | `death_link` | on / off | off | Standard Archipelago option |
@@ -179,6 +180,11 @@ In a solo seed with `starting_open_doors: 0` and `open_hubs: off`, sphere 1 can 
 - `open_hubs: on`: they're all there from the start. Peach has already fallen into Flipside, and you just talk to her for her check. Merlon has the Old Key ready, and so on. Flopside's checks still need Fleep, because you need him to get into Flopside.
 - `open_hubs: off`: each check waits for its vanilla trigger, as a logic event. For example, the Peach check needs "Chapter 1 Clear", and the Old Key check needs whatever unlocks it in vanilla.
 - Either way it's done with our own flags, not the story progress value, which the hubs keep fixed (see §6).
+
+**Coinsanity** (design only, not implemented):
+- Vanilla only remembers collected coins for the last 32 maps visited (`coinEntries[32]`, a rolling list), so coins respawn. The mod needs its own permanent flag per coin; the game uses nothing between GSWF 1328 and 8191, so there's room.
+- **2D stacks:** coins are placed in 3D, so a line of coins running along the 2D camera's view looks like one coin in 2D. When a coin is collected **in 2D** (`marioCheck3d` false), the mod also collects every other coin in the map at the same position on the 2D plane (any depth) and sends all their checks. In 3D, coins count one at a time. Done at runtime using the current 2D camera axis, because some rooms are rotated.
+- Mostly filler. Probably wants a filler-only / can-hold-progression switch like `sammer_gauntlet`.
 
 Filler (when the pool has more locations than progression items): coins, consumables, HP Plus / Power Plus (balance check needed).
 
@@ -300,6 +306,14 @@ Found with Dolphin's debugger (memory breakpoints) and the new `tools/evtdis.py`
 - **Tested (mod 0.3):** fresh file through the prologue; flipping before Bestovius; 1-1 finished without Bestovius (his lesson is then lost, see the no-missable-locations rule); section menus on the Ch1 and Ch2 doors listing only reached sections; revisiting cleared sections and "None of them" without changing chapter values; save and reload mid-chapter (slots and Tippi restored).
 - **Seen once:** "Invalid read from 0x81815bd2, PC = 0x80272014" (inside `OSLink`, applying a REL14 relocation) right after Dolphin's Emulation → Reset; never on a fresh start, and not reproduced with a breakpoint. Probably the OS module list surviving Dolphin's soft reset. Revisit if it comes back.
 - **Watch for:** practice-codes' `mapfixes.cpp` notes crashes when entering `ta4_13` (Francis's room) below story value 124, and `bos_01` (Dimension D) between 117 and 178. Per-chapter values could hit these.
+
+### Location mapping (in progress)
+`tools/locscan.py` → `data/locations_us0.md` / `.json` (locations), `data/story_us0.json` (all 319 story-value changes with maps), hand-checked notes in `data/location_notes.json`.
+- 470 locations (items, chests, item blocks, gifts). 322 have no vanilla collected flag (138 items, 122 blocks, 48 chests, 14 gifts), so the mod must give them flags; 30 of those are gated on the story value (missable).
+- Five Pixls (Thoreau, Boomer, Slim, Carrie, Dottie) have vanilla **safety nets** (`party_hoken_NN`): if the section ends without the Pixl, the game gives it. In the randomizer they should send the join location instead.
+- Pillar and chapter-clear scenes found for all 8 hearts (see `story_us0.json`).
+- Pit Keys are enemy drops inside the Pit (not locations). **Still to find:** where the Crystal Ball, Random House Key and Cooking Disk 1 are given (probably main.dol scripts or NPC dialogue the scan doesn't cover).
+- Next: logic pass (requirements per location) with the user.
 
 ### Useful tools found
 - `ref/spm-practice-codes`: warps, story-value editing and other debug features. Very useful for testing chapters out of order.

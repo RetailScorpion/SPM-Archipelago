@@ -35,6 +35,8 @@ MAPS = os.path.join(ROOT, "data", "maps_us0.json")
 ITEMS_TXT = os.path.join(ROOT, "ref", "spm-docs", "misc", "items.txt")
 OUT_JSON = os.path.join(ROOT, "data", "locations_us0.json")
 OUT_MD = os.path.join(ROOT, "data", "locations_us0.md")
+OUT_STORY = os.path.join(ROOT, "data", "story_us0.json")  # every SET(GSW(0), value), with its map(s)
+NOTES = os.path.join(ROOT, "data", "location_notes.json")  # hand-checked roles, keyed by 'at'
 
 END_SCRIPT, USER_FUNC = 1, 92
 MAX_ARGS = 24
@@ -247,6 +249,11 @@ class Scanner:
         out = []
         script = self.decode(script_start)
         for (pos, name, argpos), conds in self.conditions_walk(script):
+            # Story transitions: SET(GSW(0), value)
+            if name == "SET" and self.var(argpos[0]) == "GSW(0)" and self.const(argpos[1]) is not None:
+                out.append({"type": "story", "value": self.const(argpos[1]), "script": f"{script_start:#x}",
+                            "at": f"{pos:#x}", "conditions": conds})
+                continue
             if name != "USER_FUNC" or argpos[0] not in self.dol_ptr:
                 continue
             fn = self.syms.name(self.dol_ptr[argpos[0]])
@@ -366,7 +373,15 @@ def main():
         missed = [f"{t:#x}" for t in total if t not in reached]
         print(f"{fn}: {len(total) - len(missed)}/{len(total)} reached" + (f", missed {missed[:8]}" if missed else ""))
 
+    notes = json.load(open(NOTES)) if os.path.exists(NOTES) else {}
+    for e in locations:
+        if e["at"] in notes:
+            e.update({k: v for k, v in notes[e["at"]].items()})
+
+    stories = [e for e in locations if e["type"] == "story"]
+    locations = [e for e in locations if e["type"] != "story"]
     json.dump(locations, open(OUT_JSON, "w"), indent=1)
+    json.dump(sorted(stories, key=lambda e: e["value"]), open(OUT_STORY, "w"), indent=1)
 
     from collections import Counter
     kinds = Counter(e["type"] for e in locations)
@@ -394,7 +409,10 @@ def main():
             flag = e.get("flag", "")
             mp = e["maps"][0] + (f" (+{len(e['maps']) - 1})" if len(e["maps"]) > 1 else "")
             conds = "; ".join(e["conditions"])[:120]
-            lines.append(f"| {mp} | {e['type']} | {what} | {flag} | {conds} |")
+            kind = e["type"] if e.get("role") in (None, "location") else f"{e['type']} ({e['role'].replace('_', ' ')})"
+            if e.get("note"):
+                conds = f"**{e['note']}**" + (f"; {conds}" if conds else "")
+            lines.append(f"| {mp} | {kind} | {what} | {flag} | {conds} |")
         lines.append("")
     open(OUT_MD, "w", encoding="utf-8").write("\n".join(lines))
     print(f"{len(script_maps)} scripts reached; " + ", ".join(f"{k}: {v}" for k, v in sorted(kinds.items())))

@@ -93,7 +93,7 @@ Scripts reached from 468 maps: 2397.  Entries: block 124, check 56, chest 148, g
 | he2_01 | chest | Paratroopa | GSWF(605) |  |
 | he2_03 | block | ? block: [KINOKO] | 0 |  |
 | he2_03 | check | Thoreau |  |  |
-| he2_03 | gift | Thoreau |  | LW(0) == 0 |
+| he2_03 | gift (safety net) | Thoreau |  | **party_hoken_01: gives Thoreau at the end of 1-2 if missed**; LW(0) == 0 |
 | he2_03 | item | Paper | 0 | GSWF(415) == 0; GSWF(412) == 1; LW(0) == 1 |
 | he2_03 | item | Autograph | 0 | GSWF(415) == 0; GSWF(412) == 1; LW(0) == 3; LW(0) == 55 |
 | he2_03 | item | You-Know-What | 0 | GSWF(415) == 0; GSWF(412) == 1; LW(0) == 3; LW(0) == 55 |
@@ -105,7 +105,7 @@ Scripts reached from 468 maps: 2397.  Entries: block 124, check 56, chest 148, g
 | he2_03 | shop | mise: Fire Burst, POW Block, Shroom Shake, Long-Last Shake, Life Shroom, Sleepy Sheep, Shell Shock, Mighty Tonic, Courage Shell, Volt Shroom |  |  |
 | he2_05 | item | Red & Green | GSWF(618) |  |
 | he2_07 | chest | [NULL] | 0 | GSW(0) < 25 |
-| he2_07 | gift | Thoreau |  |  |
+| he2_07 | gift | Thoreau |  | **Thoreau joins (1-2, Yold Town basement)** |
 | he3_01 | block | ? block: [BUNSHIN_KINOKO] | 0 |  |
 | he3_01 | block | ? block: [HAPPY_FLOWER] | 0 |  |
 | he3_01 | block | ? block: [SPEED_FLOWER] | 0 |  |
@@ -145,7 +145,7 @@ Scripts reached from 468 maps: 2397.  Entries: block 124, check 56, chest 148, g
 | mi1_04 | check | Boomer |  |  |
 | mi1_04 | chest | Shlurp | GSWF(732) |  |
 | mi1_04 | chest | Swooper | GSWF(733) |  |
-| mi1_04 | gift | Boomer |  | LW(0) == 0 |
+| mi1_04 | gift (safety net) | Boomer |  | **party_hoken_05: gives Boomer at the end of 2-1 if missed**; LW(0) == 0 |
 | mi1_05 | chest | [NULL] | 0 | LW(0) == 0; GSWF(734) == 0 |
 | mi1_05 | chest | [NULL] | 0 |  |
 | mi1_05 | chest | [NULL] | 0 | not (GSWF(734) == 0); GSWF(735) == 0 |
@@ -155,7 +155,7 @@ Scripts reached from 468 maps: 2397.  Entries: block 124, check 56, chest 148, g
 | mi1_07 | chest | [NULL] | 0 | GSW(0) < 73 |
 | mi1_07 | chest | [NULL] | 1 | GSW(0): other case |
 | mi1_07 | chest | Watchitt | GSWF(738) |  |
-| mi1_07 | gift | Boomer |  |  |
+| mi1_07 | gift | Boomer |  | **Boomer joins (2-1)** |
 | mi1_08 | block | ? block: [BUNSHIN_KINOKO] | 0 |  |
 | mi1_10 | block | ? block: [SLOW_FLOWER] | 0 |  |
 | mi1_10 | block | ? block: [HAPPY_FLOWER] | 0 |  |
@@ -173,13 +173,13 @@ Scripts reached from 468 maps: 2397.  Entries: block 124, check 56, chest 148, g
 | mi3_01 | check | Slim |  |  |
 | mi3_01 | chest | Boo | GSWF(731) |  |
 | mi3_01 | chest | [NULL] | GSWF(719) |  |
-| mi3_01 | gift | Slim |  |  |
+| mi3_01 | gift | Slim |  | **Slim joins (2-3, Merlee's Mansion)** |
 | mi3_05 | block | ? block: item 550 | 0 | LW(0) < GW(0) |
 | mi3_05 | block | ? block: item 551 | 0 | not (LW(0) < GW(0)) |
 | mi3_05 | block | ? block: item 550 | -1 | LW(0) < GW(0) |
 | mi3_05 | block | ? block: item 551 | -1 | not (LW(0) < GW(0)) |
 | mi3_06 | check | Slim |  |  |
-| mi3_06 | gift | Slim |  | LW(0) == 0 |
+| mi3_06 | gift (safety net) | Slim |  | **party_hoken_02: gives Slim at the end of 2-3 if missed**; LW(0) == 0 |
 | mi4_01 | block | ? block: [KINOKO] | 0 |  |
 | mi4_03 | block | ? block: item 548 | 0 |  |
 | mi4_10 | item | Shroom Shake | GSWF(726) |  |
@@ -239,9 +239,9 @@ Scripts reached from 468 maps: 2397.  Entries: block 124, check 56, chest 148, g
 | ta4_10 | chest | Fort Key | GSWF(811) |  |
 | ta4_11 | block | ? block: [SUPER_KINOKO] | 0 |  |
 | ta4_11 | chest | Fort Key | GSWF(812) |  |
-| ta4_12 | gift | Carrie |  |  |
+| ta4_12 | gift | Carrie |  | **Carrie joins (3-4, Fort Francis basement)** |
 | ta4_13 | check | Carrie |  |  |
-| ta4_13 | gift | Carrie |  | LW(0) == 0 |
+| ta4_13 | gift (safety net) | Carrie |  | **party_hoken_03: gives Carrie at the end of 3-4 if missed**; LW(0) == 0 |
 
 ## Chapter 4
 
@@ -274,7 +274,7 @@ Scripts reached from 468 maps: 2397.  Entries: block 124, check 56, chest 148, g
 | sp3_02 | item | LW(0) | 0 |  |
 | sp3_04 | item | Ghost Shroom | GSWF(911) |  |
 | sp3_04 | item | Catch Card SP | GSWF(912) |  |
-| sp3_05 | gift | LW(10) |  | LW(0) != -1; LW(0) == 0; not (LW(4) < LW(2)); not (LW(4) == 0) |
+| sp3_05 | gift (shop) | LW(10) |  | **Twinkle Mart (4-3): custom shop script, item chosen by the player; candidate for shop locations**; LW(0) != -1; LW(0) == 0; not (LW(4) < LW(2)); not (LW(4) == 0) |
 | sp4_02 | block | ? block: [HAPPY_FLOWER] | 0 |  |
 | sp4_02 | block | ? block: [KINOKO] | 0 |  |
 | sp4_02 (+1) | check | Dimension Key |  |  |
@@ -324,7 +324,7 @@ Scripts reached from 468 maps: 2397.  Entries: block 124, check 56, chest 148, g
 | gn2_01 | item | Primordial Fruit | GSWF(1037) |  |
 | gn2_02 | block | type 32769: [KINOKO] | 0 |  |
 | gn2_02 | block | type 32769: [KINOKO] | 0 |  |
-| gn2_02 | gift | LW(1) |  | not (LW(0) == 0); LW(0) == 0 |
+| gn2_02 | gift (not a location) | LW(1) |  | **Cudge's shrine (5-2): gives a tablet back when it's removed from its slot**; not (LW(0) == 0); LW(0) == 0 |
 | gn2_02 | gift | Cudge |  |  |
 | gn2_02 | item | Ultra Shroom Shake | GSWF(1053) |  |
 | gn2_02 | item | Mighty Tonic | GSWF(1038) |  |
@@ -353,7 +353,7 @@ Scripts reached from 468 maps: 2397.  Entries: block 124, check 56, chest 148, g
 | gn4_02 | block | ? block: [BUNSHIN_KINOKO] | 0 |  |
 | gn4_02 | check | Cave Key |  |  |
 | gn4_02 | lock | Cave Key |  | GSW(0) < 208 |
-| gn4_03 | gift | Dottie |  |  |
+| gn4_03 | gift | Dottie |  | **Dottie joins (5-4, Floro Caverns)** |
 | gn4_06 (+1) | item | Cave Key | 0 | GF(0) == 0 |
 | gn4_09 | item | POW Block | GSWF(1040) |  |
 | gn4_10 | check | Card Key |  | GSW(0) < 212 |
@@ -363,7 +363,7 @@ Scripts reached from 468 maps: 2397.  Entries: block 124, check 56, chest 148, g
 | gn4_13 | item | Floro Sprout | 0 |  |
 | gn4_15 | block | ? block: [ULTRA_KINOKO] | 0 |  |
 | gn4_16 | check | Dottie |  |  |
-| gn4_16 | gift | Dottie |  | LW(0) == 0 |
+| gn4_16 | gift (safety net) | Dottie |  | **party_hoken_04: gives Dottie at the end of 5-4 if missed**; LW(0) == 0 |
 
 ## Chapter 6
 
