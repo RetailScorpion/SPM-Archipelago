@@ -330,7 +330,7 @@ Found with Dolphin's debugger (memory breakpoints) and the new `tools/evtdis.py`
   |---|---|---|---|
   | Thoreau | yes | bars + locked exit: removed | **shuffled** (tested) |
   | Boomer | yes (chest stage switch) | none: room doesn't trap you | **shuffled** (tested out of order, Chapter 2 at 74) |
-  | Slim | yes ("have Slim" check removed) | room: none. **Merlee's Mansion (2-2/2-3) needs Slim to finish and the Return Pipe is disabled there**: softlock without him | **shuffled**; fix built: the mansion's `func_800d4de4(1, 1)` (disable Return Pipe while Chapter 2 < 89, in `mi3_01`–`mi3_06`) changed to enable it (`mod/source/returnpipe.cpp`). Untested |
+  | Slim | yes ("have Slim" check removed) | room: none. **2-3 (Merlee's Mansion, "Breaking the Bank") needs Slim to finish and the Return Pipe is disabled there** (2-2 always allows it): softlock without him | **shuffled**; fix built: the mansion's `func_800d4de4(1, 1)` (disable Return Pipe while Chapter 2 < 89, in `mi3_01`–`mi3_06`) changed to enable it (`mod/source/returnpipe.cpp`). Untested |
   | Thudley | yes (scene stage switch) | ? (how is his pillar pounded before you have him?) | shuffled; test Return Pipe escape |
   | Carrie | yes | user: needs Carrie to leave | shuffled; test Return Pipe escape |
   | Fleep | yes (outhouse stage switch) | ? | shuffled; test Return Pipe escape |
