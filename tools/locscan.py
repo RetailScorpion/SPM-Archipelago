@@ -329,6 +329,43 @@ class Scanner:
         return shops
 
 
+def scan_dol(sc):
+    """Item-giving calls in main.dol's own scripts. These aren't reached from any map (the hubs' shop
+    and NPC systems run them from native code, e.g. Merluvlee's and Merlee's trades), so they're
+    found by searching the dol's data for the calls directly. Arguments are raw values: pointers
+    are absolute addresses."""
+    from dolasm import Dol
+    dol = Dol()
+    item_args = {"evt_item_entry": (1, "item"), "evt_mobj_thako": (7, "chest"), "evt_pouch_add_item": (0, "gift")}
+    fns = {sc.fn[n]: n for n in item_args}
+    out = []
+    for i in range(18):
+        if i < 7 or not dol.size[i]:
+            continue  # data sections only
+        base, off, size = dol.addr[i], dol.off[i], dol.size[i]
+        for o in range(off, off + size - 8, 4):
+            hdr = struct.unpack_from(">I", dol.data, o)[0]
+            n = hdr >> 16
+            if hdr & 0xFFFF != USER_FUNC or not 1 <= n <= 12:
+                continue
+            fn = fns.get(struct.unpack_from(">I", dol.data, o + 4)[0])
+            if fn is None:
+                continue
+            args = struct.unpack_from(f">{n - 1}i", dol.data, o + 8)
+            idx, kind = item_args[fn]
+            if idx >= len(args):
+                continue
+            item = args[idx] if 0 <= args[idx] < 10000 else None
+            if item in COIN_ITEMS:
+                continue
+            var = next((f"{name}({args[idx] - b})" for b, name in VAR_BASES
+                        if b <= args[idx] < b + 10000000 and args[idx] - b < 10000), str(args[idx]))
+            out.append({"type": kind, "item": item, "item_var": None if item is not None else var,
+                        "item_name": sc.item_name(item), "flag": None, "maps": ["main.dol"], "chapter": "dol",
+                        "script": None, "at": f"dol@{base + o - off:#x}", "conditions": []})
+    return out
+
+
 def main():
     sc = Scanner()
     maps = json.load(open(MAPS))
@@ -373,6 +410,8 @@ def main():
         missed = [f"{t:#x}" for t in total if t not in reached]
         print(f"{fn}: {len(total) - len(missed)}/{len(total)} reached" + (f", missed {missed[:8]}" if missed else ""))
 
+    locations += scan_dol(sc)
+
     notes = json.load(open(NOTES)) if os.path.exists(NOTES) else {}
     for e in locations:
         if e["at"] in notes:
@@ -391,11 +430,12 @@ def main():
              "lock = needs the listed key item; check = a script tests for the listed item.", "",
              f"Scripts reached from {len(maps)} maps: {len(script_maps)}.  Entries: " +
              ", ".join(f"{k} {v}" for k, v in sorted(kinds.items())) + f".  Coins left out: {sc.coins}.", ""]
-    for chapter in ["hub", "1", "2", "3", "4", "5", "6", "7", "8", "other"]:
+    titles = {"hub": "Flipside / Flopside", "other": "Other", "dol": "main.dol scripts (hub shop and NPC systems)"}
+    for chapter in ["hub", "1", "2", "3", "4", "5", "6", "7", "8", "other", "dol"]:
         rows = [e for e in locations if e["chapter"] == chapter]
         if not rows:
             continue
-        lines += [f"## {'Flipside / Flopside' if chapter == 'hub' else 'Other' if chapter == 'other' else 'Chapter ' + chapter}", "",
+        lines += [f"## {titles.get(chapter, 'Chapter ' + chapter)}", "",
                   "| Map | Type | Item | Flag | Conditions |", "|---|---|---|---|---|"]
         for e in sorted(rows, key=lambda e: (e["maps"][0], e["type"])):
             if e["type"] == "shop":

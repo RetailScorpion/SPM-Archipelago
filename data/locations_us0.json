@@ -1522,7 +1522,7 @@
   "chapter": "1",
   "role": "safety_net",
   "for": "Thoreau join (he2_07)",
-  "note": "party_hoken_01: gives Thoreau at the end of 1-2 if missed"
+  "note": "party_hoken_01: gives Thoreau at the end of 1-2 if missed; REMOVE in the randomizer"
  },
  {
   "type": "block",
@@ -2306,7 +2306,7 @@
   "chapter": "2",
   "role": "safety_net",
   "for": "Boomer join (mi1_07)",
-  "note": "party_hoken_05: gives Boomer at the end of 2-1 if missed"
+  "note": "party_hoken_05: gives Boomer at the end of 2-1 if missed; REMOVE in the randomizer"
  },
  {
   "type": "chest",
@@ -2901,7 +2901,7 @@
   "chapter": "2",
   "role": "safety_net",
   "for": "Slim join (mi3_01)",
-  "note": "party_hoken_02: gives Slim at the end of 2-3 if missed"
+  "note": "party_hoken_02: gives Slim at the end of 2-3 if missed; REMOVE in the randomizer"
  },
  {
   "type": "block",
@@ -3849,7 +3849,7 @@
   "chapter": "3",
   "role": "safety_net",
   "for": "Carrie join (ta4_12)",
-  "note": "party_hoken_03: gives Carrie at the end of 3-4 if missed"
+  "note": "party_hoken_03: gives Carrie at the end of 3-4 if missed; REMOVE in the randomizer"
  },
  {
   "type": "item",
@@ -5766,7 +5766,7 @@
   "chapter": "5",
   "role": "safety_net",
   "for": "Dottie join (gn4_03)",
-  "note": "party_hoken_04: gives Dottie at the end of 5-4 if missed"
+  "note": "party_hoken_04: gives Dottie at the end of 5-4 if missed; REMOVE in the randomizer"
  },
  {
   "type": "chest",
@@ -10485,5 +10485,621 @@
    "gn3_15"
   ],
   "chapter": "5"
+ },
+ {
+  "type": "item",
+  "item": null,
+  "item_var": "LW(5)",
+  "item_name": null,
+  "flag": null,
+  "maps": [
+   "main.dol"
+  ],
+  "chapter": "dol",
+  "script": null,
+  "at": "dol@0x803bca0c",
+  "conditions": []
+ },
+ {
+  "type": "item",
+  "item": null,
+  "item_var": "LW(5)",
+  "item_name": null,
+  "flag": null,
+  "maps": [
+   "main.dol"
+  ],
+  "chapter": "dol",
+  "script": null,
+  "at": "dol@0x803bcad0",
+  "conditions": []
+ },
+ {
+  "type": "item",
+  "item": null,
+  "item_var": "LW(5)",
+  "item_name": null,
+  "flag": null,
+  "maps": [
+   "main.dol"
+  ],
+  "chapter": "dol",
+  "script": null,
+  "at": "dol@0x803bcbb0",
+  "conditions": []
+ },
+ {
+  "type": "item",
+  "item": null,
+  "item_var": "LW(5)",
+  "item_name": null,
+  "flag": null,
+  "maps": [
+   "main.dol"
+  ],
+  "chapter": "dol",
+  "script": null,
+  "at": "dol@0x803bcc70",
+  "conditions": []
+ },
+ {
+  "type": "item",
+  "item": null,
+  "item_var": "LW(5)",
+  "item_name": null,
+  "flag": null,
+  "maps": [
+   "main.dol"
+  ],
+  "chapter": "dol",
+  "script": null,
+  "at": "dol@0x803bcd60",
+  "conditions": []
+ },
+ {
+  "type": "item",
+  "item": null,
+  "item_var": "LW(5)",
+  "item_name": null,
+  "flag": null,
+  "maps": [
+   "main.dol"
+  ],
+  "chapter": "dol",
+  "script": null,
+  "at": "dol@0x803bce20",
+  "conditions": []
+ },
+ {
+  "type": "item",
+  "item": 71,
+  "item_var": null,
+  "item_name": "Gold Bar",
+  "flag": null,
+  "maps": [
+   "main.dol"
+  ],
+  "chapter": "dol",
+  "script": null,
+  "at": "dol@0x803be778",
+  "conditions": []
+ },
+ {
+  "type": "item",
+  "item": 72,
+  "item_var": null,
+  "item_name": "Gold Bar x3",
+  "flag": null,
+  "maps": [
+   "main.dol"
+  ],
+  "chapter": "dol",
+  "script": null,
+  "at": "dol@0x803be810",
+  "conditions": []
+ },
+ {
+  "type": "item",
+  "item": 106,
+  "item_var": null,
+  "item_name": "Whacka Bump",
+  "flag": null,
+  "maps": [
+   "main.dol"
+  ],
+  "chapter": "dol",
+  "script": null,
+  "at": "dol@0x803cb5c0",
+  "conditions": []
+ },
+ {
+  "type": "item",
+  "item": null,
+  "item_var": "LW(0)",
+  "item_name": null,
+  "flag": null,
+  "maps": [
+   "main.dol"
+  ],
+  "chapter": "dol",
+  "script": null,
+  "at": "dol@0x803db448",
+  "conditions": []
+ },
+ {
+  "type": "item",
+  "item": 52,
+  "item_var": null,
+  "item_name": "Training Machine",
+  "flag": null,
+  "maps": [
+   "main.dol"
+  ],
+  "chapter": "dol",
+  "script": null,
+  "at": "dol@0x803ddcc8",
+  "conditions": []
+ },
+ {
+  "type": "item",
+  "item": 51,
+  "item_var": null,
+  "item_name": "Crystal Ball",
+  "flag": null,
+  "maps": [
+   "main.dol"
+  ],
+  "chapter": "dol",
+  "script": null,
+  "at": "dol@0x803ddf30",
+  "conditions": []
+ },
+ {
+  "type": "item",
+  "item": null,
+  "item_var": "LW(0)",
+  "item_name": null,
+  "flag": null,
+  "maps": [
+   "main.dol"
+  ],
+  "chapter": "dol",
+  "script": null,
+  "at": "dol@0x803de95c",
+  "conditions": []
+ },
+ {
+  "type": "item",
+  "item": null,
+  "item_var": "LW(0)",
+  "item_name": null,
+  "flag": null,
+  "maps": [
+   "main.dol"
+  ],
+  "chapter": "dol",
+  "script": null,
+  "at": "dol@0x803dea84",
+  "conditions": []
+ },
+ {
+  "type": "gift",
+  "item": null,
+  "item_var": "LW(10)",
+  "item_name": null,
+  "flag": null,
+  "maps": [
+   "main.dol"
+  ],
+  "chapter": "dol",
+  "script": null,
+  "at": "dol@0x803dece8",
+  "conditions": []
+ },
+ {
+  "type": "item",
+  "item": null,
+  "item_var": "LW(0)",
+  "item_name": null,
+  "flag": null,
+  "maps": [
+   "main.dol"
+  ],
+  "chapter": "dol",
+  "script": null,
+  "at": "dol@0x803deeb8",
+  "conditions": []
+ },
+ {
+  "type": "item",
+  "item": null,
+  "item_var": "LW(0)",
+  "item_name": null,
+  "flag": null,
+  "maps": [
+   "main.dol"
+  ],
+  "chapter": "dol",
+  "script": null,
+  "at": "dol@0x803df028",
+  "conditions": []
+ },
+ {
+  "type": "gift",
+  "item": null,
+  "item_var": "LW(10)",
+  "item_name": null,
+  "flag": null,
+  "maps": [
+   "main.dol"
+  ],
+  "chapter": "dol",
+  "script": null,
+  "at": "dol@0x803df7a8",
+  "conditions": []
+ },
+ {
+  "type": "item",
+  "item": null,
+  "item_var": "LW(0)",
+  "item_name": null,
+  "flag": null,
+  "maps": [
+   "main.dol"
+  ],
+  "chapter": "dol",
+  "script": null,
+  "at": "dol@0x803dfbcc",
+  "conditions": []
+ },
+ {
+  "type": "item",
+  "item": null,
+  "item_var": "LW(0)",
+  "item_name": null,
+  "flag": null,
+  "maps": [
+   "main.dol"
+  ],
+  "chapter": "dol",
+  "script": null,
+  "at": "dol@0x803dfcf4",
+  "conditions": []
+ },
+ {
+  "type": "gift",
+  "item": null,
+  "item_var": "LW(10)",
+  "item_name": null,
+  "flag": null,
+  "maps": [
+   "main.dol"
+  ],
+  "chapter": "dol",
+  "script": null,
+  "at": "dol@0x803dff54",
+  "conditions": []
+ },
+ {
+  "type": "item",
+  "item": null,
+  "item_var": "LW(0)",
+  "item_name": null,
+  "flag": null,
+  "maps": [
+   "main.dol"
+  ],
+  "chapter": "dol",
+  "script": null,
+  "at": "dol@0x803e0124",
+  "conditions": []
+ },
+ {
+  "type": "item",
+  "item": null,
+  "item_var": "LW(0)",
+  "item_name": null,
+  "flag": null,
+  "maps": [
+   "main.dol"
+  ],
+  "chapter": "dol",
+  "script": null,
+  "at": "dol@0x803e0294",
+  "conditions": []
+ },
+ {
+  "type": "gift",
+  "item": null,
+  "item_var": "LW(10)",
+  "item_name": null,
+  "flag": null,
+  "maps": [
+   "main.dol"
+  ],
+  "chapter": "dol",
+  "script": null,
+  "at": "dol@0x803e0a10",
+  "conditions": []
+ },
+ {
+  "type": "item",
+  "item": null,
+  "item_var": "LW(0)",
+  "item_name": null,
+  "flag": null,
+  "maps": [
+   "main.dol"
+  ],
+  "chapter": "dol",
+  "script": null,
+  "at": "dol@0x803e0ddc",
+  "conditions": []
+ },
+ {
+  "type": "item",
+  "item": null,
+  "item_var": "LW(0)",
+  "item_name": null,
+  "flag": null,
+  "maps": [
+   "main.dol"
+  ],
+  "chapter": "dol",
+  "script": null,
+  "at": "dol@0x803e0f04",
+  "conditions": []
+ },
+ {
+  "type": "gift",
+  "item": null,
+  "item_var": "LW(10)",
+  "item_name": null,
+  "flag": null,
+  "maps": [
+   "main.dol"
+  ],
+  "chapter": "dol",
+  "script": null,
+  "at": "dol@0x803e1164",
+  "conditions": []
+ },
+ {
+  "type": "item",
+  "item": null,
+  "item_var": "LW(0)",
+  "item_name": null,
+  "flag": null,
+  "maps": [
+   "main.dol"
+  ],
+  "chapter": "dol",
+  "script": null,
+  "at": "dol@0x803e1334",
+  "conditions": []
+ },
+ {
+  "type": "item",
+  "item": null,
+  "item_var": "LW(0)",
+  "item_name": null,
+  "flag": null,
+  "maps": [
+   "main.dol"
+  ],
+  "chapter": "dol",
+  "script": null,
+  "at": "dol@0x803e14a4",
+  "conditions": []
+ },
+ {
+  "type": "item",
+  "item": 51,
+  "item_var": null,
+  "item_name": "Crystal Ball",
+  "flag": null,
+  "maps": [
+   "main.dol"
+  ],
+  "chapter": "dol",
+  "script": null,
+  "at": "dol@0x803e2308",
+  "conditions": []
+ },
+ {
+  "type": "item",
+  "item": 56,
+  "item_var": null,
+  "item_name": "Random House Key",
+  "flag": null,
+  "maps": [
+   "main.dol"
+  ],
+  "chapter": "dol",
+  "script": null,
+  "at": "dol@0x803e2590",
+  "conditions": []
+ },
+ {
+  "type": "item",
+  "item": null,
+  "item_var": "LW(13)",
+  "item_name": null,
+  "flag": null,
+  "maps": [
+   "main.dol"
+  ],
+  "chapter": "dol",
+  "script": null,
+  "at": "dol@0x803e3210",
+  "conditions": []
+ },
+ {
+  "type": "item",
+  "item": null,
+  "item_var": "LW(13)",
+  "item_name": null,
+  "flag": null,
+  "maps": [
+   "main.dol"
+  ],
+  "chapter": "dol",
+  "script": null,
+  "at": "dol@0x803e3c44",
+  "conditions": []
+ },
+ {
+  "type": "item",
+  "item": null,
+  "item_var": "LW(3)",
+  "item_name": null,
+  "flag": null,
+  "maps": [
+   "main.dol"
+  ],
+  "chapter": "dol",
+  "script": null,
+  "at": "dol@0x803e435c",
+  "conditions": []
+ },
+ {
+  "type": "item",
+  "item": 87,
+  "item_var": null,
+  "item_name": "Catch Card",
+  "flag": null,
+  "maps": [
+   "main.dol"
+  ],
+  "chapter": "dol",
+  "script": null,
+  "at": "dol@0x803e4664",
+  "conditions": []
+ },
+ {
+  "type": "item",
+  "item": null,
+  "item_var": "LW(4)",
+  "item_name": null,
+  "flag": null,
+  "maps": [
+   "main.dol"
+  ],
+  "chapter": "dol",
+  "script": null,
+  "at": "dol@0x803e4f34",
+  "conditions": []
+ },
+ {
+  "type": "item",
+  "item": 88,
+  "item_var": null,
+  "item_name": "Catch Card SP",
+  "flag": null,
+  "maps": [
+   "main.dol"
+  ],
+  "chapter": "dol",
+  "script": null,
+  "at": "dol@0x803e5188",
+  "conditions": []
+ },
+ {
+  "type": "item",
+  "item": null,
+  "item_var": "LW(3)",
+  "item_name": null,
+  "flag": null,
+  "maps": [
+   "main.dol"
+  ],
+  "chapter": "dol",
+  "script": null,
+  "at": "dol@0x803e59cc",
+  "conditions": []
+ },
+ {
+  "type": "item",
+  "item": null,
+  "item_var": "LW(3)",
+  "item_name": null,
+  "flag": null,
+  "maps": [
+   "main.dol"
+  ],
+  "chapter": "dol",
+  "script": null,
+  "at": "dol@0x803e5f80",
+  "conditions": []
+ },
+ {
+  "type": "item",
+  "item": null,
+  "item_var": "LW(3)",
+  "item_name": null,
+  "flag": null,
+  "maps": [
+   "main.dol"
+  ],
+  "chapter": "dol",
+  "script": null,
+  "at": "dol@0x803e64b0",
+  "conditions": []
+ },
+ {
+  "type": "item",
+  "item": null,
+  "item_var": "LW(10)",
+  "item_name": null,
+  "flag": null,
+  "maps": [
+   "main.dol"
+  ],
+  "chapter": "dol",
+  "script": null,
+  "at": "dol@0x803e9514",
+  "conditions": []
+ },
+ {
+  "type": "item",
+  "item": null,
+  "item_var": "LW(10)",
+  "item_name": null,
+  "flag": null,
+  "maps": [
+   "main.dol"
+  ],
+  "chapter": "dol",
+  "script": null,
+  "at": "dol@0x803e9548",
+  "conditions": []
+ },
+ {
+  "type": "item",
+  "item": null,
+  "item_var": "LW(10)",
+  "item_name": null,
+  "flag": null,
+  "maps": [
+   "main.dol"
+  ],
+  "chapter": "dol",
+  "script": null,
+  "at": "dol@0x803fa9d4",
+  "conditions": []
+ },
+ {
+  "type": "item",
+  "item": null,
+  "item_var": "LW(10)",
+  "item_name": null,
+  "flag": null,
+  "maps": [
+   "main.dol"
+  ],
+  "chapter": "dol",
+  "script": null,
+  "at": "dol@0x803faa08",
+  "conditions": []
  }
 ]

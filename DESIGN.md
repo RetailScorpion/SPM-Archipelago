@@ -310,9 +310,10 @@ Found with Dolphin's debugger (memory breakpoints) and the new `tools/evtdis.py`
 ### Location mapping (in progress)
 `tools/locscan.py` → `data/locations_us0.md` / `.json` (locations), `data/story_us0.json` (all 319 story-value changes with maps), hand-checked notes in `data/location_notes.json`.
 - 470 locations (items, chests, item blocks, gifts). 322 have no vanilla collected flag (138 items, 122 blocks, 48 chests, 14 gifts), so the mod must give them flags; 30 of those are gated on the story value (missable).
-- Five Pixls (Thoreau, Boomer, Slim, Carrie, Dottie) have vanilla **safety nets** (`party_hoken_NN`): if the section ends without the Pixl, the game gives it. In the randomizer they should send the join location instead.
+- Five Pixls (Thoreau, Boomer, Slim, Carrie, Dottie) have vanilla **safety nets** (`party_hoken_NN`): if the section ends without the Pixl, the game gives it. **Decision (user): remove them entirely** in the randomizer; the join scene stays a normal (unmissable) location.
+- **Pit Keys** are dropped by a random enemy on each Pit floor and open that floor's door (the `dan_01` locks). **Leave the Pit Key system completely untouched.**
 - Pillar and chapter-clear scenes found for all 8 hearts (see `story_us0.json`).
-- Pit Keys are enemy drops inside the Pit (not locations). **Still to find:** where the Crystal Ball, Random House Key and Cooking Disk 1 are given (probably main.dol scripts or NPC dialogue the scan doesn't cover).
+- **Still to find:** where the Crystal Ball, Random House Key and Cooking Disk 1 are given (probably main.dol scripts or NPC dialogue the scan doesn't cover).
 - Next: logic pass (requirements per location) with the user.
 
 ### Useful tools found

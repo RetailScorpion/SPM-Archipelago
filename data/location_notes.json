@@ -1,15 +1,56 @@
 {
-  "_about": "Hand-checked notes merged into the locscan report, keyed by the instruction address ('at'). role: location | safety_net | not_a_location | shop. A safety_net is a vanilla script that gives the item at the end of a section if the player somehow skipped it; in the randomizer it should send the named location instead of giving the item.",
-  "0xf07c0": {"role": "safety_net", "for": "Thoreau join (he2_07)", "note": "party_hoken_01: gives Thoreau at the end of 1-2 if missed"},
-  "0xf415c": {"role": "location", "note": "Thoreau joins (1-2, Yold Town basement)"},
-  "0x102148": {"role": "safety_net", "for": "Boomer join (mi1_07)", "note": "party_hoken_05: gives Boomer at the end of 2-1 if missed"},
-  "0x1038a8": {"role": "location", "note": "Boomer joins (2-1)"},
-  "0x1143f0": {"role": "safety_net", "for": "Slim join (mi3_01)", "note": "party_hoken_02: gives Slim at the end of 2-3 if missed"},
-  "0x10e934": {"role": "location", "note": "Slim joins (2-3, Merlee's Mansion)"},
-  "0x14059c": {"role": "safety_net", "for": "Carrie join (ta4_12)", "note": "party_hoken_03: gives Carrie at the end of 3-4 if missed"},
-  "0x13e984": {"role": "location", "note": "Carrie joins (3-4, Fort Francis basement)"},
-  "0x17d320": {"role": "safety_net", "for": "Dottie join (gn4_03)", "note": "party_hoken_04: gives Dottie at the end of 5-4 if missed"},
-  "0x17610c": {"role": "location", "note": "Dottie joins (5-4, Floro Caverns)"},
-  "0x154124": {"role": "shop", "note": "Twinkle Mart (4-3): custom shop script, item chosen by the player; candidate for shop locations"},
-  "0x167580": {"role": "not_a_location", "note": "Cudge's shrine (5-2): gives a tablet back when it's removed from its slot"}
+  "_about": "Hand-checked notes merged into the locscan report, keyed by the instruction address ('at'). role: location | safety_net | not_a_location | shop. A safety_net is a vanilla script that gives the item at the end of a section if the player somehow skipped it; decision (user): the randomizer removes safety nets entirely (they would hand out the vanilla Pixl for free).",
+  "0xf07c0": {
+    "role": "safety_net",
+    "for": "Thoreau join (he2_07)",
+    "note": "party_hoken_01: gives Thoreau at the end of 1-2 if missed; REMOVE in the randomizer"
+  },
+  "0xf415c": {
+    "role": "location",
+    "note": "Thoreau joins (1-2, Yold Town basement)"
+  },
+  "0x102148": {
+    "role": "safety_net",
+    "for": "Boomer join (mi1_07)",
+    "note": "party_hoken_05: gives Boomer at the end of 2-1 if missed; REMOVE in the randomizer"
+  },
+  "0x1038a8": {
+    "role": "location",
+    "note": "Boomer joins (2-1)"
+  },
+  "0x1143f0": {
+    "role": "safety_net",
+    "for": "Slim join (mi3_01)",
+    "note": "party_hoken_02: gives Slim at the end of 2-3 if missed; REMOVE in the randomizer"
+  },
+  "0x10e934": {
+    "role": "location",
+    "note": "Slim joins (2-3, Merlee's Mansion)"
+  },
+  "0x14059c": {
+    "role": "safety_net",
+    "for": "Carrie join (ta4_12)",
+    "note": "party_hoken_03: gives Carrie at the end of 3-4 if missed; REMOVE in the randomizer"
+  },
+  "0x13e984": {
+    "role": "location",
+    "note": "Carrie joins (3-4, Fort Francis basement)"
+  },
+  "0x17d320": {
+    "role": "safety_net",
+    "for": "Dottie join (gn4_03)",
+    "note": "party_hoken_04: gives Dottie at the end of 5-4 if missed; REMOVE in the randomizer"
+  },
+  "0x17610c": {
+    "role": "location",
+    "note": "Dottie joins (5-4, Floro Caverns)"
+  },
+  "0x154124": {
+    "role": "shop",
+    "note": "Twinkle Mart (4-3): custom shop script, item chosen by the player; candidate for shop locations"
+  },
+  "0x167580": {
+    "role": "not_a_location",
+    "note": "Cudge's shrine (5-2): gives a tablet back when it's removed from its slot"
+  }
 }
