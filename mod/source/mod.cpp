@@ -23,7 +23,6 @@
 #include "joins.h"
 #include "mailbox.h"
 #include "patch.h"
-#include "returnpipe.h"
 #include "storyvalue.h"
 #include "tippi.h"
 
@@ -175,7 +174,6 @@ void main()
     doors::init();
     flip::init();
     joins::init();
-    returnpipe::init();
 
     seq_titleMainReal = spm::seqdef::seq_data[spm::seqdrv::SEQ_TITLE].main;
     spm::seqdef::seq_data[spm::seqdrv::SEQ_TITLE].main = seq_titleMainHook;
