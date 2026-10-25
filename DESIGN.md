@@ -159,6 +159,8 @@ v1 has a single "intended" logic: no tricks, no damage boosts. A `logic_difficul
 | `side_quests` | on / off | off | Piccolo trading sequence, NPC rewards in the hubs |
 | `catch_cards` | off / … | off | **Later.** 256 cards is a lot; maybe "every Nth card" |
 | `recipes` | off / on | off | **Later.** First cook of each recipe |
+| `cooking_disks` | off / on | off | **On:** the unused **Cooking Disk 1** (item 63, `DISK_PI`) goes in the pool, and Saffron in **Flipside** won't cook without it. A new custom item, **"Flopside Cooking Disk"** (name to decide; "Cooking Disk 2" is taken by the vanilla red disk), goes in the pool too, and Dyllis in **Flopside** won't cook without it. Both need item-table entries (CD1 exists but has no way to be obtained) and a check in each cook's script |
+| `piccolo_chain` | vanilla / shuffle_first / shuffle_house_key / shuffle_all | vanilla | Piccolo's trading sequence: Training Machine (Bestovius's house, 1-1) → Merluvlee gives the Crystal Ball → Merlee (Flopside) gives the Random House Key → Piccolo's house. See "Piccolo chain" below |
 | `coinsanity` | off / every_coin | off | **Design only, not implemented yet.** Every placed coin is a check (~900: ~600 spawned by map scripts, 299 from setup files; coin blocks to decide). See "Coinsanity" below |
 | `skip_cutscenes` | on / off | on | Skips the story interludes outside the chapters: Count Bleck & minions (story values 10, 54, 96), the memory flashbacks after Chapters 1–7 (57, 98, 126, 174, 221, 287, 354), the Peach intermission (55–56) and the Luigi intermission (97). Off: they play after the chapter that triggers them. Scenes with checks (the Ch4 Helmet interlude, the Underwhere) always play |
 | `traps` | 0–100% of filler | 0 | Poison Shroom, Sleepy Sheep, Mistake |
@@ -180,6 +182,13 @@ In a solo seed with `starting_open_doors: 0` and `open_hubs: off`, sphere 1 can 
 - `open_hubs: on`: they're all there from the start. Peach has already fallen into Flipside, and you just talk to her for her check. Merlon has the Old Key ready, and so on. Flopside's checks still need Fleep, because you need him to get into Flopside.
 - `open_hubs: off`: each check waits for its vanilla trigger, as a logic event. For example, the Peach check needs "Chapter 1 Clear", and the Old Key check needs whatever unlocks it in vanilla.
 - Either way it's done with our own flags, not the story progress value, which the hubs keep fixed (see §6).
+
+**Piccolo chain** (`piccolo_chain`). The chain's steps, from the scan: the Training Machine pickup in Bestovius's house (`he1_06`); Merluvlee takes it and gives the Crystal Ball (`main.dol` scripts at `0x803DDCC8`/`0x803DDF30`); Merlee takes the ball and gives the Random House Key (`0x803E2308`/`0x803E2590`); the key opens Piccolo's house (`mac_19` lock).
+- `vanilla`: all as in the original game.
+- `shuffle_first`: the **Training Machine** goes in the pool, and its pickup spot in Bestovius's house gives a random check. Finding the Training Machine (wherever it is) starts the chain; the later trades are vanilla.
+- `shuffle_house_key`: only the **Random House Key** goes in the pool. Merlee's trade gives a random check instead of the key. The earlier steps are vanilla.
+- `shuffle_all`: all three chain items (Training Machine, Crystal Ball, Random House Key) go in the pool, and **every step gives a random check**: the Bestovius's-house pickup, Merluvlee's trade and Merlee's trade.
+- Logic: Merlee is in Flopside, so her steps need Flopside access (Fleep).
 
 **Coinsanity** (design only, not implemented):
 - Vanilla only remembers collected coins for the last 32 maps visited (`coinEntries[32]`, a rolling list), so coins respawn. The mod needs its own permanent flag per coin; the game uses nothing between GSWF 1328 and 8191, so there's room.
@@ -311,6 +320,7 @@ Found with Dolphin's debugger (memory breakpoints) and the new `tools/evtdis.py`
 `tools/locscan.py` → `data/locations_us0.md` / `.json` (locations), `data/story_us0.json` (all 319 story-value changes with maps), hand-checked notes in `data/location_notes.json`.
 - 470 locations (items, chests, item blocks, gifts). 322 have no vanilla collected flag (138 items, 122 blocks, 48 chests, 14 gifts), so the mod must give them flags; 30 of those are gated on the story value (missable).
 - Five Pixls (Thoreau, Boomer, Slim, Carrie, Dottie) have vanilla **safety nets** (`party_hoken_NN`): if the section ends without the Pixl, the game gives it. **Decision (user): remove them entirely** in the randomizer; the join scene stays a normal (unmissable) location.
+- **Pixl join scenes vanish once the chapter's story value passes them** (found by tracing what starts each join): Thoreau needs GSW 0 < 25, Boomer < 72/73, Thudley < 108, Carrie < 123, Fleep < 145, Cudge < 192, Dottie < 209. Slim: no story-value gate found at the first level (probably a flag; check). Barry, Piccolo, Dashell: flag-based. With the safety nets removed, **the mod must replace each of these story-value checks with "join location not collected"** so the scene stays available. Confirm in-game for at least one (e.g. raise Chapter 1 past 25 without the Thoreau scene and check the basement chest still appears after the fix).
 - **Pit Keys** are dropped by a random enemy on each Pit floor and open that floor's door (the `dan_01` locks). **Leave the Pit Key system completely untouched.**
 - Pillar and chapter-clear scenes found for all 8 hearts (see `story_us0.json`).
 - **Still to find:** where the Crystal Ball, Random House Key and Cooking Disk 1 are given (probably main.dol scripts or NPC dialogue the scan doesn't cover).
