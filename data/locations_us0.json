@@ -1,0 +1,10460 @@
+[
+ {
+  "type": "check",
+  "item": 165,
+  "item_var": null,
+  "item_name": "Spicy Soup",
+  "script": "0xaf530",
+  "at": "0xaf53c",
+  "conditions": [],
+  "maps": [
+   "mac_01"
+  ],
+  "chapter": "hub"
+ },
+ {
+  "type": "item",
+  "name": "\"soup\"",
+  "item": 165,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "LW(0)",
+   "LW(1)",
+   "LW(2)"
+  ],
+  "item_name": "Spicy Soup",
+  "script": "0xaf530",
+  "at": "0xaf63c",
+  "conditions": [
+   "LW(0) != -1"
+  ],
+  "maps": [
+   "mac_01"
+  ],
+  "chapter": "hub"
+ },
+ {
+  "type": "check",
+  "item": 165,
+  "item_var": null,
+  "item_name": "Spicy Soup",
+  "script": "0xafec0",
+  "at": "0xafecc",
+  "conditions": [],
+  "maps": [
+   "mac_01"
+  ],
+  "chapter": "hub"
+ },
+ {
+  "type": "item",
+  "name": "\"item\"",
+  "item": 508,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "LW(0)",
+   "LW(1)",
+   "LW(2)"
+  ],
+  "item_name": "Merlee",
+  "script": "0xb1f58",
+  "at": "0xb1f7c",
+  "conditions": [],
+  "maps": [
+   "mac_01"
+  ],
+  "chapter": "hub"
+ },
+ {
+  "type": "check",
+  "item": 165,
+  "item_var": null,
+  "item_name": "Spicy Soup",
+  "script": "0xb20d4",
+  "at": "0xb244c",
+  "conditions": [
+   "GSW(0) >= 60",
+   "GSW(0) < 63"
+  ],
+  "maps": [
+   "mac_01"
+  ],
+  "chapter": "hub"
+ },
+ {
+  "type": "check",
+  "item": 165,
+  "item_var": null,
+  "item_name": "Spicy Soup",
+  "script": "0xb20d4",
+  "at": "0xb2508",
+  "conditions": [
+   "GSW(0) >= 60",
+   "GSW(0) < 63",
+   "LW(0) != 0"
+  ],
+  "maps": [
+   "mac_01"
+  ],
+  "chapter": "hub"
+ },
+ {
+  "type": "item",
+  "name": "\"kingyo\"",
+  "item": 22,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "LW(0)",
+   "LW(1)",
+   "LW(2)"
+  ],
+  "item_name": "Goldfish Bowl",
+  "script": "0xb20d4",
+  "at": "0xb26f0",
+  "conditions": [
+   "GSW(0) == 132"
+  ],
+  "maps": [
+   "mac_01"
+  ],
+  "chapter": "hub"
+ },
+ {
+  "type": "chest",
+  "name": "\"tb_00\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "GSWF(527)",
+  "item_name": "[NULL]",
+  "script": "0xb20d4",
+  "at": "0xb27f8",
+  "conditions": [],
+  "maps": [
+   "mac_01"
+  ],
+  "chapter": "hub"
+ },
+ {
+  "type": "chest",
+  "name": "\"i_00\"",
+  "item": 57,
+  "item_var": null,
+  "flag": "GSWF(580)",
+  "item_name": "Cooking Disk 2",
+  "script": "0xb20d4",
+  "at": "0xb2afc",
+  "conditions": [],
+  "maps": [
+   "mac_01"
+  ],
+  "chapter": "hub"
+ },
+ {
+  "type": "check",
+  "item": 47,
+  "item_var": null,
+  "item_name": "Old Key",
+  "script": "0xb3540",
+  "at": "0xb3540",
+  "conditions": [],
+  "maps": [
+   "mac_02"
+  ],
+  "chapter": "hub"
+ },
+ {
+  "type": "item",
+  "name": "\"_i\"",
+  "item": 50,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "LW(0)",
+   "LW(1)",
+   "LW(2)"
+  ],
+  "item_name": "Return Pipe",
+  "script": "0xb5300",
+  "at": "0xb62a4",
+  "conditions": [
+   "GSW(0) == 8"
+  ],
+  "maps": [
+   "mac_02"
+  ],
+  "chapter": "hub"
+ },
+ {
+  "type": "gift",
+  "item": 217,
+  "item_var": null,
+  "item_name": "Peach",
+  "script": "0xbbd08",
+  "at": "0xbbdf8",
+  "conditions": [],
+  "maps": [
+   "mac_02"
+  ],
+  "chapter": "hub"
+ },
+ {
+  "type": "item",
+  "name": "\"key\"",
+  "item": 47,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "0",
+   "0",
+   "0"
+  ],
+  "item_name": "Old Key",
+  "script": "0xbbd08",
+  "at": "0xbc54c",
+  "conditions": [],
+  "maps": [
+   "mac_02"
+  ],
+  "chapter": "hub"
+ },
+ {
+  "type": "lock",
+  "name": "\"mon_lock\"",
+  "item": 47,
+  "item_name": "Old Key",
+  "script": "0xc82a8",
+  "at": "0xc83d0",
+  "conditions": [
+   "GSW(0) < 64"
+  ],
+  "maps": [
+   "mac_02"
+  ],
+  "chapter": "hub"
+ },
+ {
+  "type": "item",
+  "name": "\"shop_i1\"",
+  "item": 65,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "-825",
+   "10",
+   "-550"
+  ],
+  "item_name": "Fire Burst",
+  "script": "0xc82a8",
+  "at": "0xc8994",
+  "conditions": [],
+  "maps": [
+   "mac_02"
+  ],
+  "chapter": "hub"
+ },
+ {
+  "type": "item",
+  "name": "\"shop_i2\"",
+  "item": 66,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "-825",
+   "34",
+   "-570"
+  ],
+  "item_name": "Ice Storm",
+  "script": "0xc82a8",
+  "at": "0xc89c4",
+  "conditions": [],
+  "maps": [
+   "mac_02"
+  ],
+  "chapter": "hub"
+ },
+ {
+  "type": "item",
+  "name": "\"shop_i3\"",
+  "item": 80,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "-825",
+   "34",
+   "-525"
+  ],
+  "item_name": "Shroom Shake",
+  "script": "0xc82a8",
+  "at": "0xc89f4",
+  "conditions": [],
+  "maps": [
+   "mac_02"
+  ],
+  "chapter": "hub"
+ },
+ {
+  "type": "item",
+  "name": "\"shop_i4\"",
+  "item": 96,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "-825",
+   "10",
+   "-450"
+  ],
+  "item_name": "Star Medal",
+  "script": "0xc82a8",
+  "at": "0xc8a24",
+  "conditions": [],
+  "maps": [
+   "mac_02"
+  ],
+  "chapter": "hub"
+ },
+ {
+  "type": "item",
+  "name": "\"shop_i5\"",
+  "item": 78,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "-825",
+   "59",
+   "-450"
+  ],
+  "item_name": "Sleepy Sheep",
+  "script": "0xc82a8",
+  "at": "0xc8a54",
+  "conditions": [],
+  "maps": [
+   "mac_02"
+  ],
+  "chapter": "hub"
+ },
+ {
+  "type": "shop",
+  "shops": [
+   {
+    "type": 5,
+    "npc": "mise",
+    "items": [
+     {
+      "item": 80,
+      "item_name": "Shroom Shake",
+      "price": -1
+     },
+     {
+      "item": 85,
+      "item_name": "Long-Last Shake",
+      "price": -1
+     },
+     {
+      "item": 84,
+      "item_name": "Life Shroom",
+      "price": -1
+     },
+     {
+      "item": 65,
+      "item_name": "Fire Burst",
+      "price": -1
+     },
+     {
+      "item": 66,
+      "item_name": "Ice Storm",
+      "price": -1
+     },
+     {
+      "item": 78,
+      "item_name": "Sleepy Sheep",
+      "price": -1
+     },
+     {
+      "item": 74,
+      "item_name": "Courage Shell",
+      "price": -1
+     },
+     {
+      "item": 70,
+      "item_name": "Shell Shock",
+      "price": -1
+     },
+     {
+      "item": 96,
+      "item_name": "Star Medal",
+      "price": -1
+     },
+     {
+      "item": 71,
+      "item_name": "Gold Bar",
+      "price": -1
+     }
+    ]
+   },
+   {
+    "type": 0,
+    "npc": "yado",
+    "items": []
+   },
+   {
+    "type": 2,
+    "npc": "mistail",
+    "items": []
+   }
+  ],
+  "item_name": null,
+  "script": "0xc82a8",
+  "at": "0xc9fd4",
+  "conditions": [],
+  "maps": [
+   "mac_02"
+  ],
+  "chapter": "hub"
+ },
+ {
+  "type": "item",
+  "name": "\"kingyobati\"",
+  "item": 22,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "-150",
+   "400",
+   "0"
+  ],
+  "item_name": "Goldfish Bowl",
+  "script": "0xcce30",
+  "at": "0xccf44",
+  "conditions": [
+   "LW(0) == 0"
+  ],
+  "maps": [
+   "mac_04"
+  ],
+  "chapter": "hub"
+ },
+ {
+  "type": "item",
+  "name": "\"kingyobati2\"",
+  "item": 23,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "LW(0)",
+   "LW(1)",
+   "LW(2)"
+  ],
+  "item_name": "Goldfish Bowl",
+  "script": "0xcce30",
+  "at": "0xccfc0",
+  "conditions": [
+   "LW(0) == 0"
+  ],
+  "maps": [
+   "mac_04"
+  ],
+  "chapter": "hub"
+ },
+ {
+  "type": "item",
+  "name": "\"helmet\"",
+  "item": 24,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "0",
+   "-1000",
+   "0"
+  ],
+  "item_name": "Helmet",
+  "script": "0xcce30",
+  "at": "0xcd1d0",
+  "conditions": [
+   "LW(0) == 0"
+  ],
+  "maps": [
+   "mac_04"
+  ],
+  "chapter": "hub"
+ },
+ {
+  "type": "shop",
+  "shops": [
+   {
+    "type": 3,
+    "npc": "bar_master",
+    "items": []
+   },
+   {
+    "type": 13,
+    "npc": "roten",
+    "items": [
+     {
+      "item": 105,
+      "item_name": "Cake Mix",
+      "price": -1
+     },
+     {
+      "item": 0,
+      "item_name": "[NULL]",
+      "price": 105
+     }
+    ]
+   },
+   {
+    "type": 15,
+    "npc": "sound",
+    "items": []
+   },
+   {
+    "type": 16,
+    "npc": null,
+    "items": [
+     {
+      "item": 105,
+      "item_name": "Cake Mix",
+      "price": -1
+     },
+     {
+      "item": 118,
+      "item_name": "Big Egg",
+      "price": -1
+     },
+     {
+      "item": 116,
+      "item_name": "Honey Jar",
+      "price": -1
+     }
+    ]
+   }
+  ],
+  "item_name": null,
+  "script": "0xcd6e8",
+  "at": "0xcdfec",
+  "conditions": [],
+  "maps": [
+   "mac_04"
+  ],
+  "chapter": "hub"
+ },
+ {
+  "type": "chest",
+  "name": "\"box_01\"",
+  "item": 520,
+  "item_var": null,
+  "flag": "GSWF(520)",
+  "item_name": "The InterNed",
+  "script": "0xcd6e8",
+  "at": "0xce078",
+  "conditions": [],
+  "maps": [
+   "mac_04"
+  ],
+  "chapter": "hub"
+ },
+ {
+  "type": "item",
+  "name": "\"treasure\"",
+  "item": 89,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "LW(0)",
+   "LW(1)",
+   "LW(2)"
+  ],
+  "item_name": "HP Plus",
+  "script": "0xce858",
+  "at": "0xce888",
+  "conditions": [],
+  "maps": [
+   "mac_05"
+  ],
+  "chapter": "hub"
+ },
+ {
+  "type": "chest",
+  "name": "\"treasure\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "GSWF(503)",
+  "item_name": "[NULL]",
+  "script": "0xceb30",
+  "at": "0xcef3c",
+  "conditions": [],
+  "maps": [
+   "mac_05"
+  ],
+  "chapter": "hub"
+ },
+ {
+  "type": "chest",
+  "name": "\"box_01\"",
+  "item": 534,
+  "item_var": null,
+  "flag": "GSWF(521)",
+  "item_name": "The InterChet",
+  "script": "0xcf9a4",
+  "at": "0xcfa5c",
+  "conditions": [],
+  "maps": [
+   "mac_07"
+  ],
+  "chapter": "hub"
+ },
+ {
+  "type": "chest",
+  "name": "\"box_01\"",
+  "item": 507,
+  "item_var": null,
+  "flag": "GSWF(522)",
+  "item_name": "Merluvlee",
+  "script": "0xcfd20",
+  "at": "0xcfdb8",
+  "conditions": [],
+  "maps": [
+   "mac_08"
+  ],
+  "chapter": "hub"
+ },
+ {
+  "type": "chest",
+  "name": "\"box_02\"",
+  "item": 505,
+  "item_var": null,
+  "flag": "GSWF(523)",
+  "item_name": "Merlon",
+  "script": "0xcfd20",
+  "at": "0xcfde4",
+  "conditions": [],
+  "maps": [
+   "mac_08"
+  ],
+  "chapter": "hub"
+ },
+ {
+  "type": "check",
+  "item": null,
+  "item_var": "LW(0)",
+  "item_name": null,
+  "script": "0xd2f10",
+  "at": "0xd309c",
+  "conditions": [],
+  "maps": [
+   "mac_09",
+   "mac_19"
+  ],
+  "chapter": "hub"
+ },
+ {
+  "type": "check",
+  "item": null,
+  "item_var": "LW(10)",
+  "item_name": null,
+  "script": "0xd2f10",
+  "at": "0xd30f0",
+  "conditions": [
+   "LF(0) == 1"
+  ],
+  "maps": [
+   "mac_09",
+   "mac_19"
+  ],
+  "chapter": "hub"
+ },
+ {
+  "type": "shop",
+  "shops": [
+   {
+    "type": 8,
+    "npc": "cooking",
+    "items": []
+   },
+   {
+    "type": 10,
+    "npc": "card",
+    "items": []
+   }
+  ],
+  "item_name": null,
+  "script": "0xd32a8",
+  "at": "0xd34a4",
+  "conditions": [],
+  "maps": [
+   "mac_09"
+  ],
+  "chapter": "hub"
+ },
+ {
+  "type": "item",
+  "name": "\"item\"",
+  "item": 506,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "LW(0)",
+   "LW(1)",
+   "LW(2)"
+  ],
+  "item_name": "Nolrem",
+  "script": "0xd4588",
+  "at": "0xd45ac",
+  "conditions": [],
+  "maps": [
+   "mac_11"
+  ],
+  "chapter": "hub"
+ },
+ {
+  "type": "chest",
+  "name": "\"tb_00\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "GSWF(529)",
+  "item_name": "[NULL]",
+  "script": "0xd4704",
+  "at": "0xd4970",
+  "conditions": [],
+  "maps": [
+   "mac_11"
+  ],
+  "chapter": "hub"
+ },
+ {
+  "type": "chest",
+  "name": "\"i_00\"",
+  "item": 58,
+  "item_var": null,
+  "flag": "GSWF(581)",
+  "item_name": "Cooking Disk 3",
+  "script": "0xd4704",
+  "at": "0xd4b74",
+  "conditions": [],
+  "maps": [
+   "mac_11"
+  ],
+  "chapter": "hub"
+ },
+ {
+  "type": "item",
+  "name": "\"shop_i1\"",
+  "item": 67,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "825",
+   "10",
+   "-550"
+  ],
+  "item_name": "Thunder Rage",
+  "script": "0xdaef8",
+  "at": "0xdb198",
+  "conditions": [],
+  "maps": [
+   "mac_12"
+  ],
+  "chapter": "hub"
+ },
+ {
+  "type": "item",
+  "name": "\"shop_i2\"",
+  "item": 81,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "825",
+   "34",
+   "-570"
+  ],
+  "item_name": "Super Shroom Shake",
+  "script": "0xdaef8",
+  "at": "0xdb1c8",
+  "conditions": [],
+  "maps": [
+   "mac_12"
+  ],
+  "chapter": "hub"
+ },
+ {
+  "type": "item",
+  "name": "\"shop_i3\"",
+  "item": 75,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "825",
+   "59",
+   "-525"
+  ],
+  "item_name": "Mighty Tonic",
+  "script": "0xdaef8",
+  "at": "0xdb1f8",
+  "conditions": [],
+  "maps": [
+   "mac_12"
+  ],
+  "chapter": "hub"
+ },
+ {
+  "type": "item",
+  "name": "\"shop_i4\"",
+  "item": 97,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "825",
+   "10",
+   "-450"
+  ],
+  "item_name": "Gold Medal",
+  "script": "0xdaef8",
+  "at": "0xdb228",
+  "conditions": [],
+  "maps": [
+   "mac_12"
+  ],
+  "chapter": "hub"
+ },
+ {
+  "type": "item",
+  "name": "\"shop_i5\"",
+  "item": 76,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "825",
+   "59",
+   "-450"
+  ],
+  "item_name": "Volt Shroom",
+  "script": "0xdaef8",
+  "at": "0xdb258",
+  "conditions": [],
+  "maps": [
+   "mac_12"
+  ],
+  "chapter": "hub"
+ },
+ {
+  "type": "shop",
+  "shops": [
+   {
+    "type": 6,
+    "npc": "mise",
+    "items": [
+     {
+      "item": 81,
+      "item_name": "Super Shroom Shake",
+      "price": -1
+     },
+     {
+      "item": 82,
+      "item_name": "Ultra Shroom Shake",
+      "price": -1
+     },
+     {
+      "item": 67,
+      "item_name": "Thunder Rage",
+      "price": -1
+     },
+     {
+      "item": 79,
+      "item_name": "Stop Watch",
+      "price": -1
+     },
+     {
+      "item": 75,
+      "item_name": "Mighty Tonic",
+      "price": -1
+     },
+     {
+      "item": 76,
+      "item_name": "Volt Shroom",
+      "price": -1
+     },
+     {
+      "item": 73,
+      "item_name": "Block Block",
+      "price": -1
+     },
+     {
+      "item": 77,
+      "item_name": "Ghost Shroom",
+      "price": -1
+     },
+     {
+      "item": 97,
+      "item_name": "Gold Medal",
+      "price": -1
+     },
+     {
+      "item": 72,
+      "item_name": "Gold Bar x3",
+      "price": -1
+     }
+    ]
+   },
+   {
+    "type": 1,
+    "npc": "yado",
+    "items": []
+   },
+   {
+    "type": 7,
+    "npc": "sandale",
+    "items": []
+   }
+  ],
+  "item_name": null,
+  "script": "0xdaef8",
+  "at": "0xdb3e0",
+  "conditions": [],
+  "maps": [
+   "mac_12"
+  ],
+  "chapter": "hub"
+ },
+ {
+  "type": "chest",
+  "name": "\"box01\"",
+  "item": 64,
+  "item_var": null,
+  "flag": "GSWF(537)",
+  "item_name": "Golden Card",
+  "script": "0xdc9a0",
+  "at": "0xdca1c",
+  "conditions": [],
+  "maps": [
+   "mac_14"
+  ],
+  "chapter": "hub"
+ },
+ {
+  "type": "chest",
+  "name": "\"box02\"",
+  "item": 60,
+  "item_var": null,
+  "flag": "GSWF(583)",
+  "item_name": "Cooking Disk 5",
+  "script": "0xdc9a0",
+  "at": "0xdca78",
+  "conditions": [],
+  "maps": [
+   "mac_14"
+  ],
+  "chapter": "hub"
+ },
+ {
+  "type": "shop",
+  "shops": [
+   {
+    "type": 4,
+    "npc": "bar_master",
+    "items": []
+   },
+   {
+    "type": 12,
+    "npc": "mapshop",
+    "items": []
+   },
+   {
+    "type": 16,
+    "npc": null,
+    "items": [
+     {
+      "item": 108,
+      "item_name": "Fresh Pasta Bunch",
+      "price": -1
+     },
+     {
+      "item": 117,
+      "item_name": "Power Steak",
+      "price": -1
+     },
+     {
+      "item": 115,
+      "item_name": "Smelly Herb",
+      "price": -1
+     }
+    ]
+   }
+  ],
+  "item_name": null,
+  "script": "0xdc9a0",
+  "at": "0xdcd1c",
+  "conditions": [],
+  "maps": [
+   "mac_14"
+  ],
+  "chapter": "hub"
+ },
+ {
+  "type": "item",
+  "name": "\"treasure\"",
+  "item": 90,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "LW(0)",
+   "LW(1)",
+   "LW(2)"
+  ],
+  "item_name": "Power Plus",
+  "script": "0xddefc",
+  "at": "0xddf2c",
+  "conditions": [],
+  "maps": [
+   "mac_15"
+  ],
+  "chapter": "hub"
+ },
+ {
+  "type": "chest",
+  "name": "\"treasure\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "GSWF(506)",
+  "item_name": "[NULL]",
+  "script": "0xde1bc",
+  "at": "0xde7f4",
+  "conditions": [],
+  "maps": [
+   "mac_15"
+  ],
+  "chapter": "hub"
+ },
+ {
+  "type": "chest",
+  "name": "\"box_01\"",
+  "item": 485,
+  "item_var": null,
+  "flag": "GSWF(524)",
+  "item_name": "Piccolo",
+  "script": "0xdf8f0",
+  "at": "0xdf9fc",
+  "conditions": [],
+  "maps": [
+   "mac_17"
+  ],
+  "chapter": "hub"
+ },
+ {
+  "type": "chest",
+  "name": "\"box_01\"",
+  "item": 486,
+  "item_var": null,
+  "flag": "GSWF(525)",
+  "item_name": "Barry",
+  "script": "0xdfca0",
+  "at": "0xdfd08",
+  "conditions": [],
+  "maps": [
+   "mac_18"
+  ],
+  "chapter": "hub"
+ },
+ {
+  "type": "check",
+  "item": 229,
+  "item_var": null,
+  "item_name": "Piccolo",
+  "script": "0xe0718",
+  "at": "0xe0724",
+  "conditions": [],
+  "maps": [
+   "mac_19"
+  ],
+  "chapter": "hub"
+ },
+ {
+  "type": "check",
+  "item": 56,
+  "item_var": null,
+  "item_name": "Random House Key",
+  "script": "0xe1e58",
+  "at": "0xe1e58",
+  "conditions": [],
+  "maps": [
+   "mac_19"
+  ],
+  "chapter": "hub"
+ },
+ {
+  "type": "gift",
+  "item": 229,
+  "item_var": null,
+  "item_name": "Piccolo",
+  "script": "0xe1f5c",
+  "at": "0xe2984",
+  "conditions": [],
+  "maps": [
+   "mac_19"
+  ],
+  "chapter": "hub"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "GSWF(517)",
+  "item_name": "[NULL]",
+  "script": "0xe2b50",
+  "at": "0xe2d88",
+  "conditions": [],
+  "maps": [
+   "mac_19"
+  ],
+  "chapter": "hub"
+ },
+ {
+  "type": "item",
+  "name": "\"i_00\"",
+  "item": 59,
+  "item_var": null,
+  "flag": "GSWF(582)",
+  "pos": [
+   "-370",
+   "30",
+   "-1955"
+  ],
+  "item_name": "Cooking Disk 4",
+  "script": "0xe2b50",
+  "at": "0xe2ea0",
+  "conditions": [],
+  "maps": [
+   "mac_19"
+  ],
+  "chapter": "hub"
+ },
+ {
+  "type": "shop",
+  "shops": [
+   {
+    "type": 9,
+    "npc": "cooking",
+    "items": []
+   },
+   {
+    "type": 11,
+    "npc": "card",
+    "items": []
+   }
+  ],
+  "item_name": null,
+  "script": "0xe2b50",
+  "at": "0xe2ed0",
+  "conditions": [],
+  "maps": [
+   "mac_19"
+  ],
+  "chapter": "hub"
+ },
+ {
+  "type": "lock",
+  "name": "\"house_lock\"",
+  "item": 56,
+  "item_name": "Random House Key",
+  "script": "0xe2b50",
+  "at": "0xe2f0c",
+  "conditions": [
+   "GSWF(536) == 0"
+  ],
+  "maps": [
+   "mac_19"
+  ],
+  "chapter": "hub"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_03\"",
+  "item": 6,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[KINOKO]",
+  "script": "0xe9d58",
+  "at": "0xe9e8c",
+  "conditions": [],
+  "maps": [
+   "he1_01"
+  ],
+  "chapter": "1"
+ },
+ {
+  "type": "item",
+  "name": "\"i_01\"",
+  "item": 373,
+  "item_var": null,
+  "flag": "GSWF(611)",
+  "pos": [
+   "1050",
+   "400",
+   "12"
+  ],
+  "item_name": "Squiglet",
+  "script": "0xe9d58",
+  "at": "0xe9ff4",
+  "conditions": [],
+  "maps": [
+   "he1_01"
+  ],
+  "chapter": "1"
+ },
+ {
+  "type": "item",
+  "name": "\"i2\"",
+  "item": 65,
+  "item_var": null,
+  "flag": "GSWF(615)",
+  "pos": [
+   "1080",
+   "100",
+   "-215"
+  ],
+  "item_name": "Fire Burst",
+  "script": "0xe9d58",
+  "at": "0xea024",
+  "conditions": [],
+  "maps": [
+   "he1_01"
+  ],
+  "chapter": "1"
+ },
+ {
+  "type": "block",
+  "block": "3D ? block",
+  "name": "\"b_79\"",
+  "item": 9,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[BUNSHIN_KINOKO]",
+  "script": "0xe9d58",
+  "at": "0xea13c",
+  "conditions": [],
+  "maps": [
+   "he1_01"
+  ],
+  "chapter": "1"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_01\"",
+  "item": 6,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[KINOKO]",
+  "script": "0xea4c0",
+  "at": "0xea600",
+  "conditions": [],
+  "maps": [
+   "he1_02"
+  ],
+  "chapter": "1"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_23\"",
+  "item": 5,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[HAPPY_FLOWER]",
+  "script": "0xea4c0",
+  "at": "0xea8d0",
+  "conditions": [],
+  "maps": [
+   "he1_02"
+  ],
+  "chapter": "1"
+ },
+ {
+  "type": "block",
+  "block": "3D ? block",
+  "name": "\"b_77\"",
+  "item": 6,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[KINOKO]",
+  "script": "0xea4c0",
+  "at": "0xea8f8",
+  "conditions": [],
+  "maps": [
+   "he1_02"
+  ],
+  "chapter": "1"
+ },
+ {
+  "type": "item",
+  "name": "\"i_01\"",
+  "item": 282,
+  "item_var": null,
+  "flag": "GSWF(603)",
+  "pos": [
+   "-1425",
+   "0",
+   "-60"
+  ],
+  "item_name": "Goomba",
+  "script": "0xea4c0",
+  "at": "0xea920",
+  "conditions": [],
+  "maps": [
+   "he1_02"
+  ],
+  "chapter": "1"
+ },
+ {
+  "type": "chest",
+  "name": "\"box_01\"",
+  "item": 80,
+  "item_var": null,
+  "flag": "GSWF(612)",
+  "item_name": "Shroom Shake",
+  "script": "0xeaad8",
+  "at": "0xeb5ac",
+  "conditions": [
+   "not (LW(0) & 4096)"
+  ],
+  "maps": [
+   "he1_03"
+  ],
+  "chapter": "1"
+ },
+ {
+  "type": "block",
+  "block": "type 32769",
+  "name": "\"b_16\"",
+  "item": 6,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[KINOKO]",
+  "script": "0xeb710",
+  "at": "0xebb98",
+  "conditions": [],
+  "maps": [
+   "he1_04"
+  ],
+  "chapter": "1"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_17\"",
+  "item": 9,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[BUNSHIN_KINOKO]",
+  "script": "0xeb710",
+  "at": "0xebbc0",
+  "conditions": [],
+  "maps": [
+   "he1_04"
+  ],
+  "chapter": "1"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_21\"",
+  "item": 10,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[DOT_STAR]",
+  "script": "0xebe58",
+  "at": "0xebf20",
+  "conditions": [],
+  "maps": [
+   "he1_05"
+  ],
+  "chapter": "1"
+ },
+ {
+  "type": "chest",
+  "name": "\"box_01\"",
+  "item": 291,
+  "item_var": null,
+  "flag": "GSWF(604)",
+  "item_name": "Koopa Troopa",
+  "script": "0xebe58",
+  "at": "0xec9e4",
+  "conditions": [],
+  "maps": [
+   "he1_05"
+  ],
+  "chapter": "1"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_00\"",
+  "item": 6,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[KINOKO]",
+  "script": "0xed224",
+  "at": "0xed304",
+  "conditions": [],
+  "maps": [
+   "he2_01"
+  ],
+  "chapter": "1"
+ },
+ {
+  "type": "chest",
+  "name": "\"box_01\"",
+  "item": 296,
+  "item_var": null,
+  "flag": "GSWF(605)",
+  "item_name": "Paratroopa",
+  "script": "0xed224",
+  "at": "0xed5ac",
+  "conditions": [],
+  "maps": [
+   "he2_01"
+  ],
+  "chapter": "1"
+ },
+ {
+  "type": "item",
+  "name": "\"sikisi\"",
+  "item": 54,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "0",
+   "0",
+   "0"
+  ],
+  "item_name": "Paper",
+  "script": "0xefaf8",
+  "at": "0xefdb0",
+  "conditions": [
+   "GSWF(415) == 0",
+   "GSWF(412) == 1",
+   "LW(0) == 1"
+  ],
+  "maps": [
+   "he2_03"
+  ],
+  "chapter": "1"
+ },
+ {
+  "type": "item",
+  "name": "\"sign\"",
+  "item": 55,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "LW(0)",
+   "LW(1)",
+   "LW(2)"
+  ],
+  "item_name": "Autograph",
+  "script": "0xefaf8",
+  "at": "0xeff84",
+  "conditions": [
+   "GSWF(415) == 0",
+   "GSWF(412) == 1",
+   "LW(0) == 3",
+   "LW(0) == 55"
+  ],
+  "maps": [
+   "he2_03"
+  ],
+  "chapter": "1"
+ },
+ {
+  "type": "item",
+  "name": "\"mono\"",
+  "item": 53,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "0",
+   "0",
+   "0"
+  ],
+  "item_name": "You-Know-What",
+  "script": "0xefaf8",
+  "at": "0xf0128",
+  "conditions": [
+   "GSWF(415) == 0",
+   "GSWF(412) == 1",
+   "LW(0) == 3",
+   "LW(0) == 55"
+  ],
+  "maps": [
+   "he2_03"
+  ],
+  "chapter": "1"
+ },
+ {
+  "type": "check",
+  "item": 221,
+  "item_var": null,
+  "item_name": "Thoreau",
+  "script": "0xf0770",
+  "at": "0xf078c",
+  "conditions": [],
+  "maps": [
+   "he2_03"
+  ],
+  "chapter": "1"
+ },
+ {
+  "type": "gift",
+  "item": 221,
+  "item_var": null,
+  "item_name": "Thoreau",
+  "script": "0xf0770",
+  "at": "0xf07c0",
+  "conditions": [
+   "LW(0) == 0"
+  ],
+  "maps": [
+   "he2_03"
+  ],
+  "chapter": "1"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_00\"",
+  "item": 6,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[KINOKO]",
+  "script": "0xf0cc8",
+  "at": "0xf0ddc",
+  "conditions": [],
+  "maps": [
+   "he2_03"
+  ],
+  "chapter": "1"
+ },
+ {
+  "type": "item",
+  "name": "\"i_01\"",
+  "item": 382,
+  "item_var": null,
+  "flag": "GSWF(610)",
+  "pos": [
+   "175",
+   "250",
+   "-140"
+  ],
+  "item_name": "Boomboxer",
+  "script": "0xf0cc8",
+  "at": "0xf0e04",
+  "conditions": [],
+  "maps": [
+   "he2_03"
+  ],
+  "chapter": "1"
+ },
+ {
+  "type": "item",
+  "name": "\"shop_i1\"",
+  "item": 65,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "-570",
+   "75",
+   "-270"
+  ],
+  "item_name": "Fire Burst",
+  "script": "0xf0cc8",
+  "at": "0xf0f28",
+  "conditions": [],
+  "maps": [
+   "he2_03"
+  ],
+  "chapter": "1"
+ },
+ {
+  "type": "item",
+  "name": "\"shop_i2\"",
+  "item": 69,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "-570",
+   "75",
+   "-300"
+  ],
+  "item_name": "POW Block",
+  "script": "0xf0cc8",
+  "at": "0xf0f58",
+  "conditions": [],
+  "maps": [
+   "he2_03"
+  ],
+  "chapter": "1"
+ },
+ {
+  "type": "item",
+  "name": "\"shop_i3\"",
+  "item": 78,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "-570",
+   "75",
+   "-330"
+  ],
+  "item_name": "Sleepy Sheep",
+  "script": "0xf0cc8",
+  "at": "0xf0f88",
+  "conditions": [],
+  "maps": [
+   "he2_03"
+  ],
+  "chapter": "1"
+ },
+ {
+  "type": "item",
+  "name": "\"shop_i4\"",
+  "item": 80,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "-570",
+   "75",
+   "-360"
+  ],
+  "item_name": "Shroom Shake",
+  "script": "0xf0cc8",
+  "at": "0xf0fb8",
+  "conditions": [],
+  "maps": [
+   "he2_03"
+  ],
+  "chapter": "1"
+ },
+ {
+  "type": "shop",
+  "shops": [
+   {
+    "type": 5,
+    "npc": "mise",
+    "items": [
+     {
+      "item": 65,
+      "item_name": "Fire Burst",
+      "price": 7
+     },
+     {
+      "item": 69,
+      "item_name": "POW Block",
+      "price": 60
+     },
+     {
+      "item": 80,
+      "item_name": "Shroom Shake",
+      "price": 11
+     },
+     {
+      "item": 85,
+      "item_name": "Long-Last Shake",
+      "price": 15
+     },
+     {
+      "item": 84,
+      "item_name": "Life Shroom",
+      "price": 50
+     },
+     {
+      "item": 78,
+      "item_name": "Sleepy Sheep",
+      "price": 25
+     },
+     {
+      "item": 70,
+      "item_name": "Shell Shock",
+      "price": 8
+     },
+     {
+      "item": 75,
+      "item_name": "Mighty Tonic",
+      "price": 50
+     },
+     {
+      "item": 74,
+      "item_name": "Courage Shell",
+      "price": 25
+     },
+     {
+      "item": 76,
+      "item_name": "Volt Shroom",
+      "price": 20
+     }
+    ]
+   }
+  ],
+  "item_name": null,
+  "script": "0xf0cc8",
+  "at": "0xf1038",
+  "conditions": [],
+  "maps": [
+   "he2_03"
+  ],
+  "chapter": "1"
+ },
+ {
+  "type": "item",
+  "name": "\"i_01\"",
+  "item": 524,
+  "item_var": null,
+  "flag": "GSWF(618)",
+  "pos": [
+   "-100",
+   "150",
+   "-65"
+  ],
+  "item_name": "Red & Green",
+  "script": "0xf34b0",
+  "at": "0xf3790",
+  "conditions": [],
+  "maps": [
+   "he2_05"
+  ],
+  "chapter": "1"
+ },
+ {
+  "type": "gift",
+  "item": 221,
+  "item_var": null,
+  "item_name": "Thoreau",
+  "script": "0xf3a98",
+  "at": "0xf415c",
+  "conditions": [],
+  "maps": [
+   "he2_07"
+  ],
+  "chapter": "1"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "0",
+  "item_name": "[NULL]",
+  "script": "0xf46e4",
+  "at": "0xf4824",
+  "conditions": [
+   "GSW(0) < 25"
+  ],
+  "maps": [
+   "he2_07"
+  ],
+  "chapter": "1"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_00\"",
+  "item": 9,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[BUNSHIN_KINOKO]",
+  "script": "0xf4f24",
+  "at": "0xf5144",
+  "conditions": [],
+  "maps": [
+   "he3_01"
+  ],
+  "chapter": "1"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_03\"",
+  "item": 5,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[HAPPY_FLOWER]",
+  "script": "0xf4f24",
+  "at": "0xf51bc",
+  "conditions": [],
+  "maps": [
+   "he3_01"
+  ],
+  "chapter": "1"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_15\"",
+  "item": 3,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[SPEED_FLOWER]",
+  "script": "0xf4f24",
+  "at": "0xf539c",
+  "conditions": [],
+  "maps": [
+   "he3_01"
+  ],
+  "chapter": "1"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_20\"",
+  "item": 548,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "item 548",
+  "script": "0xf4f24",
+  "at": "0xf53c4",
+  "conditions": [],
+  "maps": [
+   "he3_01"
+  ],
+  "chapter": "1"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_21\"",
+  "item": 6,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[KINOKO]",
+  "script": "0xf4f24",
+  "at": "0xf53ec",
+  "conditions": [],
+  "maps": [
+   "he3_01"
+  ],
+  "chapter": "1"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_37\"",
+  "item": 6,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[KINOKO]",
+  "script": "0xf4f24",
+  "at": "0xf557c",
+  "conditions": [],
+  "maps": [
+   "he3_01"
+  ],
+  "chapter": "1"
+ },
+ {
+  "type": "item",
+  "name": "\"i_01\"",
+  "item": 374,
+  "item_var": null,
+  "flag": "GSWF(606)",
+  "pos": [
+   "1125",
+   "0",
+   "-20"
+  ],
+  "item_name": "Squig",
+  "script": "0xf4f24",
+  "at": "0xf5694",
+  "conditions": [],
+  "maps": [
+   "he3_01"
+  ],
+  "chapter": "1"
+ },
+ {
+  "type": "item",
+  "name": "\"i_01\"",
+  "item": 74,
+  "item_var": null,
+  "flag": "GSWF(607)",
+  "pos": [
+   "1125",
+   "0",
+   "175"
+  ],
+  "item_name": "Courage Shell",
+  "script": "0xf5838",
+  "at": "0xf5924",
+  "conditions": [],
+  "maps": [
+   "he3_02"
+  ],
+  "chapter": "1"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_03\"",
+  "item": 548,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "item 548",
+  "script": "0xf5f48",
+  "at": "0xf6120",
+  "conditions": [],
+  "maps": [
+   "he3_03"
+  ],
+  "chapter": "1"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_10\"",
+  "item": 6,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[KINOKO]",
+  "script": "0xf5f48",
+  "at": "0xf61c0",
+  "conditions": [],
+  "maps": [
+   "he3_03"
+  ],
+  "chapter": "1"
+ },
+ {
+  "type": "block",
+  "block": "3D ? block",
+  "name": "\"b_16\"",
+  "item": 7,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[SUPER_KINOKO]",
+  "script": "0xf7ba0",
+  "at": "0xf7e6c",
+  "conditions": [],
+  "maps": [
+   "he3_05"
+  ],
+  "chapter": "1"
+ },
+ {
+  "type": "item",
+  "name": "\"i_01\"",
+  "item": 77,
+  "item_var": null,
+  "flag": "GSWF(608)",
+  "pos": [
+   "-425",
+   "0",
+   "150"
+  ],
+  "item_name": "Ghost Shroom",
+  "script": "0xf86b0",
+  "at": "0xf87c4",
+  "conditions": [],
+  "maps": [
+   "he3_06"
+  ],
+  "chapter": "1"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_00\"",
+  "item": 6,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[KINOKO]",
+  "script": "0xf95e8",
+  "at": "0xf9688",
+  "conditions": [],
+  "maps": [
+   "he4_02"
+  ],
+  "chapter": "1"
+ },
+ {
+  "type": "chest",
+  "name": "\"box_01\"",
+  "item": 84,
+  "item_var": null,
+  "flag": "GSWF(609)",
+  "item_name": "Life Shroom",
+  "script": "0xf95e8",
+  "at": "0xf96f4",
+  "conditions": [],
+  "maps": [
+   "he4_02"
+  ],
+  "chapter": "1"
+ },
+ {
+  "type": "check",
+  "item": 16,
+  "item_var": null,
+  "item_name": "Ruins Key",
+  "script": "0xf9860",
+  "at": "0xf9860",
+  "conditions": [],
+  "maps": [
+   "he4_03"
+  ],
+  "chapter": "1"
+ },
+ {
+  "type": "lock",
+  "name": "\"lock_00\"",
+  "item": 16,
+  "item_name": "Ruins Key",
+  "script": "0xf98f8",
+  "at": "0xf9b88",
+  "conditions": [
+   "GSW(0) < 41"
+  ],
+  "maps": [
+   "he4_03"
+  ],
+  "chapter": "1"
+ },
+ {
+  "type": "item",
+  "name": "\"key\"",
+  "item": 16,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "LW(0)",
+   "LW(1)",
+   "LW(2)"
+  ],
+  "item_name": "Ruins Key",
+  "script": "0xf9c20",
+  "at": "0xf9c44",
+  "conditions": [],
+  "maps": [
+   "he4_04"
+  ],
+  "chapter": "1"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "0",
+  "item_name": "[NULL]",
+  "script": "0xf9cbc",
+  "at": "0xf9d88",
+  "conditions": [
+   "GSW(0) < 40"
+  ],
+  "maps": [
+   "he4_04"
+  ],
+  "chapter": "1"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "1",
+  "item_name": "[NULL]",
+  "script": "0xf9cbc",
+  "at": "0xf9db8",
+  "conditions": [
+   "not (GSW(0) < 40)"
+  ],
+  "maps": [
+   "he4_04"
+  ],
+  "chapter": "1"
+ },
+ {
+  "type": "check",
+  "item": 16,
+  "item_var": null,
+  "item_name": "Ruins Key",
+  "script": "0xf9ea0",
+  "at": "0xf9ea0",
+  "conditions": [],
+  "maps": [
+   "he4_05"
+  ],
+  "chapter": "1"
+ },
+ {
+  "type": "item",
+  "name": "\"key\"",
+  "item": 16,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "-162.5f",
+   "200",
+   "0f"
+  ],
+  "item_name": "Ruins Key",
+  "script": "0xfa118",
+  "at": "0xfa3a0",
+  "conditions": [
+   "GSW(0) < 43"
+  ],
+  "maps": [
+   "he4_05"
+  ],
+  "chapter": "1"
+ },
+ {
+  "type": "lock",
+  "name": "\"lock_00\"",
+  "item": 16,
+  "item_name": "Ruins Key",
+  "script": "0xfa118",
+  "at": "0xfa3f8",
+  "conditions": [
+   "GSW(0) < 44"
+  ],
+  "maps": [
+   "he4_05"
+  ],
+  "chapter": "1"
+ },
+ {
+  "type": "check",
+  "item": 16,
+  "item_var": null,
+  "item_name": "Ruins Key",
+  "script": "0xfaae0",
+  "at": "0xfaae0",
+  "conditions": [],
+  "maps": [
+   "he4_07"
+  ],
+  "chapter": "1"
+ },
+ {
+  "type": "item",
+  "name": "\"key\"",
+  "item": 16,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "-625",
+   "100",
+   "-250"
+  ],
+  "item_name": "Ruins Key",
+  "script": "0xfab8c",
+  "at": "0xfac58",
+  "conditions": [
+   "GSW(0) < 46"
+  ],
+  "maps": [
+   "he4_07"
+  ],
+  "chapter": "1"
+ },
+ {
+  "type": "lock",
+  "name": "\"lock_00\"",
+  "item": 16,
+  "item_name": "Ruins Key",
+  "script": "0xfab8c",
+  "at": "0xfac98",
+  "conditions": [
+   "GSW(0) < 47"
+  ],
+  "maps": [
+   "he4_07"
+  ],
+  "chapter": "1"
+ },
+ {
+  "type": "chest",
+  "name": "\"box_01\"",
+  "item": 298,
+  "item_var": null,
+  "flag": "GSWF(613)",
+  "item_name": "Buzzy Beetle",
+  "script": "0xfab8c",
+  "at": "0xfacd8",
+  "conditions": [],
+  "maps": [
+   "he4_07"
+  ],
+  "chapter": "1"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_80\"",
+  "item": 7,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[SUPER_KINOKO]",
+  "script": "0xfc960",
+  "at": "0xfc9ec",
+  "conditions": [],
+  "maps": [
+   "he4_09"
+  ],
+  "chapter": "1"
+ },
+ {
+  "type": "item",
+  "name": "\"sikisi\"",
+  "item": 54,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "LW(0)",
+   "LW(1)",
+   "LW(2)"
+  ],
+  "item_name": "Paper",
+  "script": "0xffb00",
+  "at": "0x1006a0",
+  "conditions": [],
+  "maps": [
+   "he4_11"
+  ],
+  "chapter": "1"
+ },
+ {
+  "type": "item",
+  "name": "\"sign\"",
+  "item": 55,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "0",
+   "0",
+   "0"
+  ],
+  "item_name": "Autograph",
+  "script": "0xffb00",
+  "at": "0x100744",
+  "conditions": [],
+  "maps": [
+   "he4_11"
+  ],
+  "chapter": "1"
+ },
+ {
+  "type": "check",
+  "item": 17,
+  "item_var": null,
+  "item_name": "Door Key",
+  "script": "0x101010",
+  "at": "0x101010",
+  "conditions": [],
+  "maps": [
+   "mi1_01"
+  ],
+  "chapter": "2"
+ },
+ {
+  "type": "lock",
+  "name": "\"lock\"",
+  "item": 17,
+  "item_name": "Door Key",
+  "script": "0x101224",
+  "at": "0x10161c",
+  "conditions": [
+   "GSW(0) < 69"
+  ],
+  "maps": [
+   "mi1_01"
+  ],
+  "chapter": "2"
+ },
+ {
+  "type": "check",
+  "item": 222,
+  "item_var": null,
+  "item_name": "Boomer",
+  "script": "0x1020f8",
+  "at": "0x102114",
+  "conditions": [],
+  "maps": [
+   "mi1_04"
+  ],
+  "chapter": "2"
+ },
+ {
+  "type": "gift",
+  "item": 222,
+  "item_var": null,
+  "item_name": "Boomer",
+  "script": "0x1020f8",
+  "at": "0x102148",
+  "conditions": [
+   "LW(0) == 0"
+  ],
+  "maps": [
+   "mi1_04"
+  ],
+  "chapter": "2"
+ },
+ {
+  "type": "chest",
+  "name": "\"box_01\"",
+  "item": 365,
+  "item_var": null,
+  "flag": "GSWF(732)",
+  "item_name": "Shlurp",
+  "script": "0x102308",
+  "at": "0x1023b8",
+  "conditions": [],
+  "maps": [
+   "mi1_04"
+  ],
+  "chapter": "2"
+ },
+ {
+  "type": "chest",
+  "name": "\"box_02\"",
+  "item": 337,
+  "item_var": null,
+  "flag": "GSWF(733)",
+  "item_name": "Swooper",
+  "script": "0x102308",
+  "at": "0x1023e4",
+  "conditions": [],
+  "maps": [
+   "mi1_04"
+  ],
+  "chapter": "2"
+ },
+ {
+  "type": "item",
+  "name": "\"key\"",
+  "item": 17,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "0",
+   "0",
+   "0"
+  ],
+  "item_name": "Door Key",
+  "script": "0x102490",
+  "at": "0x10249c",
+  "conditions": [],
+  "maps": [
+   "mi1_05"
+  ],
+  "chapter": "2"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "0",
+  "item_name": "[NULL]",
+  "script": "0x10250c",
+  "at": "0x10253c",
+  "conditions": [
+   "LW(0) == 0",
+   "GSWF(734) == 0"
+  ],
+  "maps": [
+   "mi1_05"
+  ],
+  "chapter": "2"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "0",
+  "item_name": "[NULL]",
+  "script": "0x10250c",
+  "at": "0x1027a0",
+  "conditions": [],
+  "maps": [
+   "mi1_05"
+  ],
+  "chapter": "2"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "0",
+  "item_name": "[NULL]",
+  "script": "0x102858",
+  "at": "0x102944",
+  "conditions": [
+   "not (GSWF(734) == 0)",
+   "GSWF(735) == 0"
+  ],
+  "maps": [
+   "mi1_05"
+  ],
+  "chapter": "2"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "GSWF(735)",
+  "item_name": "[NULL]",
+  "script": "0x102858",
+  "at": "0x102974",
+  "conditions": [
+   "not (GSWF(734) == 0)",
+   "not (GSWF(735) == 0)"
+  ],
+  "maps": [
+   "mi1_05"
+  ],
+  "chapter": "2"
+ },
+ {
+  "type": "gift",
+  "item": 222,
+  "item_var": null,
+  "item_name": "Boomer",
+  "script": "0x102ee8",
+  "at": "0x1038a8",
+  "conditions": [],
+  "maps": [
+   "mi1_07"
+  ],
+  "chapter": "2"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "0",
+  "item_name": "[NULL]",
+  "script": "0x1039e0",
+  "at": "0x103bfc",
+  "conditions": [],
+  "maps": [
+   "mi1_07"
+  ],
+  "chapter": "2"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "0",
+  "item_name": "[NULL]",
+  "script": "0x103f98",
+  "at": "0x104100",
+  "conditions": [
+   "GSW(0) < 73"
+  ],
+  "maps": [
+   "mi1_07"
+  ],
+  "chapter": "2"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "1",
+  "item_name": "[NULL]",
+  "script": "0x103f98",
+  "at": "0x104160",
+  "conditions": [
+   "GSW(0): other case"
+  ],
+  "maps": [
+   "mi1_07"
+  ],
+  "chapter": "2"
+ },
+ {
+  "type": "chest",
+  "name": "\"box_01\"",
+  "item": 511,
+  "item_var": null,
+  "flag": "GSWF(738)",
+  "item_name": "Watchitt",
+  "script": "0x103f98",
+  "at": "0x104408",
+  "conditions": [],
+  "maps": [
+   "mi1_07"
+  ],
+  "chapter": "2"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_00\"",
+  "item": 9,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[BUNSHIN_KINOKO]",
+  "script": "0x1048e0",
+  "at": "0x104a60",
+  "conditions": [],
+  "maps": [
+   "mi1_08"
+  ],
+  "chapter": "2"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_00\"",
+  "item": 4,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[SLOW_FLOWER]",
+  "script": "0x105400",
+  "at": "0x105554",
+  "conditions": [],
+  "maps": [
+   "mi1_10"
+  ],
+  "chapter": "2"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_02\"",
+  "item": 5,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[HAPPY_FLOWER]",
+  "script": "0x105400",
+  "at": "0x1055a4",
+  "conditions": [],
+  "maps": [
+   "mi1_10"
+  ],
+  "chapter": "2"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"c_03\"",
+  "item": 10,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[DOT_STAR]",
+  "script": "0x105a30",
+  "at": "0x105d7c",
+  "conditions": [],
+  "maps": [
+   "mi1_11"
+  ],
+  "chapter": "2"
+ },
+ {
+  "type": "chest",
+  "name": "\"box_01\"",
+  "item": 79,
+  "item_var": null,
+  "flag": "GSWF(729)",
+  "item_name": "Stop Watch",
+  "script": "0x106740",
+  "at": "0x106980",
+  "conditions": [],
+  "maps": [
+   "mi2_01"
+  ],
+  "chapter": "2"
+ },
+ {
+  "type": "chest",
+  "name": "\"box_02\"",
+  "item": 345,
+  "item_var": null,
+  "flag": "GSWF(730)",
+  "item_name": "Cursya",
+  "script": "0x106740",
+  "at": "0x1069ac",
+  "conditions": [],
+  "maps": [
+   "mi2_01"
+  ],
+  "chapter": "2"
+ },
+ {
+  "type": "shop",
+  "shops": [
+   {
+    "type": 7,
+    "npc": "sandale",
+    "items": []
+   }
+  ],
+  "item_name": null,
+  "script": "0x106c80",
+  "at": "0x106de4",
+  "conditions": [
+   "96 <= GSW(0) <= 126"
+  ],
+  "maps": [
+   "mi2_02"
+  ],
+  "chapter": "2"
+ },
+ {
+  "type": "check",
+  "item": 18,
+  "item_var": null,
+  "item_name": "House Key",
+  "script": "0x108188",
+  "at": "0x108188",
+  "conditions": [],
+  "maps": [
+   "mi2_03"
+  ],
+  "chapter": "2"
+ },
+ {
+  "type": "lock",
+  "name": "\"lock\"",
+  "item": 18,
+  "item_name": "House Key",
+  "script": "0x108268",
+  "at": "0x1085b0",
+  "conditions": [
+   "GSW(0) < 80"
+  ],
+  "maps": [
+   "mi2_03"
+  ],
+  "chapter": "2"
+ },
+ {
+  "type": "item",
+  "name": "\"kinoko\"",
+  "item": 6,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "LW(0)",
+   "80",
+   "LW(2)"
+  ],
+  "item_name": "[KINOKO]",
+  "script": "0x108bc0",
+  "at": "0x108c58",
+  "conditions": [],
+  "maps": [
+   "mi2_04"
+  ],
+  "chapter": "2"
+ },
+ {
+  "type": "item",
+  "name": "\"key\"",
+  "item": 18,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "LW(0)",
+   "LW(1)",
+   "LW(2)"
+  ],
+  "item_name": "House Key",
+  "script": "0x10aa48",
+  "at": "0x10aa6c",
+  "conditions": [],
+  "maps": [
+   "mi2_06"
+  ],
+  "chapter": "2"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "0",
+  "item_name": "[NULL]",
+  "script": "0x10aad8",
+  "at": "0x10abc8",
+  "conditions": [
+   "GSW(0) < 79"
+  ],
+  "maps": [
+   "mi2_06"
+  ],
+  "chapter": "2"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "1",
+  "item_name": "[NULL]",
+  "script": "0x10aad8",
+  "at": "0x10abf8",
+  "conditions": [
+   "not (GSW(0) < 79)"
+  ],
+  "maps": [
+   "mi2_06"
+  ],
+  "chapter": "2"
+ },
+ {
+  "type": "item",
+  "name": "\"kinoko\"",
+  "item": 6,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "-480",
+   "0",
+   "1"
+  ],
+  "item_name": "[KINOKO]",
+  "script": "0x10b520",
+  "at": "0x10b5b8",
+  "conditions": [],
+  "maps": [
+   "mi2_07"
+  ],
+  "chapter": "2"
+ },
+ {
+  "type": "gift",
+  "item": 223,
+  "item_var": null,
+  "item_name": "Slim",
+  "script": "0x10df98",
+  "at": "0x10e934",
+  "conditions": [],
+  "maps": [
+   "mi3_01"
+  ],
+  "chapter": "2"
+ },
+ {
+  "type": "chest",
+  "name": "\"box_01\"",
+  "item": 354,
+  "item_var": null,
+  "flag": "GSWF(731)",
+  "item_name": "Boo",
+  "script": "0x10edc8",
+  "at": "0x10fae0",
+  "conditions": [],
+  "maps": [
+   "mi3_01"
+  ],
+  "chapter": "2"
+ },
+ {
+  "type": "check",
+  "item": 223,
+  "item_var": null,
+  "item_name": "Slim",
+  "script": "0x10edc8",
+  "at": "0x10fb0c",
+  "conditions": [],
+  "maps": [
+   "mi3_01"
+  ],
+  "chapter": "2"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "GSWF(719)",
+  "item_name": "[NULL]",
+  "script": "0x10edc8",
+  "at": "0x10fbd0",
+  "conditions": [],
+  "maps": [
+   "mi3_01"
+  ],
+  "chapter": "2"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_00\"",
+  "item": 550,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "item 550",
+  "script": "0x113868",
+  "at": "0x1138f8",
+  "conditions": [
+   "LW(0) < GW(0)"
+  ],
+  "maps": [
+   "mi3_05"
+  ],
+  "chapter": "2"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_00\"",
+  "item": 551,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "item 551",
+  "script": "0x113868",
+  "at": "0x113924",
+  "conditions": [
+   "not (LW(0) < GW(0))"
+  ],
+  "maps": [
+   "mi3_05"
+  ],
+  "chapter": "2"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_00\"",
+  "item": 550,
+  "chance_table": null,
+  "flag": "-1",
+  "item_name": "item 550",
+  "script": "0x113d38",
+  "at": "0x113e1c",
+  "conditions": [
+   "LW(0) < GW(0)"
+  ],
+  "maps": [
+   "mi3_05"
+  ],
+  "chapter": "2"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_00\"",
+  "item": 551,
+  "chance_table": null,
+  "flag": "-1",
+  "item_name": "item 551",
+  "script": "0x113d38",
+  "at": "0x113e48",
+  "conditions": [
+   "not (LW(0) < GW(0))"
+  ],
+  "maps": [
+   "mi3_05"
+  ],
+  "chapter": "2"
+ },
+ {
+  "type": "check",
+  "item": 223,
+  "item_var": null,
+  "item_name": "Slim",
+  "script": "0x114390",
+  "at": "0x1143bc",
+  "conditions": [],
+  "maps": [
+   "mi3_06"
+  ],
+  "chapter": "2"
+ },
+ {
+  "type": "gift",
+  "item": 223,
+  "item_var": null,
+  "item_name": "Slim",
+  "script": "0x114390",
+  "at": "0x1143f0",
+  "conditions": [
+   "LW(0) == 0"
+  ],
+  "maps": [
+   "mi3_06"
+  ],
+  "chapter": "2"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_00\"",
+  "item": 6,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[KINOKO]",
+  "script": "0x1159b8",
+  "at": "0x115aa4",
+  "conditions": [],
+  "maps": [
+   "mi4_01"
+  ],
+  "chapter": "2"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_01\"",
+  "item": 548,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "item 548",
+  "script": "0x115f04",
+  "at": "0x115fe0",
+  "conditions": [],
+  "maps": [
+   "mi4_03"
+  ],
+  "chapter": "2"
+ },
+ {
+  "type": "item",
+  "name": "\"item\"",
+  "item": 80,
+  "item_var": null,
+  "flag": "GSWF(726)",
+  "pos": [
+   "0",
+   "0",
+   "-550"
+  ],
+  "item_name": "Shroom Shake",
+  "script": "0x118a90",
+  "at": "0x118c34",
+  "conditions": [],
+  "maps": [
+   "mi4_10"
+  ],
+  "chapter": "2"
+ },
+ {
+  "type": "item",
+  "name": "\"item\"",
+  "item": 80,
+  "item_var": null,
+  "flag": "GSWF(726)",
+  "pos": [
+   "0",
+   "0",
+   "-550"
+  ],
+  "item_name": "Shroom Shake",
+  "script": "0x118cd8",
+  "at": "0x118efc",
+  "conditions": [
+   "not (GSWF(708) == 0)"
+  ],
+  "maps": [
+   "mi4_10"
+  ],
+  "chapter": "2"
+ },
+ {
+  "type": "block",
+  "block": "3D ? block",
+  "name": "\"b_01\"",
+  "item": 6,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[KINOKO]",
+  "script": "0x119470",
+  "at": "0x11954c",
+  "conditions": [],
+  "maps": [
+   "mi4_12"
+  ],
+  "chapter": "2"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_02\"",
+  "item": 7,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[SUPER_KINOKO]",
+  "script": "0x119470",
+  "at": "0x119574",
+  "conditions": [],
+  "maps": [
+   "mi4_12"
+  ],
+  "chapter": "2"
+ },
+ {
+  "type": "item",
+  "name": "\"cur\"",
+  "item": 232,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "0",
+   "0",
+   "0"
+  ],
+  "item_name": "[ICON]",
+  "script": "0x11b498",
+  "at": "0x11bcd8",
+  "conditions": [],
+  "maps": [
+   "mi4_14"
+  ],
+  "chapter": "2"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_00\"",
+  "item": 10,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[DOT_STAR]",
+  "script": "0x120cc0",
+  "at": "0x120d7c",
+  "conditions": [],
+  "maps": [
+   "ta1_02"
+  ],
+  "chapter": "3"
+ },
+ {
+  "type": "item",
+  "name": "\"i_00\"",
+  "item": 80,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "-1330",
+   "58",
+   "-165"
+  ],
+  "item_name": "Shroom Shake",
+  "script": "0x120cc0",
+  "at": "0x120e20",
+  "conditions": [
+   "LW(0) & 4096"
+  ],
+  "maps": [
+   "ta1_02"
+  ],
+  "chapter": "3"
+ },
+ {
+  "type": "item",
+  "name": "\"i_01\"",
+  "item": 88,
+  "item_var": null,
+  "flag": "GSWF(821)",
+  "pos": [
+   "-1330",
+   "58",
+   "-165"
+  ],
+  "item_name": "Catch Card SP",
+  "script": "0x120cc0",
+  "at": "0x120e78",
+  "conditions": [
+   "not (LW(0) & 4096)"
+  ],
+  "maps": [
+   "ta1_02"
+  ],
+  "chapter": "3"
+ },
+ {
+  "type": "block",
+  "block": "type 16385",
+  "name": "\"h_00\"",
+  "item": 9,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[BUNSHIN_KINOKO]",
+  "script": "0x1212d8",
+  "at": "0x12148c",
+  "conditions": [],
+  "maps": [
+   "ta1_03"
+  ],
+  "chapter": "3"
+ },
+ {
+  "type": "block",
+  "block": "type 16386",
+  "name": "\"h_26\"",
+  "item": 548,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "item 548",
+  "script": "0x1212d8",
+  "at": "0x1217d4",
+  "conditions": [],
+  "maps": [
+   "ta1_03"
+  ],
+  "chapter": "3"
+ },
+ {
+  "type": "block",
+  "block": "type 16386",
+  "name": "\"h_35\"",
+  "item": 6,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[KINOKO]",
+  "script": "0x1212d8",
+  "at": "0x1219e4",
+  "conditions": [],
+  "maps": [
+   "ta1_03"
+  ],
+  "chapter": "3"
+ },
+ {
+  "type": "gift",
+  "item": 218,
+  "item_var": null,
+  "item_name": "Bowser",
+  "script": "0x1220a0",
+  "at": "0x123a44",
+  "conditions": [],
+  "maps": [
+   "ta1_04"
+  ],
+  "chapter": "3"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 67,
+  "item_var": null,
+  "flag": "GSWF(832)",
+  "item_name": "Thunder Rage",
+  "script": "0x126b74",
+  "at": "0x126c94",
+  "conditions": [],
+  "maps": [
+   "ta1_05"
+  ],
+  "chapter": "3"
+ },
+ {
+  "type": "item",
+  "name": "\"i_01\"",
+  "item": 88,
+  "item_var": null,
+  "flag": "GSWF(822)",
+  "pos": [
+   "175",
+   "0",
+   "-25"
+  ],
+  "item_name": "Catch Card SP",
+  "script": "0x126ce8",
+  "at": "0x12722c",
+  "conditions": [
+   "not (LW(0) & 4096)"
+  ],
+  "maps": [
+   "ta1_06"
+  ],
+  "chapter": "3"
+ },
+ {
+  "type": "chest",
+  "name": "\"box_01\"",
+  "item": 317,
+  "item_var": null,
+  "flag": "GSWF(826)",
+  "item_name": "Magikoopa",
+  "script": "0x1273b8",
+  "at": "0x127678",
+  "conditions": [],
+  "maps": [
+   "ta1_07"
+  ],
+  "chapter": "3"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"h_02\"",
+  "item": 7,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[SUPER_KINOKO]",
+  "script": "0x1276e8",
+  "at": "0x1277c0",
+  "conditions": [],
+  "maps": [
+   "ta1_08"
+  ],
+  "chapter": "3"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"h_00\"",
+  "item": 10,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[DOT_STAR]",
+  "script": "0x12818c",
+  "at": "0x1282e0",
+  "conditions": [],
+  "maps": [
+   "ta1_09"
+  ],
+  "chapter": "3"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"c_55\"",
+  "item": 10,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[DOT_STAR]",
+  "script": "0x12818c",
+  "at": "0x128f88",
+  "conditions": [],
+  "maps": [
+   "ta1_09"
+  ],
+  "chapter": "3"
+ },
+ {
+  "type": "gift",
+  "item": 230,
+  "item_var": null,
+  "item_name": "Barry",
+  "script": "0x129c98",
+  "at": "0x12a324",
+  "conditions": [],
+  "maps": [
+   "ta1_01"
+  ],
+  "chapter": "3"
+ },
+ {
+  "type": "chest",
+  "name": "\"box_01\"",
+  "item": 325,
+  "item_var": null,
+  "flag": "GSWF(820)",
+  "item_name": "Piranha Plant",
+  "script": "0x12bafc",
+  "at": "0x12bd00",
+  "conditions": [],
+  "maps": [
+   "ta1_01"
+  ],
+  "chapter": "3"
+ },
+ {
+  "type": "item",
+  "name": "\"i_02\"",
+  "item": 66,
+  "item_var": null,
+  "flag": "GSWF(825)",
+  "pos": [
+   "445",
+   "75",
+   "-165"
+  ],
+  "item_name": "Ice Storm",
+  "script": "0x12bafc",
+  "at": "0x12bd2c",
+  "conditions": [],
+  "maps": [
+   "ta1_01"
+  ],
+  "chapter": "3"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_01\"",
+  "item": 6,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[KINOKO]",
+  "script": "0x12c4f0",
+  "at": "0x12c76c",
+  "conditions": [],
+  "maps": [
+   "ta2_01"
+  ],
+  "chapter": "3"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_02\"",
+  "item": 5,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[HAPPY_FLOWER]",
+  "script": "0x12c4f0",
+  "at": "0x12c794",
+  "conditions": [],
+  "maps": [
+   "ta2_01"
+  ],
+  "chapter": "3"
+ },
+ {
+  "type": "chest",
+  "name": "\"box_01\"",
+  "item": 71,
+  "item_var": null,
+  "flag": "GSWF(823)",
+  "item_name": "Gold Bar",
+  "script": "0x12d138",
+  "at": "0x12d23c",
+  "conditions": [],
+  "maps": [
+   "ta2_02"
+  ],
+  "chapter": "3"
+ },
+ {
+  "type": "gift",
+  "item": 224,
+  "item_var": null,
+  "item_name": "Thudley",
+  "script": "0x12d690",
+  "at": "0x12e214",
+  "conditions": [],
+  "maps": [
+   "ta2_04"
+  ],
+  "chapter": "3"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "0",
+  "item_name": "[NULL]",
+  "script": "0x12e338",
+  "at": "0x12e570",
+  "conditions": [],
+  "maps": [
+   "ta2_04"
+  ],
+  "chapter": "3"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_01\"",
+  "item": 4,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[SLOW_FLOWER]",
+  "script": "0x131298",
+  "at": "0x131338",
+  "conditions": [],
+  "maps": [
+   "ta3_01"
+  ],
+  "chapter": "3"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_02\"",
+  "item": 3,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[SPEED_FLOWER]",
+  "script": "0x131298",
+  "at": "0x131360",
+  "conditions": [],
+  "maps": [
+   "ta3_01"
+  ],
+  "chapter": "3"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_40\"",
+  "item": 6,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[KINOKO]",
+  "script": "0x131298",
+  "at": "0x13193c",
+  "conditions": [],
+  "maps": [
+   "ta3_01"
+  ],
+  "chapter": "3"
+ },
+ {
+  "type": "shop",
+  "shops": [
+   {
+    "type": 16,
+    "npc": null,
+    "items": [
+     {
+      "item": 100,
+      "item_name": "Peachy Peach",
+      "price": -1
+     },
+     {
+      "item": 114,
+      "item_name": "Fresh Veggie",
+      "price": -1
+     },
+     {
+      "item": 107,
+      "item_name": "Horsetail",
+      "price": -1
+     }
+    ]
+   }
+  ],
+  "item_name": null,
+  "script": "0x131298",
+  "at": "0x1319d4",
+  "conditions": [],
+  "maps": [
+   "ta3_01"
+  ],
+  "chapter": "3"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_01\"",
+  "item": 7,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[SUPER_KINOKO]",
+  "script": "0x134660",
+  "at": "0x1347bc",
+  "conditions": [],
+  "maps": [
+   "ta3_02"
+  ],
+  "chapter": "3"
+ },
+ {
+  "type": "item",
+  "name": "\"item\"",
+  "item": 474,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "LW(0)",
+   "LW(1)",
+   "LW(2)"
+  ],
+  "item_name": "Peach (2)",
+  "script": "0x136998",
+  "at": "0x1369dc",
+  "conditions": [],
+  "maps": [
+   "ta3_07"
+  ],
+  "chapter": "3"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "0",
+  "item_name": "[NULL]",
+  "script": "0x136a40",
+  "at": "0x136a70",
+  "conditions": [
+   "LW(0) == 0",
+   "GSWF(827) == 0"
+  ],
+  "maps": [
+   "ta3_07"
+  ],
+  "chapter": "3"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "0",
+  "item_name": "[NULL]",
+  "script": "0x136a40",
+  "at": "0x136c68",
+  "conditions": [],
+  "maps": [
+   "ta3_07"
+  ],
+  "chapter": "3"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "0",
+  "item_name": "[NULL]",
+  "script": "0x136d18",
+  "at": "0x136dc4",
+  "conditions": [
+   "not (GSWF(827) == 0)",
+   "GSWF(828) == 0"
+  ],
+  "maps": [
+   "ta3_07"
+  ],
+  "chapter": "3"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "GSWF(828)",
+  "item_name": "[NULL]",
+  "script": "0x136d18",
+  "at": "0x136df4",
+  "conditions": [
+   "not (GSWF(827) == 0)",
+   "not (GSWF(828) == 0)"
+  ],
+  "maps": [
+   "ta3_07"
+  ],
+  "chapter": "3"
+ },
+ {
+  "type": "check",
+  "item": 19,
+  "item_var": null,
+  "item_name": "Fort Key",
+  "script": "0x137448",
+  "at": "0x137448",
+  "conditions": [],
+  "maps": [
+   "ta4_01"
+  ],
+  "chapter": "3"
+ },
+ {
+  "type": "lock",
+  "name": "\"lock\"",
+  "item": 19,
+  "item_name": "Fort Key",
+  "script": "0x1376d8",
+  "at": "0x137b54",
+  "conditions": [
+   "GSW(0) < 122"
+  ],
+  "maps": [
+   "ta4_01"
+  ],
+  "chapter": "3"
+ },
+ {
+  "type": "item",
+  "name": "\"key\"",
+  "item": 19,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "0",
+   "-1000",
+   "0"
+  ],
+  "item_name": "Fort Key",
+  "script": "0x137bb0",
+  "at": "0x137bdc",
+  "conditions": [],
+  "maps": [
+   "ta4_02"
+  ],
+  "chapter": "3"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "0",
+  "item_name": "[NULL]",
+  "script": "0x137c40",
+  "at": "0x137db0",
+  "conditions": [],
+  "maps": [
+   "ta4_02"
+  ],
+  "chapter": "3"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "0",
+  "item_name": "[NULL]",
+  "script": "0x137e60",
+  "at": "0x137f7c",
+  "conditions": [
+   "GSW(0) < 121"
+  ],
+  "maps": [
+   "ta4_02"
+  ],
+  "chapter": "3"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "1",
+  "item_name": "[NULL]",
+  "script": "0x137e60",
+  "at": "0x137fac",
+  "conditions": [
+   "GSW(0): other case"
+  ],
+  "maps": [
+   "ta4_02"
+  ],
+  "chapter": "3"
+ },
+ {
+  "type": "check",
+  "item": 20,
+  "item_var": null,
+  "item_name": "Fort Key",
+  "script": "0x139400",
+  "at": "0x139494",
+  "conditions": [],
+  "maps": [
+   "ta4_04"
+  ],
+  "chapter": "3"
+ },
+ {
+  "type": "check",
+  "item": 21,
+  "item_var": null,
+  "item_name": "Fort Key",
+  "script": "0x139400",
+  "at": "0x1394b0",
+  "conditions": [
+   "LW(0) == 0"
+  ],
+  "maps": [
+   "ta4_04"
+  ],
+  "chapter": "3"
+ },
+ {
+  "type": "check",
+  "item": 21,
+  "item_var": null,
+  "item_name": "Fort Key",
+  "script": "0x139400",
+  "at": "0x1394ec",
+  "conditions": [
+   "not (LW(0) == 0)"
+  ],
+  "maps": [
+   "ta4_04"
+  ],
+  "chapter": "3"
+ },
+ {
+  "type": "check",
+  "item": 20,
+  "item_var": null,
+  "item_name": "Fort Key",
+  "script": "0x1396d8",
+  "at": "0x13976c",
+  "conditions": [],
+  "maps": [
+   "ta4_04"
+  ],
+  "chapter": "3"
+ },
+ {
+  "type": "check",
+  "item": 21,
+  "item_var": null,
+  "item_name": "Fort Key",
+  "script": "0x1396d8",
+  "at": "0x139788",
+  "conditions": [
+   "LW(0) == 0"
+  ],
+  "maps": [
+   "ta4_04"
+  ],
+  "chapter": "3"
+ },
+ {
+  "type": "check",
+  "item": 21,
+  "item_var": null,
+  "item_name": "Fort Key",
+  "script": "0x1396d8",
+  "at": "0x1397c4",
+  "conditions": [
+   "not (LW(0) == 0)"
+  ],
+  "maps": [
+   "ta4_04"
+  ],
+  "chapter": "3"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 21,
+  "item_var": null,
+  "flag": "GSWF(811)",
+  "item_name": "Fort Key",
+  "script": "0x13bf70",
+  "at": "0x13c078",
+  "conditions": [],
+  "maps": [
+   "ta4_10"
+  ],
+  "chapter": "3"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_01\"",
+  "item": 6,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[KINOKO]",
+  "script": "0x13bf70",
+  "at": "0x13c128",
+  "conditions": [],
+  "maps": [
+   "ta4_10"
+  ],
+  "chapter": "3"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 20,
+  "item_var": null,
+  "flag": "GSWF(812)",
+  "item_name": "Fort Key",
+  "script": "0x13da60",
+  "at": "0x13dbdc",
+  "conditions": [],
+  "maps": [
+   "ta4_11"
+  ],
+  "chapter": "3"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_01\"",
+  "item": 7,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[SUPER_KINOKO]",
+  "script": "0x13da60",
+  "at": "0x13dd0c",
+  "conditions": [],
+  "maps": [
+   "ta4_11"
+  ],
+  "chapter": "3"
+ },
+ {
+  "type": "gift",
+  "item": 225,
+  "item_var": null,
+  "item_name": "Carrie",
+  "script": "0x13de58",
+  "at": "0x13e984",
+  "conditions": [],
+  "maps": [
+   "ta4_12"
+  ],
+  "chapter": "3"
+ },
+ {
+  "type": "check",
+  "item": 225,
+  "item_var": null,
+  "item_name": "Carrie",
+  "script": "0x13f760",
+  "at": "0x140568",
+  "conditions": [],
+  "maps": [
+   "ta4_13"
+  ],
+  "chapter": "3"
+ },
+ {
+  "type": "gift",
+  "item": 225,
+  "item_var": null,
+  "item_name": "Carrie",
+  "script": "0x13f760",
+  "at": "0x14059c",
+  "conditions": [
+   "LW(0) == 0"
+  ],
+  "maps": [
+   "ta4_13"
+  ],
+  "chapter": "3"
+ },
+ {
+  "type": "item",
+  "name": "\"_sys_item_\"",
+  "item": 24,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "LW(10)",
+   "LW(11)",
+   "LW(12)"
+  ],
+  "item_name": "Helmet",
+  "script": "0x146500",
+  "at": "0x146924",
+  "conditions": [],
+  "maps": [
+   "sp1_01"
+  ],
+  "chapter": "4"
+ },
+ {
+  "type": "item",
+  "name": "\"i_01\"",
+  "item": 409,
+  "item_var": null,
+  "flag": "GSWF(906)",
+  "pos": [
+   "1100",
+   "137.5f",
+   "-50"
+  ],
+  "item_name": "Foton",
+  "script": "0x148f80",
+  "at": "0x1490e8",
+  "conditions": [],
+  "maps": [
+   "sp1_02"
+  ],
+  "chapter": "4"
+ },
+ {
+  "type": "item",
+  "name": "\"i_01\"",
+  "item": 88,
+  "item_var": null,
+  "flag": "GSWF(907)",
+  "pos": [
+   "850",
+   "87.5f",
+   "25"
+  ],
+  "item_name": "Catch Card SP",
+  "script": "0x14988c",
+  "at": "0x1499f8",
+  "conditions": [],
+  "maps": [
+   "sp1_05"
+  ],
+  "chapter": "4"
+ },
+ {
+  "type": "check",
+  "item": 26,
+  "item_var": null,
+  "item_name": "Door Key",
+  "script": "0x14a468",
+  "at": "0x14a468",
+  "conditions": [],
+  "maps": [
+   "sp2_01"
+  ],
+  "chapter": "4"
+ },
+ {
+  "type": "check",
+  "item": 25,
+  "item_var": null,
+  "item_name": "Ancient Clue",
+  "script": "0x14a5d0",
+  "at": "0x14a7b0",
+  "conditions": [
+   "GSW(0) < 145"
+  ],
+  "maps": [
+   "sp2_01"
+  ],
+  "chapter": "4"
+ },
+ {
+  "type": "item",
+  "name": "\"dummy\"",
+  "item": 25,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "0",
+   "0",
+   "0"
+  ],
+  "item_name": "Ancient Clue",
+  "script": "0x14a5d0",
+  "at": "0x14a8c8",
+  "conditions": [
+   "GSW(0) < 145",
+   "not (LW(0) != 25)"
+  ],
+  "maps": [
+   "sp2_01"
+  ],
+  "chapter": "4"
+ },
+ {
+  "type": "gift",
+  "item": 226,
+  "item_var": null,
+  "item_name": "Fleep",
+  "script": "0x14a5d0",
+  "at": "0x14b1ec",
+  "conditions": [
+   "GSW(0) < 145",
+   "not (LW(0) != 25)"
+  ],
+  "maps": [
+   "sp2_01"
+  ],
+  "chapter": "4"
+ },
+ {
+  "type": "item",
+  "name": "\"key\"",
+  "item": 26,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "770",
+   "885",
+   "0"
+  ],
+  "item_name": "Door Key",
+  "script": "0x14b6d0",
+  "at": "0x14b798",
+  "conditions": [
+   "GF(0) == 0"
+  ],
+  "maps": [
+   "sp2_01"
+  ],
+  "chapter": "4"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_01\"",
+  "item": 6,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[KINOKO]",
+  "script": "0x14c36c",
+  "at": "0x14c438",
+  "conditions": [],
+  "maps": [
+   "sp2_01"
+  ],
+  "chapter": "4"
+ },
+ {
+  "type": "item",
+  "name": "\"i_01\"",
+  "item": 82,
+  "item_var": null,
+  "flag": "GSWF(908)",
+  "pos": [
+   "1037.5f",
+   "100",
+   "0"
+  ],
+  "item_name": "Ultra Shroom Shake",
+  "script": "0x14c36c",
+  "at": "0x14c658",
+  "conditions": [],
+  "maps": [
+   "sp2_01"
+  ],
+  "chapter": "4"
+ },
+ {
+  "type": "lock",
+  "name": "\"lock\"",
+  "item": 26,
+  "item_name": "Door Key",
+  "script": "0x14c36c",
+  "at": "0x14cd34",
+  "conditions": [
+   "GSW(0) < 147"
+  ],
+  "maps": [
+   "sp2_01"
+  ],
+  "chapter": "4"
+ },
+ {
+  "type": "block",
+  "block": "coin brick",
+  "name": "\"b_23\"",
+  "item": 548,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "item 548",
+  "script": "0x14d250",
+  "at": "0x14d3e4",
+  "conditions": [],
+  "maps": [
+   "sp2_03"
+  ],
+  "chapter": "4"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_31\"",
+  "item": 3,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[SPEED_FLOWER]",
+  "script": "0x14d250",
+  "at": "0x14d434",
+  "conditions": [],
+  "maps": [
+   "sp2_03"
+  ],
+  "chapter": "4"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_32\"",
+  "item": 9,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[BUNSHIN_KINOKO]",
+  "script": "0x14d250",
+  "at": "0x14d45c",
+  "conditions": [],
+  "maps": [
+   "sp2_03"
+  ],
+  "chapter": "4"
+ },
+ {
+  "type": "block",
+  "block": "type 32769",
+  "name": "\"b_00\"",
+  "item": 3,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[SPEED_FLOWER]",
+  "script": "0x14d600",
+  "at": "0x14d68c",
+  "conditions": [],
+  "maps": [
+   "sp2_04"
+  ],
+  "chapter": "4"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_02\"",
+  "item": 4,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[SLOW_FLOWER]",
+  "script": "0x14d600",
+  "at": "0x14d6dc",
+  "conditions": [],
+  "maps": [
+   "sp2_04"
+  ],
+  "chapter": "4"
+ },
+ {
+  "type": "item",
+  "name": "\"i_01\"",
+  "item": 171,
+  "item_var": null,
+  "flag": "GSWF(909)",
+  "pos": [
+   "475",
+   "0",
+   "-100"
+  ],
+  "item_name": "Space Food",
+  "script": "0x14d808",
+  "at": "0x14d920",
+  "conditions": [],
+  "maps": [
+   "sp2_04",
+   "sp2_05"
+  ],
+  "chapter": "4"
+ },
+ {
+  "type": "block",
+  "block": "type 32769",
+  "name": "\"i_01\"",
+  "item": 6,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[KINOKO]",
+  "script": "0x14dd10",
+  "at": "0x14de94",
+  "conditions": [],
+  "maps": [
+   "sp2_06"
+  ],
+  "chapter": "4"
+ },
+ {
+  "type": "item",
+  "name": "\"komonjyo\"",
+  "item": 25,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "0",
+   "-1000",
+   "0"
+  ],
+  "item_name": "Ancient Clue",
+  "script": "0x14e238",
+  "at": "0x14e574",
+  "conditions": [
+   "GSW(0) < 143",
+   "LF(0) == 1",
+   "not (LW(0) < LW(10))"
+  ],
+  "maps": [
+   "sp2_08"
+  ],
+  "chapter": "4"
+ },
+ {
+  "type": "item",
+  "name": "\"komonjyo\"",
+  "item": 25,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "0",
+   "-1000",
+   "0"
+  ],
+  "item_name": "Ancient Clue",
+  "script": "0x14e238",
+  "at": "0x14e768",
+  "conditions": [
+   "GSW(0) < 144",
+   "LF(0) == 1",
+   "not (LW(0) < LW(10))"
+  ],
+  "maps": [
+   "sp2_08"
+  ],
+  "chapter": "4"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_03\"",
+  "item": 7,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[SUPER_KINOKO]",
+  "script": "0x14ec28",
+  "at": "0x14ed2c",
+  "conditions": [],
+  "maps": [
+   "sp2_10"
+  ],
+  "chapter": "4"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_04\"",
+  "item": 10,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[DOT_STAR]",
+  "script": "0x14ec28",
+  "at": "0x14ed54",
+  "conditions": [],
+  "maps": [
+   "sp2_10"
+  ],
+  "chapter": "4"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_23\"",
+  "item": 7,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[SUPER_KINOKO]",
+  "script": "0x14fef8",
+  "at": "0x150364",
+  "conditions": [],
+  "maps": [
+   "sp3_01"
+  ],
+  "chapter": "4"
+ },
+ {
+  "type": "item",
+  "name": "\"i_01\"",
+  "item": 68,
+  "item_var": null,
+  "flag": "GSWF(910)",
+  "pos": [
+   "-1025",
+   "150",
+   "30f"
+  ],
+  "item_name": "Shooting Star",
+  "script": "0x14fef8",
+  "at": "0x150774",
+  "conditions": [],
+  "maps": [
+   "sp3_01"
+  ],
+  "chapter": "4"
+ },
+ {
+  "type": "item",
+  "name": "\"dummy\"",
+  "item": null,
+  "item_var": "LW(0)",
+  "flag": "0",
+  "pos": [
+   "0",
+   "0",
+   "0"
+  ],
+  "item_name": null,
+  "script": "0x1513c8",
+  "at": "0x1513c8",
+  "conditions": [],
+  "maps": [
+   "sp3_02"
+  ],
+  "chapter": "4"
+ },
+ {
+  "type": "item",
+  "name": "\"i_01\"",
+  "item": 77,
+  "item_var": null,
+  "flag": "GSWF(911)",
+  "pos": [
+   "387.5f",
+   "600",
+   "-25"
+  ],
+  "item_name": "Ghost Shroom",
+  "script": "0x153260",
+  "at": "0x1538a0",
+  "conditions": [],
+  "maps": [
+   "sp3_04"
+  ],
+  "chapter": "4"
+ },
+ {
+  "type": "item",
+  "name": "\"i_02\"",
+  "item": 88,
+  "item_var": null,
+  "flag": "GSWF(912)",
+  "pos": [
+   "-587.5f",
+   "1250",
+   "-25f"
+  ],
+  "item_name": "Catch Card SP",
+  "script": "0x153260",
+  "at": "0x1538d0",
+  "conditions": [],
+  "maps": [
+   "sp3_04"
+  ],
+  "chapter": "4"
+ },
+ {
+  "type": "gift",
+  "item": null,
+  "item_var": "LW(10)",
+  "item_name": null,
+  "script": "0x153ae8",
+  "at": "0x154124",
+  "conditions": [
+   "LW(0) != -1",
+   "LW(0) == 0",
+   "not (LW(4) < LW(2))",
+   "not (LW(4) == 0)"
+  ],
+  "maps": [
+   "sp3_05"
+  ],
+  "chapter": "4"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_00\"",
+  "item": 5,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[HAPPY_FLOWER]",
+  "script": "0x155e48",
+  "at": "0x155efc",
+  "conditions": [],
+  "maps": [
+   "sp4_02"
+  ],
+  "chapter": "4"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_01\"",
+  "item": 6,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[KINOKO]",
+  "script": "0x155e48",
+  "at": "0x155f24",
+  "conditions": [],
+  "maps": [
+   "sp4_02"
+  ],
+  "chapter": "4"
+ },
+ {
+  "type": "check",
+  "item": 27,
+  "item_var": null,
+  "item_name": "Dimension Key",
+  "script": "0x156018",
+  "at": "0x156018",
+  "conditions": [],
+  "maps": [
+   "sp4_02",
+   "sp4_03"
+  ],
+  "chapter": "4"
+ },
+ {
+  "type": "lock",
+  "name": "\"lock\"",
+  "item": 27,
+  "item_name": "Dimension Key",
+  "script": "0x1560b0",
+  "at": "0x1561ac",
+  "conditions": [
+   "GSW(0) < 164"
+  ],
+  "maps": [
+   "sp4_03"
+  ],
+  "chapter": "4"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_00\"",
+  "item": 4,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[SLOW_FLOWER]",
+  "script": "0x1562a8",
+  "at": "0x15635c",
+  "conditions": [],
+  "maps": [
+   "sp4_04"
+  ],
+  "chapter": "4"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_01\"",
+  "item": 5,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[HAPPY_FLOWER]",
+  "script": "0x1562a8",
+  "at": "0x156384",
+  "conditions": [],
+  "maps": [
+   "sp4_04"
+  ],
+  "chapter": "4"
+ },
+ {
+  "type": "item",
+  "name": "\"key\"",
+  "item": 27,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "LW(0)",
+   "LW(1)",
+   "LW(2)"
+  ],
+  "item_name": "Dimension Key",
+  "script": "0x156410",
+  "at": "0x156434",
+  "conditions": [],
+  "maps": [
+   "sp4_04",
+   "sp4_05"
+  ],
+  "chapter": "4"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "0",
+  "item_name": "[NULL]",
+  "script": "0x1564ac",
+  "at": "0x1565a8",
+  "conditions": [
+   "GSW(0) < 163"
+  ],
+  "maps": [
+   "sp4_05"
+  ],
+  "chapter": "4"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "1",
+  "item_name": "[NULL]",
+  "script": "0x1564ac",
+  "at": "0x1565d8",
+  "conditions": [
+   "not (GSW(0) < 163)"
+  ],
+  "maps": [
+   "sp4_05"
+  ],
+  "chapter": "4"
+ },
+ {
+  "type": "item",
+  "name": "\"key\"",
+  "item": 28,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "LW(0)",
+   "LW(1)",
+   "LW(2)"
+  ],
+  "item_name": "Dimension Key",
+  "script": "0x156848",
+  "at": "0x15688c",
+  "conditions": [],
+  "maps": [
+   "sp4_07"
+  ],
+  "chapter": "4"
+ },
+ {
+  "type": "check",
+  "item": 28,
+  "item_var": null,
+  "item_name": "Dimension Key",
+  "script": "0x156920",
+  "at": "0x156920",
+  "conditions": [],
+  "maps": [
+   "sp4_07"
+  ],
+  "chapter": "4"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "0",
+  "item_name": "[NULL]",
+  "script": "0x1569b8",
+  "at": "0x156ac4",
+  "conditions": [
+   "GSW(0) < 165"
+  ],
+  "maps": [
+   "sp4_07"
+  ],
+  "chapter": "4"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "1",
+  "item_name": "[NULL]",
+  "script": "0x1569b8",
+  "at": "0x156b0c",
+  "conditions": [
+   "not (GSW(0) < 165)"
+  ],
+  "maps": [
+   "sp4_07"
+  ],
+  "chapter": "4"
+ },
+ {
+  "type": "lock",
+  "name": "\"lock\"",
+  "item": 28,
+  "item_name": "Dimension Key",
+  "script": "0x1569b8",
+  "at": "0x156b60",
+  "conditions": [
+   "GSW(0) < 166"
+  ],
+  "maps": [
+   "sp4_07"
+  ],
+  "chapter": "4"
+ },
+ {
+  "type": "item",
+  "name": "\"item\"",
+  "item": 485,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "LW(0)",
+   "LW(1)",
+   "LW(2)"
+  ],
+  "item_name": "Piccolo",
+  "script": "0x156d28",
+  "at": "0x156d6c",
+  "conditions": [],
+  "maps": [
+   "sp4_08",
+   "sp4_09"
+  ],
+  "chapter": "4"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "0",
+  "item_name": "[NULL]",
+  "script": "0x156de4",
+  "at": "0x156e14",
+  "conditions": [
+   "LW(0) == 0",
+   "GSWF(916) == 0"
+  ],
+  "maps": [
+   "sp4_09"
+  ],
+  "chapter": "4"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "0",
+  "item_name": "[NULL]",
+  "script": "0x156de4",
+  "at": "0x157034",
+  "conditions": [],
+  "maps": [
+   "sp4_09"
+  ],
+  "chapter": "4"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "0",
+  "item_name": "[NULL]",
+  "script": "0x1570f0",
+  "at": "0x157218",
+  "conditions": [
+   "not (GSWF(916) == 0)",
+   "GSWF(905) == 0"
+  ],
+  "maps": [
+   "sp4_09"
+  ],
+  "chapter": "4"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "GSWF(905)",
+  "item_name": "[NULL]",
+  "script": "0x1570f0",
+  "at": "0x157260",
+  "conditions": [
+   "not (GSWF(916) == 0)",
+   "not (GSWF(905) == 0)"
+  ],
+  "maps": [
+   "sp4_09"
+  ],
+  "chapter": "4"
+ },
+ {
+  "type": "check",
+  "item": 29,
+  "item_var": null,
+  "item_name": "Dimension Key",
+  "script": "0x1574b0",
+  "at": "0x1574b0",
+  "conditions": [],
+  "maps": [
+   "sp4_10",
+   "sp4_11"
+  ],
+  "chapter": "4"
+ },
+ {
+  "type": "lock",
+  "name": "\"lock\"",
+  "item": 29,
+  "item_name": "Dimension Key",
+  "script": "0x157548",
+  "at": "0x15766c",
+  "conditions": [
+   "GSW(0) < 169"
+  ],
+  "maps": [
+   "sp4_11"
+  ],
+  "chapter": "4"
+ },
+ {
+  "type": "item",
+  "name": "\"key\"",
+  "item": 29,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "LW(0)",
+   "LW(1)",
+   "LW(2)"
+  ],
+  "item_name": "Dimension Key",
+  "script": "0x157770",
+  "at": "0x157794",
+  "conditions": [],
+  "maps": [
+   "sp4_12"
+  ],
+  "chapter": "4"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "0",
+  "item_name": "[NULL]",
+  "script": "0x15780c",
+  "at": "0x157908",
+  "conditions": [
+   "GSW(0) < 168"
+  ],
+  "maps": [
+   "sp4_12"
+  ],
+  "chapter": "4"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "1",
+  "item_name": "[NULL]",
+  "script": "0x15780c",
+  "at": "0x157950",
+  "conditions": [
+   "not (GSW(0) < 168)"
+  ],
+  "maps": [
+   "sp4_12"
+  ],
+  "chapter": "4"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_01\"",
+  "item": 7,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[SUPER_KINOKO]",
+  "script": "0x15780c",
+  "at": "0x157998",
+  "conditions": [],
+  "maps": [
+   "sp4_12"
+  ],
+  "chapter": "4"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_02\"",
+  "item": 548,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "item 548",
+  "script": "0x15780c",
+  "at": "0x1579c0",
+  "conditions": [],
+  "maps": [
+   "sp4_12"
+  ],
+  "chapter": "4"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_03\"",
+  "item": 7,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[SUPER_KINOKO]",
+  "script": "0x15780c",
+  "at": "0x1579e8",
+  "conditions": [],
+  "maps": [
+   "sp4_12"
+  ],
+  "chapter": "4"
+ },
+ {
+  "type": "chest",
+  "name": "\"box_01\"",
+  "item": 61,
+  "item_var": null,
+  "flag": "GSWF(1035)",
+  "item_name": "Cooking Disk 6",
+  "script": "0x160654",
+  "at": "0x16075c",
+  "conditions": [],
+  "maps": [
+   "gn1_01"
+  ],
+  "chapter": "5"
+ },
+ {
+  "type": "item",
+  "name": "\"shop_i1\"",
+  "item": 65,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "225",
+   "7",
+   "-315"
+  ],
+  "item_name": "Fire Burst",
+  "script": "0x160654",
+  "at": "0x160840",
+  "conditions": [],
+  "maps": [
+   "gn1_01"
+  ],
+  "chapter": "5"
+ },
+ {
+  "type": "item",
+  "name": "\"shop_i2\"",
+  "item": 66,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "225",
+   "33",
+   "-295"
+  ],
+  "item_name": "Ice Storm",
+  "script": "0x160654",
+  "at": "0x160870",
+  "conditions": [],
+  "maps": [
+   "gn1_01"
+  ],
+  "chapter": "5"
+ },
+ {
+  "type": "item",
+  "name": "\"shop_i3\"",
+  "item": 84,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "225",
+   "33",
+   "-340"
+  ],
+  "item_name": "Life Shroom",
+  "script": "0x160654",
+  "at": "0x1608a0",
+  "conditions": [],
+  "maps": [
+   "gn1_01"
+  ],
+  "chapter": "5"
+ },
+ {
+  "type": "item",
+  "name": "\"shop_i4\"",
+  "item": 102,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "225",
+   "58",
+   "-320"
+  ],
+  "item_name": "Primordial Fruit",
+  "script": "0x160654",
+  "at": "0x1608d0",
+  "conditions": [],
+  "maps": [
+   "gn1_01"
+  ],
+  "chapter": "5"
+ },
+ {
+  "type": "shop",
+  "shops": [
+   {
+    "type": 5,
+    "npc": "mise",
+    "items": [
+     {
+      "item": 65,
+      "item_name": "Fire Burst",
+      "price": 15
+     },
+     {
+      "item": 66,
+      "item_name": "Ice Storm",
+      "price": 25
+     },
+     {
+      "item": 69,
+      "item_name": "POW Block",
+      "price": 80
+     },
+     {
+      "item": 80,
+      "item_name": "Shroom Shake",
+      "price": 25
+     },
+     {
+      "item": 81,
+      "item_name": "Super Shroom Shake",
+      "price": 100
+     },
+     {
+      "item": 84,
+      "item_name": "Life Shroom",
+      "price": 75
+     },
+     {
+      "item": 78,
+      "item_name": "Sleepy Sheep",
+      "price": 30
+     },
+     {
+      "item": 74,
+      "item_name": "Courage Shell",
+      "price": 8
+     },
+     {
+      "item": 86,
+      "item_name": "Mystery Box",
+      "price": 3
+     },
+     {
+      "item": 102,
+      "item_name": "Primordial Fruit",
+      "price": 22
+     }
+    ]
+   },
+   {
+    "type": 16,
+    "npc": null,
+    "items": [
+     {
+      "item": 101,
+      "item_name": "Keel Mango",
+      "price": -1
+     },
+     {
+      "item": 119,
+      "item_name": "Mild Cocoa Bean",
+      "price": -1
+     }
+    ]
+   }
+  ],
+  "item_name": null,
+  "script": "0x160654",
+  "at": "0x160950",
+  "conditions": [],
+  "maps": [
+   "gn1_01"
+  ],
+  "chapter": "5"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_02\"",
+  "item": 5,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[HAPPY_FLOWER]",
+  "script": "0x163200",
+  "at": "0x1632f4",
+  "conditions": [],
+  "maps": [
+   "gn1_02"
+  ],
+  "chapter": "5"
+ },
+ {
+  "type": "chest",
+  "name": "\"box_01\"",
+  "item": 363,
+  "item_var": null,
+  "flag": "GSWF(1036)",
+  "item_name": "Moon Cleft",
+  "script": "0x163200",
+  "at": "0x163344",
+  "conditions": [],
+  "maps": [
+   "gn1_02"
+  ],
+  "chapter": "5"
+ },
+ {
+  "type": "item",
+  "name": "\"item\"",
+  "item": 473,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "LW(0)",
+   "LW(1)",
+   "LW(2)"
+  ],
+  "item_name": "Bowser (2)",
+  "script": "0x164be8",
+  "at": "0x164c0c",
+  "conditions": [],
+  "maps": [
+   "gn1_04"
+  ],
+  "chapter": "5"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "0",
+  "item_name": "[NULL]",
+  "script": "0x164c70",
+  "at": "0x164ca0",
+  "conditions": [
+   "LW(0) == 0",
+   "GSWF(1044) == 0"
+  ],
+  "maps": [
+   "gn1_04"
+  ],
+  "chapter": "5"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "0",
+  "item_name": "[NULL]",
+  "script": "0x164c70",
+  "at": "0x164e98",
+  "conditions": [],
+  "maps": [
+   "gn1_04"
+  ],
+  "chapter": "5"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "0",
+  "item_name": "[NULL]",
+  "script": "0x164f48",
+  "at": "0x164ff4",
+  "conditions": [
+   "not (GSWF(1044) == 0)",
+   "GSWF(1045) == 0"
+  ],
+  "maps": [
+   "gn1_04"
+  ],
+  "chapter": "5"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "GSWF(1045)",
+  "item_name": "[NULL]",
+  "script": "0x164f48",
+  "at": "0x165024",
+  "conditions": [
+   "not (GSWF(1044) == 0)",
+   "not (GSWF(1045) == 0)"
+  ],
+  "maps": [
+   "gn1_04"
+  ],
+  "chapter": "5"
+ },
+ {
+  "type": "item",
+  "name": "\"i_01\"",
+  "item": 102,
+  "item_var": null,
+  "flag": "GSWF(1037)",
+  "pos": [
+   "-325",
+   "600",
+   "35"
+  ],
+  "item_name": "Primordial Fruit",
+  "script": "0x165a78",
+  "at": "0x165bb0",
+  "conditions": [],
+  "maps": [
+   "gn2_01"
+  ],
+  "chapter": "5"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 30,
+  "item_var": null,
+  "flag": "GSWF(1004)",
+  "item_name": "Water Tablet",
+  "script": "0x165a78",
+  "at": "0x1662f0",
+  "conditions": [],
+  "maps": [
+   "gn2_01"
+  ],
+  "chapter": "5"
+ },
+ {
+  "type": "gift",
+  "item": null,
+  "item_var": "LW(1)",
+  "item_name": null,
+  "script": "0x1673bc",
+  "at": "0x167580",
+  "conditions": [
+   "not (LW(0) == 0)",
+   "LW(0) == 0"
+  ],
+  "maps": [
+   "gn2_02"
+  ],
+  "chapter": "5"
+ },
+ {
+  "type": "gift",
+  "item": 227,
+  "item_var": null,
+  "item_name": "Cudge",
+  "script": "0x167660",
+  "at": "0x168518",
+  "conditions": [],
+  "maps": [
+   "gn2_02"
+  ],
+  "chapter": "5"
+ },
+ {
+  "type": "block",
+  "block": "type 32769",
+  "name": "\"hatena_1\"",
+  "item": 6,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[KINOKO]",
+  "script": "0x168780",
+  "at": "0x168940",
+  "conditions": [],
+  "maps": [
+   "gn2_02"
+  ],
+  "chapter": "5"
+ },
+ {
+  "type": "block",
+  "block": "type 32769",
+  "name": "\"hatena_2\"",
+  "item": 6,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[KINOKO]",
+  "script": "0x168780",
+  "at": "0x168968",
+  "conditions": [],
+  "maps": [
+   "gn2_02"
+  ],
+  "chapter": "5"
+ },
+ {
+  "type": "item",
+  "name": "\"i_00\"",
+  "item": 82,
+  "item_var": null,
+  "flag": "GSWF(1053)",
+  "pos": [
+   "20",
+   "340",
+   "-165"
+  ],
+  "item_name": "Ultra Shroom Shake",
+  "script": "0x168780",
+  "at": "0x168990",
+  "conditions": [],
+  "maps": [
+   "gn2_02"
+  ],
+  "chapter": "5"
+ },
+ {
+  "type": "item",
+  "name": "\"i_01\"",
+  "item": 75,
+  "item_var": null,
+  "flag": "GSWF(1038)",
+  "pos": [
+   "1600",
+   "0",
+   "-37.5f"
+  ],
+  "item_name": "Mighty Tonic",
+  "script": "0x168780",
+  "at": "0x1689e4",
+  "conditions": [],
+  "maps": [
+   "gn2_02"
+  ],
+  "chapter": "5"
+ },
+ {
+  "type": "item",
+  "name": "\"sekiban2\"",
+  "item": 31,
+  "item_var": null,
+  "flag": "GSWF(1005)",
+  "pos": [
+   "800",
+   "151",
+   "40"
+  ],
+  "item_name": "Stone Tablet",
+  "script": "0x16ac28",
+  "at": "0x16aec8",
+  "conditions": [],
+  "maps": [
+   "gn2_03"
+  ],
+  "chapter": "5"
+ },
+ {
+  "type": "item",
+  "name": "\"sekiban2\"",
+  "item": 31,
+  "item_var": null,
+  "flag": "GSWF(1005)",
+  "pos": [
+   "800",
+   "150",
+   "40"
+  ],
+  "item_name": "Stone Tablet",
+  "script": "0x16af98",
+  "at": "0x16b2ac",
+  "conditions": [
+   "not (GSWF(1013) == 0)"
+  ],
+  "maps": [
+   "gn2_03"
+  ],
+  "chapter": "5"
+ },
+ {
+  "type": "item",
+  "name": "\"sekiban3\"",
+  "item": 32,
+  "item_var": null,
+  "flag": "GSWF(1006)",
+  "pos": [
+   "700",
+   "0",
+   "0"
+  ],
+  "item_name": "Fire Tablet",
+  "script": "0x16b7b8",
+  "at": "0x16b90c",
+  "conditions": [],
+  "maps": [
+   "gn2_04"
+  ],
+  "chapter": "5"
+ },
+ {
+  "type": "item",
+  "name": "\"sekiban3\"",
+  "item": 32,
+  "item_var": null,
+  "flag": "GSWF(1006)",
+  "pos": [
+   "700f",
+   "0f",
+   "0f"
+  ],
+  "item_name": "Fire Tablet",
+  "script": "0x16bbd8",
+  "at": "0x16bde0",
+  "conditions": [
+   "not (GSWF(1016) == 0)"
+  ],
+  "maps": [
+   "gn2_04"
+  ],
+  "chapter": "5"
+ },
+ {
+  "type": "chest",
+  "name": "\"box_01\"",
+  "item": 303,
+  "item_var": null,
+  "flag": "GSWF(1042)",
+  "item_name": "Stone Buzzy",
+  "script": "0x16bef8",
+  "at": "0x16bfb8",
+  "conditions": [],
+  "maps": [
+   "gn2_05"
+  ],
+  "chapter": "5"
+ },
+ {
+  "type": "item",
+  "name": "rel@0x889b8",
+  "item": 33,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "LW(0)",
+   "LW(1)",
+   "LW(2)"
+  ],
+  "item_name": "Cave Key",
+  "script": "0x16d040",
+  "at": "0x16d460",
+  "conditions": [],
+  "maps": [
+   "gn3_01"
+  ],
+  "chapter": "5"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_00\"",
+  "item": 7,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[SUPER_KINOKO]",
+  "script": "0x16e458",
+  "at": "0x16e4f0",
+  "conditions": [],
+  "maps": [
+   "gn3_01"
+  ],
+  "chapter": "5"
+ },
+ {
+  "type": "check",
+  "item": 33,
+  "item_var": null,
+  "item_name": "Cave Key",
+  "script": "0x16f510",
+  "at": "0x16f510",
+  "conditions": [],
+  "maps": [
+   "gn3_03"
+  ],
+  "chapter": "5"
+ },
+ {
+  "type": "lock",
+  "name": "\"lock\"",
+  "item": 33,
+  "item_name": "Cave Key",
+  "script": "0x16f8b4",
+  "at": "0x16fe1c",
+  "conditions": [
+   "GSW(0) < 201"
+  ],
+  "maps": [
+   "gn3_03"
+  ],
+  "chapter": "5"
+ },
+ {
+  "type": "chest",
+  "name": "\"treasure\"",
+  "item": 80,
+  "item_var": null,
+  "flag": "GSWF(1050)",
+  "item_name": "Shroom Shake",
+  "script": "0x170130",
+  "at": "0x170208",
+  "conditions": [],
+  "maps": [
+   "gn3_05"
+  ],
+  "chapter": "5"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_00\"",
+  "item": 548,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "item 548",
+  "script": "0x1706b8",
+  "at": "0x170720",
+  "conditions": [],
+  "maps": [
+   "gn3_06"
+  ],
+  "chapter": "5"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_01\"",
+  "item": 548,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "item 548",
+  "script": "0x170d80",
+  "at": "0x170e00",
+  "conditions": [],
+  "maps": [
+   "gn3_08"
+  ],
+  "chapter": "5"
+ },
+ {
+  "type": "item",
+  "name": "\"i_01\"",
+  "item": 343,
+  "item_var": null,
+  "flag": "GSWF(1039)",
+  "pos": [
+   "350",
+   "125",
+   "25"
+  ],
+  "item_name": "Spania",
+  "script": "0x170d80",
+  "at": "0x170f18",
+  "conditions": [],
+  "maps": [
+   "gn3_08"
+  ],
+  "chapter": "5"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"hb_00\"",
+  "item": 10,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[DOT_STAR]",
+  "script": "0x1732d8",
+  "at": "0x173438",
+  "conditions": [],
+  "maps": [
+   "gn3_14"
+  ],
+  "chapter": "5"
+ },
+ {
+  "type": "block",
+  "block": "coin brick",
+  "name": "\"b_01\"",
+  "item": 6,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[KINOKO]",
+  "script": "0x173c70",
+  "at": "0x173d00",
+  "conditions": [],
+  "maps": [
+   "gn4_01"
+  ],
+  "chapter": "5"
+ },
+ {
+  "type": "block",
+  "block": "coin brick",
+  "name": "\"b_02\"",
+  "item": 548,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "item 548",
+  "script": "0x173c70",
+  "at": "0x173d28",
+  "conditions": [],
+  "maps": [
+   "gn4_01"
+  ],
+  "chapter": "5"
+ },
+ {
+  "type": "check",
+  "item": 34,
+  "item_var": null,
+  "item_name": "Cave Key",
+  "script": "0x174510",
+  "at": "0x174510",
+  "conditions": [],
+  "maps": [
+   "gn4_02"
+  ],
+  "chapter": "5"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_00\"",
+  "item": 9,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[BUNSHIN_KINOKO]",
+  "script": "0x174ed8",
+  "at": "0x174f58",
+  "conditions": [],
+  "maps": [
+   "gn4_02"
+  ],
+  "chapter": "5"
+ },
+ {
+  "type": "lock",
+  "name": "\"lock\"",
+  "item": 34,
+  "item_name": "Cave Key",
+  "script": "0x174ed8",
+  "at": "0x1750c8",
+  "conditions": [
+   "GSW(0) < 208"
+  ],
+  "maps": [
+   "gn4_02"
+  ],
+  "chapter": "5"
+ },
+ {
+  "type": "gift",
+  "item": 228,
+  "item_var": null,
+  "item_name": "Dottie",
+  "script": "0x175238",
+  "at": "0x17610c",
+  "conditions": [],
+  "maps": [
+   "gn4_03"
+  ],
+  "chapter": "5"
+ },
+ {
+  "type": "item",
+  "name": "\"key\"",
+  "item": 34,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "LW(0)",
+   "LW(1)",
+   "LW(2)"
+  ],
+  "item_name": "Cave Key",
+  "script": "0x176934",
+  "at": "0x1769cc",
+  "conditions": [
+   "GF(0) == 0"
+  ],
+  "maps": [
+   "gn4_06",
+   "gn4_07"
+  ],
+  "chapter": "5"
+ },
+ {
+  "type": "item",
+  "name": "\"i_01\"",
+  "item": 69,
+  "item_var": null,
+  "flag": "GSWF(1040)",
+  "pos": [
+   "212.5f",
+   "0",
+   "-50"
+  ],
+  "item_name": "POW Block",
+  "script": "0x176cb4",
+  "at": "0x176d1c",
+  "conditions": [],
+  "maps": [
+   "gn4_09"
+  ],
+  "chapter": "5"
+ },
+ {
+  "type": "check",
+  "item": 35,
+  "item_var": null,
+  "item_name": "Card Key",
+  "script": "0x176e78",
+  "at": "0x176ea8",
+  "conditions": [
+   "GSW(0) < 212"
+  ],
+  "maps": [
+   "gn4_10"
+  ],
+  "chapter": "5"
+ },
+ {
+  "type": "item",
+  "name": "\"cardkey\"",
+  "item": 35,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "-600",
+   "0",
+   "0"
+  ],
+  "item_name": "Card Key",
+  "script": "0x177038",
+  "at": "0x177130",
+  "conditions": [
+   "GSW(0) < 211"
+  ],
+  "maps": [
+   "gn4_10"
+  ],
+  "chapter": "5"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_00\"",
+  "item": 7,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[SUPER_KINOKO]",
+  "script": "0x1772a0",
+  "at": "0x177320",
+  "conditions": [],
+  "maps": [
+   "gn4_11"
+  ],
+  "chapter": "5"
+ },
+ {
+  "type": "chest",
+  "name": "\"box_01\"",
+  "item": 430,
+  "item_var": null,
+  "flag": "GSWF(1041)",
+  "item_name": "Floro Cragnien",
+  "script": "0x177770",
+  "at": "0x177840",
+  "conditions": [],
+  "maps": [
+   "gn4_12"
+  ],
+  "chapter": "5"
+ },
+ {
+  "type": "item",
+  "name": "\"bud\"",
+  "item": 36,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "68.5f",
+   "44.5f",
+   "0"
+  ],
+  "item_name": "Floro Sprout",
+  "script": "0x177f98",
+  "at": "0x1780d4",
+  "conditions": [],
+  "maps": [
+   "gn4_13"
+  ],
+  "chapter": "5"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_10\"",
+  "item": 8,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[ULTRA_KINOKO]",
+  "script": "0x179e98",
+  "at": "0x17a294",
+  "conditions": [],
+  "maps": [
+   "gn4_15"
+  ],
+  "chapter": "5"
+ },
+ {
+  "type": "check",
+  "item": 228,
+  "item_var": null,
+  "item_name": "Dottie",
+  "script": "0x17bd40",
+  "at": "0x17d2ec",
+  "conditions": [],
+  "maps": [
+   "gn4_16"
+  ],
+  "chapter": "5"
+ },
+ {
+  "type": "gift",
+  "item": 228,
+  "item_var": null,
+  "item_name": "Dottie",
+  "script": "0x17bd40",
+  "at": "0x17d320",
+  "conditions": [
+   "LW(0) == 0"
+  ],
+  "maps": [
+   "gn4_16"
+  ],
+  "chapter": "5"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "0",
+  "item_name": "[NULL]",
+  "script": "0x18cbc0",
+  "at": "0x18d110",
+  "conditions": [
+   "GSW(0) < 274"
+  ],
+  "maps": [
+   "wa2_01"
+  ],
+  "chapter": "6"
+ },
+ {
+  "type": "item",
+  "name": "\"item\"",
+  "item": 496,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "0",
+   "-1000",
+   "0"
+  ],
+  "item_name": "Goombella",
+  "script": "0x192c34",
+  "at": "0x192e78",
+  "conditions": [],
+  "maps": [
+   "wa4_26"
+  ],
+  "chapter": "6"
+ },
+ {
+  "type": "item",
+  "name": "\"item\"",
+  "item": 497,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "0",
+   "-1000",
+   "0"
+  ],
+  "item_name": "Koops",
+  "script": "0x192c34",
+  "at": "0x192ec8",
+  "conditions": [],
+  "maps": [
+   "wa4_26"
+  ],
+  "chapter": "6"
+ },
+ {
+  "type": "item",
+  "name": "\"item\"",
+  "item": 498,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "0",
+   "-1000",
+   "0"
+  ],
+  "item_name": "Madame Flurrie",
+  "script": "0x192c34",
+  "at": "0x192f18",
+  "conditions": [],
+  "maps": [
+   "wa4_26"
+  ],
+  "chapter": "6"
+ },
+ {
+  "type": "item",
+  "name": "\"item\"",
+  "item": 499,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "0",
+   "-1000",
+   "0"
+  ],
+  "item_name": "Yoshi",
+  "script": "0x192c34",
+  "at": "0x192f68",
+  "conditions": [],
+  "maps": [
+   "wa4_26"
+  ],
+  "chapter": "6"
+ },
+ {
+  "type": "item",
+  "name": "\"item\"",
+  "item": 500,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "0",
+   "-1000",
+   "0"
+  ],
+  "item_name": "Vivian",
+  "script": "0x192c34",
+  "at": "0x192fb8",
+  "conditions": [],
+  "maps": [
+   "wa4_26"
+  ],
+  "chapter": "6"
+ },
+ {
+  "type": "item",
+  "name": "\"item\"",
+  "item": 501,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "0",
+   "-1000",
+   "0"
+  ],
+  "item_name": "Admiral Bobbery",
+  "script": "0x192c34",
+  "at": "0x193008",
+  "conditions": [],
+  "maps": [
+   "wa4_26"
+  ],
+  "chapter": "6"
+ },
+ {
+  "type": "item",
+  "name": "\"item\"",
+  "item": 502,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "0",
+   "-1000",
+   "0"
+  ],
+  "item_name": "Ms. Mowz",
+  "script": "0x192c34",
+  "at": "0x193058",
+  "conditions": [],
+  "maps": [
+   "wa4_26"
+  ],
+  "chapter": "6"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_23\"",
+  "item": 5,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[HAPPY_FLOWER]",
+  "script": "0x195080",
+  "at": "0x195224",
+  "conditions": [],
+  "maps": [
+   "an1_02"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "item",
+  "name": "\"i_01\"",
+  "item": 81,
+  "item_var": null,
+  "flag": "GSWF(1268)",
+  "pos": [
+   "LW(0)",
+   "LW(1)",
+   "LW(2)"
+  ],
+  "item_name": "Super Shroom Shake",
+  "script": "0x195080",
+  "at": "0x1952dc",
+  "conditions": [],
+  "maps": [
+   "an1_02"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "check",
+  "item": 49,
+  "item_var": null,
+  "item_name": "Door Key",
+  "script": "0x196778",
+  "at": "0x196778",
+  "conditions": [],
+  "maps": [
+   "an1_03"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "lock",
+  "name": "\"lock\"",
+  "item": 49,
+  "item_name": "Door Key",
+  "script": "0x196810",
+  "at": "0x196bf8",
+  "conditions": [
+   "GSW(0) < 296"
+  ],
+  "maps": [
+   "an1_03"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "item",
+  "name": "\"key\"",
+  "item": 49,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "0",
+   "0",
+   "0"
+  ],
+  "item_name": "Door Key",
+  "script": "0x198830",
+  "at": "0x199a60",
+  "conditions": [],
+  "maps": [
+   "an1_04"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "gift",
+  "item": 219,
+  "item_var": null,
+  "item_name": "Luigi",
+  "script": "0x19c2a0",
+  "at": "0x19cd4c",
+  "conditions": [],
+  "maps": [
+   "an1_07"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "item",
+  "name": "\"i_01\"",
+  "item": 85,
+  "item_var": null,
+  "flag": "GSWF(1269)",
+  "pos": [
+   "675",
+   "200",
+   "100"
+  ],
+  "item_name": "Long-Last Shake",
+  "script": "0x19cd84",
+  "at": "0x19cf9c",
+  "conditions": [],
+  "maps": [
+   "an1_07"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "chest",
+  "name": "\"box_01\"",
+  "item": 310,
+  "item_var": null,
+  "flag": "GSWF(1282)",
+  "item_name": "Dry Bones",
+  "script": "0x19cd84",
+  "at": "0x19cfcc",
+  "conditions": [],
+  "maps": [
+   "an1_07"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "item",
+  "name": "\"item\"",
+  "item": 475,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "LW(0)",
+   "LW(1)",
+   "LW(2)"
+  ],
+  "item_name": "Peach (3)",
+  "script": "0x19e3a8",
+  "at": "0x19e3ec",
+  "conditions": [],
+  "maps": [
+   "an1_11"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "0",
+  "item_name": "[NULL]",
+  "script": "0x19e450",
+  "at": "0x19e480",
+  "conditions": [
+   "LW(0) == 0",
+   "GSWF(1285) == 0"
+  ],
+  "maps": [
+   "an1_11"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "0",
+  "item_name": "[NULL]",
+  "script": "0x19e450",
+  "at": "0x19e678",
+  "conditions": [],
+  "maps": [
+   "an1_11"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "0",
+  "item_name": "[NULL]",
+  "script": "0x19e728",
+  "at": "0x19e7d4",
+  "conditions": [
+   "not (GSWF(1285) == 0)",
+   "GSWF(1286) == 0"
+  ],
+  "maps": [
+   "an1_11"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "GSWF(1286)",
+  "item_name": "[NULL]",
+  "script": "0x19e728",
+  "at": "0x19e804",
+  "conditions": [
+   "not (GSWF(1285) == 0)",
+   "not (GSWF(1286) == 0)"
+  ],
+  "maps": [
+   "an1_11"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "item",
+  "name": "\"key\"",
+  "item": 39,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "0",
+   "-1000",
+   "0"
+  ],
+  "item_name": "Diet Book",
+  "script": "0x19eca8",
+  "at": "0x19ecfc",
+  "conditions": [
+   "GSW(0) < 321"
+  ],
+  "maps": [
+   "an2_01"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_00\"",
+  "item": 6,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[KINOKO]",
+  "script": "0x1a06d8",
+  "at": "0x1a0a50",
+  "conditions": [],
+  "maps": [
+   "an2_02"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_02\"",
+  "item": 6,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[KINOKO]",
+  "script": "0x1a06d8",
+  "at": "0x1a0aa0",
+  "conditions": [],
+  "maps": [
+   "an2_02"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "chest",
+  "name": "\"box_01\"",
+  "item": 355,
+  "item_var": null,
+  "flag": "GSWF(1281)",
+  "item_name": "Dark Boo",
+  "script": "0x1a06d8",
+  "at": "0x1a0ac8",
+  "conditions": [],
+  "maps": [
+   "an2_02"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "check",
+  "item": 37,
+  "item_var": null,
+  "item_name": "Door Key",
+  "script": "0x1a0b80",
+  "at": "0x1a0b80",
+  "conditions": [],
+  "maps": [
+   "an2_03"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "item",
+  "name": "\"key\"",
+  "item": 37,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "LW(0)",
+   "LW(1)",
+   "0"
+  ],
+  "item_name": "Door Key",
+  "script": "0x1a1680",
+  "at": "0x1a19bc",
+  "conditions": [],
+  "maps": [
+   "an2_03"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "lock",
+  "name": "\"lock1\"",
+  "item": 0,
+  "item_name": "[NULL]",
+  "script": "0x1a1f60",
+  "at": "0x1a1fe4",
+  "conditions": [
+   "GSW(0) < 312"
+  ],
+  "maps": [
+   "an2_03"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "lock",
+  "name": "\"lock2\"",
+  "item": 37,
+  "item_name": "Door Key",
+  "script": "0x1a1f60",
+  "at": "0x1a2048",
+  "conditions": [
+   "GSW(0) < 316"
+  ],
+  "maps": [
+   "an2_03"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "check",
+  "item": 38,
+  "item_var": null,
+  "item_name": "Door Key",
+  "script": "0x1a5d30",
+  "at": "0x1a5d30",
+  "conditions": [],
+  "maps": [
+   "an2_06"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "lock",
+  "name": "\"lock2\"",
+  "item": 38,
+  "item_name": "Door Key",
+  "script": "0x1a6088",
+  "at": "0x1a61e8",
+  "conditions": [
+   "GSW(0) < 323"
+  ],
+  "maps": [
+   "an2_06"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "item",
+  "name": "\"key\"",
+  "item": 39,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "0",
+   "-1000",
+   "0"
+  ],
+  "item_name": "Diet Book",
+  "script": "0x1a6438",
+  "at": "0x1a6bf8",
+  "conditions": [
+   "GSW(0) < 322",
+   "LW(0) == 39"
+  ],
+  "maps": [
+   "an2_07"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "item",
+  "name": "\"key\"",
+  "item": 38,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "0",
+   "-1000",
+   "0"
+  ],
+  "item_name": "Door Key",
+  "script": "0x1a6438",
+  "at": "0x1a6cec",
+  "conditions": [
+   "GSW(0) < 322",
+   "LW(0) == 39"
+  ],
+  "maps": [
+   "an2_07"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "check",
+  "item": 84,
+  "item_var": null,
+  "item_name": "Life Shroom",
+  "script": "0x1aa908",
+  "at": "0x1aa928",
+  "conditions": [],
+  "maps": [
+   "an2_08"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_01\"",
+  "item": 7,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[SUPER_KINOKO]",
+  "script": "0x1ae2f4",
+  "at": "0x1ae3f0",
+  "conditions": [],
+  "maps": [
+   "an3_01"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_04_01\"",
+  "item": 4,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[SLOW_FLOWER]",
+  "script": "0x1ae2f4",
+  "at": "0x1ae4e0",
+  "conditions": [],
+  "maps": [
+   "an3_01"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "chest",
+  "name": "\"box_01\"",
+  "item": 80,
+  "item_var": null,
+  "flag": "GSWF(1270)",
+  "item_name": "Shroom Shake",
+  "script": "0x1af280",
+  "at": "0x1af460",
+  "conditions": [],
+  "maps": [
+   "an3_02"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_29\"",
+  "item": 6,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[KINOKO]",
+  "script": "0x1b0280",
+  "at": "0x1b031c",
+  "conditions": [],
+  "maps": [
+   "an3_03"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "chest",
+  "name": "\"box_01\"",
+  "item": 451,
+  "item_var": null,
+  "flag": "GSWF(1280)",
+  "item_name": "Zombie Shroom",
+  "script": "0x1b06c8",
+  "at": "0x1b07b0",
+  "conditions": [],
+  "maps": [
+   "an3_04"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "item",
+  "name": "\"_mi1\"",
+  "item": 91,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "LW(0)",
+   "LW(1)",
+   "LW(2)"
+  ],
+  "item_name": "Blue Apple",
+  "script": "0x1b0858",
+  "at": "0x1b08bc",
+  "conditions": [
+   "LW(0) != 0"
+  ],
+  "maps": [
+   "an3_05"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "item",
+  "name": "\"_mi2\"",
+  "item": 91,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "LW(0)",
+   "LW(1)",
+   "LW(2)"
+  ],
+  "item_name": "Blue Apple",
+  "script": "0x1b0858",
+  "at": "0x1b0970",
+  "conditions": [
+   "LW(0) != 0"
+  ],
+  "maps": [
+   "an3_05"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "item",
+  "name": "\"_mi3\"",
+  "item": 91,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "LW(0)",
+   "LW(1)",
+   "LW(2)"
+  ],
+  "item_name": "Blue Apple",
+  "script": "0x1b0858",
+  "at": "0x1b0a24",
+  "conditions": [
+   "LW(0) != 0"
+  ],
+  "maps": [
+   "an3_05"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "item",
+  "name": "\"mi1\"",
+  "item": 91,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "110",
+   "175",
+   "-100"
+  ],
+  "item_name": "Blue Apple",
+  "script": "0x1b0b50",
+  "at": "0x1b0cac",
+  "conditions": [],
+  "maps": [
+   "an3_05"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "item",
+  "name": "\"mi2\"",
+  "item": 91,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "150",
+   "195",
+   "-100"
+  ],
+  "item_name": "Blue Apple",
+  "script": "0x1b0b50",
+  "at": "0x1b0cdc",
+  "conditions": [],
+  "maps": [
+   "an3_05"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "item",
+  "name": "\"mi3\"",
+  "item": 91,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "190",
+   "185",
+   "-100"
+  ],
+  "item_name": "Blue Apple",
+  "script": "0x1b0b50",
+  "at": "0x1b0d0c",
+  "conditions": [],
+  "maps": [
+   "an3_05"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "item",
+  "name": "\"item\"",
+  "item": null,
+  "item_var": "LW(0)",
+  "flag": "0",
+  "pos": [
+   "0",
+   "-1000",
+   "0"
+  ],
+  "item_name": null,
+  "script": "0x1b1178",
+  "at": "0x1b1250",
+  "conditions": [],
+  "maps": [
+   "an3_06"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "item",
+  "name": "\"momo\"",
+  "item": 45,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "-155",
+   "20",
+   "0"
+  ],
+  "item_name": "[STG7_PEACH]",
+  "script": "0x1b1178",
+  "at": "0x1b19e4",
+  "conditions": [
+   "LW(0) == 94"
+  ],
+  "maps": [
+   "an3_06"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "item",
+  "name": "\"_mi1\"",
+  "item": 92,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "LW(0)",
+   "LW(1)",
+   "LW(2)"
+  ],
+  "item_name": "Orange Apple",
+  "script": "0x1b4358",
+  "at": "0x1b43bc",
+  "conditions": [
+   "LW(0) != 0"
+  ],
+  "maps": [
+   "an3_07"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "item",
+  "name": "\"_mi2\"",
+  "item": 92,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "LW(0)",
+   "LW(1)",
+   "LW(2)"
+  ],
+  "item_name": "Orange Apple",
+  "script": "0x1b4358",
+  "at": "0x1b4470",
+  "conditions": [
+   "LW(0) != 0"
+  ],
+  "maps": [
+   "an3_07"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "item",
+  "name": "\"_mi3\"",
+  "item": 92,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "LW(0)",
+   "LW(1)",
+   "LW(2)"
+  ],
+  "item_name": "Orange Apple",
+  "script": "0x1b4358",
+  "at": "0x1b4524",
+  "conditions": [
+   "LW(0) != 0"
+  ],
+  "maps": [
+   "an3_07"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "item",
+  "name": "\"mi1\"",
+  "item": 92,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "-240",
+   "175",
+   "-100"
+  ],
+  "item_name": "Orange Apple",
+  "script": "0x1b4650",
+  "at": "0x1b47ac",
+  "conditions": [],
+  "maps": [
+   "an3_07"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "item",
+  "name": "\"mi2\"",
+  "item": 92,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "-200",
+   "195",
+   "-100"
+  ],
+  "item_name": "Orange Apple",
+  "script": "0x1b4650",
+  "at": "0x1b47dc",
+  "conditions": [],
+  "maps": [
+   "an3_07"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "item",
+  "name": "\"mi3\"",
+  "item": 92,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "-160",
+   "185",
+   "-100"
+  ],
+  "item_name": "Orange Apple",
+  "script": "0x1b4650",
+  "at": "0x1b480c",
+  "conditions": [],
+  "maps": [
+   "an3_07"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "item",
+  "name": "\"_mi1\"",
+  "item": 93,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "LW(0)",
+   "LW(1)",
+   "LW(2)"
+  ],
+  "item_name": "Red Apple",
+  "script": "0x1b48e8",
+  "at": "0x1b494c",
+  "conditions": [
+   "LW(0) != 0"
+  ],
+  "maps": [
+   "an3_08"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "item",
+  "name": "\"_mi2\"",
+  "item": 93,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "LW(0)",
+   "LW(1)",
+   "LW(2)"
+  ],
+  "item_name": "Red Apple",
+  "script": "0x1b48e8",
+  "at": "0x1b4a00",
+  "conditions": [
+   "LW(0) != 0"
+  ],
+  "maps": [
+   "an3_08"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "item",
+  "name": "\"_mi3\"",
+  "item": 93,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "LW(0)",
+   "LW(1)",
+   "LW(2)"
+  ],
+  "item_name": "Red Apple",
+  "script": "0x1b48e8",
+  "at": "0x1b4ab4",
+  "conditions": [
+   "LW(0) != 0"
+  ],
+  "maps": [
+   "an3_08"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_00\"",
+  "item": 5,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[HAPPY_FLOWER]",
+  "script": "0x1b4be0",
+  "at": "0x1b4cdc",
+  "conditions": [],
+  "maps": [
+   "an3_08"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "item",
+  "name": "\"mi1\"",
+  "item": 93,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "710",
+   "175",
+   "-150"
+  ],
+  "item_name": "Red Apple",
+  "script": "0x1b4be0",
+  "at": "0x1b4d64",
+  "conditions": [],
+  "maps": [
+   "an3_08"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "item",
+  "name": "\"mi2\"",
+  "item": 93,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "750",
+   "195",
+   "-150"
+  ],
+  "item_name": "Red Apple",
+  "script": "0x1b4be0",
+  "at": "0x1b4d94",
+  "conditions": [],
+  "maps": [
+   "an3_08"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "item",
+  "name": "\"mi3\"",
+  "item": 93,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "790",
+   "185",
+   "-150"
+  ],
+  "item_name": "Red Apple",
+  "script": "0x1b4be0",
+  "at": "0x1b4dc4",
+  "conditions": [],
+  "maps": [
+   "an3_08"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "item",
+  "name": "\"_mi1\"",
+  "item": 94,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "LW(0)",
+   "LW(1)",
+   "LW(2)"
+  ],
+  "item_name": "Pink Apple",
+  "script": "0x1b4ea0",
+  "at": "0x1b4f04",
+  "conditions": [
+   "LW(0) != 0"
+  ],
+  "maps": [
+   "an3_09"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "item",
+  "name": "\"_mi2\"",
+  "item": 94,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "LW(0)",
+   "LW(1)",
+   "LW(2)"
+  ],
+  "item_name": "Pink Apple",
+  "script": "0x1b4ea0",
+  "at": "0x1b4fb8",
+  "conditions": [
+   "LW(0) != 0"
+  ],
+  "maps": [
+   "an3_09"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "item",
+  "name": "\"_mi3\"",
+  "item": 94,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "LW(0)",
+   "LW(1)",
+   "LW(2)"
+  ],
+  "item_name": "Pink Apple",
+  "script": "0x1b4ea0",
+  "at": "0x1b506c",
+  "conditions": [
+   "LW(0) != 0"
+  ],
+  "maps": [
+   "an3_09"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "item",
+  "name": "\"mi1\"",
+  "item": 94,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "-155",
+   "175",
+   "40"
+  ],
+  "item_name": "Pink Apple",
+  "script": "0x1b5194",
+  "at": "0x1b52f0",
+  "conditions": [],
+  "maps": [
+   "an3_09"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "item",
+  "name": "\"mi2\"",
+  "item": 94,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "-155",
+   "195",
+   "0"
+  ],
+  "item_name": "Pink Apple",
+  "script": "0x1b5194",
+  "at": "0x1b5320",
+  "conditions": [],
+  "maps": [
+   "an3_09"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "item",
+  "name": "\"mi3\"",
+  "item": 94,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "-155",
+   "185",
+   "-40"
+  ],
+  "item_name": "Pink Apple",
+  "script": "0x1b5194",
+  "at": "0x1b5350",
+  "conditions": [],
+  "maps": [
+   "an3_09"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "item",
+  "name": "\"_mi1\"",
+  "item": 95,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "LW(0)",
+   "LW(1)",
+   "LW(2)"
+  ],
+  "item_name": "Black Apple",
+  "script": "0x1b53f0",
+  "at": "0x1b5454",
+  "conditions": [
+   "LW(0) != 0"
+  ],
+  "maps": [
+   "an3_10"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "item",
+  "name": "\"_mi2\"",
+  "item": 95,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "LW(0)",
+   "LW(1)",
+   "LW(2)"
+  ],
+  "item_name": "Black Apple",
+  "script": "0x1b53f0",
+  "at": "0x1b5508",
+  "conditions": [
+   "LW(0) != 0"
+  ],
+  "maps": [
+   "an3_10"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "item",
+  "name": "\"_mi3\"",
+  "item": 95,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "LW(0)",
+   "LW(1)",
+   "LW(2)"
+  ],
+  "item_name": "Black Apple",
+  "script": "0x1b53f0",
+  "at": "0x1b55bc",
+  "conditions": [
+   "LW(0) != 0"
+  ],
+  "maps": [
+   "an3_10"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "item",
+  "name": "\"mi1\"",
+  "item": 95,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "110",
+   "175",
+   "-100"
+  ],
+  "item_name": "Black Apple",
+  "script": "0x1b56e8",
+  "at": "0x1b5844",
+  "conditions": [],
+  "maps": [
+   "an3_10"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "item",
+  "name": "\"mi2\"",
+  "item": 95,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "150",
+   "195",
+   "-100"
+  ],
+  "item_name": "Black Apple",
+  "script": "0x1b56e8",
+  "at": "0x1b5874",
+  "conditions": [],
+  "maps": [
+   "an3_10"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "item",
+  "name": "\"mi3\"",
+  "item": 95,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "190",
+   "185",
+   "-100"
+  ],
+  "item_name": "Black Apple",
+  "script": "0x1b56e8",
+  "at": "0x1b58a4",
+  "conditions": [],
+  "maps": [
+   "an3_10"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_05\"",
+  "item": 548,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "item 548",
+  "script": "0x1b6018",
+  "at": "0x1b6108",
+  "conditions": [],
+  "maps": [
+   "an3_12"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_06\"",
+  "item": 3,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[SPEED_FLOWER]",
+  "script": "0x1b6018",
+  "at": "0x1b6130",
+  "conditions": [],
+  "maps": [
+   "an3_12"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_07\"",
+  "item": 548,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "item 548",
+  "script": "0x1b6018",
+  "at": "0x1b6158",
+  "conditions": [],
+  "maps": [
+   "an3_12"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_08\"",
+  "item": 548,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "item 548",
+  "script": "0x1b6018",
+  "at": "0x1b6180",
+  "conditions": [],
+  "maps": [
+   "an3_12"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_09\"",
+  "item": 548,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "item 548",
+  "script": "0x1b6018",
+  "at": "0x1b61a8",
+  "conditions": [],
+  "maps": [
+   "an3_12"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_10\"",
+  "item": 548,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "item 548",
+  "script": "0x1b6018",
+  "at": "0x1b61d0",
+  "conditions": [],
+  "maps": [
+   "an3_12"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "chest",
+  "name": "\"box_01\"",
+  "item": 387,
+  "item_var": null,
+  "flag": "GSWF(1271)",
+  "item_name": "Rawbus",
+  "script": "0x1b6018",
+  "at": "0x1b634c",
+  "conditions": [],
+  "maps": [
+   "an3_12"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_25\"",
+  "item": 6,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[KINOKO]",
+  "script": "0x1b64b8",
+  "at": "0x1b659c",
+  "conditions": [],
+  "maps": [
+   "an3_13"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "block",
+  "block": "type 32769",
+  "name": "\"b_27\"",
+  "item": 549,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "item 549",
+  "script": "0x1b64b8",
+  "at": "0x1b65ec",
+  "conditions": [],
+  "maps": [
+   "an3_13"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "chest",
+  "name": "\"box_01\"",
+  "item": 341,
+  "item_var": null,
+  "flag": "GSWF(1272)",
+  "item_name": "Ruff Puff",
+  "script": "0x1b64b8",
+  "at": "0x1b663c",
+  "conditions": [],
+  "maps": [
+   "an3_13"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "block",
+  "block": "coin brick",
+  "name": "\"b_11\"",
+  "item": 7,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[SUPER_KINOKO]",
+  "script": "0x1b6c58",
+  "at": "0x1b6f4c",
+  "conditions": [],
+  "maps": [
+   "an3_14"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "chest",
+  "name": "\"box_01\"",
+  "item": 67,
+  "item_var": null,
+  "flag": "GSWF(1273)",
+  "item_name": "Thunder Rage",
+  "script": "0x1b6c58",
+  "at": "0x1b6f74",
+  "conditions": [],
+  "maps": [
+   "an3_14"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "chest",
+  "name": "\"box_02\"",
+  "item": 85,
+  "item_var": null,
+  "flag": "GSWF(1289)",
+  "item_name": "Long-Last Shake",
+  "script": "0x1b6c58",
+  "at": "0x1b6fa0",
+  "conditions": [],
+  "maps": [
+   "an3_14"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "item",
+  "name": "\"item\"",
+  "item": null,
+  "item_var": "LW(0)",
+  "flag": "0",
+  "pos": [
+   "0",
+   "-1000",
+   "0"
+  ],
+  "item_name": null,
+  "script": "0x1b7950",
+  "at": "0x1b7a78",
+  "conditions": [],
+  "maps": [
+   "an3_15"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "item",
+  "name": "\"momo\"",
+  "item": 45,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "LW(0)",
+   "2395",
+   "LW(2)"
+  ],
+  "item_name": "[STG7_PEACH]",
+  "script": "0x1b7950",
+  "at": "0x1b8014",
+  "conditions": [
+   "LW(0) == 94"
+  ],
+  "maps": [
+   "an3_15"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "block",
+  "block": "3D ? block",
+  "name": "\"b_01\"",
+  "item": 7,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[SUPER_KINOKO]",
+  "script": "0x1b8454",
+  "at": "0x1b85c4",
+  "conditions": [],
+  "maps": [
+   "an3_15"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "chest",
+  "name": "\"box_01\"",
+  "item": 71,
+  "item_var": null,
+  "flag": "GSWF(1274)",
+  "item_name": "Gold Bar",
+  "script": "0x1b8454",
+  "at": "0x1b8614",
+  "conditions": [],
+  "maps": [
+   "an3_15"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "chest",
+  "name": "\"box_02\"",
+  "item": 84,
+  "item_var": null,
+  "flag": "GSWF(1290)",
+  "item_name": "Life Shroom",
+  "script": "0x1b8454",
+  "at": "0x1b8640",
+  "conditions": [],
+  "maps": [
+   "an3_15"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "check",
+  "item": 40,
+  "item_var": null,
+  "item_name": "Door Key",
+  "script": "0x1b93b0",
+  "at": "0x1b93b0",
+  "conditions": [],
+  "maps": [
+   "an4_01"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_23\"",
+  "item": 3,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[SPEED_FLOWER]",
+  "script": "0x1b9480",
+  "at": "0x1b958c",
+  "conditions": [],
+  "maps": [
+   "an4_01"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_31\"",
+  "item": 6,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[KINOKO]",
+  "script": "0x1b9480",
+  "at": "0x1b95b4",
+  "conditions": [],
+  "maps": [
+   "an4_01"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "lock",
+  "name": "\"lock\"",
+  "item": 40,
+  "item_name": "Door Key",
+  "script": "0x1b9480",
+  "at": "0x1b9720",
+  "conditions": [
+   "GSW(0) < 345"
+  ],
+  "maps": [
+   "an4_01"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "check",
+  "item": 40,
+  "item_var": null,
+  "item_name": "Door Key",
+  "script": "0x1b9e48",
+  "at": "0x1b9e48",
+  "conditions": [],
+  "maps": [
+   "an4_02"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "lock",
+  "name": "\"lock\"",
+  "item": 40,
+  "item_name": "Door Key",
+  "script": "0x1bab48",
+  "at": "0x1bb060",
+  "conditions": [
+   "GSW(0) < 349"
+  ],
+  "maps": [
+   "an4_02"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "item",
+  "name": "\"key\"",
+  "item": 40,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "0",
+   "-1000",
+   "0"
+  ],
+  "item_name": "Door Key",
+  "script": "0x1bbed8",
+  "at": "0x1bc3a8",
+  "conditions": [],
+  "maps": [
+   "an4_03"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "shop",
+  "shops": [
+   {
+    "type": 16,
+    "npc": null,
+    "items": [
+     {
+      "item": 166,
+      "item_name": "Hot Dog",
+      "price": -1
+     },
+     {
+      "item": 109,
+      "item_name": "Hot Sauce",
+      "price": -1
+     }
+    ]
+   }
+  ],
+  "item_name": null,
+  "script": "0x1bcdd8",
+  "at": "0x1bce90",
+  "conditions": [],
+  "maps": [
+   "an4_03"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "check",
+  "item": 41,
+  "item_var": null,
+  "item_name": "Blue Orb",
+  "script": "0x1bcdd8",
+  "at": "0x1bd16c",
+  "conditions": [
+   "GSW(0) < 350"
+  ],
+  "maps": [
+   "an4_03"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "check",
+  "item": 42,
+  "item_var": null,
+  "item_name": "Yellow Orb",
+  "script": "0x1bcdd8",
+  "at": "0x1bd198",
+  "conditions": [
+   "GSW(0) < 350"
+  ],
+  "maps": [
+   "an4_03"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "check",
+  "item": 43,
+  "item_var": null,
+  "item_name": "Red Orb",
+  "script": "0x1bcdd8",
+  "at": "0x1bd1c4",
+  "conditions": [
+   "GSW(0) < 350"
+  ],
+  "maps": [
+   "an4_03"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "item",
+  "name": "\"key\"",
+  "item": 40,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "0",
+   "-1000",
+   "0"
+  ],
+  "item_name": "Door Key",
+  "script": "0x1bd490",
+  "at": "0x1bd6e0",
+  "conditions": [],
+  "maps": [
+   "an4_04"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "item",
+  "name": "\"key\"",
+  "item": 41,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "0",
+   "-1000",
+   "0"
+  ],
+  "item_name": "Blue Orb",
+  "script": "0x1bde50",
+  "at": "0x1be18c",
+  "conditions": [
+   "GSW(0): other case"
+  ],
+  "maps": [
+   "an4_04"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "block",
+  "block": "3D ? block",
+  "name": "\"b_00\"",
+  "item": 7,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[SUPER_KINOKO]",
+  "script": "0x1be640",
+  "at": "0x1be708",
+  "conditions": [],
+  "maps": [
+   "an4_04"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_01\"",
+  "item": 7,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[SUPER_KINOKO]",
+  "script": "0x1be640",
+  "at": "0x1be730",
+  "conditions": [],
+  "maps": [
+   "an4_04"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_02\"",
+  "item": 549,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "item 549",
+  "script": "0x1be640",
+  "at": "0x1be758",
+  "conditions": [],
+  "maps": [
+   "an4_04"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "block",
+  "block": "2D ? block",
+  "name": "\"b_03\"",
+  "item": 9,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[BUNSHIN_KINOKO]",
+  "script": "0x1be640",
+  "at": "0x1be780",
+  "conditions": [],
+  "maps": [
+   "an4_04"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "item",
+  "name": "\"i_01\"",
+  "item": 68,
+  "item_var": null,
+  "flag": "GSWF(1275)",
+  "pos": [
+   "1800",
+   "450",
+   "100"
+  ],
+  "item_name": "Shooting Star",
+  "script": "0x1bf8d0",
+  "at": "0x1bf9ac",
+  "conditions": [],
+  "maps": [
+   "an4_05"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "item",
+  "name": "\"key\"",
+  "item": 42,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "0",
+   "-1000",
+   "0"
+  ],
+  "item_name": "Yellow Orb",
+  "script": "0x1bff18",
+  "at": "0x1c04d8",
+  "conditions": [
+   "LW(0) == 0",
+   "LW(0) == 2"
+  ],
+  "maps": [
+   "an4_06"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_000\"",
+  "item": 10,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[DOT_STAR]",
+  "script": "0x1c0808",
+  "at": "0x1c0938",
+  "conditions": [],
+  "maps": [
+   "an4_06"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"h_01\"",
+  "item": 6,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[KINOKO]",
+  "script": "0x1c0808",
+  "at": "0x1c0e38",
+  "conditions": [],
+  "maps": [
+   "an4_06"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "item",
+  "name": "\"key\"",
+  "item": 43,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "0",
+   "-1000",
+   "0"
+  ],
+  "item_name": "Red Orb",
+  "script": "0x1c10cc",
+  "at": "0x1c12e8",
+  "conditions": [],
+  "maps": [
+   "an4_07"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "item",
+  "name": "\"item\"",
+  "item": 82,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "0",
+   "-1000",
+   "0"
+  ],
+  "item_name": "Ultra Shroom Shake",
+  "script": "0x1c20f4",
+  "at": "0x1c2240",
+  "conditions": [],
+  "maps": [
+   "an4_07"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "chest",
+  "name": "\"box2\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "0",
+  "item_name": "[NULL]",
+  "script": "0x1c20f4",
+  "at": "0x1c23dc",
+  "conditions": [],
+  "maps": [
+   "an4_07"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "0",
+  "item_name": "[NULL]",
+  "script": "0x1c2444",
+  "at": "0x1c26b8",
+  "conditions": [],
+  "maps": [
+   "an4_07"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_00\"",
+  "item": 4,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[SLOW_FLOWER]",
+  "script": "0x1c2920",
+  "at": "0x1c2adc",
+  "conditions": [],
+  "maps": [
+   "an4_08"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_04\"",
+  "item": 5,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[HAPPY_FLOWER]",
+  "script": "0x1c2920",
+  "at": "0x1c2b7c",
+  "conditions": [],
+  "maps": [
+   "an4_08"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_01\"",
+  "item": 8,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[ULTRA_KINOKO]",
+  "script": "0x1c3e90",
+  "at": "0x1c3fa4",
+  "conditions": [],
+  "maps": [
+   "an4_09"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "chest",
+  "name": "\"box_01\"",
+  "item": 82,
+  "item_var": null,
+  "flag": "GSWF(1276)",
+  "item_name": "Ultra Shroom Shake",
+  "script": "0x1c3e90",
+  "at": "0x1c3fcc",
+  "conditions": [],
+  "maps": [
+   "an4_09"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "chest",
+  "name": "\"box_02\"",
+  "item": 437,
+  "item_var": null,
+  "flag": "GSWF(1277)",
+  "item_name": "Spiky Skellobit",
+  "script": "0x1c3e90",
+  "at": "0x1c3ff8",
+  "conditions": [],
+  "maps": [
+   "an4_09"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "item",
+  "name": "\"item\"",
+  "item": 62,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "LW(0)",
+   "LW(1)",
+   "LW(2)"
+  ],
+  "item_name": "Cooking Disk 7",
+  "script": "0x1c7e98",
+  "at": "0x1c7edc",
+  "conditions": [],
+  "maps": [
+   "an4_11"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "0",
+  "item_name": "[NULL]",
+  "script": "0x1c7f40",
+  "at": "0x1c7f70",
+  "conditions": [
+   "LW(0) == 0",
+   "GSWF(1287) == 0"
+  ],
+  "maps": [
+   "an4_11"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "0",
+  "item_name": "[NULL]",
+  "script": "0x1c7f40",
+  "at": "0x1c8168",
+  "conditions": [],
+  "maps": [
+   "an4_11"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "0",
+  "item_name": "[NULL]",
+  "script": "0x1c8218",
+  "at": "0x1c82e4",
+  "conditions": [
+   "not (GSWF(1287) == 0)",
+   "GSWF(1288) == 0"
+  ],
+  "maps": [
+   "an4_11"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "GSWF(1288)",
+  "item_name": "[NULL]",
+  "script": "0x1c8218",
+  "at": "0x1c8314",
+  "conditions": [
+   "not (GSWF(1287) == 0)",
+   "not (GSWF(1288) == 0)"
+  ],
+  "maps": [
+   "an4_11"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "chest",
+  "name": "\"box_01\"",
+  "item": 436,
+  "item_var": null,
+  "flag": "GSWF(1278)",
+  "item_name": "Skellobit",
+  "script": "0x1c8378",
+  "at": "0x1c841c",
+  "conditions": [],
+  "maps": [
+   "an4_12"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "chest",
+  "name": "\"box_02\"",
+  "item": 440,
+  "item_var": null,
+  "flag": "GSWF(1279)",
+  "item_name": "Skellobomber",
+  "script": "0x1c8378",
+  "at": "0x1c8448",
+  "conditions": [],
+  "maps": [
+   "an4_12"
+  ],
+  "chapter": "7"
+ },
+ {
+  "type": "check",
+  "item": 46,
+  "item_var": null,
+  "item_name": "Castle Bleck Key",
+  "script": "0x1cbcb0",
+  "at": "0x1cbcb0",
+  "conditions": [],
+  "maps": [
+   "ls1_05"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "lock",
+  "name": "\"lock\"",
+  "item": 46,
+  "item_name": "Castle Bleck Key",
+  "script": "0x1cca8c",
+  "at": "0x1ccb9c",
+  "conditions": [
+   "GSW(0) < 362"
+  ],
+  "maps": [
+   "ls1_05"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "chest",
+  "name": "\"box_01\"",
+  "item": 85,
+  "item_var": null,
+  "flag": "GSWF(1303)",
+  "item_name": "Long-Last Shake",
+  "script": "0x1cddcc",
+  "at": "0x1cdef0",
+  "conditions": [],
+  "maps": [
+   "ls1_06"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "chest",
+  "name": "\"box_02\"",
+  "item": 79,
+  "item_var": null,
+  "flag": "GSWF(1309)",
+  "item_name": "Stop Watch",
+  "script": "0x1cddcc",
+  "at": "0x1cdf1c",
+  "conditions": [],
+  "maps": [
+   "ls1_06"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "item",
+  "name": "\"key\"",
+  "item": 46,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "LW(0)",
+   "LW(1)",
+   "LW(2)"
+  ],
+  "item_name": "Castle Bleck Key",
+  "script": "0x1ce298",
+  "at": "0x1ce2f4",
+  "conditions": [],
+  "maps": [
+   "ls1_07"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "0",
+  "item_name": "[NULL]",
+  "script": "0x1ce370",
+  "at": "0x1ce418",
+  "conditions": [
+   "GSW(0) < 361"
+  ],
+  "maps": [
+   "ls1_07"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "1",
+  "item_name": "[NULL]",
+  "script": "0x1ce370",
+  "at": "0x1ce448",
+  "conditions": [
+   "not (GSW(0) < 361)"
+  ],
+  "maps": [
+   "ls1_07"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_00\"",
+  "item": 8,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[ULTRA_KINOKO]",
+  "script": "0x1ce688",
+  "at": "0x1ce744",
+  "conditions": [],
+  "maps": [
+   "ls1_08",
+   "ls1_09"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "item",
+  "name": "\"key\"",
+  "item": 46,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "LW(0)",
+   "LW(1)",
+   "LW(2)"
+  ],
+  "item_name": "Castle Bleck Key",
+  "script": "0x1d6040",
+  "at": "0x1d6064",
+  "conditions": [],
+  "maps": [
+   "ls2_02"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "check",
+  "item": 46,
+  "item_var": null,
+  "item_name": "Castle Bleck Key",
+  "script": "0x1d60e8",
+  "at": "0x1d60e8",
+  "conditions": [],
+  "maps": [
+   "ls2_02"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "chest",
+  "name": "\"box_01\"",
+  "item": 74,
+  "item_var": null,
+  "flag": "GSWF(1310)",
+  "item_name": "Courage Shell",
+  "script": "0x1d6820",
+  "at": "0x1d6918",
+  "conditions": [],
+  "maps": [
+   "ls2_02"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "chest",
+  "name": "\"box_02\"",
+  "item": 84,
+  "item_var": null,
+  "flag": "GSWF(1311)",
+  "item_name": "Life Shroom",
+  "script": "0x1d6820",
+  "at": "0x1d6944",
+  "conditions": [],
+  "maps": [
+   "ls2_02"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "0",
+  "item_name": "[NULL]",
+  "script": "0x1d6820",
+  "at": "0x1d6bc0",
+  "conditions": [
+   "GSW(0) > 359",
+   "GSW(0) < 375"
+  ],
+  "maps": [
+   "ls2_02"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "1",
+  "item_name": "[NULL]",
+  "script": "0x1d6820",
+  "at": "0x1d6bf0",
+  "conditions": [
+   "GSW(0) > 359",
+   "not (GSW(0) < 375)"
+  ],
+  "maps": [
+   "ls2_02"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "lock",
+  "name": "\"lock\"",
+  "item": 46,
+  "item_name": "Castle Bleck Key",
+  "script": "0x1d6820",
+  "at": "0x1d6c2c",
+  "conditions": [
+   "GSW(0) > 359",
+   "GSW(0) < 376"
+  ],
+  "maps": [
+   "ls2_02"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "item",
+  "name": "\"i_01\"",
+  "item": 67,
+  "item_var": null,
+  "flag": "GSWF(1308)",
+  "pos": [
+   "200",
+   "0",
+   "-75"
+  ],
+  "item_name": "Thunder Rage",
+  "script": "0x1d83b0",
+  "at": "0x1d84b8",
+  "conditions": [],
+  "maps": [
+   "ls2_05",
+   "ls2_06"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "chest",
+  "name": "\"box_01\"",
+  "item": 82,
+  "item_var": null,
+  "flag": "GSWF(1304)",
+  "item_name": "Ultra Shroom Shake",
+  "script": "0x1da048",
+  "at": "0x1da110",
+  "conditions": [],
+  "maps": [
+   "ls2_08"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "check",
+  "item": 46,
+  "item_var": null,
+  "item_name": "Castle Bleck Key",
+  "script": "0x1da688",
+  "at": "0x1da688",
+  "conditions": [],
+  "maps": [
+   "ls2_09"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "lock",
+  "name": "\"lock\"",
+  "item": 46,
+  "item_name": "Castle Bleck Key",
+  "script": "0x1dab80",
+  "at": "0x1dadc8",
+  "conditions": [
+   "GSW(0) < 378"
+  ],
+  "maps": [
+   "ls2_09"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "item",
+  "name": "\"kinoko_01\"",
+  "item": 6,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "LW(0)",
+   "80",
+   "LW(2)"
+  ],
+  "item_name": "[KINOKO]",
+  "script": "0x1dab80",
+  "at": "0x1dae20",
+  "conditions": [],
+  "maps": [
+   "ls2_09"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "item",
+  "name": "\"kinoko_02\"",
+  "item": 6,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "LW(0)",
+   "80",
+   "LW(2)"
+  ],
+  "item_name": "[KINOKO]",
+  "script": "0x1dab80",
+  "at": "0x1dae7c",
+  "conditions": [],
+  "maps": [
+   "ls2_09"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "item",
+  "name": "\"kinoko_03\"",
+  "item": 6,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "LW(0)",
+   "80",
+   "LW(2)"
+  ],
+  "item_name": "[KINOKO]",
+  "script": "0x1dab80",
+  "at": "0x1daed8",
+  "conditions": [],
+  "maps": [
+   "ls2_09"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "item",
+  "name": "\"key\"",
+  "item": 46,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "125",
+   "0",
+   "0"
+  ],
+  "item_name": "Castle Bleck Key",
+  "script": "0x1dbca0",
+  "at": "0x1dbce0",
+  "conditions": [
+   "GSW(0) < 377"
+  ],
+  "maps": [
+   "ls2_12"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "item",
+  "name": "0",
+  "item": 8,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "0",
+   "0",
+   "0"
+  ],
+  "item_name": "[ULTRA_KINOKO]",
+  "script": "0x1dc898",
+  "at": "0x1dc9b4",
+  "conditions": [
+   "GSW(502) == 2"
+  ],
+  "maps": [
+   "ls2_14"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "item",
+  "name": "0",
+  "item": 67,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "0",
+   "0",
+   "0"
+  ],
+  "item_name": "Thunder Rage",
+  "script": "0x1dcad8",
+  "at": "0x1dcbf4",
+  "conditions": [
+   "GSW(503) == 2"
+  ],
+  "maps": [
+   "ls2_15"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "item",
+  "name": "0",
+  "item": 175,
+  "item_var": null,
+  "flag": "GSWF(1318)",
+  "pos": [
+   "-250",
+   "0",
+   "0"
+  ],
+  "item_name": "Mistake",
+  "script": "0x1dd6fc",
+  "at": "0x1dd7f4",
+  "conditions": [
+   "GSW(504) == 2"
+  ],
+  "maps": [
+   "ls2_16"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "item",
+  "name": "0",
+  "item": 175,
+  "item_var": null,
+  "flag": "GSWF(1319)",
+  "pos": [
+   "-200",
+   "0",
+   "0"
+  ],
+  "item_name": "Mistake",
+  "script": "0x1dd6fc",
+  "at": "0x1dd824",
+  "conditions": [
+   "GSW(504) == 2"
+  ],
+  "maps": [
+   "ls2_16"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "item",
+  "name": "0",
+  "item": 175,
+  "item_var": null,
+  "flag": "GSWF(1320)",
+  "pos": [
+   "-150",
+   "0",
+   "0"
+  ],
+  "item_name": "Mistake",
+  "script": "0x1dd6fc",
+  "at": "0x1dd854",
+  "conditions": [
+   "GSW(504) == 2"
+  ],
+  "maps": [
+   "ls2_16"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "item",
+  "name": "0",
+  "item": 175,
+  "item_var": null,
+  "flag": "GSWF(1321)",
+  "pos": [
+   "-100",
+   "0",
+   "0"
+  ],
+  "item_name": "Mistake",
+  "script": "0x1dd6fc",
+  "at": "0x1dd884",
+  "conditions": [
+   "GSW(504) == 2"
+  ],
+  "maps": [
+   "ls2_16"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "item",
+  "name": "0",
+  "item": 175,
+  "item_var": null,
+  "flag": "GSWF(1322)",
+  "pos": [
+   "-50",
+   "0",
+   "0"
+  ],
+  "item_name": "Mistake",
+  "script": "0x1dd6fc",
+  "at": "0x1dd8b4",
+  "conditions": [
+   "GSW(504) == 2"
+  ],
+  "maps": [
+   "ls2_16"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "item",
+  "name": "0",
+  "item": 175,
+  "item_var": null,
+  "flag": "GSWF(1323)",
+  "pos": [
+   "0",
+   "0",
+   "0"
+  ],
+  "item_name": "Mistake",
+  "script": "0x1dd6fc",
+  "at": "0x1dd8e4",
+  "conditions": [
+   "GSW(504) == 2"
+  ],
+  "maps": [
+   "ls2_16"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "item",
+  "name": "0",
+  "item": 175,
+  "item_var": null,
+  "flag": "GSWF(1324)",
+  "pos": [
+   "50",
+   "0",
+   "0"
+  ],
+  "item_name": "Mistake",
+  "script": "0x1dd6fc",
+  "at": "0x1dd914",
+  "conditions": [
+   "GSW(504) == 2"
+  ],
+  "maps": [
+   "ls2_16"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "item",
+  "name": "0",
+  "item": 175,
+  "item_var": null,
+  "flag": "GSWF(1325)",
+  "pos": [
+   "100",
+   "0",
+   "0"
+  ],
+  "item_name": "Mistake",
+  "script": "0x1dd6fc",
+  "at": "0x1dd944",
+  "conditions": [
+   "GSW(504) == 2"
+  ],
+  "maps": [
+   "ls2_16"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "item",
+  "name": "0",
+  "item": 175,
+  "item_var": null,
+  "flag": "GSWF(1326)",
+  "pos": [
+   "150",
+   "0",
+   "0"
+  ],
+  "item_name": "Mistake",
+  "script": "0x1dd6fc",
+  "at": "0x1dd974",
+  "conditions": [
+   "GSW(504) == 2"
+  ],
+  "maps": [
+   "ls2_16"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "item",
+  "name": "0",
+  "item": 175,
+  "item_var": null,
+  "flag": "GSWF(1327)",
+  "pos": [
+   "200",
+   "0",
+   "0"
+  ],
+  "item_name": "Mistake",
+  "script": "0x1dd6fc",
+  "at": "0x1dd9a4",
+  "conditions": [
+   "GSW(504) == 2"
+  ],
+  "maps": [
+   "ls2_16"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_00\"",
+  "item": 3,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[SPEED_FLOWER]",
+  "script": "0x1e1120",
+  "at": "0x1e11a8",
+  "conditions": [],
+  "maps": [
+   "ls3_01"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_01\"",
+  "item": 9,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[BUNSHIN_KINOKO]",
+  "script": "0x1e1120",
+  "at": "0x1e11d0",
+  "conditions": [],
+  "maps": [
+   "ls3_01"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_02\"",
+  "item": 4,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[SLOW_FLOWER]",
+  "script": "0x1e1120",
+  "at": "0x1e11f8",
+  "conditions": [],
+  "maps": [
+   "ls3_01"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "item",
+  "name": "\"_bitem_\"",
+  "item": 46,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "LW(10)",
+   "LW(11)",
+   "LW(12)"
+  ],
+  "item_name": "Castle Bleck Key",
+  "script": "0x1e1560",
+  "at": "0x1e1584",
+  "conditions": [],
+  "maps": [
+   "ls3_03"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "check",
+  "item": 46,
+  "item_var": null,
+  "item_name": "Castle Bleck Key",
+  "script": "0x1e1690",
+  "at": "0x1e1690",
+  "conditions": [],
+  "maps": [
+   "ls3_03"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "chest",
+  "name": "\"box_01\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "0",
+  "item_name": "[NULL]",
+  "script": "0x1e1c48",
+  "at": "0x1e1d0c",
+  "conditions": [
+   "GSW(0) < 389"
+  ],
+  "maps": [
+   "ls3_03"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "chest",
+  "name": "\"box_01\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "1",
+  "item_name": "[NULL]",
+  "script": "0x1e1c48",
+  "at": "0x1e1d54",
+  "conditions": [
+   "not (GSW(0) < 389)"
+  ],
+  "maps": [
+   "ls3_03"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "chest",
+  "name": "\"box_02\"",
+  "item": 66,
+  "item_var": null,
+  "flag": "GSWF(1312)",
+  "item_name": "Ice Storm",
+  "script": "0x1e1c48",
+  "at": "0x1e1db4",
+  "conditions": [],
+  "maps": [
+   "ls3_03"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "lock",
+  "name": "\"lock\"",
+  "item": 46,
+  "item_name": "Castle Bleck Key",
+  "script": "0x1e1c48",
+  "at": "0x1e1ea0",
+  "conditions": [
+   "GSW(0) < 390"
+  ],
+  "maps": [
+   "ls3_03"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "check",
+  "item": 46,
+  "item_var": null,
+  "item_name": "Castle Bleck Key",
+  "script": "0x1e20d8",
+  "at": "0x1e20d8",
+  "conditions": [],
+  "maps": [
+   "ls3_04"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_01\"",
+  "item": 6,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[KINOKO]",
+  "script": "0x1e2170",
+  "at": "0x1e21f0",
+  "conditions": [],
+  "maps": [
+   "ls3_04"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_02\"",
+  "item": 5,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[HAPPY_FLOWER]",
+  "script": "0x1e2170",
+  "at": "0x1e2218",
+  "conditions": [],
+  "maps": [
+   "ls3_04"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_03\"",
+  "item": 549,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "item 549",
+  "script": "0x1e2170",
+  "at": "0x1e2240",
+  "conditions": [],
+  "maps": [
+   "ls3_04"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "lock",
+  "name": "\"lock\"",
+  "item": 46,
+  "item_name": "Castle Bleck Key",
+  "script": "0x1e2170",
+  "at": "0x1e2298",
+  "conditions": [
+   "GSW(0) < 396"
+  ],
+  "maps": [
+   "ls3_04"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "item",
+  "name": "\"key\"",
+  "item": 46,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "LW(0)",
+   "LW(1)",
+   "LW(2)"
+  ],
+  "item_name": "Castle Bleck Key",
+  "script": "0x1e2e70",
+  "at": "0x1e2e94",
+  "conditions": [],
+  "maps": [
+   "ls3_09"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "0",
+  "item_name": "[NULL]",
+  "script": "0x1e3000",
+  "at": "0x1e3178",
+  "conditions": [
+   "GW(0) == 2",
+   "GSW(0) < 394"
+  ],
+  "maps": [
+   "ls3_09"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "0",
+  "item_name": "[NULL]",
+  "script": "0x1e3268",
+  "at": "0x1e3440",
+  "conditions": [
+   "GSW(0) >= 394",
+   "GSW(0) < 395"
+  ],
+  "maps": [
+   "ls3_09"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "1",
+  "item_name": "[NULL]",
+  "script": "0x1e3268",
+  "at": "0x1e3470",
+  "conditions": [
+   "GSW(0) >= 394",
+   "not (GSW(0) < 395)"
+  ],
+  "maps": [
+   "ls3_09"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "item",
+  "name": "\"key\"",
+  "item": 46,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "LW(0)",
+   "LW(1)",
+   "LW(2)"
+  ],
+  "item_name": "Castle Bleck Key",
+  "script": "0x1e3850",
+  "at": "0x1e3874",
+  "conditions": [],
+  "maps": [
+   "ls3_11"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "check",
+  "item": 46,
+  "item_var": null,
+  "item_name": "Castle Bleck Key",
+  "script": "0x1e38f8",
+  "at": "0x1e38f8",
+  "conditions": [],
+  "maps": [
+   "ls3_11"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "0",
+  "item_name": "[NULL]",
+  "script": "0x1e39a4",
+  "at": "0x1e3ae4",
+  "conditions": [
+   "GSW(0) < 398"
+  ],
+  "maps": [
+   "ls3_11"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "1",
+  "item_name": "[NULL]",
+  "script": "0x1e39a4",
+  "at": "0x1e3b2c",
+  "conditions": [
+   "not (GSW(0) < 398)"
+  ],
+  "maps": [
+   "ls3_11"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "lock",
+  "name": "\"lock\"",
+  "item": 46,
+  "item_name": "Castle Bleck Key",
+  "script": "0x1e39a4",
+  "at": "0x1e3be4",
+  "conditions": [
+   "GSW(0) < 399"
+  ],
+  "maps": [
+   "ls3_11"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_01\"",
+  "item": 7,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[SUPER_KINOKO]",
+  "script": "0x1e39a4",
+  "at": "0x1e3c70",
+  "conditions": [],
+  "maps": [
+   "ls3_11"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_02\"",
+  "item": 7,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[SUPER_KINOKO]",
+  "script": "0x1e39a4",
+  "at": "0x1e3cb0",
+  "conditions": [],
+  "maps": [
+   "ls3_11"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "chest",
+  "name": "\"box_01\"",
+  "item": 67,
+  "item_var": null,
+  "flag": "GSWF(1313)",
+  "item_name": "Thunder Rage",
+  "script": "0x1e39a4",
+  "at": "0x1e3cf0",
+  "conditions": [],
+  "maps": [
+   "ls3_11"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_01\"",
+  "item": 6,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[KINOKO]",
+  "script": "0x1e7638",
+  "at": "0x1e76c0",
+  "conditions": [],
+  "maps": [
+   "ls4_01"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_03\"",
+  "item": 6,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[KINOKO]",
+  "script": "0x1e7638",
+  "at": "0x1e7710",
+  "conditions": [],
+  "maps": [
+   "ls4_01"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_01\"",
+  "item": 8,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[ULTRA_KINOKO]",
+  "script": "0x1e7d78",
+  "at": "0x1e7e54",
+  "conditions": [],
+  "maps": [
+   "ls4_03"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "check",
+  "item": 46,
+  "item_var": null,
+  "item_name": "Castle Bleck Key",
+  "script": "0x1e7f50",
+  "at": "0x1e7f50",
+  "conditions": [],
+  "maps": [
+   "ls4_04"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "lock",
+  "name": "\"lock\"",
+  "item": 46,
+  "item_name": "Castle Bleck Key",
+  "script": "0x1e8360",
+  "at": "0x1e8438",
+  "conditions": [
+   "GSW(0) < 409"
+  ],
+  "maps": [
+   "ls4_04"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "item",
+  "name": "\"key\"",
+  "item": 46,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "LW(0)",
+   "LW(1)",
+   "LW(2)"
+  ],
+  "item_name": "Castle Bleck Key",
+  "script": "0x1e862c",
+  "at": "0x1e8650",
+  "conditions": [],
+  "maps": [
+   "ls4_05"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "0",
+  "item_name": "[NULL]",
+  "script": "0x1e86c8",
+  "at": "0x1e8778",
+  "conditions": [
+   "GSW(0) < 408"
+  ],
+  "maps": [
+   "ls4_05"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "1",
+  "item_name": "[NULL]",
+  "script": "0x1e86c8",
+  "at": "0x1e87a8",
+  "conditions": [
+   "not (GSW(0) < 408)"
+  ],
+  "maps": [
+   "ls4_05"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "chest",
+  "name": "\"box_01\"",
+  "item": 68,
+  "item_var": null,
+  "flag": "GSWF(1305)",
+  "item_name": "Shooting Star",
+  "script": "0x1e8e10",
+  "at": "0x1e8e98",
+  "conditions": [],
+  "maps": [
+   "ls4_07"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "chest",
+  "name": "\"box_01\"",
+  "item": 81,
+  "item_var": null,
+  "flag": "GSWF(1306)",
+  "item_name": "Super Shroom Shake",
+  "script": "0x1e93e0",
+  "at": "0x1e9468",
+  "conditions": [],
+  "maps": [
+   "ls4_08"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "chest",
+  "name": "\"box_01\"",
+  "item": 82,
+  "item_var": null,
+  "flag": "GSWF(1307)",
+  "item_name": "Ultra Shroom Shake",
+  "script": "0x1e99b0",
+  "at": "0x1e9a38",
+  "conditions": [],
+  "maps": [
+   "ls4_09"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "block",
+  "block": "? block",
+  "name": "\"b_00\"",
+  "item": 8,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[ULTRA_KINOKO]",
+  "script": "0x1e9bb0",
+  "at": "0x1e9c78",
+  "conditions": [],
+  "maps": [
+   "ls4_10"
+  ],
+  "chapter": "8"
+ },
+ {
+  "type": "check",
+  "item": 48,
+  "item_var": null,
+  "item_name": "Pit Key",
+  "script": "0x208a40",
+  "at": "0x208a58",
+  "conditions": [
+   "GSW(1) < 100"
+  ],
+  "maps": [
+   "dan_01",
+   "dan_02",
+   "dan_03",
+   "dan_04",
+   "dan_41",
+   "dan_42",
+   "dan_43",
+   "dan_44"
+  ],
+  "chapter": "other"
+ },
+ {
+  "type": "check",
+  "item": 44,
+  "item_var": null,
+  "item_name": "Pit Key",
+  "script": "0x208a40",
+  "at": "0x208ab0",
+  "conditions": [
+   "not (GSW(1) < 100)"
+  ],
+  "maps": [
+   "dan_01",
+   "dan_02",
+   "dan_03",
+   "dan_04",
+   "dan_41",
+   "dan_42",
+   "dan_43",
+   "dan_44"
+  ],
+  "chapter": "other"
+ },
+ {
+  "type": "lock",
+  "name": "\"lock_00\"",
+  "item": 48,
+  "item_name": "Pit Key",
+  "script": "0x208b50",
+  "at": "0x208c04",
+  "conditions": [
+   "GSW(1) < 100"
+  ],
+  "maps": [
+   "dan_01",
+   "dan_02",
+   "dan_03",
+   "dan_04",
+   "dan_41",
+   "dan_42",
+   "dan_43",
+   "dan_44"
+  ],
+  "chapter": "other"
+ },
+ {
+  "type": "lock",
+  "name": "\"lock_00\"",
+  "item": 44,
+  "item_name": "Pit Key",
+  "script": "0x208b50",
+  "at": "0x208c34",
+  "conditions": [
+   "not (GSW(1) < 100)"
+  ],
+  "maps": [
+   "dan_01",
+   "dan_02",
+   "dan_03",
+   "dan_04",
+   "dan_41",
+   "dan_42",
+   "dan_43",
+   "dan_44"
+  ],
+  "chapter": "other"
+ },
+ {
+  "type": "item",
+  "name": "\"item\"",
+  "item": null,
+  "item_var": "LW(10)",
+  "flag": "0",
+  "pos": [
+   "LW(0)",
+   "LW(1)",
+   "LW(2)"
+  ],
+  "item_name": null,
+  "script": "0x208fb0",
+  "at": "0x208ff0",
+  "conditions": [],
+  "maps": [
+   "dan_21",
+   "dan_22",
+   "dan_23",
+   "dan_24",
+   "dan_61",
+   "dan_62",
+   "dan_63",
+   "dan_64"
+  ],
+  "chapter": "other"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "GSWF(433)",
+  "item_name": "[NULL]",
+  "script": "0x209258",
+  "at": "0x2092b8",
+  "conditions": [
+   "GSW(1) == 9"
+  ],
+  "maps": [
+   "dan_21",
+   "dan_22",
+   "dan_23",
+   "dan_24",
+   "dan_61",
+   "dan_62",
+   "dan_63",
+   "dan_64"
+  ],
+  "chapter": "other"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "GSWF(434)",
+  "item_name": "[NULL]",
+  "script": "0x209258",
+  "at": "0x2092ec",
+  "conditions": [
+   "GSW(1) == 19"
+  ],
+  "maps": [
+   "dan_21",
+   "dan_22",
+   "dan_23",
+   "dan_24",
+   "dan_61",
+   "dan_62",
+   "dan_63",
+   "dan_64"
+  ],
+  "chapter": "other"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "GSWF(435)",
+  "item_name": "[NULL]",
+  "script": "0x209258",
+  "at": "0x209320",
+  "conditions": [
+   "GSW(1) == 29"
+  ],
+  "maps": [
+   "dan_21",
+   "dan_22",
+   "dan_23",
+   "dan_24",
+   "dan_61",
+   "dan_62",
+   "dan_63",
+   "dan_64"
+  ],
+  "chapter": "other"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "GSWF(436)",
+  "item_name": "[NULL]",
+  "script": "0x209258",
+  "at": "0x209354",
+  "conditions": [
+   "GSW(1) == 39"
+  ],
+  "maps": [
+   "dan_21",
+   "dan_22",
+   "dan_23",
+   "dan_24",
+   "dan_61",
+   "dan_62",
+   "dan_63",
+   "dan_64"
+  ],
+  "chapter": "other"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "GSWF(437)",
+  "item_name": "[NULL]",
+  "script": "0x209258",
+  "at": "0x209388",
+  "conditions": [
+   "GSW(1) == 49"
+  ],
+  "maps": [
+   "dan_21",
+   "dan_22",
+   "dan_23",
+   "dan_24",
+   "dan_61",
+   "dan_62",
+   "dan_63",
+   "dan_64"
+  ],
+  "chapter": "other"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "GSWF(438)",
+  "item_name": "[NULL]",
+  "script": "0x209258",
+  "at": "0x2093bc",
+  "conditions": [
+   "GSW(1) == 59"
+  ],
+  "maps": [
+   "dan_21",
+   "dan_22",
+   "dan_23",
+   "dan_24",
+   "dan_61",
+   "dan_62",
+   "dan_63",
+   "dan_64"
+  ],
+  "chapter": "other"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "GSWF(439)",
+  "item_name": "[NULL]",
+  "script": "0x209258",
+  "at": "0x2093f0",
+  "conditions": [
+   "GSW(1) == 69"
+  ],
+  "maps": [
+   "dan_21",
+   "dan_22",
+   "dan_23",
+   "dan_24",
+   "dan_61",
+   "dan_62",
+   "dan_63",
+   "dan_64"
+  ],
+  "chapter": "other"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "GSWF(440)",
+  "item_name": "[NULL]",
+  "script": "0x209258",
+  "at": "0x209424",
+  "conditions": [
+   "GSW(1) == 79"
+  ],
+  "maps": [
+   "dan_21",
+   "dan_22",
+   "dan_23",
+   "dan_24",
+   "dan_61",
+   "dan_62",
+   "dan_63",
+   "dan_64"
+  ],
+  "chapter": "other"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "GSWF(441)",
+  "item_name": "[NULL]",
+  "script": "0x209258",
+  "at": "0x209458",
+  "conditions": [
+   "GSW(1) == 89"
+  ],
+  "maps": [
+   "dan_21",
+   "dan_22",
+   "dan_23",
+   "dan_24",
+   "dan_61",
+   "dan_62",
+   "dan_63",
+   "dan_64"
+  ],
+  "chapter": "other"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "GSWF(442)",
+  "item_name": "[NULL]",
+  "script": "0x209258",
+  "at": "0x20948c",
+  "conditions": [
+   "GSW(1) == 109"
+  ],
+  "maps": [
+   "dan_21",
+   "dan_22",
+   "dan_23",
+   "dan_24",
+   "dan_61",
+   "dan_62",
+   "dan_63",
+   "dan_64"
+  ],
+  "chapter": "other"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "GSWF(443)",
+  "item_name": "[NULL]",
+  "script": "0x209258",
+  "at": "0x2094c0",
+  "conditions": [
+   "GSW(1) == 119"
+  ],
+  "maps": [
+   "dan_21",
+   "dan_22",
+   "dan_23",
+   "dan_24",
+   "dan_61",
+   "dan_62",
+   "dan_63",
+   "dan_64"
+  ],
+  "chapter": "other"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "GSWF(444)",
+  "item_name": "[NULL]",
+  "script": "0x209258",
+  "at": "0x2094f4",
+  "conditions": [
+   "GSW(1) == 129"
+  ],
+  "maps": [
+   "dan_21",
+   "dan_22",
+   "dan_23",
+   "dan_24",
+   "dan_61",
+   "dan_62",
+   "dan_63",
+   "dan_64"
+  ],
+  "chapter": "other"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "GSWF(445)",
+  "item_name": "[NULL]",
+  "script": "0x209258",
+  "at": "0x209528",
+  "conditions": [
+   "GSW(1) == 139"
+  ],
+  "maps": [
+   "dan_21",
+   "dan_22",
+   "dan_23",
+   "dan_24",
+   "dan_61",
+   "dan_62",
+   "dan_63",
+   "dan_64"
+  ],
+  "chapter": "other"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "GSWF(446)",
+  "item_name": "[NULL]",
+  "script": "0x209258",
+  "at": "0x20955c",
+  "conditions": [
+   "GSW(1) == 149"
+  ],
+  "maps": [
+   "dan_21",
+   "dan_22",
+   "dan_23",
+   "dan_24",
+   "dan_61",
+   "dan_62",
+   "dan_63",
+   "dan_64"
+  ],
+  "chapter": "other"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "GSWF(447)",
+  "item_name": "[NULL]",
+  "script": "0x209258",
+  "at": "0x209590",
+  "conditions": [
+   "GSW(1) == 159"
+  ],
+  "maps": [
+   "dan_21",
+   "dan_22",
+   "dan_23",
+   "dan_24",
+   "dan_61",
+   "dan_62",
+   "dan_63",
+   "dan_64"
+  ],
+  "chapter": "other"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "GSWF(448)",
+  "item_name": "[NULL]",
+  "script": "0x209258",
+  "at": "0x2095c4",
+  "conditions": [
+   "GSW(1) == 169"
+  ],
+  "maps": [
+   "dan_21",
+   "dan_22",
+   "dan_23",
+   "dan_24",
+   "dan_61",
+   "dan_62",
+   "dan_63",
+   "dan_64"
+  ],
+  "chapter": "other"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "GSWF(449)",
+  "item_name": "[NULL]",
+  "script": "0x209258",
+  "at": "0x2095f8",
+  "conditions": [
+   "GSW(1) == 179"
+  ],
+  "maps": [
+   "dan_21",
+   "dan_22",
+   "dan_23",
+   "dan_24",
+   "dan_61",
+   "dan_62",
+   "dan_63",
+   "dan_64"
+  ],
+  "chapter": "other"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "GSWF(450)",
+  "item_name": "[NULL]",
+  "script": "0x209258",
+  "at": "0x20962c",
+  "conditions": [
+   "GSW(1) == 189"
+  ],
+  "maps": [
+   "dan_21",
+   "dan_22",
+   "dan_23",
+   "dan_24",
+   "dan_61",
+   "dan_62",
+   "dan_63",
+   "dan_64"
+  ],
+  "chapter": "other"
+ },
+ {
+  "type": "shop",
+  "shops": [
+   {
+    "type": 14,
+    "npc": "roten",
+    "items": [
+     {
+      "item": 65,
+      "item_name": "Fire Burst",
+      "price": -1
+     },
+     {
+      "item": 0,
+      "item_name": "[NULL]",
+      "price": 66
+     }
+    ]
+   }
+  ],
+  "item_name": null,
+  "script": "0x209258",
+  "at": "0x20996c",
+  "conditions": [
+   "LW(0) < 30"
+  ],
+  "maps": [
+   "dan_21",
+   "dan_22",
+   "dan_23",
+   "dan_24",
+   "dan_61",
+   "dan_62",
+   "dan_63",
+   "dan_64"
+  ],
+  "chapter": "other"
+ },
+ {
+  "type": "gift",
+  "item": 231,
+  "item_var": null,
+  "item_name": "Dashell",
+  "script": "0x20a0a0",
+  "at": "0x20a9d4",
+  "conditions": [],
+  "maps": [
+   "dan_30",
+   "dan_70"
+  ],
+  "chapter": "other"
+ },
+ {
+  "type": "check",
+  "item": 231,
+  "item_var": null,
+  "item_name": "Dashell",
+  "script": "0x20acf0",
+  "at": "0x20bdbc",
+  "conditions": [],
+  "maps": [
+   "dan_30",
+   "dan_70"
+  ],
+  "chapter": "other"
+ },
+ {
+  "type": "chest",
+  "name": "\"box\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "0",
+  "item_name": "[NULL]",
+  "script": "0x20acf0",
+  "at": "0x20bf30",
+  "conditions": [],
+  "maps": [
+   "dan_30",
+   "dan_70"
+  ],
+  "chapter": "other"
+ },
+ {
+  "type": "item",
+  "name": "\"item\"",
+  "item": 522,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "LW(0)",
+   "LW(1)",
+   "LW(2)"
+  ],
+  "item_name": "Mario",
+  "script": "0x20c2b8",
+  "at": "0x20c2dc",
+  "conditions": [],
+  "maps": [
+   "dan_30",
+   "dan_70"
+  ],
+  "chapter": "other"
+ },
+ {
+  "type": "item",
+  "name": "\"item\"",
+  "item": 461,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "LW(0)",
+   "LW(1)",
+   "LW(2)"
+  ],
+  "item_name": "Dark Mario",
+  "script": "0x20c340",
+  "at": "0x20c364",
+  "conditions": [],
+  "maps": [
+   "dan_30",
+   "dan_70"
+  ],
+  "chapter": "other"
+ },
+ {
+  "type": "item",
+  "name": "\"item\"",
+  "item": 523,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "LW(0)",
+   "LW(1)",
+   "LW(2)"
+  ],
+  "item_name": "Peach (1)",
+  "script": "0x20c3c8",
+  "at": "0x20c3ec",
+  "conditions": [],
+  "maps": [
+   "dan_30",
+   "dan_70"
+  ],
+  "chapter": "other"
+ },
+ {
+  "type": "item",
+  "name": "\"item\"",
+  "item": 462,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "LW(0)",
+   "LW(1)",
+   "LW(2)"
+  ],
+  "item_name": "Dark Peach",
+  "script": "0x20c450",
+  "at": "0x20c474",
+  "conditions": [],
+  "maps": [
+   "dan_30",
+   "dan_70"
+  ],
+  "chapter": "other"
+ },
+ {
+  "type": "item",
+  "name": "\"item\"",
+  "item": 458,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "LW(0)",
+   "LW(1)",
+   "LW(2)"
+  ],
+  "item_name": "Bowser (1)",
+  "script": "0x20c4d8",
+  "at": "0x20c4fc",
+  "conditions": [],
+  "maps": [
+   "dan_30",
+   "dan_70"
+  ],
+  "chapter": "other"
+ },
+ {
+  "type": "item",
+  "name": "\"item\"",
+  "item": 459,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "LW(0)",
+   "LW(1)",
+   "LW(2)"
+  ],
+  "item_name": "Dark Bowser",
+  "script": "0x20c560",
+  "at": "0x20c584",
+  "conditions": [],
+  "maps": [
+   "dan_30",
+   "dan_70"
+  ],
+  "chapter": "other"
+ },
+ {
+  "type": "item",
+  "name": "\"item\"",
+  "item": 521,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "LW(0)",
+   "LW(1)",
+   "LW(2)"
+  ],
+  "item_name": "Luigi",
+  "script": "0x20c5e8",
+  "at": "0x20c60c",
+  "conditions": [],
+  "maps": [
+   "dan_30",
+   "dan_70"
+  ],
+  "chapter": "other"
+ },
+ {
+  "type": "item",
+  "name": "\"item\"",
+  "item": 460,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "LW(0)",
+   "LW(1)",
+   "LW(2)"
+  ],
+  "item_name": "Dark Luigi",
+  "script": "0x20c670",
+  "at": "0x20c694",
+  "conditions": [],
+  "maps": [
+   "dan_30",
+   "dan_70"
+  ],
+  "chapter": "other"
+ },
+ {
+  "type": "chest",
+  "name": "\"b1\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "0",
+  "item_name": "[NULL]",
+  "script": "0x20d684",
+  "at": "0x20d998",
+  "conditions": [],
+  "maps": [
+   "dan_30",
+   "dan_70"
+  ],
+  "chapter": "other"
+ },
+ {
+  "type": "chest",
+  "name": "\"b2\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "0",
+  "item_name": "[NULL]",
+  "script": "0x20d684",
+  "at": "0x20d9c4",
+  "conditions": [],
+  "maps": [
+   "dan_30",
+   "dan_70"
+  ],
+  "chapter": "other"
+ },
+ {
+  "type": "chest",
+  "name": "\"b3\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "0",
+  "item_name": "[NULL]",
+  "script": "0x20d684",
+  "at": "0x20d9f0",
+  "conditions": [],
+  "maps": [
+   "dan_30",
+   "dan_70"
+  ],
+  "chapter": "other"
+ },
+ {
+  "type": "chest",
+  "name": "\"b4\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "0",
+  "item_name": "[NULL]",
+  "script": "0x20d684",
+  "at": "0x20da1c",
+  "conditions": [],
+  "maps": [
+   "dan_30",
+   "dan_70"
+  ],
+  "chapter": "other"
+ },
+ {
+  "type": "chest",
+  "name": "\"b5\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "0",
+  "item_name": "[NULL]",
+  "script": "0x20d684",
+  "at": "0x20da48",
+  "conditions": [],
+  "maps": [
+   "dan_30",
+   "dan_70"
+  ],
+  "chapter": "other"
+ },
+ {
+  "type": "chest",
+  "name": "\"b6\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "0",
+  "item_name": "[NULL]",
+  "script": "0x20d684",
+  "at": "0x20da74",
+  "conditions": [],
+  "maps": [
+   "dan_30",
+   "dan_70"
+  ],
+  "chapter": "other"
+ },
+ {
+  "type": "chest",
+  "name": "\"b7\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "0",
+  "item_name": "[NULL]",
+  "script": "0x20d684",
+  "at": "0x20daa0",
+  "conditions": [],
+  "maps": [
+   "dan_30",
+   "dan_70"
+  ],
+  "chapter": "other"
+ },
+ {
+  "type": "chest",
+  "name": "\"b8\"",
+  "item": 0,
+  "item_var": null,
+  "flag": "0",
+  "item_name": "[NULL]",
+  "script": "0x20d684",
+  "at": "0x20dacc",
+  "conditions": [],
+  "maps": [
+   "dan_30",
+   "dan_70"
+  ],
+  "chapter": "other"
+ },
+ {
+  "type": "item",
+  "name": "\"mono\"",
+  "item": 53,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "LW(0)",
+   "LW(1)",
+   "LW(2)"
+  ],
+  "item_name": "You-Know-What",
+  "script": "0x213418",
+  "at": "0x213744",
+  "conditions": [
+   "LW(0) > 0",
+   "LW(0) == 3",
+   "LW(0) == 53"
+  ],
+  "maps": [
+   "he1_06"
+  ],
+  "chapter": "1"
+ },
+ {
+  "type": "item",
+  "name": "\"machine\"",
+  "item": 52,
+  "item_var": null,
+  "flag": "0",
+  "pos": [
+   "0",
+   "0",
+   "0"
+  ],
+  "item_name": "Training Machine",
+  "script": "0x213418",
+  "at": "0x213840",
+  "conditions": [
+   "LW(0) > 0",
+   "LW(0) == 3",
+   "LW(0) == 53"
+  ],
+  "maps": [
+   "he1_06"
+  ],
+  "chapter": "1"
+ },
+ {
+  "type": "item",
+  "name": "\"i1\"",
+  "item": 70,
+  "item_var": null,
+  "flag": "GSWF(614)",
+  "pos": [
+   "-30",
+   "0",
+   "-70"
+  ],
+  "item_name": "Shell Shock",
+  "script": "0x214520",
+  "at": "0x2145f0",
+  "conditions": [],
+  "maps": [
+   "he1_06"
+  ],
+  "chapter": "1"
+ },
+ {
+  "type": "item",
+  "name": "\"i3\"",
+  "item": 80,
+  "item_var": null,
+  "flag": "GSWF(616)",
+  "pos": [
+   "30",
+   "0",
+   "-70"
+  ],
+  "item_name": "Shroom Shake",
+  "script": "0x214520",
+  "at": "0x214620",
+  "conditions": [],
+  "maps": [
+   "he1_06"
+  ],
+  "chapter": "1"
+ },
+ {
+  "type": "check",
+  "item": 64,
+  "item_var": null,
+  "item_name": "Golden Card",
+  "script": "0x214890",
+  "at": "0x214940",
+  "conditions": [
+   "GSWF(570) == 0"
+  ],
+  "maps": [
+   "mac_30"
+  ],
+  "chapter": "hub"
+ },
+ {
+  "type": "check",
+  "item": 64,
+  "item_var": null,
+  "item_name": "Golden Card",
+  "script": "0x214890",
+  "at": "0x214a54",
+  "conditions": [
+   "not (GSWF(570) == 0)"
+  ],
+  "maps": [
+   "mac_30"
+  ],
+  "chapter": "hub"
+ },
+ {
+  "type": "item",
+  "name": "\"prize\"",
+  "item": null,
+  "item_var": "LW(10)",
+  "flag": "0",
+  "pos": [
+   "0",
+   "-1000",
+   "0"
+  ],
+  "item_name": null,
+  "script": "0x214890",
+  "at": "0x215284",
+  "conditions": [
+   "LW(0) == 1",
+   "LW(0) == 0",
+   "not (LW(0) < LW(11))",
+   "not (LW(0) == 0)"
+  ],
+  "maps": [
+   "mac_30"
+  ],
+  "chapter": "hub"
+ },
+ {
+  "type": "block",
+  "block": "coin brick",
+  "name": "\"b_01\"",
+  "item": 9,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[BUNSHIN_KINOKO]",
+  "script": "0x216970",
+  "at": "0x2169d8",
+  "conditions": [],
+  "maps": [
+   "gn3_15"
+  ],
+  "chapter": "5"
+ },
+ {
+  "type": "block",
+  "block": "type 32769",
+  "name": "\"b_04\"",
+  "item": 6,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[KINOKO]",
+  "script": "0x216970",
+  "at": "0x216a50",
+  "conditions": [],
+  "maps": [
+   "gn3_15"
+  ],
+  "chapter": "5"
+ },
+ {
+  "type": "block",
+  "block": "2D ? block",
+  "name": "\"b_08\"",
+  "item": 6,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[KINOKO]",
+  "script": "0x216970",
+  "at": "0x216af0",
+  "conditions": [],
+  "maps": [
+   "gn3_15"
+  ],
+  "chapter": "5"
+ },
+ {
+  "type": "block",
+  "block": "coin brick",
+  "name": "\"b_19\"",
+  "item": 3,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[SPEED_FLOWER]",
+  "script": "0x216970",
+  "at": "0x216ca8",
+  "conditions": [],
+  "maps": [
+   "gn3_15"
+  ],
+  "chapter": "5"
+ },
+ {
+  "type": "block",
+  "block": "coin brick",
+  "name": "\"b_40\"",
+  "item": 4,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[SLOW_FLOWER]",
+  "script": "0x216970",
+  "at": "0x216fa0",
+  "conditions": [],
+  "maps": [
+   "gn3_15"
+  ],
+  "chapter": "5"
+ },
+ {
+  "type": "block",
+  "block": "coin brick",
+  "name": "\"b_52\"",
+  "item": 6,
+  "chance_table": null,
+  "flag": "0",
+  "item_name": "[KINOKO]",
+  "script": "0x216970",
+  "at": "0x217158",
+  "conditions": [],
+  "maps": [
+   "gn3_15"
+  ],
+  "chapter": "5"
+ }
+]
