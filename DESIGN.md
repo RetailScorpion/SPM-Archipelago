@@ -327,8 +327,8 @@ Found with Dolphin's debugger (memory breakpoints) and the new `tools/evtdis.py`
   | Pixl | Gate patched | Trap | Status |
   |---|---|---|---|
   | Thoreau | yes | bars + locked exit: removed | **shuffled** (tested) |
-  | Boomer | yes (chest stage switch) | user: needs Boomer to leave | shuffled; test Return Pipe escape |
-  | Slim | yes ("have Slim" check removed) | ? | shuffled; test Return Pipe escape |
+  | Boomer | yes (chest stage switch) | none: room doesn't trap you | **shuffled** (tested out of order, Chapter 2 at 74) |
+  | Slim | yes ("have Slim" check removed) | room: none. **Merlee's Mansion (2-2/2-3) needs Slim to finish and the Return Pipe is disabled there**: softlock without him | **shuffled; needs fix**: make the Return Pipe work in the mansion (find what greys it out), or require Slim in logic to enter |
   | Thudley | yes (scene stage switch) | ? (how is his pillar pounded before you have him?) | shuffled; test Return Pipe escape |
   | Carrie | yes | user: needs Carrie to leave | shuffled; test Return Pipe escape |
   | Fleep | yes (outhouse stage switch) | ? | shuffled; test Return Pipe escape |
