@@ -15,6 +15,10 @@
 
     The slots live in reserved GSW bytes (savedata.h), so they're saved with the game. The current
     chapter's slot is synced from GSW 0 every frame, so a save made mid-chapter is up to date.
+
+    Slots only move forwards. A scene played out of order (a Pixl join after the chapter has moved
+    on) still sets its original story value; that lower value is ignored and the chapter's own
+    value comes back at the next map change.
 */
 
 namespace mod::storyvalue {

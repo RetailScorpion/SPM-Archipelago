@@ -20,6 +20,7 @@
 
 #include "doors.h"
 #include "flip.h"
+#include "joins.h"
 #include "mailbox.h"
 #include "patch.h"
 #include "storyvalue.h"
@@ -157,6 +158,7 @@ void main()
     mailbox::gMailbox.storyState = &storyvalue::gStory;
     doors::init();
     flip::init();
+    joins::init();
 
     seq_titleMainReal = spm::seqdef::seq_data[spm::seqdrv::SEQ_TITLE].main;
     spm::seqdef::seq_data[spm::seqdrv::SEQ_TITLE].main = seq_titleMainHook;

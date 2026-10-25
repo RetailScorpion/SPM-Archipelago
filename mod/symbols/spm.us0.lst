@@ -20,3 +20,10 @@
 1,5,9acc:mac_door_select_evt
 1,5,9d6c:mac_door_setup_evt
 1,5,1ad9c:mac_tower_run_door_setup
+
+// relF: Thoreau's room (he2_07) and Yold Town (he2_03)
+1,5,45490:he2_07_thoreau_gate_spawn
+1,5,4556c:he2_07_thoreau_gate_lock
+1,5,45600:he2_07_thoreau_gate_bars
+1,5,44e5c:he2_07_thoreau_join_gift
+1,5,4149c:he2_03_thoreau_safety_net

@@ -117,8 +117,9 @@ void onMapChange(const char * nextMap)
     if (gStory.context <= STORY_CONTEXT_HUB && gsw0 < STORY_PROLOGUE_END)
         next = STORY_CONTEXT_NONE;
 
-    // The chapter being left was kept in sync every frame; a final store catches the last change
-    if (gStory.context > STORY_CONTEXT_HUB)
+    // The chapter being left was kept in sync every frame; a final store catches the last change.
+    // Never backwards: a scene played late (a Pixl join, say) still sets its original value.
+    if (gStory.context > STORY_CONTEXT_HUB && gsw0 > loadSlot(gStory.context))
         storeSlot(gStory.context, gsw0);
     else if (gStory.context == STORY_CONTEXT_HUB && gsw0 != STORY_HUB_VALUE)
         wii::os::OSReport("[spmap] story: hub wrote %d, discarded\n", gsw0);
@@ -139,8 +140,9 @@ void sync()
 {
     if (gStory.context > STORY_CONTEXT_HUB)
     {
+        // Only forwards; a lower value set by a late scene is undone at the next map change
         s32 value = spm::spmario::gp->gsw0;
-        if (value != gStory.slots[gStory.context])
+        if (value > gStory.slots[gStory.context])
         {
             storeSlot(gStory.context, value);
             gStory.slots[gStory.context] = value;

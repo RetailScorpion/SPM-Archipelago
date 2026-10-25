@@ -19,6 +19,9 @@ namespace mod::savedata {
 // GSWF flags 7168-8191 (1024 flags)
 #define AP_GSWF_BASE 7168
 #define AP_GSWF_FLIP (AP_GSWF_BASE + 0)  // Mario can flip
+// Pixl join locations collected (one flag each, in item order: Thoreau 221 .. Dottie 228)
+#define AP_GSWF_JOIN_BASE (AP_GSWF_BASE + 1)
+#define AP_GSWF_JOIN(pixlItemId) (AP_GSWF_JOIN_BASE + (pixlItemId) - 221)
 
 // Vanilla flags the mod relies on
 #define GSWF_TIPPI_PRESENT 403  // written by the save code from the guide state, restored on load
