@@ -90,6 +90,14 @@ static const Patch sPatches[] = {
     {HAVE_NEVER, 0x6081c, 0, 0, "Slim: having Slim marks his chest opened"},
     {GIFT, 0x5f634, PIXL_SLIM, 0, "Slim join"},
     {SAFETY_NET, 0x650cc, 0, 0, "Slim safety net"},
+    // Merlee's Mansion turns the Return Pipe off ("can't use it now") until Chapter 2 is 89, which
+    // needs Slim; without him the pipe is the only way out (trap)
+    {NEVER, 0x60df4, 89, 0, "Slim: mi3_01 Return Pipe off (trap)"},
+    {NEVER, 0x61924, 89, 0, "Slim: mi3_02 Return Pipe off (trap)"},
+    {NEVER, 0x62f10, 89, 0, "Slim: mi3_03 Return Pipe off (trap)"},
+    {NEVER, 0x641f0, 89, 0, "Slim: mi3_04 Return Pipe off (trap)"},
+    {NEVER, 0x65068, 89, 0, "Slim: mi3_05 Return Pipe off (trap)"},
+    {NEVER, 0x66020, 89, 0, "Slim: mi3_06 Return Pipe off (trap)"},
 
     {GATE, 0x7f4f0, 108, PIXL_THUDLEY, "Thudley: him"},
     {STAGE, 0x7f588, 1, 0, "Thudley: scene stage"},
