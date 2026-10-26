@@ -136,6 +136,8 @@ Menu
 
 ### Known requirements (found while testing; fold into the logic pass)
 - **Carrie's location** (`ta4_12`, Fort Francis): needs `ground_pound` (Thudley presses the switch that opens her cage), plus `carry` unless `return_pipe_escapes` is on (leaving on foot means hovering over spikes with Carrie; the Return Pipe works there, tested).
+- **Fleep's location** (`sp2_01` outhouse, Planet Blobule): needs the **Ancient Clue** (item 25, found in `sp2_08`), which you hand to the outhouse.
+- **Every Pixl join scene** calls `evt_pouch_set_pixl_selected(<pixl>)` right after the gift, even when the location held something else. Watch for side effects (selected Pixl you don't own).
 
 ### Logic difficulty
 v1 has a single "intended" logic: no tricks, no damage boosts. A `logic_difficulty` option can come later, once speedrun tricks are documented.
