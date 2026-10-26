@@ -6,7 +6,7 @@ import time
 import dolphin_memory_engine as dme
 
 MAGIC = b"SPMAP_MAILBOX_v1"
-VERSION = 4
+VERSION = 5
 RECV_SIZE = 16
 SENT_SIZE = 32
 
@@ -27,6 +27,7 @@ OFF_WARP_REQUEST = 0xCC
 OFF_WARP_MAP = 0xD0
 OFF_WARP_DOOR = 0xE0
 OFF_DEBUG_FLAGS = 0x100
+OFF_PLACEHOLDER_ITEM = 0x104
 DEBUG_JOINS_GIVE_NOTHING = 0x1
 DEBUG_JOINS_GIVE_PLACEHOLDER = 0x2
 STORY_SLOTS_GSW = 1792  # mod/include/savedata.h AP_GSW_STORY_SLOTS
@@ -117,6 +118,10 @@ class Mailbox:
     def set_debug_flag(self, flag: int, on: bool):
         flags = dme.read_word(self.addr + OFF_DEBUG_FLAGS)
         dme.write_word(self.addr + OFF_DEBUG_FLAGS, (flags | flag) if on else (flags & ~flag))
+
+    def set_placeholder_item(self, item_id: int):
+        """Debug: the item Pixl joins give with DEBUG_JOINS_GIVE_PLACEHOLDER (0 = Gold Bar)."""
+        dme.write_word(self.addr + OFF_PLACEHOLDER_ITEM, item_id)
 
     def set_chapter_value(self, chapter: int, value: int):
         """Debug: set a chapter's story value. Writes the live value too if that chapter is the

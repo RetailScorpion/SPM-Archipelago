@@ -14,11 +14,11 @@
 namespace mod::mailbox {
 
 #define MAILBOX_MAGIC "SPMAP_MAILBOX_v1"
-#define MAILBOX_VERSION 4
+#define MAILBOX_VERSION 5
 
 // debugFlags bits
 #define DEBUG_JOINS_GIVE_NOTHING 0x1      // Pixl joins mark their location but don't give the Pixl
-#define DEBUG_JOINS_GIVE_PLACEHOLDER 0x2  // Pixl joins give a Gold Bar instead of the Pixl
+#define DEBUG_JOINS_GIVE_PLACEHOLDER 0x2  // Pixl joins give placeholderItem instead of the Pixl
 #define MAILBOX_RECV_SIZE 16
 #define MAILBOX_SENT_SIZE 32
 
@@ -51,8 +51,9 @@ struct Mailbox
 /* 0xD0 */ char warpMap[16];      // map to change to
 /* 0xE0 */ char warpDoor[32];     // door to enter by; empty = the map's default spawn
 /* 0x100 */ u32 debugFlags;       // DEBUG_*, written by the client
+/* 0x104 */ u32 placeholderItem;  // item for DEBUG_JOINS_GIVE_PLACEHOLDER; 0 = Gold Bar
 };
-static_assert(sizeof(Mailbox) == 0x104);
+static_assert(sizeof(Mailbox) == 0x108);
 
 extern Mailbox gMailbox;
 

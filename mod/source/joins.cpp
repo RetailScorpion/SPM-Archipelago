@@ -45,8 +45,8 @@ using spm::evtmgr::EvtScriptCode;
 #define PIXL_BARRY 230
 #define PIXL_DASHELL 231
 
-// What a join gives with DEBUG_JOINS_GIVE_PLACEHOLDER: a stand-in for "some other item"
-#define PLACEHOLDER_ITEM 71  // Gold Bar
+// What a join gives with DEBUG_JOINS_GIVE_PLACEHOLDER when the client hasn't picked an item
+#define DEFAULT_PLACEHOLDER_ITEM 71  // Gold Bar
 
 // Stage value meaning "join done", past every vanilla stage
 #define STAGE_DONE 200
@@ -175,7 +175,8 @@ static EVT_DEFINE_USER_FUNC(ap_join_gift)
     if (debug & DEBUG_JOINS_GIVE_NOTHING)
         ;
     else if (debug & DEBUG_JOINS_GIVE_PLACEHOLDER)
-        delivery::giveLocal(PLACEHOLDER_ITEM);
+        delivery::giveLocal(mailbox::gMailbox.placeholderItem ? mailbox::gMailbox.placeholderItem
+                                                              : DEFAULT_PLACEHOLDER_ITEM);
     else
         spm::mario_pouch::pouchAddItem(item);
     wii::os::OSReport("[spmap] joins: location for Pixl %d collected\n", item);
