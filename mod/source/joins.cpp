@@ -169,14 +169,18 @@ static EVT_DEFINE_USER_FUNC(ap_join_gift)
     (void) isFirstCall;
     s32 item = spm::evtmgr_cmd::evtGetValue(evt, evt->pCurData[0]);
     spm::swdrv::swSet(AP_GSWF_JOIN(item));
-    // Debug: act like a join holding another item (another world's: nothing here; or a placeholder
-    // item from this game), to test the rooms without the Pixl
-    u32 debug = mailbox::gMailbox.debugFlags;
-    if (debug & DEBUG_JOINS_GIVE_NOTHING)
+    // Debug: act like a join holding another item, to test the rooms and deliveries without the Pixl:
+    // per Pixl (joinItems), or for every join (debugFlags)
+    mailbox::Mailbox & mb = mailbox::gMailbox;
+    u16 given = mb.joinItems[item - ITEM_ID_FAIRY_START];
+    if (given == JOIN_ITEM_OTHER_WORLD)
+        wii::os::OSReport("[spmap] joins: Pixl %d's location holds another world's item\n", item);
+    else if (given != 0)
+        delivery::giveLocal(given);
+    else if (mb.debugFlags & DEBUG_JOINS_GIVE_NOTHING)
         ;
-    else if (debug & DEBUG_JOINS_GIVE_PLACEHOLDER)
-        delivery::giveLocal(mailbox::gMailbox.placeholderItem ? mailbox::gMailbox.placeholderItem
-                                                              : DEFAULT_PLACEHOLDER_ITEM);
+    else if (mb.debugFlags & DEBUG_JOINS_GIVE_PLACEHOLDER)
+        delivery::giveLocal(mb.placeholderItem ? mb.placeholderItem : DEFAULT_PLACEHOLDER_ITEM);
     else
         spm::mario_pouch::pouchAddItem(item);
     wii::os::OSReport("[spmap] joins: location for Pixl %d collected\n", item);

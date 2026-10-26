@@ -74,6 +74,23 @@ static s32 sRecvCooldown;
 static s32 sControlFrames;
 #define WARP_CONTROL_FRAMES 60
 
+// The spawned item reached Mario: take it off its queue
+static void itemDelivered()
+{
+    sSpawnedItem = -1;
+    sRecvCooldown = RECV_COOLDOWN_FRAMES;
+    if (sSpawnedLocal)
+    {
+        sLocalCount--;
+        for (s32 i = 0; i < sLocalCount; i++)
+            sLocalQueue[i] = sLocalQueue[i + 1];
+    }
+    else
+    {
+        mailbox::commitReceived();
+    }
+}
+
 static void spawnNextReceived()
 {
     if (sRecvCooldown > 0)
@@ -106,6 +123,11 @@ static void spawnNextReceived()
     spm::itemdrv::itemEntry(RECV_ITEM_NAME, itemId, 0, pos.x, pos.y, pos.z, nullptr, 0);
     sSpawnedItem = itemId;
     wii::os::OSReport("[spmap] spawned received item %d\n", itemId);
+
+    // World pickups (coins, flowers, world mushrooms) take effect without going through
+    // pouchAddItem, so the hook never sees them: count them as delivered once spawned on Mario
+    if (itemId < ITEM_ID_KEY_START)
+        itemDelivered();
 }
 
 static bool (*pouchAddItemReal)(s32 itemId);
@@ -113,19 +135,7 @@ static bool pouchAddItemHook(s32 itemId)
 {
     if (sSpawnedItem != -1 && itemId == sSpawnedItem)
     {
-        // Mario collected the item we spawned
-        sSpawnedItem = -1;
-        sRecvCooldown = RECV_COOLDOWN_FRAMES;
-        if (sSpawnedLocal)
-        {
-            sLocalCount--;
-            for (s32 i = 0; i < sLocalCount; i++)
-                sLocalQueue[i] = sLocalQueue[i + 1];
-        }
-        else
-        {
-            mailbox::commitReceived();
-        }
+        itemDelivered();
         wii::os::OSReport("[spmap] delivered received item %d\n", itemId);
     }
     else

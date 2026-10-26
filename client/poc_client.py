@@ -9,6 +9,8 @@ Commands:
   nojoin on|off            debug: Pixl joins give nothing (like holding another world's item)
   placeholder <item>|off   debug: Pixl joins give that item instead (like holding an item from this game),
                            e.g. "placeholder piccolo"; "placeholder on" = Gold Bar
+  joinitem <pixl> <item>|ap|off   debug: what one Pixl's join gives, e.g. "joinitem dottie barry",
+                           "joinitem dashell 1" (a coin), "joinitem piccolo ap" (another world's item)
   quit
 Item pickups the mod reports are printed as they happen.
 """
@@ -17,7 +19,7 @@ import sys
 import threading
 import time
 
-from mailbox import DEBUG_JOINS_GIVE_NOTHING, DEBUG_JOINS_GIVE_PLACEHOLDER, Mailbox, MailboxError, STATE_NAMES
+from mailbox import DEBUG_JOINS_GIVE_NOTHING, DEBUG_JOINS_GIVE_PLACEHOLDER, JOIN_ITEM_OTHER_WORLD, Mailbox, MailboxError, STATE_NAMES
 
 POC_LOCATION_BASE = 0x10000
 
@@ -101,6 +103,27 @@ def main():
             with lock:
                 mb.set_debug_flag(DEBUG_JOINS_GIVE_NOTHING, arg == "on")
             print(f"Pixl joins give nothing: {arg == 'on'}")
+        elif cmd == "joinitem":
+            parts = arg.split()
+            pixl = NAMED_ITEMS.get(parts[0]) if parts else None
+            if pixl is None or not 220 <= pixl < 232 or len(parts) != 2:
+                print("joinitem <pixl name> <item>|ap|off")
+                continue
+            if parts[1] == "off":
+                item = 0
+            elif parts[1] == "ap":
+                item = JOIN_ITEM_OTHER_WORLD
+            else:
+                item = NAMED_ITEMS.get(parts[1])
+                if item is None:
+                    try:
+                        item = int(parts[1], 0)
+                    except ValueError:
+                        print(f"Unknown item {parts[1]!r}")
+                        continue
+            with lock:
+                mb.set_join_item(pixl, item)
+            print(f"{parts[0]}'s join gives: {parts[1]}")
         elif cmd == "placeholder":
             if arg in ("off", "on"):
                 item = 0

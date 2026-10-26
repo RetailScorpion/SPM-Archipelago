@@ -14,7 +14,7 @@
 namespace mod::mailbox {
 
 #define MAILBOX_MAGIC "SPMAP_MAILBOX_v1"
-#define MAILBOX_VERSION 5
+#define MAILBOX_VERSION 6
 
 // debugFlags bits
 #define DEBUG_JOINS_GIVE_NOTHING 0x1      // Pixl joins mark their location but don't give the Pixl
@@ -52,8 +52,13 @@ struct Mailbox
 /* 0xE0 */ char warpDoor[32];     // door to enter by; empty = the map's default spawn
 /* 0x100 */ u32 debugFlags;       // DEBUG_*, written by the client
 /* 0x104 */ u32 placeholderItem;  // item for DEBUG_JOINS_GIVE_PLACEHOLDER; 0 = Gold Bar
+/* 0x108 */ u16 joinItems[12];    // per Pixl (index = item id - 220): what its join gives, overriding
+                                  // debugFlags; 0 = no override, JOIN_ITEM_OTHER_WORLD = nothing here
 };
-static_assert(sizeof(Mailbox) == 0x108);
+static_assert(sizeof(Mailbox) == 0x120);
+
+// joinItems value: the location holds another world's item
+#define JOIN_ITEM_OTHER_WORLD 0xFFFF
 
 extern Mailbox gMailbox;
 
