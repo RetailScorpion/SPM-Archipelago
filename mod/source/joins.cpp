@@ -5,6 +5,7 @@
 #include <spm/evt_pouch.h>
 #include <spm/evt_snd.h>
 #include <spm/evtmgr_cmd.h>
+#include <spm/item_data_ids.h>
 #include <spm/mario_pouch.h>
 #include <spm/swdrv.h>
 #include <wii/os.h>
@@ -62,7 +63,8 @@ enum PatchKind
 {
     GATE,       // IF_SMALL(GSW(0), a) -> IF_EQUAL(GSWF(join flag of pixl b), 0)
     NEVER,      // IF_SMALL(GSW(0), a) -> IF_SMALL(GSW(0), 0): the block never runs
-    GIFT,       // USER_FUNC(evt_pouch_add_item, a) -> USER_FUNC(ap_join_gift, a)
+    GIFT,       // USER_FUNC(evt_pouch_add_item, a) -> USER_FUNC(ap_join_gift, a), and the
+                // USER_FUNC(evt_pouch_set_pixl_selected, a) right after -> USER_FUNC(ap_join_select, a)
     SAFETY_NET, // IF_EQUAL(LW(0), 0) -> never true
     STAGE,      // SWITCH(GSW(0)) -> SWITCH(GSW(AP_GSW_JOIN_STAGES + a))
     CASE_NEVER, // CASE_SMALL(a) -> CASE_SMALL(b), where b makes it unreachable
@@ -167,6 +169,27 @@ static EVT_DEFINE_USER_FUNC(ap_skip)
     return 2;
 }
 
+static bool havePixl(s32 pixl)
+{
+    for (auto & info : spm::mario_pouch::pouchGetPtr()->pixls)
+    {
+        if (info.itemType == pixl)
+            return true;
+    }
+    return false;
+}
+
+// ap_join_select(pixlItemId): selects the Pixl only if Mario has it. Selecting one he doesn't have
+// leaves no Pixl selected, and opening the Pixl menu then crashes
+static EVT_DEFINE_USER_FUNC(ap_join_select)
+{
+    (void) isFirstCall;
+    s32 item = spm::evtmgr_cmd::evtGetValue(evt, evt->pCurData[0]);
+    if (havePixl(item))
+        spm::mario_pouch::pouchSetPixlSelected(item);
+    return 2;
+}
+
 static bool expect(const EvtScriptCode * at, const s32 * words, s32 n, const char * what)
 {
     for (s32 i = 0; i < n; i++)
@@ -205,9 +228,15 @@ static void apply(const Patch & p)
         }
         case GIFT:
         {
-            const s32 orig[] = {EVT_CMD(2, OP_USER_FUNC), reinterpret_cast<s32>(spm::evt_pouch::evt_pouch_add_item), p.a};
-            if (expect(at, orig, 3, p.what))
+            const s32 orig[] = {
+                EVT_CMD(2, OP_USER_FUNC), reinterpret_cast<s32>(spm::evt_pouch::evt_pouch_add_item), p.a,
+                EVT_CMD(2, OP_USER_FUNC), reinterpret_cast<s32>(spm::evt_pouch::evt_pouch_set_pixl_selected), p.a,
+            };
+            if (expect(at, orig, 6, p.what))
+            {
                 at[1] = reinterpret_cast<s32>(ap_join_gift);
+                at[4] = reinterpret_cast<s32>(ap_join_select);
+            }
             break;
         }
         case SAFETY_NET:
@@ -255,8 +284,28 @@ void init()
     wii::os::OSReport("[spmap] joins: patched\n");
 }
 
+// A save can have Pixls but none selected (from a join before ap_join_select existed): select one
+static void repairPixlSelection()
+{
+    s32 first = -1;
+    for (auto & info : spm::mario_pouch::pouchGetPtr()->pixls)
+    {
+        if (info.selected)
+            return;
+        if (first == -1 && info.itemType >= PIXL_THOREAU && info.itemType < ITEM_ID_FAIRY_MAX)
+            first = info.itemType;
+    }
+    if (first != -1)
+    {
+        spm::mario_pouch::pouchSetPixlSelected(first);
+        wii::os::OSReport("[spmap] joins: no Pixl was selected, selected %d\n", first);
+    }
+}
+
 void onMapChange()
 {
+    repairPixlSelection();
+
     for (u32 i = 0; i < sizeof(sStages) / sizeof(sStages[0]); i++)
     {
         const Stage & s = sStages[i];
