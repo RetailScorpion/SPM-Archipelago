@@ -1,0 +1,165 @@
+"""Writes logic/checks.md: every check from the location scan, under chapter and level headings.
+
+Leaves out what the scan finds that isn't a check: "check"/"lock" entries (scripts that look for or use
+up an item), the Pixl safety nets (party_hoken, removed by the mod), empty chests (item 0), and repeats
+of the same item, map and flag reached by more than one script. Story checks the scan can't see
+(Pure Hearts, lessons, ...) are added by hand from EXTRA_CHECKS.
+
+Usage: py -3 -E tools/checks_list.py
+"""
+
+import json
+import os
+import re
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+LOCATIONS = os.path.join(ROOT, "data", "locations_us0.json")
+MESSAGES = os.path.join(ROOT, "build", "devdisc", "files", "msg", "US", "global.txt")
+OUT = os.path.join(ROOT, "logic", "checks.md")
+
+# map prefix -> chapter (levels are the prefix's digit: he1 = 1-1, he2 = 1-2, ...)
+CHAPTERS = {"he": 1, "mi": 2, "ta": 3, "sp": 4, "gn": 5, "wa": 6, "an": 7, "ls": 8}
+
+# Checks that aren't item pickups, so the scan doesn't find them: (chapter, level, map, check, item, kind)
+EXTRA_CHECKS = [
+    ("hub", None, "mac_02", "Merlon's gift", "Pure Heart (merlon_gift)", "story"),
+    (1, 1, "he1_06", "Bestovius's lesson", "Flip", "story (flip option)"),
+    (1, 4, "he4_*", "Fracktail defeated", "Pure Heart", "story"),
+    (2, 4, "mi4_*", "Mimi defeated", "Pure Heart", "story"),
+    (3, 4, "ta4_*", "Francis defeated", "Pure Heart", "story"),
+    (4, 4, "sp4_*", "Mr. L / Brobot defeated", "Pure Heart", "story"),
+    (5, 4, "gn4_*", "King Croacus defeated", "Pure Heart", "story"),
+    (6, 4, "wa4_*", "King Sammer defeated", "Pure Heart", "story"),
+    (7, 4, "an4_*", "Bonechill defeated", "Pure Heart", "story"),
+]
+
+
+# World pickups (ids 1-15) have no display name; readable names where they're clear
+WORLD_ITEM_NAMES = {
+    "[COIN]": "Coin", "[COIN_x3]": "3 Coins", "[SPEED_FLOWER]": "Speed Flower",
+    "[SLOW_FLOWER]": "Slow Flower", "[HAPPY_FLOWER]": "Happy Flower", "[KINOKO]": "Mushroom",
+    "[SUPER_KINOKO]": "Super Mushroom", "[ULTRA_KINOKO]": "Ultra Mushroom",
+}
+
+
+def level_names():
+    names = {}
+    if os.path.exists(MESSAGES):
+        parts = open(MESSAGES, "rb").read().split(b"\0")
+        for key, text in zip(parts, parts[1:]):
+            m = re.fullmatch(rb"place_stg(\d)_(\d)", key)
+            if m:
+                names[(int(m[1]), int(m[2]))] = text.decode()
+    return names
+
+
+def kind(loc):
+    t, item = loc["type"], loc.get("item")
+    if t == "block":
+        return "? block (item_blocks)"
+    if t == "shop":
+        return "shop (shop_items)"
+    if t == "gift":
+        if 216 <= (item or 0) < 220:
+            return "character (randomize_characters)"
+        if 229 <= (item or 0) < 232:
+            return "optional Pixl (optional_pixls)"
+        if 220 <= (item or 0) < 232:
+            return "Pixl"
+        return "gift"
+    if isinstance(item, int):
+        if 16 <= item < 65:
+            return "key item"
+        if 282 <= item < 538:
+            return "catch card in a chest (catch_cards)" if t == "chest" else "catch card, lying around (catch_cards)"
+    return "item in a chest (overworld_items)" if t == "chest" else "item, lying around (overworld_items)"
+
+
+def notes(loc):
+    out = []
+    if any("GSW(0)" in c for c in loc.get("conditions", [])):
+        out.append("story-gated in vanilla")
+    if loc.get("note"):
+        out.append(loc["note"])
+    return "; ".join(out)
+
+
+def place(loc):
+    m = loc["maps"][0]
+    prefix = m[:2]
+    if prefix in CHAPTERS and m[2].isdigit():
+        return CHAPTERS[prefix], int(m[2])
+    if m.startswith("mac_"):
+        return "hub", None
+    if m.startswith("dan_"):
+        return "pit", None
+    if m == "main.dol":
+        return "dol", None
+    return "other", None
+
+
+def main():
+    locations = json.load(open(LOCATIONS))
+    rows, seen = {}, set()
+    for loc in locations:
+        if loc["type"] in ("check", "lock") or (loc.get("note") or "").startswith("party_hoken"):
+            continue
+        if loc.get("item") == 0:
+            continue
+        key = (loc["maps"][0], loc.get("item"), loc.get("flag"), loc["type"])
+        if loc.get("flag") not in (None, "0") and key in seen:
+            continue
+        seen.add(key)
+        name = loc.get("item_name") or (f"item {loc['item']}" if loc.get("item") is not None else "?")
+        if loc["type"] == "shop":
+            name = "Shop stock"
+        name = WORLD_ITEM_NAMES.get(name, name)
+        rows.setdefault(place(loc), []).append((loc["maps"][0], name, kind(loc), notes(loc), loc.get("at", "")))
+    for chapter, level, map_name, check, item, k in EXTRA_CHECKS:
+        rows.setdefault((chapter, level), []).append((map_name, f"{check}: {item}", k, "added by hand (not an item pickup)", ""))
+
+    levels = level_names()
+    total = sum(len(v) for v in rows.values())
+    lines = [
+        "# Every check, by chapter and level",
+        "",
+        f"Generated by `tools/checks_list.py` from the location scan (`data/locations_us0.json`); {total} checks.",
+        "Each row: map, what's there in vanilla, the kind of check (and the option that turns it on), notes.",
+        "Rows marked *added by hand* are story checks the scan can't see. The scan may still miss some checks",
+        "and include a few props from cutscenes; treat this as the starting list, not the final one.",
+        "",
+    ]
+
+    def table(entries):
+        lines.append("| Map | Check (vanilla item) | Kind | Notes |")
+        lines.append("|---|---|---|---|")
+        for map_name, name, k, n, _ in sorted(entries):
+            lines.append(f"| `{map_name}` | {name} | {k} | {n} |")
+        lines.append("")
+
+    for chapter in range(1, 9):
+        lines.append(f"## Chapter {chapter}")
+        lines.append("")
+        for level in range(1, 5):
+            entries = rows.get((chapter, level))
+            lines.append(f"### {chapter}-{level} {levels.get((chapter, level), '')}".rstrip())
+            lines.append("")
+            if entries:
+                table(entries)
+            else:
+                lines.append("No checks found by the scan.")
+                lines.append("")
+    for key, title in [("hub", "Flipside and Flopside"), ("pit", "Pits of 100 Trials"),
+                       ("dol", "Hub scripts in main.dol (shops, the Piccolo chain, ...)"), ("other", "Other maps")]:
+        if rows.get((key, None)):
+            lines.append(f"## {title}")
+            lines.append("")
+            table(rows[(key, None)])
+
+    os.makedirs(os.path.dirname(OUT), exist_ok=True)
+    open(OUT, "w", encoding="utf-8").write("\n".join(lines))
+    print(f"Wrote {OUT}: {total} checks")
+
+
+if __name__ == "__main__":
+    main()
