@@ -42,8 +42,10 @@ static const LocName * findLocation(s32 flag)
     return nullptr;
 }
 
-// The AP item is being collected and its item-get message hasn't been shown yet
-static bool sGetPending;
+// Frames the AP item's item-get stays active after the last frame of its collection. The game looks
+// up item_get (and the item name) more than once per item-get, so the text must hold for all of them
+#define ACTIVE_FRAMES 30
+static s32 sActiveFrames;
 
 static char sGetText[128];
 
@@ -58,20 +60,25 @@ static void swSetHook(s32 id)
         sCurrent = loc;
 }
 
-// Runs every frame of a pickup's item-get; on its first frame, takes the names from the item's own flag
+// Runs every frame of an item-get (pickups, chests, deliveries: all spawn an item Mario collects). For
+// the AP item it keeps the item-get active, and on the first frame takes the names from the item's own
+// flag (pickups; chests and joins have no flag on the item, but set theirs earlier, see swSetHook)
 static bool (*itemCollectPouchItemReal)(spm::itemdrv::ItemEntry * item);
 static bool itemCollectPouchItemHook(spm::itemdrv::ItemEntry * item)
 {
     u16 state = *reinterpret_cast<u16 *>(reinterpret_cast<u8 *>(item) + 0x36);
-    if (item->type == AP_ITEM_ID && state == 0)
+    if (item->type == AP_ITEM_ID)
     {
-        s32 flag = item->switchNumber - GSWF_VAR_BASE;
-        if (flag >= 0 && flag < GSWF_COUNT)
+        if (state == 0)
         {
-            if (const LocName * loc = findLocation(flag))
-                sCurrent = loc;
+            s32 flag = item->switchNumber - GSWF_VAR_BASE;
+            if (flag >= 0 && flag < GSWF_COUNT)
+            {
+                if (const LocName * loc = findLocation(flag))
+                    sCurrent = loc;
+            }
         }
-        sGetPending = true;
+        sActiveFrames = ACTIVE_FRAMES;
     }
     return itemCollectPouchItemReal(item);
 }
@@ -89,20 +96,11 @@ void init()
     wii::os::OSReport("[spmap] apitem: item %d is the Archipelago item\n", AP_ITEM_ID);
 }
 
-void onSpawn(s32 itemId)
+void tick()
 {
-    if (itemId != AP_ITEM_ID)
-        return;
-    // A delivery (a join holding another world's item, whose flag was set just before, or a test)
-    sGetPending = true;
-}
-
-void onPouchAdd(s32 itemId)
-{
-    if (itemId == AP_ITEM_ID)
-        sGetPending = true;
-    else
-        sGetPending = false;
+    // The item-get is over: forget the names, so the next AP item doesn't reuse them by mistake
+    if (sActiveFrames > 0 && --sActiveFrames == 0)
+        sCurrent = &sPlaceholder;
 }
 
 const char * message(const char * msgName)
@@ -111,11 +109,9 @@ const char * message(const char * msgName)
         return sCurrent->item;
     if (msl::string::strcmp(msgName, DESC_KEY) == 0)
         return "An item for another world.";
-    if (sGetPending && msl::string::strcmp(msgName, ITEM_GET_KEY) == 0)
+    if (sActiveFrames > 0 && msl::string::strcmp(msgName, ITEM_GET_KEY) == 0)
     {
-        sGetPending = false;
         msl::stdio::sprintf(sGetText, "Sent <col c00000ff>%s</col>\nto %s!", sCurrent->item, sCurrent->player);
-        sCurrent = &sPlaceholder;
         return sGetText;
     }
     return nullptr;

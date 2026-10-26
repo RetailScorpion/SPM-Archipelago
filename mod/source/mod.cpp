@@ -145,7 +145,6 @@ static void spawnNextReceived()
         return;
     }
 
-    apitem::onSpawn(itemId);
     wii::mtx::Vec3 & pos = spm::mario::marioGetPtr()->position;
     spm::itemdrv::itemEntry(RECV_ITEM_NAME, itemId, 0, pos.x, pos.y, pos.z, nullptr, 0);
     sSpawnedItem = itemId;
@@ -170,7 +169,6 @@ static bool pouchAddItemHook(s32 itemId)
         mailbox::sendLocation(POC_LOCATION_BASE + itemId);
         wii::os::OSReport("[spmap] picked up item %d\n", itemId);
     }
-    apitem::onPouchAdd(itemId);
     // The AP item only exists for its item-get; it never goes in the inventory
     if (itemId == apitem::AP_ITEM_ID)
         return true;
@@ -242,6 +240,7 @@ static void seq_gameMainHook(spm::seqdrv::SeqWork * wp)
     mailbox::gMailbox.savedRecvCount = savedRecvCount();
     seq_gameMainReal(wp);
     storyvalue::sync();
+    apitem::tick();
     spawnNextReceived();
 }
 

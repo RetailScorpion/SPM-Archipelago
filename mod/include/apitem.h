@@ -12,8 +12,8 @@
     messages. The cooking_disks option will need a different entry.
 
     The client fills a table of names for the locations holding other worlds' items, keyed by the
-    location's save flag. The game sets that flag when the location is collected (swSet), which is
-    how the mod knows whose names to show.
+    location's save flag. The mod takes the flag from the item being collected (pickups) or from the
+    flag set just before the item appears (chests, Pixl joins: swSet).
 */
 
 namespace mod::apitem {
@@ -32,11 +32,8 @@ static_assert(sizeof(LocName) == 0x40);
 
 void init();
 
-// Called when the mod spawns an item on Mario for delivery
-void onSpawn(s32 itemId);
-
-// Called when an item is added to the inventory (or would be): any other item ends the AP item-get
-void onPouchAdd(s32 itemId);
+// Call every frame in game: ends the AP item-get a little after its last collection frame
+void tick();
 
 // The mod's text for a message, or nullptr to use the game's
 const char * message(const char * msgName);
