@@ -5,6 +5,8 @@ Unlike poc_client.py it doesn't acknowledge anything, so other tools can still r
 Usage: py -3 -E watch.py
 """
 
+import json
+import os
 import time
 
 import dolphin_memory_engine as dme
@@ -14,12 +16,25 @@ from mailbox import (Mailbox, MailboxError, OFF_RECV_HANDLED, OFF_RECV_ITEMS, OF
 from poc_client import JOIN_LOCATION_BASE, JOIN_LOCATION_OTHER_WORLD, PIXL_NAMES, POC_LOCATION_BASE, format_story
 
 
+# Item display names (data/item_names_us0.json, exported from the item list by tools/locscan.py)
+ITEM_NAMES_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "item_names_us0.json")
+try:
+    ITEM_NAMES = {int(k): v for k, v in json.load(open(ITEM_NAMES_PATH, encoding="utf-8")).items()}
+except OSError:
+    ITEM_NAMES = {}
+
+
+def item_name(item):
+    name = ITEM_NAMES.get(item)
+    return f"{name} ({item})" if name else f"item {item}"
+
+
 def describe_location(loc):
     if loc >= JOIN_LOCATION_BASE:
         pixl = (loc - JOIN_LOCATION_BASE) & 0xFFF
         held = ", held another world's item" if loc & JOIN_LOCATION_OTHER_WORLD else ""
         return f"[check] {PIXL_NAMES.get(pixl, pixl)}'s join location{held} ({loc:#x})"
-    return f"[pickup] item {loc - POC_LOCATION_BASE} ({loc:#x})"
+    return f"[pickup] {item_name(loc - POC_LOCATION_BASE)} ({loc:#x})"
 
 
 def connect():
@@ -49,7 +64,7 @@ def main():
             now = dme.read_word(mb.addr + OFF_RECV_HANDLED)
             for i in range(handled, now):
                 item = int.from_bytes(dme.read_bytes(mb.addr + OFF_RECV_ITEMS + (i % RECV_SIZE) * 2, 2), "big")
-                print(f"[received] item {item} delivered")
+                print(f"[received] {item_name(item)} delivered")
             handled = now
 
             story = mb.story_state()
