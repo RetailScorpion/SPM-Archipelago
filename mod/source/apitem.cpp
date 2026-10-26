@@ -2,6 +2,7 @@
 #include <msl/stdio.h>
 #include <msl/string.h>
 #include <spm/item_data.h>
+#include <spm/itemdrv.h>
 #include <spm/swdrv.h>
 #include <wii/os.h>
 
@@ -24,27 +25,55 @@ static LocName sLocNames[LOC_NAMES_MAX];
 // Shown when the location isn't in the table (no client, or a delivery test)
 static const LocName sPlaceholder = {0, 0, "Placeholder Item", "Placeholder Player"};
 
-// Names for the AP item being collected now
+// Names for the AP item being collected now (or about to be)
 static const LocName * sCurrent = &sPlaceholder;
+
+// EvtVar encoding of GSWF flags (evt_cmd.h)
+#define GSWF_VAR_BASE (-130000000)
+#define GSWF_COUNT 8192
+
+static const LocName * findLocation(s32 flag)
+{
+    for (auto & loc : sLocNames)
+    {
+        if (loc.flag != 0 && loc.flag == flag)
+            return &loc;
+    }
+    return nullptr;
+}
 
 // The AP item is being collected and its item-get message hasn't been shown yet
 static bool sGetPending;
 
 static char sGetText[128];
 
+// A location's flag being set: remembers its names for the coming item-get. Chests and Pixl joins set
+// their flag before the item appears; pickups set it only after their item-get, so they're handled
+// by itemCollectPouchItemHook instead. Only remembers: the message is armed by the AP item itself.
 static void (*swSetReal)(s32 id);
 static void swSetHook(s32 id)
 {
     swSetReal(id);
-    for (auto & loc : sLocNames)
+    if (const LocName * loc = findLocation(id))
+        sCurrent = loc;
+}
+
+// Runs every frame of a pickup's item-get; on its first frame, takes the names from the item's own flag
+static bool (*itemCollectPouchItemReal)(spm::itemdrv::ItemEntry * item);
+static bool itemCollectPouchItemHook(spm::itemdrv::ItemEntry * item)
+{
+    u16 state = *reinterpret_cast<u16 *>(reinterpret_cast<u8 *>(item) + 0x36);
+    if (item->type == AP_ITEM_ID && state == 0)
     {
-        if (loc.flag != 0 && loc.flag == id)
+        s32 flag = item->switchNumber - GSWF_VAR_BASE;
+        if (flag >= 0 && flag < GSWF_COUNT)
         {
-            sCurrent = &loc;
-            sGetPending = true;
-            break;
+            if (const LocName * loc = findLocation(flag))
+                sCurrent = loc;
         }
+        sGetPending = true;
     }
+    return itemCollectPouchItemReal(item);
 }
 
 void init()
@@ -56,6 +85,7 @@ void init()
     mailbox::gMailbox.locNames = sLocNames;
     mailbox::gMailbox.locNamesMax = LOC_NAMES_MAX;
     swSetReal = patch::hookFunction(spm::swdrv::swSet, swSetHook);
+    itemCollectPouchItemReal = patch::hookFunction(spm::itemdrv::itemCollectPouchItem, itemCollectPouchItemHook);
     wii::os::OSReport("[spmap] apitem: item %d is the Archipelago item\n", AP_ITEM_ID);
 }
 
@@ -63,9 +93,7 @@ void onSpawn(s32 itemId)
 {
     if (itemId != AP_ITEM_ID)
         return;
-    // A delivery (debug test, or a join holding another world's item, which sets its flag first)
-    if (!sGetPending)
-        sCurrent = &sPlaceholder;
+    // A delivery (a join holding another world's item, whose flag was set just before, or a test)
     sGetPending = true;
 }
 
