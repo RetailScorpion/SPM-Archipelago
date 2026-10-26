@@ -224,6 +224,10 @@ Filler (when the pool has more locations than progression items): coins, consuma
    - `ap_progression.png` (colour): **progression** and **useful** items.
    - `ap_filler.png` (greyscale): **filler** and **traps**. Traps look like junk, which is standard Archipelago practice.
    - In-game, item icons are 40×40 RGB5A3 textures in `files/wicon.tpl`, with icon definitions in `files/wicon.bin`. We add both textures there and add two item-table entries ("AP Item" and "AP Junk") that use them. Placed or received items for other games use those two IDs, with the real item name shown through our own message.
+6. **Client log** (requested by the user; `client/watch.py` is the stand-in for now). Every item event gets one line naming the item and the location:
+   - `Received <item> from <location>`: an item for this game, found here or in another world (then also `from <player>`).
+   - `Sent <AP item name> to <player> from <location>`: an item for another world, found here.
+   Needs Archipelago location names and the server's item/player info; until then the watcher prints raw checks.
 
 ## 7. Open questions
 
