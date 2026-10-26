@@ -1,0 +1,2196 @@
+{
+ "id_base": 1397771520,
+ "locations": [
+  {
+   "kind": "join",
+   "map": "he2_07",
+   "item": 221,
+   "flag": 7169,
+   "label": "Thoreau joins",
+   "patches": [],
+   "name": "1-2 Mount Lineland - Thoreau joins (he2_07)",
+   "id": 1397771520,
+   "category": "pixl"
+  },
+  {
+   "kind": "join",
+   "map": "mi1_07",
+   "item": 222,
+   "flag": 7170,
+   "label": "Boomer joins",
+   "patches": [],
+   "name": "2-1 Gloam Valley - Boomer joins (mi1_07)",
+   "id": 1397771521,
+   "category": "pixl"
+  },
+  {
+   "kind": "join",
+   "map": "mi3_01",
+   "item": 223,
+   "flag": 7171,
+   "label": "Slim joins",
+   "patches": [],
+   "name": "2-3 Merlee's Mansion - Slim joins (mi3_01)",
+   "id": 1397771522,
+   "category": "pixl"
+  },
+  {
+   "kind": "join",
+   "map": "ta2_04",
+   "item": 224,
+   "flag": 7172,
+   "label": "Thudley joins",
+   "patches": [],
+   "name": "3-2 The Tile Pool - Thudley joins (ta2_04)",
+   "id": 1397771523,
+   "category": "pixl"
+  },
+  {
+   "kind": "join",
+   "map": "ta4_12",
+   "item": 225,
+   "flag": 7173,
+   "label": "Carrie joins",
+   "patches": [],
+   "name": "3-4 Fort Francis - Carrie joins (ta4_12)",
+   "id": 1397771524,
+   "category": "pixl"
+  },
+  {
+   "kind": "join",
+   "map": "sp2_01",
+   "item": 226,
+   "flag": 7174,
+   "label": "Fleep joins",
+   "patches": [],
+   "name": "4-2 Planet Blobule - Fleep joins (sp2_01)",
+   "id": 1397771525,
+   "category": "pixl"
+  },
+  {
+   "kind": "join",
+   "map": "gn2_02",
+   "item": 227,
+   "flag": 7175,
+   "label": "Cudge joins",
+   "patches": [],
+   "name": "5-2 Gap of Crag - Cudge joins (gn2_02)",
+   "id": 1397771526,
+   "category": "pixl"
+  },
+  {
+   "kind": "join",
+   "map": "gn4_03",
+   "item": 228,
+   "flag": 7176,
+   "label": "Dottie joins",
+   "patches": [],
+   "name": "5-4 Floro Caverns - Dottie joins (gn4_03)",
+   "id": 1397771527,
+   "category": "pixl"
+  },
+  {
+   "kind": "join",
+   "map": "mac_19",
+   "item": 229,
+   "flag": 7177,
+   "label": "Piccolo joins",
+   "patches": [],
+   "name": "Flipside/Flopside - Piccolo joins (mac_19)",
+   "id": 1397771528,
+   "category": "optional_pixl"
+  },
+  {
+   "kind": "join",
+   "map": "ta1_01",
+   "item": 230,
+   "flag": 7178,
+   "label": "Barry joins",
+   "patches": [],
+   "name": "3-1 The Bitlands - Barry joins (ta1_01)",
+   "id": 1397771529,
+   "category": "optional_pixl"
+  },
+  {
+   "kind": "join",
+   "map": "dan_30",
+   "item": 231,
+   "flag": 7179,
+   "label": "Dashell joins",
+   "patches": [],
+   "name": "Pit of 100 Trials - Dashell joins (dan_30)",
+   "id": 1397771530,
+   "category": "optional_pixl"
+  },
+  {
+   "kind": "flagged",
+   "map": "an1_02",
+   "item": 81,
+   "flag": 1268,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1659624,
+     "original": 81
+    }
+   ],
+   "name": "7-1 The Underwhere - Super Shroom Shake (an1_02)",
+   "id": 1397771531,
+   "category": "overworld_item"
+  },
+  {
+   "kind": "flagged",
+   "map": "an1_07",
+   "item": 85,
+   "flag": 1269,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1691560,
+     "original": 85
+    }
+   ],
+   "name": "7-1 The Underwhere - Long-Last Shake (an1_07)",
+   "id": 1397771532,
+   "category": "overworld_item"
+  },
+  {
+   "kind": "flagged",
+   "map": "an1_07",
+   "item": 310,
+   "flag": 1282,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1691632,
+     "original": 310
+    }
+   ],
+   "name": "7-1 The Underwhere - Dry Bones Card (an1_07)",
+   "id": 1397771533,
+   "category": "catch_card"
+  },
+  {
+   "kind": "flagged",
+   "map": "an2_02",
+   "item": 355,
+   "flag": 1281,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1706732,
+     "original": 355
+    }
+   ],
+   "name": "7-2 Underwhere Road - Dark Boo Card (an2_02)",
+   "id": 1397771534,
+   "category": "catch_card"
+  },
+  {
+   "kind": "flagged",
+   "map": "an3_02",
+   "item": 80,
+   "flag": 1270,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1766532,
+     "original": 80
+    }
+   ],
+   "name": "7-3 Overthere Stair - Shroom Shake (an3_02)",
+   "id": 1397771535,
+   "category": "overworld_item"
+  },
+  {
+   "kind": "flagged",
+   "map": "an3_04",
+   "item": 451,
+   "flag": 1280,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1771476,
+     "original": 451
+    }
+   ],
+   "name": "7-3 Overthere Stair - Zombie Shroom Card (an3_04)",
+   "id": 1397771536,
+   "category": "catch_card"
+  },
+  {
+   "kind": "flagged",
+   "map": "an3_12",
+   "item": 387,
+   "flag": 1271,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1794928,
+     "original": 387
+    }
+   ],
+   "name": "7-3 Overthere Stair - Rawbus Card (an3_12)",
+   "id": 1397771537,
+   "category": "catch_card"
+  },
+  {
+   "kind": "flagged",
+   "map": "an3_13",
+   "item": 341,
+   "flag": 1272,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1795680,
+     "original": 341
+    }
+   ],
+   "name": "7-3 Overthere Stair - Ruff Puff Card (an3_13)",
+   "id": 1397771538,
+   "category": "catch_card"
+  },
+  {
+   "kind": "flagged",
+   "map": "an3_14",
+   "item": 67,
+   "flag": 1273,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1798040,
+     "original": 67
+    }
+   ],
+   "name": "7-3 Overthere Stair - Thunder Rage (an3_14)",
+   "id": 1397771539,
+   "category": "overworld_item"
+  },
+  {
+   "kind": "flagged",
+   "map": "an3_14",
+   "item": 85,
+   "flag": 1289,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1798084,
+     "original": 85
+    }
+   ],
+   "name": "7-3 Overthere Stair - Long-Last Shake (an3_14)",
+   "id": 1397771540,
+   "category": "overworld_item"
+  },
+  {
+   "kind": "flagged",
+   "map": "an3_15",
+   "item": 71,
+   "flag": 1274,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1803832,
+     "original": 71
+    }
+   ],
+   "name": "7-3 Overthere Stair - Gold Bar (an3_15)",
+   "id": 1397771541,
+   "category": "overworld_item"
+  },
+  {
+   "kind": "flagged",
+   "map": "an3_15",
+   "item": 84,
+   "flag": 1290,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1803876,
+     "original": 84
+    }
+   ],
+   "name": "7-3 Overthere Stair - Life Shroom (an3_15)",
+   "id": 1397771542,
+   "category": "overworld_item"
+  },
+  {
+   "kind": "flagged",
+   "map": "an4_05",
+   "item": 68,
+   "flag": 1275,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1833400,
+     "original": 68
+    }
+   ],
+   "name": "7-4 The Overthere - Shooting Star (an4_05)",
+   "id": 1397771543,
+   "category": "overworld_item"
+  },
+  {
+   "kind": "flagged",
+   "map": "an4_09",
+   "item": 82,
+   "flag": 1276,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1851376,
+     "original": 82
+    }
+   ],
+   "name": "7-4 The Overthere - Ultra Shroom Shake (an4_09)",
+   "id": 1397771544,
+   "category": "overworld_item"
+  },
+  {
+   "kind": "flagged",
+   "map": "an4_09",
+   "item": 437,
+   "flag": 1277,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1851420,
+     "original": 437
+    }
+   ],
+   "name": "7-4 The Overthere - Spiky Skellobit Card (an4_09)",
+   "id": 1397771545,
+   "category": "catch_card"
+  },
+  {
+   "kind": "flagged",
+   "map": "an4_12",
+   "item": 436,
+   "flag": 1278,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1868864,
+     "original": 436
+    }
+   ],
+   "name": "7-4 The Overthere - Skellobit Card (an4_12)",
+   "id": 1397771546,
+   "category": "catch_card"
+  },
+  {
+   "kind": "flagged",
+   "map": "an4_12",
+   "item": 440,
+   "flag": 1279,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1868908,
+     "original": 440
+    }
+   ],
+   "name": "7-4 The Overthere - Skellobomber Card (an4_12)",
+   "id": 1397771547,
+   "category": "catch_card"
+  },
+  {
+   "kind": "flagged",
+   "map": "gn1_01",
+   "item": 61,
+   "flag": 1035,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1443712,
+     "original": 61
+    }
+   ],
+   "name": "5-1 Downtown of Crag - Cooking Disk 6 (gn1_01)",
+   "id": 1397771548,
+   "category": "key_item"
+  },
+  {
+   "kind": "flagged",
+   "map": "gn1_02",
+   "item": 363,
+   "flag": 1036,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1454952,
+     "original": 363
+    }
+   ],
+   "name": "5-1 Downtown of Crag - Moon Cleft Card (gn1_02)",
+   "id": 1397771549,
+   "category": "catch_card"
+  },
+  {
+   "kind": "flagged",
+   "map": "gn2_01",
+   "item": 30,
+   "flag": 1004,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1467156,
+     "original": 30
+    }
+   ],
+   "name": "5-2 Gap of Crag - Water Tablet (gn2_01)",
+   "id": 1397771550,
+   "category": "key_item"
+  },
+  {
+   "kind": "flagged",
+   "map": "gn2_01",
+   "item": 102,
+   "flag": 1037,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1465276,
+     "original": 102
+    }
+   ],
+   "name": "5-2 Gap of Crag - Primordial Fruit (gn2_01)",
+   "id": 1397771551,
+   "category": "overworld_item"
+  },
+  {
+   "kind": "flagged",
+   "map": "gn2_02",
+   "item": 75,
+   "flag": 1038,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1477104,
+     "original": 75
+    }
+   ],
+   "name": "5-2 Gap of Crag - Mighty Tonic (gn2_02)",
+   "id": 1397771552,
+   "category": "overworld_item"
+  },
+  {
+   "kind": "flagged",
+   "map": "gn2_02",
+   "item": 82,
+   "flag": 1053,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1477020,
+     "original": 82
+    }
+   ],
+   "name": "5-2 Gap of Crag - Ultra Shroom Shake (gn2_02)",
+   "id": 1397771553,
+   "category": "overworld_item"
+  },
+  {
+   "kind": "flagged",
+   "map": "gn2_03",
+   "item": 31,
+   "flag": 1005,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1486548,
+     "original": 31
+    },
+    {
+     "offset": 1487544,
+     "original": 31
+    }
+   ],
+   "name": "5-2 Gap of Crag - Stone Tablet (gn2_03)",
+   "id": 1397771554,
+   "category": "key_item"
+  },
+  {
+   "kind": "flagged",
+   "map": "gn2_04",
+   "item": 32,
+   "flag": 1006,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1489176,
+     "original": 32
+    },
+    {
+     "offset": 1490412,
+     "original": 32
+    }
+   ],
+   "name": "5-2 Gap of Crag - Fire Tablet (gn2_04)",
+   "id": 1397771555,
+   "category": "key_item"
+  },
+  {
+   "kind": "flagged",
+   "map": "gn2_05",
+   "item": 303,
+   "flag": 1042,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1490908,
+     "original": 303
+    }
+   ],
+   "name": "5-2 Gap of Crag - Stone Buzzy Card (gn2_05)",
+   "id": 1397771556,
+   "category": "catch_card"
+  },
+  {
+   "kind": "flagged",
+   "map": "gn3_05",
+   "item": 80,
+   "flag": 1050,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1507884,
+     "original": 80
+    }
+   ],
+   "name": "5-3 Floro Caverns - Shroom Shake (gn3_05)",
+   "id": 1397771557,
+   "category": "overworld_item"
+  },
+  {
+   "kind": "flagged",
+   "map": "gn3_08",
+   "item": 343,
+   "flag": 1039,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1511204,
+     "original": 343
+    }
+   ],
+   "name": "5-3 Floro Caverns - Spania Card (gn3_08)",
+   "id": 1397771558,
+   "category": "catch_card"
+  },
+  {
+   "kind": "flagged",
+   "map": "gn4_09",
+   "item": 69,
+   "flag": 1040,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1535272,
+     "original": 69
+    }
+   ],
+   "name": "5-4 Floro Caverns - POW Block (gn4_09)",
+   "id": 1397771559,
+   "category": "overworld_item"
+  },
+  {
+   "kind": "flagged",
+   "map": "gn4_12",
+   "item": 430,
+   "flag": 1041,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1538148,
+     "original": 430
+    }
+   ],
+   "name": "5-4 Floro Caverns - Floro Cragnien Card (gn4_12)",
+   "id": 1397771560,
+   "category": "catch_card"
+  },
+  {
+   "kind": "flagged",
+   "map": "he1_01",
+   "item": 373,
+   "flag": 611,
+   "label": null,
+   "patches": [
+    {
+     "offset": 958464,
+     "original": 373
+    }
+   ],
+   "name": "1-1 Lineland Road - Squiglet Card (he1_01)",
+   "id": 1397771561,
+   "category": "catch_card"
+  },
+  {
+   "kind": "flagged",
+   "map": "he1_01",
+   "item": 65,
+   "flag": 615,
+   "label": null,
+   "patches": [
+    {
+     "offset": 958512,
+     "original": 65
+    }
+   ],
+   "name": "1-1 Lineland Road - Fire Burst (he1_01)",
+   "id": 1397771562,
+   "category": "overworld_item"
+  },
+  {
+   "kind": "flagged",
+   "map": "he1_02",
+   "item": 282,
+   "flag": 603,
+   "label": null,
+   "patches": [
+    {
+     "offset": 960812,
+     "original": 282
+    }
+   ],
+   "name": "1-1 Lineland Road - Goomba Card (he1_02)",
+   "id": 1397771563,
+   "category": "catch_card"
+  },
+  {
+   "kind": "flagged",
+   "map": "he1_03",
+   "item": 80,
+   "flag": 612,
+   "label": null,
+   "patches": [
+    {
+     "offset": 964048,
+     "original": 80
+    }
+   ],
+   "name": "1-1 Lineland Road - Shroom Shake (he1_03)",
+   "id": 1397771564,
+   "category": "overworld_item"
+  },
+  {
+   "kind": "flagged",
+   "map": "he1_05",
+   "item": 291,
+   "flag": 604,
+   "label": null,
+   "patches": [
+    {
+     "offset": 969224,
+     "original": 291
+    }
+   ],
+   "name": "1-1 Lineland Road - Koopa Troopa Card (he1_05)",
+   "id": 1397771565,
+   "category": "catch_card"
+  },
+  {
+   "kind": "flagged",
+   "map": "he1_06",
+   "item": 70,
+   "flag": 614,
+   "label": null,
+   "patches": [
+    {
+     "offset": 2180604,
+     "original": 70
+    }
+   ],
+   "name": "1-1 Lineland Road - Shell Shock (he1_06)",
+   "id": 1397771566,
+   "category": "overworld_item"
+  },
+  {
+   "kind": "flagged",
+   "map": "he1_06",
+   "item": 80,
+   "flag": 616,
+   "label": null,
+   "patches": [
+    {
+     "offset": 2180652,
+     "original": 80
+    }
+   ],
+   "name": "1-1 Lineland Road - Shroom Shake (he1_06)",
+   "id": 1397771567,
+   "category": "overworld_item"
+  },
+  {
+   "kind": "flagged",
+   "map": "he2_01",
+   "item": 296,
+   "flag": 605,
+   "label": null,
+   "patches": [
+    {
+     "offset": 972240,
+     "original": 296
+    }
+   ],
+   "name": "1-2 Mount Lineland - Paratroopa Card (he2_01)",
+   "id": 1397771568,
+   "category": "catch_card"
+  },
+  {
+   "kind": "flagged",
+   "map": "he2_03",
+   "item": 382,
+   "flag": 610,
+   "label": null,
+   "patches": [
+    {
+     "offset": 986640,
+     "original": 382
+    }
+   ],
+   "name": "1-2 Mount Lineland - Boomboxer Card (he2_03)",
+   "id": 1397771569,
+   "category": "catch_card"
+  },
+  {
+   "kind": "flagged",
+   "map": "he2_05",
+   "item": 524,
+   "flag": 618,
+   "label": null,
+   "patches": [
+    {
+     "offset": 997276,
+     "original": 524
+    }
+   ],
+   "name": "1-2 Mount Lineland - Red & Green Card (he2_05)",
+   "id": 1397771570,
+   "category": "catch_card"
+  },
+  {
+   "kind": "flagged",
+   "map": "he3_01",
+   "item": 374,
+   "flag": 606,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1005216,
+     "original": 374
+    }
+   ],
+   "name": "1-3 Yold Desert - Squig Card (he3_01)",
+   "id": 1397771571,
+   "category": "catch_card"
+  },
+  {
+   "kind": "flagged",
+   "map": "he3_02",
+   "item": 74,
+   "flag": 607,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1005872,
+     "original": 74
+    }
+   ],
+   "name": "1-3 Yold Desert - Courage Shell (he3_02)",
+   "id": 1397771572,
+   "category": "overworld_item"
+  },
+  {
+   "kind": "flagged",
+   "map": "he3_06",
+   "item": 77,
+   "flag": 608,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1017808,
+     "original": 77
+    }
+   ],
+   "name": "1-3 Yold Desert - Ghost Shroom (he3_06)",
+   "id": 1397771573,
+   "category": "overworld_item"
+  },
+  {
+   "kind": "flagged",
+   "map": "he4_02",
+   "item": 84,
+   "flag": 609,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1021720,
+     "original": 84
+    }
+   ],
+   "name": "1-4 Yold Ruins - Life Shroom (he4_02)",
+   "id": 1397771574,
+   "category": "overworld_item"
+  },
+  {
+   "kind": "flagged",
+   "map": "he4_07",
+   "item": 298,
+   "flag": 613,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1027324,
+     "original": 298
+    }
+   ],
+   "name": "1-4 Yold Ruins - Buzzy Beetle Card (he4_07)",
+   "id": 1397771575,
+   "category": "catch_card"
+  },
+  {
+   "kind": "flagged",
+   "map": "ls1_06",
+   "item": 85,
+   "flag": 1303,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1892116,
+     "original": 85
+    }
+   ],
+   "name": "8-1 Castle Bleck Entry - Long-Last Shake (ls1_06)",
+   "id": 1397771576,
+   "category": "overworld_item"
+  },
+  {
+   "kind": "flagged",
+   "map": "ls1_06",
+   "item": 79,
+   "flag": 1309,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1892160,
+     "original": 79
+    }
+   ],
+   "name": "8-1 Castle Bleck Entry - Stop Watch (ls1_06)",
+   "id": 1397771577,
+   "category": "overworld_item"
+  },
+  {
+   "kind": "flagged",
+   "map": "ls2_02",
+   "item": 74,
+   "flag": 1310,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1927484,
+     "original": 74
+    }
+   ],
+   "name": "8-2 Castle Bleck Foyer - Courage Shell (ls2_02)",
+   "id": 1397771578,
+   "category": "overworld_item"
+  },
+  {
+   "kind": "flagged",
+   "map": "ls2_02",
+   "item": 84,
+   "flag": 1311,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1927528,
+     "original": 84
+    }
+   ],
+   "name": "8-2 Castle Bleck Foyer - Life Shroom (ls2_02)",
+   "id": 1397771579,
+   "category": "overworld_item"
+  },
+  {
+   "kind": "flagged",
+   "map": "ls2_05",
+   "item": 67,
+   "flag": 1308,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1934532,
+     "original": 67
+    }
+   ],
+   "name": "8-2 Castle Bleck Foyer - Thunder Rage (ls2_05)",
+   "id": 1397771580,
+   "category": "overworld_item"
+  },
+  {
+   "kind": "flagged",
+   "map": "ls2_08",
+   "item": 82,
+   "flag": 1304,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1941812,
+     "original": 82
+    }
+   ],
+   "name": "8-2 Castle Bleck Foyer - Ultra Shroom Shake (ls2_08)",
+   "id": 1397771581,
+   "category": "overworld_item"
+  },
+  {
+   "kind": "flagged",
+   "map": "ls2_16",
+   "item": 175,
+   "flag": 1318,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1955840,
+     "original": 175
+    }
+   ],
+   "name": "8-2 Castle Bleck Foyer - Mistake (ls2_16) #1",
+   "id": 1397771582,
+   "category": "overworld_item"
+  },
+  {
+   "kind": "flagged",
+   "map": "ls2_16",
+   "item": 175,
+   "flag": 1319,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1955888,
+     "original": 175
+    }
+   ],
+   "name": "8-2 Castle Bleck Foyer - Mistake (ls2_16) #2",
+   "id": 1397771583,
+   "category": "overworld_item"
+  },
+  {
+   "kind": "flagged",
+   "map": "ls2_16",
+   "item": 175,
+   "flag": 1320,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1955936,
+     "original": 175
+    }
+   ],
+   "name": "8-2 Castle Bleck Foyer - Mistake (ls2_16) #3",
+   "id": 1397771584,
+   "category": "overworld_item"
+  },
+  {
+   "kind": "flagged",
+   "map": "ls2_16",
+   "item": 175,
+   "flag": 1321,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1955984,
+     "original": 175
+    }
+   ],
+   "name": "8-2 Castle Bleck Foyer - Mistake (ls2_16) #4",
+   "id": 1397771585,
+   "category": "overworld_item"
+  },
+  {
+   "kind": "flagged",
+   "map": "ls2_16",
+   "item": 175,
+   "flag": 1322,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1956032,
+     "original": 175
+    }
+   ],
+   "name": "8-2 Castle Bleck Foyer - Mistake (ls2_16) #5",
+   "id": 1397771586,
+   "category": "overworld_item"
+  },
+  {
+   "kind": "flagged",
+   "map": "ls2_16",
+   "item": 175,
+   "flag": 1323,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1956080,
+     "original": 175
+    }
+   ],
+   "name": "8-2 Castle Bleck Foyer - Mistake (ls2_16) #6",
+   "id": 1397771587,
+   "category": "overworld_item"
+  },
+  {
+   "kind": "flagged",
+   "map": "ls2_16",
+   "item": 175,
+   "flag": 1324,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1956128,
+     "original": 175
+    }
+   ],
+   "name": "8-2 Castle Bleck Foyer - Mistake (ls2_16) #7",
+   "id": 1397771588,
+   "category": "overworld_item"
+  },
+  {
+   "kind": "flagged",
+   "map": "ls2_16",
+   "item": 175,
+   "flag": 1325,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1956176,
+     "original": 175
+    }
+   ],
+   "name": "8-2 Castle Bleck Foyer - Mistake (ls2_16) #8",
+   "id": 1397771589,
+   "category": "overworld_item"
+  },
+  {
+   "kind": "flagged",
+   "map": "ls2_16",
+   "item": 175,
+   "flag": 1326,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1956224,
+     "original": 175
+    }
+   ],
+   "name": "8-2 Castle Bleck Foyer - Mistake (ls2_16) #9",
+   "id": 1397771590,
+   "category": "overworld_item"
+  },
+  {
+   "kind": "flagged",
+   "map": "ls2_16",
+   "item": 175,
+   "flag": 1327,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1956272,
+     "original": 175
+    }
+   ],
+   "name": "8-2 Castle Bleck Foyer - Mistake (ls2_16) #10",
+   "id": 1397771591,
+   "category": "overworld_item"
+  },
+  {
+   "kind": "flagged",
+   "map": "ls3_03",
+   "item": 66,
+   "flag": 1312,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1973720,
+     "original": 66
+    }
+   ],
+   "name": "8-3 Castle Bleck Interior - Ice Storm (ls3_03)",
+   "id": 1397771592,
+   "category": "overworld_item"
+  },
+  {
+   "kind": "flagged",
+   "map": "ls3_11",
+   "item": 67,
+   "flag": 1313,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1981716,
+     "original": 67
+    }
+   ],
+   "name": "8-3 Castle Bleck Interior - Thunder Rage (ls3_11)",
+   "id": 1397771593,
+   "category": "overworld_item"
+  },
+  {
+   "kind": "flagged",
+   "map": "ls4_07",
+   "item": 68,
+   "flag": 1305,
+   "label": null,
+   "patches": [
+    {
+     "offset": 2002620,
+     "original": 68
+    }
+   ],
+   "name": "8-4 Castle Bleck Inner Sanctum - Shooting Star (ls4_07)",
+   "id": 1397771594,
+   "category": "overworld_item"
+  },
+  {
+   "kind": "flagged",
+   "map": "ls4_08",
+   "item": 81,
+   "flag": 1306,
+   "label": null,
+   "patches": [
+    {
+     "offset": 2004108,
+     "original": 81
+    }
+   ],
+   "name": "8-4 Castle Bleck Inner Sanctum - Super Shroom Shake (ls4_08)",
+   "id": 1397771595,
+   "category": "overworld_item"
+  },
+  {
+   "kind": "flagged",
+   "map": "ls4_09",
+   "item": 82,
+   "flag": 1307,
+   "label": null,
+   "patches": [
+    {
+     "offset": 2005596,
+     "original": 82
+    }
+   ],
+   "name": "8-4 Castle Bleck Inner Sanctum - Ultra Shroom Shake (ls4_09)",
+   "id": 1397771596,
+   "category": "overworld_item"
+  },
+  {
+   "kind": "flagged",
+   "map": "mac_01",
+   "item": 57,
+   "flag": 580,
+   "label": null,
+   "patches": [
+    {
+     "offset": 731936,
+     "original": 57
+    }
+   ],
+   "name": "Flipside/Flopside - Cooking Disk 2 (mac_01)",
+   "id": 1397771597,
+   "category": "key_item"
+  },
+  {
+   "kind": "flagged",
+   "map": "mac_04",
+   "item": 520,
+   "flag": 520,
+   "label": null,
+   "patches": [
+    {
+     "offset": 843932,
+     "original": 520
+    }
+   ],
+   "name": "Flipside/Flopside - The InterNed Card (mac_04)",
+   "id": 1397771598,
+   "category": "catch_card"
+  },
+  {
+   "kind": "flagged",
+   "map": "mac_07",
+   "item": 534,
+   "flag": 521,
+   "label": null,
+   "patches": [
+    {
+     "offset": 850560,
+     "original": 534
+    }
+   ],
+   "name": "Flipside/Flopside - The InterChet Card (mac_07)",
+   "id": 1397771599,
+   "category": "catch_card"
+  },
+  {
+   "kind": "flagged",
+   "map": "mac_08",
+   "item": 507,
+   "flag": 522,
+   "label": null,
+   "patches": [
+    {
+     "offset": 851420,
+     "original": 507
+    }
+   ],
+   "name": "Flipside/Flopside - Merluvlee Card (mac_08)",
+   "id": 1397771600,
+   "category": "catch_card"
+  },
+  {
+   "kind": "flagged",
+   "map": "mac_08",
+   "item": 505,
+   "flag": 523,
+   "label": null,
+   "patches": [
+    {
+     "offset": 851464,
+     "original": 505
+    }
+   ],
+   "name": "Flipside/Flopside - Merlon Card (mac_08)",
+   "id": 1397771601,
+   "category": "catch_card"
+  },
+  {
+   "kind": "flagged",
+   "map": "mac_11",
+   "item": 58,
+   "flag": 581,
+   "label": null,
+   "patches": [
+    {
+     "offset": 871320,
+     "original": 58
+    }
+   ],
+   "name": "Flipside/Flopside - Cooking Disk 3 (mac_11)",
+   "id": 1397771602,
+   "category": "key_item"
+  },
+  {
+   "kind": "flagged",
+   "map": "mac_14",
+   "item": 64,
+   "flag": 537,
+   "label": null,
+   "patches": [
+    {
+     "offset": 903744,
+     "original": 64
+    }
+   ],
+   "name": "Flipside/Flopside - Golden Card (mac_14)",
+   "id": 1397771603,
+   "category": "key_item"
+  },
+  {
+   "kind": "flagged",
+   "map": "mac_14",
+   "item": 60,
+   "flag": 583,
+   "label": null,
+   "patches": [
+    {
+     "offset": 903836,
+     "original": 60
+    }
+   ],
+   "name": "Flipside/Flopside - Cooking Disk 5 (mac_14)",
+   "id": 1397771604,
+   "category": "key_item"
+  },
+  {
+   "kind": "flagged",
+   "map": "mac_17",
+   "item": 485,
+   "flag": 524,
+   "label": null,
+   "patches": [
+    {
+     "offset": 916000,
+     "original": 485
+    }
+   ],
+   "name": "Flipside/Flopside - Piccolo Card (mac_17)",
+   "id": 1397771605,
+   "category": "catch_card"
+  },
+  {
+   "kind": "flagged",
+   "map": "mac_18",
+   "item": 486,
+   "flag": 525,
+   "label": null,
+   "patches": [
+    {
+     "offset": 916780,
+     "original": 486
+    }
+   ],
+   "name": "Flipside/Flopside - Barry Card (mac_18)",
+   "id": 1397771606,
+   "category": "catch_card"
+  },
+  {
+   "kind": "flagged",
+   "map": "mac_19",
+   "item": 59,
+   "flag": 582,
+   "label": null,
+   "patches": [
+    {
+     "offset": 929452,
+     "original": 59
+    }
+   ],
+   "name": "Flipside/Flopside - Cooking Disk 4 (mac_19)",
+   "id": 1397771607,
+   "category": "key_item"
+  },
+  {
+   "kind": "flagged",
+   "map": "mi1_04",
+   "item": 365,
+   "flag": 732,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1057756,
+     "original": 365
+    }
+   ],
+   "name": "2-1 Gloam Valley - Shlurp Card (mi1_04)",
+   "id": 1397771608,
+   "category": "catch_card"
+  },
+  {
+   "kind": "flagged",
+   "map": "mi1_04",
+   "item": 337,
+   "flag": 733,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1057800,
+     "original": 337
+    }
+   ],
+   "name": "2-1 Gloam Valley - Swooper Card (mi1_04)",
+   "id": 1397771609,
+   "category": "catch_card"
+  },
+  {
+   "kind": "flagged",
+   "map": "mi1_07",
+   "item": 511,
+   "flag": 738,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1066028,
+     "original": 511
+    }
+   ],
+   "name": "2-1 Gloam Valley - Watchitt Card (mi1_07)",
+   "id": 1397771610,
+   "category": "catch_card"
+  },
+  {
+   "kind": "flagged",
+   "map": "mi2_01",
+   "item": 79,
+   "flag": 729,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1075620,
+     "original": 79
+    }
+   ],
+   "name": "2-2 Merlee's Mansion - Stop Watch (mi2_01)",
+   "id": 1397771611,
+   "category": "overworld_item"
+  },
+  {
+   "kind": "flagged",
+   "map": "mi2_01",
+   "item": 345,
+   "flag": 730,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1075664,
+     "original": 345
+    }
+   ],
+   "name": "2-2 Merlee's Mansion - Cursya Card (mi2_01)",
+   "id": 1397771612,
+   "category": "catch_card"
+  },
+  {
+   "kind": "flagged",
+   "map": "mi3_01",
+   "item": 354,
+   "flag": 731,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1112836,
+     "original": 354
+    }
+   ],
+   "name": "2-3 Merlee's Mansion - Boo Card (mi3_01)",
+   "id": 1397771613,
+   "category": "catch_card"
+  },
+  {
+   "kind": "flagged",
+   "map": "mi4_10",
+   "item": 80,
+   "flag": 726,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1150016,
+     "original": 80
+    },
+    {
+     "offset": 1150728,
+     "original": 80
+    }
+   ],
+   "name": "2-4 Merlee's Basement - Shroom Shake (mi4_10)",
+   "id": 1397771614,
+   "category": "overworld_item"
+  },
+  {
+   "kind": "flagged",
+   "map": "sp1_02",
+   "item": 409,
+   "flag": 906,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1347828,
+     "original": 409
+    }
+   ],
+   "name": "4-1 Outer Space - Foton Card (sp1_02)",
+   "id": 1397771615,
+   "category": "catch_card"
+  },
+  {
+   "kind": "flagged",
+   "map": "sp1_05",
+   "item": 88,
+   "flag": 907,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1350148,
+     "original": 88
+    }
+   ],
+   "name": "4-1 Outer Space - Catch Card SP (sp1_05)",
+   "id": 1397771616,
+   "category": "overworld_item"
+  },
+  {
+   "kind": "flagged",
+   "map": "sp2_01",
+   "item": 82,
+   "flag": 908,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1361508,
+     "original": 82
+    }
+   ],
+   "name": "4-2 Planet Blobule - Ultra Shroom Shake (sp2_01)",
+   "id": 1397771617,
+   "category": "overworld_item"
+  },
+  {
+   "kind": "flagged",
+   "map": "sp2_04",
+   "item": 171,
+   "flag": 909,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1366316,
+     "original": 171
+    }
+   ],
+   "name": "4-2 Planet Blobule - Space Food (sp2_04)",
+   "id": 1397771618,
+   "category": "overworld_item"
+  },
+  {
+   "kind": "flagged",
+   "map": "sp3_01",
+   "item": 68,
+   "flag": 910,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1378176,
+     "original": 68
+    }
+   ],
+   "name": "4-3 Outer Limits - Shooting Star (sp3_01)",
+   "id": 1397771619,
+   "category": "overworld_item"
+  },
+  {
+   "kind": "flagged",
+   "map": "sp3_04",
+   "item": 77,
+   "flag": 911,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1390764,
+     "original": 77
+    }
+   ],
+   "name": "4-3 Outer Limits - Ghost Shroom (sp3_04)",
+   "id": 1397771620,
+   "category": "overworld_item"
+  },
+  {
+   "kind": "flagged",
+   "map": "sp3_04",
+   "item": 88,
+   "flag": 912,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1390812,
+     "original": 88
+    }
+   ],
+   "name": "4-3 Outer Limits - Catch Card SP (sp3_04)",
+   "id": 1397771621,
+   "category": "overworld_item"
+  },
+  {
+   "kind": "flagged",
+   "map": "ta1_01",
+   "item": 325,
+   "flag": 820,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1228068,
+     "original": 325
+    }
+   ],
+   "name": "3-1 The Bitlands - Piranha Plant Card (ta1_01)",
+   "id": 1397771622,
+   "category": "catch_card"
+  },
+  {
+   "kind": "flagged",
+   "map": "ta1_01",
+   "item": 66,
+   "flag": 825,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1228088,
+     "original": 66
+    }
+   ],
+   "name": "3-1 The Bitlands - Ice Storm (ta1_01)",
+   "id": 1397771623,
+   "category": "overworld_item"
+  },
+  {
+   "kind": "flagged",
+   "map": "ta1_02",
+   "item": 88,
+   "flag": 821,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1183364,
+     "original": 88
+    }
+   ],
+   "name": "3-1 The Bitlands - Catch Card SP (ta1_02)",
+   "id": 1397771624,
+   "category": "overworld_item"
+  },
+  {
+   "kind": "flagged",
+   "map": "ta1_05",
+   "item": 67,
+   "flag": 832,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1207480,
+     "original": 67
+    }
+   ],
+   "name": "3-1 The Bitlands - Thunder Rage (ta1_05)",
+   "id": 1397771625,
+   "category": "overworld_item"
+  },
+  {
+   "kind": "flagged",
+   "map": "ta1_06",
+   "item": 88,
+   "flag": 822,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1208888,
+     "original": 88
+    }
+   ],
+   "name": "3-1 The Bitlands - Catch Card SP (ta1_06)",
+   "id": 1397771626,
+   "category": "overworld_item"
+  },
+  {
+   "kind": "flagged",
+   "map": "ta1_07",
+   "item": 317,
+   "flag": 826,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1210012,
+     "original": 317
+    }
+   ],
+   "name": "3-1 The Bitlands - Magikoopa Card (ta1_07)",
+   "id": 1397771627,
+   "category": "catch_card"
+  },
+  {
+   "kind": "flagged",
+   "map": "ta2_02",
+   "item": 71,
+   "flag": 823,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1233504,
+     "original": 71
+    }
+   ],
+   "name": "3-2 The Tile Pool - Gold Bar (ta2_02)",
+   "id": 1397771628,
+   "category": "overworld_item"
+  },
+  {
+   "kind": "flagged",
+   "map": "ta4_10",
+   "item": 21,
+   "flag": 811,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1294492,
+     "original": 21
+    }
+   ],
+   "name": "3-4 Fort Francis - Fort Key (ta4_10)",
+   "id": 1397771629,
+   "category": "key_item"
+  },
+  {
+   "kind": "flagged",
+   "map": "ta4_11",
+   "item": 20,
+   "flag": 812,
+   "label": null,
+   "patches": [
+    {
+     "offset": 1301504,
+     "original": 20
+    }
+   ],
+   "name": "3-4 Fort Francis - Fort Key (ta4_11)",
+   "id": 1397771630,
+   "category": "key_item"
+  }
+ ],
+ "items": [
+  {
+   "id": 1397771540,
+   "spm": 20,
+   "name": "Fort Key (20)",
+   "category": "key_item"
+  },
+  {
+   "id": 1397771541,
+   "spm": 21,
+   "name": "Fort Key (21)",
+   "category": "key_item"
+  },
+  {
+   "id": 1397771550,
+   "spm": 30,
+   "name": "Water Tablet",
+   "category": "key_item"
+  },
+  {
+   "id": 1397771551,
+   "spm": 31,
+   "name": "Stone Tablet",
+   "category": "key_item"
+  },
+  {
+   "id": 1397771552,
+   "spm": 32,
+   "name": "Fire Tablet",
+   "category": "key_item"
+  },
+  {
+   "id": 1397771577,
+   "spm": 57,
+   "name": "Cooking Disk 2",
+   "category": "key_item"
+  },
+  {
+   "id": 1397771578,
+   "spm": 58,
+   "name": "Cooking Disk 3",
+   "category": "key_item"
+  },
+  {
+   "id": 1397771579,
+   "spm": 59,
+   "name": "Cooking Disk 4",
+   "category": "key_item"
+  },
+  {
+   "id": 1397771580,
+   "spm": 60,
+   "name": "Cooking Disk 5",
+   "category": "key_item"
+  },
+  {
+   "id": 1397771581,
+   "spm": 61,
+   "name": "Cooking Disk 6",
+   "category": "key_item"
+  },
+  {
+   "id": 1397771584,
+   "spm": 64,
+   "name": "Golden Card",
+   "category": "key_item"
+  },
+  {
+   "id": 1397771585,
+   "spm": 65,
+   "name": "Fire Burst",
+   "category": "overworld_item"
+  },
+  {
+   "id": 1397771586,
+   "spm": 66,
+   "name": "Ice Storm",
+   "category": "overworld_item"
+  },
+  {
+   "id": 1397771587,
+   "spm": 67,
+   "name": "Thunder Rage",
+   "category": "overworld_item"
+  },
+  {
+   "id": 1397771588,
+   "spm": 68,
+   "name": "Shooting Star",
+   "category": "overworld_item"
+  },
+  {
+   "id": 1397771589,
+   "spm": 69,
+   "name": "POW Block",
+   "category": "overworld_item"
+  },
+  {
+   "id": 1397771590,
+   "spm": 70,
+   "name": "Shell Shock",
+   "category": "overworld_item"
+  },
+  {
+   "id": 1397771591,
+   "spm": 71,
+   "name": "Gold Bar",
+   "category": "overworld_item"
+  },
+  {
+   "id": 1397771594,
+   "spm": 74,
+   "name": "Courage Shell",
+   "category": "overworld_item"
+  },
+  {
+   "id": 1397771595,
+   "spm": 75,
+   "name": "Mighty Tonic",
+   "category": "overworld_item"
+  },
+  {
+   "id": 1397771597,
+   "spm": 77,
+   "name": "Ghost Shroom",
+   "category": "overworld_item"
+  },
+  {
+   "id": 1397771599,
+   "spm": 79,
+   "name": "Stop Watch",
+   "category": "overworld_item"
+  },
+  {
+   "id": 1397771600,
+   "spm": 80,
+   "name": "Shroom Shake",
+   "category": "overworld_item"
+  },
+  {
+   "id": 1397771601,
+   "spm": 81,
+   "name": "Super Shroom Shake",
+   "category": "overworld_item"
+  },
+  {
+   "id": 1397771602,
+   "spm": 82,
+   "name": "Ultra Shroom Shake",
+   "category": "overworld_item"
+  },
+  {
+   "id": 1397771604,
+   "spm": 84,
+   "name": "Life Shroom",
+   "category": "overworld_item"
+  },
+  {
+   "id": 1397771605,
+   "spm": 85,
+   "name": "Long-Last Shake",
+   "category": "overworld_item"
+  },
+  {
+   "id": 1397771608,
+   "spm": 88,
+   "name": "Catch Card SP",
+   "category": "overworld_item"
+  },
+  {
+   "id": 1397771622,
+   "spm": 102,
+   "name": "Primordial Fruit",
+   "category": "overworld_item"
+  },
+  {
+   "id": 1397771691,
+   "spm": 171,
+   "name": "Space Food",
+   "category": "overworld_item"
+  },
+  {
+   "id": 1397771695,
+   "spm": 175,
+   "name": "Mistake",
+   "category": "overworld_item"
+  },
+  {
+   "id": 1397771741,
+   "spm": 221,
+   "name": "Thoreau",
+   "category": "pixl"
+  },
+  {
+   "id": 1397771742,
+   "spm": 222,
+   "name": "Boomer",
+   "category": "pixl"
+  },
+  {
+   "id": 1397771743,
+   "spm": 223,
+   "name": "Slim",
+   "category": "pixl"
+  },
+  {
+   "id": 1397771744,
+   "spm": 224,
+   "name": "Thudley",
+   "category": "pixl"
+  },
+  {
+   "id": 1397771745,
+   "spm": 225,
+   "name": "Carrie",
+   "category": "pixl"
+  },
+  {
+   "id": 1397771746,
+   "spm": 226,
+   "name": "Fleep",
+   "category": "pixl"
+  },
+  {
+   "id": 1397771747,
+   "spm": 227,
+   "name": "Cudge",
+   "category": "pixl"
+  },
+  {
+   "id": 1397771748,
+   "spm": 228,
+   "name": "Dottie",
+   "category": "pixl"
+  },
+  {
+   "id": 1397771749,
+   "spm": 229,
+   "name": "Piccolo",
+   "category": "optional_pixl"
+  },
+  {
+   "id": 1397771750,
+   "spm": 230,
+   "name": "Barry",
+   "category": "optional_pixl"
+  },
+  {
+   "id": 1397771751,
+   "spm": 231,
+   "name": "Dashell",
+   "category": "optional_pixl"
+  },
+  {
+   "id": 1397771802,
+   "spm": 282,
+   "name": "Goomba Card",
+   "category": "catch_card"
+  },
+  {
+   "id": 1397771811,
+   "spm": 291,
+   "name": "Koopa Troopa Card",
+   "category": "catch_card"
+  },
+  {
+   "id": 1397771816,
+   "spm": 296,
+   "name": "Paratroopa Card",
+   "category": "catch_card"
+  },
+  {
+   "id": 1397771818,
+   "spm": 298,
+   "name": "Buzzy Beetle Card",
+   "category": "catch_card"
+  },
+  {
+   "id": 1397771823,
+   "spm": 303,
+   "name": "Stone Buzzy Card",
+   "category": "catch_card"
+  },
+  {
+   "id": 1397771830,
+   "spm": 310,
+   "name": "Dry Bones Card",
+   "category": "catch_card"
+  },
+  {
+   "id": 1397771837,
+   "spm": 317,
+   "name": "Magikoopa Card",
+   "category": "catch_card"
+  },
+  {
+   "id": 1397771845,
+   "spm": 325,
+   "name": "Piranha Plant Card",
+   "category": "catch_card"
+  },
+  {
+   "id": 1397771857,
+   "spm": 337,
+   "name": "Swooper Card",
+   "category": "catch_card"
+  },
+  {
+   "id": 1397771861,
+   "spm": 341,
+   "name": "Ruff Puff Card",
+   "category": "catch_card"
+  },
+  {
+   "id": 1397771863,
+   "spm": 343,
+   "name": "Spania Card",
+   "category": "catch_card"
+  },
+  {
+   "id": 1397771865,
+   "spm": 345,
+   "name": "Cursya Card",
+   "category": "catch_card"
+  },
+  {
+   "id": 1397771874,
+   "spm": 354,
+   "name": "Boo Card",
+   "category": "catch_card"
+  },
+  {
+   "id": 1397771875,
+   "spm": 355,
+   "name": "Dark Boo Card",
+   "category": "catch_card"
+  },
+  {
+   "id": 1397771883,
+   "spm": 363,
+   "name": "Moon Cleft Card",
+   "category": "catch_card"
+  },
+  {
+   "id": 1397771885,
+   "spm": 365,
+   "name": "Shlurp Card",
+   "category": "catch_card"
+  },
+  {
+   "id": 1397771893,
+   "spm": 373,
+   "name": "Squiglet Card",
+   "category": "catch_card"
+  },
+  {
+   "id": 1397771894,
+   "spm": 374,
+   "name": "Squig Card",
+   "category": "catch_card"
+  },
+  {
+   "id": 1397771902,
+   "spm": 382,
+   "name": "Boomboxer Card",
+   "category": "catch_card"
+  },
+  {
+   "id": 1397771907,
+   "spm": 387,
+   "name": "Rawbus Card",
+   "category": "catch_card"
+  },
+  {
+   "id": 1397771929,
+   "spm": 409,
+   "name": "Foton Card",
+   "category": "catch_card"
+  },
+  {
+   "id": 1397771950,
+   "spm": 430,
+   "name": "Floro Cragnien Card",
+   "category": "catch_card"
+  },
+  {
+   "id": 1397771956,
+   "spm": 436,
+   "name": "Skellobit Card",
+   "category": "catch_card"
+  },
+  {
+   "id": 1397771957,
+   "spm": 437,
+   "name": "Spiky Skellobit Card",
+   "category": "catch_card"
+  },
+  {
+   "id": 1397771960,
+   "spm": 440,
+   "name": "Skellobomber Card",
+   "category": "catch_card"
+  },
+  {
+   "id": 1397771971,
+   "spm": 451,
+   "name": "Zombie Shroom Card",
+   "category": "catch_card"
+  },
+  {
+   "id": 1397772005,
+   "spm": 485,
+   "name": "Piccolo Card",
+   "category": "catch_card"
+  },
+  {
+   "id": 1397772006,
+   "spm": 486,
+   "name": "Barry Card",
+   "category": "catch_card"
+  },
+  {
+   "id": 1397772025,
+   "spm": 505,
+   "name": "Merlon Card",
+   "category": "catch_card"
+  },
+  {
+   "id": 1397772027,
+   "spm": 507,
+   "name": "Merluvlee Card",
+   "category": "catch_card"
+  },
+  {
+   "id": 1397772031,
+   "spm": 511,
+   "name": "Watchitt Card",
+   "category": "catch_card"
+  },
+  {
+   "id": 1397772040,
+   "spm": 520,
+   "name": "The InterNed Card",
+   "category": "catch_card"
+  },
+  {
+   "id": 1397772044,
+   "spm": 524,
+   "name": "Red & Green Card",
+   "category": "catch_card"
+  },
+  {
+   "id": 1397772054,
+   "spm": 534,
+   "name": "The InterChet Card",
+   "category": "catch_card"
+  }
+ ]
+}
