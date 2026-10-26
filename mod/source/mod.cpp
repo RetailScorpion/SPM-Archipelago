@@ -129,6 +129,9 @@ static void handleWarpRequest()
     mailbox::Mailbox & mb = mailbox::gMailbox;
     if (mb.warpRequest == 0 || spm::seqdrv::seqGetSeq() != spm::seqdrv::SEQ_GAME)
         return;
+    // Wait until the player has control: changing map during a cutscene or item-get can crash
+    if (spm::mario::marioCtrlOffChk() || spm::mario::marioKeyOffChk())
+        return;
     mb.warpRequest = 0;
     mb.warpMap[sizeof(mb.warpMap) - 1] = '\0';
     mb.warpDoor[sizeof(mb.warpDoor) - 1] = '\0';
