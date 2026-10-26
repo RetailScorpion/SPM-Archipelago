@@ -7,6 +7,7 @@ Commands:
   warp <map> [door]        debug: go to a map, e.g. "warp mi1_07"
   story <chapter> <value>  debug: set a chapter's story value, e.g. "story 2 72"
   nojoin on|off            debug: Pixl joins give nothing (like holding another world's item)
+  placeholder on|off       debug: Pixl joins give a Gold Bar instead (like holding an item from this game)
   quit
 Item pickups the mod reports are printed as they happen.
 """
@@ -15,7 +16,7 @@ import sys
 import threading
 import time
 
-from mailbox import DEBUG_JOINS_GIVE_NOTHING, Mailbox, MailboxError, STATE_NAMES
+from mailbox import DEBUG_JOINS_GIVE_NOTHING, DEBUG_JOINS_GIVE_PLACEHOLDER, Mailbox, MailboxError, STATE_NAMES
 
 POC_LOCATION_BASE = 0x10000
 
@@ -99,6 +100,10 @@ def main():
             with lock:
                 mb.set_debug_flag(DEBUG_JOINS_GIVE_NOTHING, arg == "on")
             print(f"Pixl joins give nothing: {arg == 'on'}")
+        elif cmd == "placeholder":
+            with lock:
+                mb.set_debug_flag(DEBUG_JOINS_GIVE_PLACEHOLDER, arg == "on")
+            print(f"Pixl joins give a Gold Bar: {arg == 'on'} (nojoin takes priority)")
         elif cmd == "give":
             item = NAMED_ITEMS.get(arg.replace(" ", ""))
             if item is None:

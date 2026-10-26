@@ -18,6 +18,7 @@
 #include <wii/gx.h>
 #include <wii/os.h>
 
+#include "delivery.h"
 #include "doors.h"
 #include "flip.h"
 #include "joins.h"
@@ -38,6 +39,13 @@ namespace mod {
 
 // Item id of the received item currently spawned on Mario, waiting to be collected, or -1
 static s32 sSpawnedItem = -1;
+// Whether that item came from delivery::giveLocal rather than the client
+static bool sSpawnedLocal;
+
+// Items from delivery::giveLocal, waiting to be spawned (oldest first)
+#define LOCAL_QUEUE_SIZE 8
+static s32 sLocalQueue[LOCAL_QUEUE_SIZE];
+static s32 sLocalCount;
 
 static void drawText(const char * msg, f32 y, wii::gx::GXColor colour)
 {
@@ -75,10 +83,15 @@ static void spawnNextReceived()
     }
 
     // Only while the player has control: not during cutscenes, text boxes or another item-get
-    s32 itemId;
-    if (sSpawnedItem != -1 || spm::mario::marioCtrlOffChk() || spm::mario::marioKeyOffChk()
-        || !mailbox::peekReceived(&itemId))
+    if (sSpawnedItem != -1 || spm::mario::marioCtrlOffChk() || spm::mario::marioKeyOffChk())
         return;
+    s32 itemId;
+    bool local = sLocalCount > 0;
+    if (local)
+        itemId = sLocalQueue[0];
+    else if (!mailbox::peekReceived(&itemId))
+        return;
+    sSpawnedLocal = local;
 
     // Characters crash the world-item pickup (they're never world items in vanilla), so they're
     // added directly for now; they'll need their own presentation
@@ -100,10 +113,19 @@ static bool pouchAddItemHook(s32 itemId)
 {
     if (sSpawnedItem != -1 && itemId == sSpawnedItem)
     {
-        // Mario collected the item we spawned for the client
+        // Mario collected the item we spawned
         sSpawnedItem = -1;
         sRecvCooldown = RECV_COOLDOWN_FRAMES;
-        mailbox::commitReceived();
+        if (sSpawnedLocal)
+        {
+            sLocalCount--;
+            for (s32 i = 0; i < sLocalCount; i++)
+                sLocalQueue[i] = sLocalQueue[i + 1];
+        }
+        else
+        {
+            mailbox::commitReceived();
+        }
         wii::os::OSReport("[spmap] delivered received item %d\n", itemId);
     }
     else
@@ -112,6 +134,17 @@ static bool pouchAddItemHook(s32 itemId)
         wii::os::OSReport("[spmap] picked up item %d\n", itemId);
     }
     return pouchAddItemReal(itemId);
+}
+
+void delivery::giveLocal(s32 itemId)
+{
+    if (sLocalCount == LOCAL_QUEUE_SIZE)
+    {
+        wii::os::OSReport("[spmap] local item queue full, dropped item %d\n", itemId);
+        return;
+    }
+    sLocalQueue[sLocalCount++] = itemId;
+    wii::os::OSReport("[spmap] queued local item %d\n", itemId);
 }
 
 /*
@@ -141,7 +174,7 @@ static void handleWarpRequest()
     else
         sControlFrames++;
     if (sControlFrames < WARP_CONTROL_FRAMES || sSpawnedItem != -1 || sRecvCooldown > 0
-        || mailbox::peekReceived(&pending))
+        || sLocalCount > 0 || mailbox::peekReceived(&pending))
         return;
     mb.warpRequest = 0;
     mb.warpMap[sizeof(mb.warpMap) - 1] = '\0';

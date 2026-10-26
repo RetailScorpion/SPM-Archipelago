@@ -10,6 +10,7 @@
 #include <spm/swdrv.h>
 #include <wii/os.h>
 
+#include "delivery.h"
 #include "gamesyms.h"
 #include "joins.h"
 #include "mailbox.h"
@@ -40,6 +41,12 @@ using spm::evtmgr::EvtScriptCode;
 #define PIXL_FLEEP 226
 #define PIXL_CUDGE 227
 #define PIXL_DOTTIE 228
+#define PIXL_PICCOLO 229
+#define PIXL_BARRY 230
+#define PIXL_DASHELL 231
+
+// What a join gives with DEBUG_JOINS_GIVE_PLACEHOLDER: a stand-in for "some other item"
+#define PLACEHOLDER_ITEM 71  // Gold Bar
 
 // Stage value meaning "join done", past every vanilla stage
 #define STAGE_DONE 200
@@ -148,6 +155,11 @@ static const Patch sPatches[] = {
     {GATE, 0xc7050, 209, PIXL_DOTTIE, "Dottie: her"},
     {GIFT, 0xc6e0c, PIXL_DOTTIE, 0, "Dottie join"},
     {SAFETY_NET, 0xcdffc, 0, 0, "Dottie safety net"},
+
+    // Optional Pixls: their scenes aren't gated by story value (tested), so only the gift is patched
+    {GIFT, 0x33684, PIXL_PICCOLO, 0, "Piccolo join"},
+    {GIFT, 0x7b024, PIXL_BARRY, 0, "Barry join"},
+    {GIFT, 0x15b6d4, PIXL_DASHELL, 0, "Dashell join"},
 };
 
 // ap_join_gift(pixlItemId): a Pixl join location. Marks it collected; until Archipelago is
@@ -157,8 +169,14 @@ static EVT_DEFINE_USER_FUNC(ap_join_gift)
     (void) isFirstCall;
     s32 item = spm::evtmgr_cmd::evtGetValue(evt, evt->pCurData[0]);
     spm::swdrv::swSet(AP_GSWF_JOIN(item));
-    // Debug: act like a join holding another world's item, to test the rooms without the Pixl
-    if (!(mailbox::gMailbox.debugFlags & DEBUG_JOINS_GIVE_NOTHING))
+    // Debug: act like a join holding another item (another world's: nothing here; or a placeholder
+    // item from this game), to test the rooms without the Pixl
+    u32 debug = mailbox::gMailbox.debugFlags;
+    if (debug & DEBUG_JOINS_GIVE_NOTHING)
+        ;
+    else if (debug & DEBUG_JOINS_GIVE_PLACEHOLDER)
+        delivery::giveLocal(PLACEHOLDER_ITEM);
+    else
         spm::mario_pouch::pouchAddItem(item);
     wii::os::OSReport("[spmap] joins: location for Pixl %d collected\n", item);
     return 2;

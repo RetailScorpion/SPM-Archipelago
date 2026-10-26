@@ -17,7 +17,8 @@ namespace mod::mailbox {
 #define MAILBOX_VERSION 4
 
 // debugFlags bits
-#define DEBUG_JOINS_GIVE_NOTHING 0x1  // Pixl joins mark their location but don't give the Pixl
+#define DEBUG_JOINS_GIVE_NOTHING 0x1      // Pixl joins mark their location but don't give the Pixl
+#define DEBUG_JOINS_GIVE_PLACEHOLDER 0x2  // Pixl joins give a Gold Bar instead of the Pixl
 #define MAILBOX_RECV_SIZE 16
 #define MAILBOX_SENT_SIZE 32
 
