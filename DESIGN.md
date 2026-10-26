@@ -344,7 +344,7 @@ Found with Dolphin's debugger (memory breakpoints) and the new `tools/evtdis.py`
   | Thudley | yes (scene stage switch) | room (`ta2_04`): dead end; bars close behind Mario and only pounding the pile (needs Thudley) opens them; Return Pipe always off there | **shuffled**; bars never close or reopen (`SKIP` patches); the pile still sets 108. Tested: no trap without him |
   | Carrie | yes | user: needs Carrie to leave. Room (`ta4_12`): no lock or Return Pipe disable in its scripts; pipes back to `ta4_03` and on to `ta4_15`. Her cage switch needs Thudley (logic) | **shuffled**; tested: leaving on foot needs Carrie (spikes), the Return Pipe works. Logic per `return_pipe_escapes` |
   | Fleep | yes (outhouse stage switch) | none: `sp2_01` has a pipe to Flipside and the Return Pipe works. Scene's pointer-mode calls froze the game without him (fixed, `FLEEP_ONLY`) | **shuffled**. Tested: no trap, no freeze |
-  | Cudge | yes | exit pipe off at 189–192: removed | shuffled; test Return Pipe escape |
+  | Cudge | yes | first visit: the entry pipe closes behind Mario; re-entering at 189–192 kept it hidden (removed). Join needs the three tablets | **shuffled**. Tested: no issues without him |
   | Dottie | yes | user: needs Dottie to leave | shuffled; test Return Pipe escape |
 - **Pit Keys** are dropped by a random enemy on each Pit floor and open that floor's door (the `dan_01` locks). **Leave the Pit Key system completely untouched.**
 - Pillar and chapter-clear scenes found for all 8 hearts (see `story_us0.json`).
