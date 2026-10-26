@@ -35,6 +35,7 @@ if DEVKITPPC.startswith("/opt/devkitpro"):
     DEVKITPPC = os.path.join(os.environ.get("DEVKITPRO_WIN", r"C:\devkitPro"),
                              DEVKITPPC[len("/opt/devkitpro/"):])
 CC = os.path.join("$devkitppc", "bin", "powerpc-eabi-gcc")
+NM = os.path.join("$devkitppc", "bin", "powerpc-eabi-nm")
 
 
 def find_elf2rel() -> str:
@@ -126,7 +127,7 @@ def main(versions: List[str]):
     n.variable("ninja_required_version", "1.3")
     for name, value in [
         ("srcdir", SRCDIR), ("incdir", INCDIR), ("builddir", BUILDDIR), ("outdir", OUTDIR),
-        ("spm_headers", SPM_HEADERS), ("devkitppc", DEVKITPPC), ("cc", CC), ("elf2rel", ELF2REL),
+        ("spm_headers", SPM_HEADERS), ("devkitppc", DEVKITPPC), ("cc", CC), ("nm", NM), ("elf2rel", ELF2REL),
         ("includes", INCLUDES), ("machdep", MACHDEP), ("cflags", CFLAGS), ("cxxflags", CXXFLAGS),
         ("ldflags", LDFLAGS),
     ]:
@@ -138,6 +139,7 @@ def main(versions: List[str]):
     n.rule("ld", "$cc $in $ldflags -o $out -Wl,-Map,$map", description="LD $out")
     n.rule("elf2rel", "$elf2rel $in -s $lst", description="ELF2REL $out")
     # spm-headers' symbols plus the mod's own (symbols/), as one lst
+    n.rule("checksyms", f'"{sys.executable}" -E check_syms.py $nm $in $lst $out', description="CHECK $in")
     n.rule("mergelst", f'"{sys.executable}" -E merge_lst.py $out $in', description="LST $out")
     n.newline()
 
@@ -162,7 +164,9 @@ def main(versions: List[str]):
             lsts.append(own)
         lst = os.path.join("$builddir", ver, "spm.lst")
         n.build(lst, "mergelst", lsts, implicit="merge_lst.py")
-        n.build(rel, "elf2rel", elf, implicit=lst, variables={"lst": lst})
+        stamp = os.path.join("$builddir", ver, "syms.ok")
+        n.build(stamp, "checksyms", elf, implicit=[lst, "check_syms.py"], variables={"lst": lst})
+        n.build(rel, "elf2rel", elf, implicit=[lst, stamp], variables={"lst": lst})
         n.build(ver, "phony", rel)
         n.default(rel)
 

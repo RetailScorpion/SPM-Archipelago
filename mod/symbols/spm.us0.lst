@@ -13,6 +13,8 @@
 // Called only by Fleep's join scene (sp2_01), right after the join (names are guesses): with 1, the
 // first sets MarioWork flag 0x00200000 and gives an object callback 0x8012CA18, mode 6; the second
 // changes that object's mode. Tippi's pointer crashes afterwards if Mario has no Fleep
+// Not in spm-headers' lst; called by evt_pouch_set_pixl_selected
+8014E914:pouchSetPixlSelected
 800F2838:evt_fleep_mode_on
 800F2878:evt_fleep_mode_set
 
