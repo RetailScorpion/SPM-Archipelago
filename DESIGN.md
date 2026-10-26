@@ -168,6 +168,7 @@ v1 has a single "intended" logic: no tricks, no damage boosts. A `logic_difficul
 | `shop_items` | on / off | off | Each hub shop slot sells an Archipelago item |
 | `pit_rewards` | off / flipside / both | off | Pit of 100 Trials chests; Dashell needs `flipside` or higher |
 | `side_quests` | on / off | off | Piccolo trading sequence, NPC rewards in the hubs |
+| `tablet_shuffle` | on / off | off | **Later.** Shuffle the Water, Stone and Fire Tablets (Cudge's shrine, `gn2_02`) into the pool instead of leaving them at their vanilla spots. Check how they fit with the key item pool first: if key items are always shuffled, this may just be an exception list |
 | `level_shuffle` | off / chapters / levels / both | off | **Later.** Shuffle which chapter is behind each door, and/or which level (N-k) comes next within or across chapters. Needs the per-chapter story values to cope with entering a chapter at a later level |
 | `catch_cards` | off / … | off | **Later.** 256 cards is a lot; maybe "every Nth card" |
 | `recipes` | off / on | off | **Later.** First cook of each recipe |
