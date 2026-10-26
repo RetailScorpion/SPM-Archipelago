@@ -11,7 +11,7 @@ import time
 
 import dolphin_memory_engine as dme
 
-from mailbox import (Mailbox, MailboxError, OFF_RECV_HANDLED, OFF_RECV_ITEMS, OFF_SENT_COUNT,
+from mailbox import (GP_PTR, Mailbox, MailboxError, OFF_RECV_HANDLED, OFF_RECV_ITEMS, OFF_SENT_COUNT,
                      OFF_SENT_LOCATIONS, RECV_SIZE, SENT_SIZE)
 from poc_client import JOIN_LOCATION_BASE, JOIN_LOCATION_OTHER_WORLD, PIXL_NAMES, POC_LOCATION_BASE, format_story
 
@@ -35,6 +35,29 @@ def describe_location(loc):
         held = ", held another world's item" if loc & JOIN_LOCATION_OTHER_WORLD else ""
         return f"[check] {PIXL_NAMES.get(pixl, pixl)}'s join location{held} ({loc:#x})"
     return f"[pickup] {item_name(loc - POC_LOCATION_BASE)} ({loc:#x})"
+
+
+MAP_NAME_OFFSET = 0x44  # SpmarioGlobals mapName
+
+
+def current_map():
+    return dme.read_bytes(dme.read_word(GP_PTR) + MAP_NAME_OFFSET, 32).split(b"\0")[0].decode(errors="replace")
+
+
+def place_name(map_name):
+    """Names for maps outside the chapters and hubs, which the story line would only call "other map"."""
+    if map_name.startswith("dan_"):
+        # dan_0x-dan_30: Flipside Pit of 100 Trials; dan_4x-dan_70: Flopside's
+        return "Flipside Pit" if map_name[4] in "0123" else "Flopside Pit"
+    return None
+
+
+def describe_story(story, map_name):
+    text = format_story(*story)
+    place = place_name(map_name)
+    if place and text.startswith("other map"):
+        text = place + text[len("other map"):]
+    return f"{text} | map {map_name}"
 
 
 def connect():
@@ -68,9 +91,10 @@ def main():
             handled = now
 
             story = mb.story_state()
-            if last_story is None or story[0] != last_story[0] or story[2] != last_story[2]:
-                print(f"[story] {format_story(*story)}")
-                last_story = story
+            map_name = current_map()
+            if last_story is None or (story[0], story[2], map_name) != last_story:
+                print(f"[story] {describe_story(story, map_name)}")
+                last_story = (story[0], story[2], map_name)
         except RuntimeError:
             print("Lost Dolphin; reconnecting")
             mb = connect()
