@@ -10,6 +10,7 @@
 #include <spm/swdrv.h>
 #include <wii/os.h>
 
+#include "apitem.h"
 #include "delivery.h"
 #include "gamesyms.h"
 #include "joins.h"
@@ -179,7 +180,10 @@ static EVT_DEFINE_USER_FUNC(ap_join_gift)
     mailbox::Mailbox & mb = mailbox::gMailbox;
     u16 given = mb.joinItems[item - ITEM_ID_FAIRY_START];
     if (given == JOIN_ITEM_OTHER_WORLD)
+    {
+        delivery::giveLocal(apitem::AP_ITEM_ID);
         wii::os::OSReport("[spmap] joins: Pixl %d's location holds another world's item\n", item);
+    }
     else if (given != 0)
         delivery::giveLocal(given);
     else if (mb.debugFlags & DEBUG_JOINS_GIVE_NOTHING)

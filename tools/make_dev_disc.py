@@ -3,6 +3,7 @@
   build/devdisc/   copy of the extracted game partition (disc/DATA), made once
     sys/main.dol   clean dol + rel-loader (tools/patch_dol.py)
     files/mod/mod.rel   the mod (mod/out/us0.rel)
+    files/wicon.tpl, files/wicon.bin   item icons plus the Archipelago icons (tools/wicon.py)
 
 Usage: py -3 -E tools/make_dev_disc.py            (from the SPM_AP folder)
 Then in Dolphin: File > Open > build/devdisc/sys/main.dol
@@ -12,6 +13,9 @@ import os
 import shutil
 import subprocess
 import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import wicon  # noqa: E402
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CLEAN = os.path.join(ROOT, "disc", "DATA")
@@ -29,6 +33,9 @@ def main():
     os.remove(dol)
     subprocess.run([sys.executable, "-E", os.path.join(ROOT, "tools", "patch_dol.py"),
                     os.path.join(CLEAN, "sys", "main.dol"), LOADER, dol], check=True)
+
+    icons = wicon.build(os.path.join(CLEAN, "files"), os.path.join(DEV, "files"))
+    print("Archipelago icons added as icon ids", ", ".join(map(str, icons)))
 
     if not os.path.exists(REL):
         sys.exit(f"Mod not built yet: {REL} is missing (run configure.py and ninja in mod/)")

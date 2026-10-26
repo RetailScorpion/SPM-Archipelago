@@ -12,6 +12,7 @@
 #include <msl/stdio.h>
 #include <msl/string.h>
 
+#include "apitem.h"
 #include "doors.h"
 #include "gamesyms.h"
 #include "patch.h"
@@ -62,8 +63,12 @@ static const char * buildSelectText(s32 door)
 }
 
 static const char * (*msgSearchReal)(const char * msgName);
+// The mod's one msgSearch hook (a function can only be hooked once): the AP item's messages, then
+// the door menus
 static const char * msgSearchHook(const char * msgName)
 {
+    if (const char * text = apitem::message(msgName))
+        return text;
     if (msl::string::strncmp(msgName, SELECT_KEY_PREFIX, sizeof(SELECT_KEY_PREFIX) - 1) == 0)
     {
         s32 door = msgName[sizeof(SELECT_KEY_PREFIX) - 1] - '1';

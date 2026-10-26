@@ -18,6 +18,7 @@
 #include <wii/gx.h>
 #include <wii/os.h>
 
+#include "apitem.h"
 #include "delivery.h"
 #include "doors.h"
 #include "flip.h"
@@ -119,6 +120,7 @@ static void spawnNextReceived()
         return;
     }
 
+    apitem::onSpawn(itemId);
     wii::mtx::Vec3 & pos = spm::mario::marioGetPtr()->position;
     spm::itemdrv::itemEntry(RECV_ITEM_NAME, itemId, 0, pos.x, pos.y, pos.z, nullptr, 0);
     sSpawnedItem = itemId;
@@ -143,6 +145,10 @@ static bool pouchAddItemHook(s32 itemId)
         mailbox::sendLocation(POC_LOCATION_BASE + itemId);
         wii::os::OSReport("[spmap] picked up item %d\n", itemId);
     }
+    apitem::onPouchAdd(itemId);
+    // The AP item only exists for its item-get; it never goes in the inventory
+    if (itemId == apitem::AP_ITEM_ID)
+        return true;
     bool added = pouchAddItemReal(itemId);
     // A first Pixl gets selected right away (pouchAddItem doesn't select it)
     if (itemId >= ITEM_ID_FAIRY_START && itemId < ITEM_ID_FAIRY_MAX)
@@ -235,6 +241,7 @@ void main()
     doors::init();
     flip::init();
     joins::init();
+    apitem::init();
 
     seq_titleMainReal = spm::seqdef::seq_data[spm::seqdrv::SEQ_TITLE].main;
     spm::seqdef::seq_data[spm::seqdrv::SEQ_TITLE].main = seq_titleMainHook;
