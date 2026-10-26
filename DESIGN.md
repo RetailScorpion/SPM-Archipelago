@@ -228,7 +228,7 @@ Filler (when the pool has more locations than progression items): coins, consuma
    - `Received <item> from <location>`: an item for this game, found here or in another world (then also `from <player>`).
    - `Sent <AP item name> to <player> from <location>`: an item for another world, found here.
    Needs Archipelago location names and the server's item/player info; until then the watcher prints raw checks.
-7. **Next feature (user request):** a location holding another world's item plays the normal item-get with Mario holding up the AP icon (item 5's "AP Item"/"AP Junk" entries) and the text **"Sent <item name> to <player>!"** instead of "You got X!". First version uses placeholder names. Work: an item-table entry that uses a new icon in `wicon.tpl`/`wicon.bin`, and a hook on the item-get message.
+7. **AP item-get (built, tested 2026-10-25):** a location holding another world's item plays the normal item-get with Mario holding up the AP icon and **"Sent <item> to <player>!"** (placeholder names for now). Item 63 (Cooking Disk 1) is retargeted at runtime to icon 402 and the mod's messages (`apitem.cpp`); icons 402/403 are added by `tools/wicon.py`; the `item_get` message is swapped in the mod's `msgSearch` hook. **Next:** real item and player names from the client, the greyscale icon (403) for filler/traps by switching the entry's `iconId` per delivery, and a different entry once `cooking_disks` needs item 63.
 
 ## 7. Open questions
 
