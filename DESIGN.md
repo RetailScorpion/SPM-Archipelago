@@ -341,7 +341,7 @@ Found with Dolphin's debugger (memory breakpoints) and the new `tools/evtdis.py`
   | Slim | yes ("have Slim" check removed) | room: none. **2-3 (Merlee's Mansion, "Breaking the Bank") needs Slim to finish and the Return Pipe is disabled there** (2-2 always allows it): softlock without him | **shuffled**; fix built: the mansion's Return Pipe disable (`IF_SMALL(GSW(0), 89)` in `mi3_01`–`mi3_06`) never runs (`joins.cpp`). Untested |
   | Thudley | yes (scene stage switch) | room (`ta2_04`): dead end; bars close behind Mario and only pounding the pile (needs Thudley) opens them; Return Pipe always off there | **shuffled**; bars never close or reopen (`SKIP` patches); the pile still sets 108. Tested: no trap without him |
   | Carrie | yes | user: needs Carrie to leave. Room (`ta4_12`): no lock or Return Pipe disable in its scripts; pipes back to `ta4_03` and on to `ta4_15`. Her cage switch needs Thudley (logic) | **shuffled**; tested: leaving on foot needs Carrie (spikes), the Return Pipe works. Logic per `return_pipe_escapes` |
-  | Fleep | yes (outhouse stage switch) | ? | shuffled; test Return Pipe escape |
+  | Fleep | yes (outhouse stage switch) | none: `sp2_01` has a pipe to Flipside and the Return Pipe works. Scene's pointer-mode calls froze the game without him (fixed, `FLEEP_ONLY`) | **shuffled**. Tested: no trap, no freeze |
   | Cudge | yes | exit pipe off at 189–192: removed | shuffled; test Return Pipe escape |
   | Dottie | yes | user: needs Dottie to leave | shuffled; test Return Pipe escape |
 - **Pit Keys** are dropped by a random enemy on each Pit floor and open that floor's door (the `dan_01` locks). **Leave the Pit Key system completely untouched.**
