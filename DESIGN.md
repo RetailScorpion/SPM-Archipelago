@@ -331,8 +331,8 @@ Found with Dolphin's debugger (memory breakpoints) and the new `tools/evtdis.py`
   | Thoreau | yes | bars + locked exit: removed | **shuffled** (tested) |
   | Boomer | yes (chest stage switch) | none: room doesn't trap you | **shuffled** (tested out of order, Chapter 2 at 74) |
   | Slim | yes ("have Slim" check removed) | room: none. **2-3 (Merlee's Mansion, "Breaking the Bank") needs Slim to finish and the Return Pipe is disabled there** (2-2 always allows it): softlock without him | **shuffled**; fix built: the mansion's Return Pipe disable (`IF_SMALL(GSW(0), 89)` in `mi3_01`–`mi3_06`) never runs (`joins.cpp`). Untested |
-  | Thudley | yes (scene stage switch) | ? (how is his pillar pounded before you have him?) | shuffled; test Return Pipe escape |
-  | Carrie | yes | user: needs Carrie to leave | shuffled; test Return Pipe escape |
+  | Thudley | yes (scene stage switch) | room (`ta2_04`): dead end; bars close behind Mario and only pounding the pile (needs Thudley) opens them; Return Pipe always off there | **shuffled**; bars never close or reopen (`SKIP` patches); the pile still sets 108. Tested: no trap without him |
+  | Carrie | yes | user: needs Carrie to leave. Room (`ta4_12`): no lock or Return Pipe disable in its scripts; pipes back to `ta4_03` and on to `ta4_15` | shuffled; test Return Pipe escape |
   | Fleep | yes (outhouse stage switch) | ? | shuffled; test Return Pipe escape |
   | Cudge | yes | exit pipe off at 189–192: removed | shuffled; test Return Pipe escape |
   | Dottie | yes | user: needs Dottie to leave | shuffled; test Return Pipe escape |
