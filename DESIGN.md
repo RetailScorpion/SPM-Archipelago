@@ -134,6 +134,9 @@ Menu
 - Story fights inside a chapter count as part of that chapter's path. If a boss needs an ability, it's a requirement on the next sub-region.
 - Duplicate key items (three Ruins Keys, for example) are tracked by count. Using a key on any matching door works.
 
+### Known requirements (found while testing; fold into the logic pass)
+- **Carrie's location** (`ta4_12`, Fort Francis): needs `ground_pound` (Thudley presses the switch that opens her cage).
+
 ### Logic difficulty
 v1 has a single "intended" logic: no tricks, no damage boosts. A `logic_difficulty` option can come later, once speedrun tricks are documented.
 
@@ -332,7 +335,7 @@ Found with Dolphin's debugger (memory breakpoints) and the new `tools/evtdis.py`
   | Boomer | yes (chest stage switch) | none: room doesn't trap you | **shuffled** (tested out of order, Chapter 2 at 74) |
   | Slim | yes ("have Slim" check removed) | room: none. **2-3 (Merlee's Mansion, "Breaking the Bank") needs Slim to finish and the Return Pipe is disabled there** (2-2 always allows it): softlock without him | **shuffled**; fix built: the mansion's Return Pipe disable (`IF_SMALL(GSW(0), 89)` in `mi3_01`–`mi3_06`) never runs (`joins.cpp`). Untested |
   | Thudley | yes (scene stage switch) | room (`ta2_04`): dead end; bars close behind Mario and only pounding the pile (needs Thudley) opens them; Return Pipe always off there | **shuffled**; bars never close or reopen (`SKIP` patches); the pile still sets 108. Tested: no trap without him |
-  | Carrie | yes | user: needs Carrie to leave. Room (`ta4_12`): no lock or Return Pipe disable in its scripts; pipes back to `ta4_03` and on to `ta4_15` | shuffled; test Return Pipe escape |
+  | Carrie | yes | user: needs Carrie to leave. Room (`ta4_12`): no lock or Return Pipe disable in its scripts; pipes back to `ta4_03` and on to `ta4_15`. Her cage switch needs Thudley (logic) | shuffled; test Return Pipe escape |
   | Fleep | yes (outhouse stage switch) | ? | shuffled; test Return Pipe escape |
   | Cudge | yes | exit pipe off at 189–192: removed | shuffled; test Return Pipe escape |
   | Dottie | yes | user: needs Dottie to leave | shuffled; test Return Pipe escape |
