@@ -62,6 +62,10 @@ static void drawText(const char * msg, f32 y, wii::gx::GXColor colour)
 
 static s32 sRecvCooldown;
 
+// Frames in a row the player has had control (for the debug warp)
+static s32 sControlFrames;
+#define WARP_CONTROL_FRAMES 60
+
 static void spawnNextReceived()
 {
     if (sRecvCooldown > 0)
@@ -129,8 +133,15 @@ static void handleWarpRequest()
     mailbox::Mailbox & mb = mailbox::gMailbox;
     if (mb.warpRequest == 0 || spm::seqdrv::seqGetSeq() != spm::seqdrv::SEQ_GAME)
         return;
-    // Wait until the player has control: changing map during a cutscene or item-get can crash
+    // Wait until the player has had control for a while and no received item is on its way:
+    // changing map during a cutscene or item-get can crash (control briefly returns mid item-get)
+    s32 pending;
     if (spm::mario::marioCtrlOffChk() || spm::mario::marioKeyOffChk())
+        sControlFrames = 0;
+    else
+        sControlFrames++;
+    if (sControlFrames < WARP_CONTROL_FRAMES || sSpawnedItem != -1 || sRecvCooldown > 0
+        || mailbox::peekReceived(&pending))
         return;
     mb.warpRequest = 0;
     mb.warpMap[sizeof(mb.warpMap) - 1] = '\0';
