@@ -22,9 +22,11 @@
 #include "delivery.h"
 #include "doors.h"
 #include "flip.h"
+#include "gamesyms.h"
 #include "joins.h"
 #include "mailbox.h"
 #include "patch.h"
+#include "savedata.h"
 #include "storyvalue.h"
 #include "tippi.h"
 
@@ -76,6 +78,22 @@ static s32 sControlFrames;
 #define WARP_CONTROL_FRAMES 60
 
 // The spawned item reached Mario: take it off its queue
+// Items from the server the loaded save has handled (delivered or already given in the game)
+static u32 savedRecvCount()
+{
+    return (savedata::getGswByte(AP_GSW_RECV_COUNT) << 8) | savedata::getGswByte(AP_GSW_RECV_COUNT + 1);
+}
+
+static void receivedHandled()
+{
+    u32 count = savedRecvCount() + 1;
+    savedata::setGswByte(AP_GSW_RECV_COUNT, static_cast<u8>(count >> 8));
+    savedata::setGswByte(AP_GSW_RECV_COUNT + 1, static_cast<u8>(count));
+    // The client reads "nothing pending" before the count, so the count must be current first
+    mailbox::gMailbox.savedRecvCount = count;
+    mailbox::commitReceived();
+}
+
 static void itemDelivered()
 {
     sSpawnedItem = -1;
@@ -88,7 +106,7 @@ static void itemDelivered()
     }
     else
     {
-        mailbox::commitReceived();
+        receivedHandled();
     }
 }
 
@@ -110,6 +128,13 @@ static void spawnNextReceived()
     else if (!mailbox::peekReceived(&itemId))
         return;
     sSpawnedLocal = local;
+
+    // An item for this world that was found here: the game already gave it, so it only counts
+    if (!local && (itemId & RECV_ALREADY_GIVEN))
+    {
+        receivedHandled();
+        return;
+    }
 
     // Characters crash the world-item pickup (they're never world items in vanilla), so they're
     // added directly for now; they'll need their own presentation
@@ -174,8 +199,14 @@ void delivery::giveLocal(s32 itemId)
 static spm::seqdef::SeqFunc * seq_titleMainReal;
 static void seq_titleMainHook(spm::seqdrv::SeqWork * wp)
 {
-    mailbox::gMailbox.modState = mailbox::STATE_TITLE;
+    mailbox::Mailbox & mb = mailbox::gMailbox;
+    mb.modState = mailbox::STATE_TITLE;
     storyvalue::resetContext();
+    // No save loaded: drop queued deliveries; the client queues them again from the next save's count
+    mb.savedRecvCount = 0xFFFFFFFF;
+    mb.recvHandled = mb.recvCount;
+    sSpawnedItem = -1;
+    sLocalCount = 0;
     seq_titleMainReal(wp);
     drawText("SPM Archipelago " MOD_VERSION, 200.0f, {255, 255, 255, 255});
 }
@@ -208,6 +239,7 @@ static void seq_gameMainHook(spm::seqdrv::SeqWork * wp)
 {
     mailbox::gMailbox.modState = mailbox::STATE_IN_GAME;
     handleWarpRequest();
+    mailbox::gMailbox.savedRecvCount = savedRecvCount();
     seq_gameMainReal(wp);
     storyvalue::sync();
     spawnNextReceived();
@@ -236,6 +268,8 @@ void main()
     wii::os::OSReport("[spmap] SPM Archipelago " MOD_VERSION " loaded\n");
 
     mailbox::init();
+    // relF is loaded once and stays; section 5 starts 0xAF300 into the file
+    mailbox::gMailbox.relfBase = reinterpret_cast<u32>(gamesyms::relF_section5) - 0xAF300;
     storyvalue::init();
     mailbox::gMailbox.storyState = &storyvalue::gStory;
     doors::init();

@@ -14,12 +14,14 @@
 namespace mod::mailbox {
 
 #define MAILBOX_MAGIC "SPMAP_MAILBOX_v1"
-#define MAILBOX_VERSION 6
+#define MAILBOX_VERSION 7
 
 // debugFlags bits
 #define DEBUG_JOINS_GIVE_NOTHING 0x1      // Pixl joins mark their location but don't give the Pixl
 #define DEBUG_JOINS_GIVE_PLACEHOLDER 0x2  // Pixl joins give placeholderItem instead of the Pixl
 #define MAILBOX_RECV_SIZE 16
+// recvItems bit: the item was already given in the game (an item for this world found here); the mod only counts it
+#define RECV_ALREADY_GIVEN 0x8000
 #define MAILBOX_SENT_SIZE 32
 
 enum ModState : u32
@@ -54,8 +56,14 @@ struct Mailbox
 /* 0x104 */ u32 placeholderItem;  // item for DEBUG_JOINS_GIVE_PLACEHOLDER; 0 = Gold Bar
 /* 0x108 */ u16 joinItems[12];    // per Pixl (index = item id - 220): what its join gives, overriding
                                   // debugFlags; 0 = no override, JOIN_ITEM_OTHER_WORLD = nothing here
+
+    // Archipelago (all written by the mod; the client writes into what they point at)
+/* 0x120 */ u32 relfBase;         // address of relF.rel's start (location placements are relF file offsets)
+/* 0x124 */ u32 savedRecvCount;   // items from the server the loaded save has handled; 0xFFFFFFFF = no save
+/* 0x128 */ void * locNames;      // apitem::LocName[locNamesMax]: names for locations holding other worlds' items
+/* 0x12C */ u32 locNamesMax;
 };
-static_assert(sizeof(Mailbox) == 0x120);
+static_assert(sizeof(Mailbox) == 0x130);
 
 // joinItems value: the location holds another world's item
 #define JOIN_ITEM_OTHER_WORLD 0xFFFF

@@ -20,3 +20,4 @@ build.ninja
 __pycache__/
 *.pyc
 mod/out/
+__pycache__/

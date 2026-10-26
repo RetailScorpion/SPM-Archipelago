@@ -10,11 +10,25 @@
     It reuses item 63 (Cooking Disk 1, never obtainable in vanilla): its item-table entry is pointed
     at the Archipelago icon (added to wicon.tpl/wicon.bin by tools/wicon.py) and the mod's own
     messages. The cooking_disks option will need a different entry.
+
+    The client fills a table of names for the locations holding other worlds' items, keyed by the
+    location's save flag. The game sets that flag when the location is collected (swSet), which is
+    how the mod knows whose names to show.
 */
 
 namespace mod::apitem {
 
 constexpr s32 AP_ITEM_ID = 63;
+
+// One location holding another world's item (written by the client; mailbox locNames)
+struct LocName
+{
+    u16 flag;        // the location's GSWF save flag; 0 = unused entry
+    u16 pad;
+    char item[36];   // NUL-terminated
+    char player[24];
+};
+static_assert(sizeof(LocName) == 0x40);
 
 void init();
 
