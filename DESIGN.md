@@ -138,7 +138,7 @@ Menu
 - **Carrie's location** (`ta4_12`, Fort Francis): needs `ground_pound` (Thudley presses the switch that opens her cage), plus `carry` unless `return_pipe_escapes` is on (leaving on foot means hovering over spikes with Carrie; the Return Pipe works there, tested).
 - **Fleep's location** (`sp2_01` outhouse, Planet Blobule): needs the **Ancient Clue** (item 25, found in `sp2_08`), which you hand to the outhouse.
 - **Cudge's location** (`gn2_02`, Gap of Crag): needs the **Water, Stone and Fire Tablets** (items 30, 31, 32) placed in the three stone slots.
-- **Dottie's location** (`gn4_03`, Cragnon cave): leaving on foot needs `shrink` (Dottie), unless `return_pipe_escapes` is on; the Return Pipe works there. Luigi (`super_jump`) may also get out: testing.
+- **Dottie's location** (`gn4_03`, Cragnon cave): leaving on foot needs `shrink` (Dottie) or `super_jump` (Luigi, tested), unless `return_pipe_escapes` is on; the Return Pipe works there.
 - **`sp2_01` door `doa2_l`** (toward `sp2_03`, the Ancient Clue in `sp2_08`, and every other check beyond it): blocked by a wall of blocks (`b_10`–`b_42`, while Chapter 4 < 142) that needs a way to break blocks: `hammer` (Cudge), `ground_pound` (Thudley) or `bomb` (Boomer). So the Ancient Clue, and with it Fleep's location, needs one of those three.
 - **Every Pixl join scene** calls `evt_pouch_set_pixl_selected(<pixl>)` right after the gift. Without that Pixl the game deselects every Pixl. Fixed: `ap_join_select` only selects a Pixl Mario has, and map loads repair saves with none selected.
 - **Fleep's join scene** then calls `0x800f2838(1)` and `0x800f2878(1)` (a Fleep mode for something Tippi's pointer uses). Without Fleep, pointing at the screen afterwards freezes the game (found by the user). Fixed: both run only if Mario has Fleep (`FLEEP_ONLY`); re-entering `sp2_01` never calls them either.
@@ -346,7 +346,7 @@ Found with Dolphin's debugger (memory breakpoints) and the new `tools/evtdis.py`
   | Carrie | yes | user: needs Carrie to leave. Room (`ta4_12`): no lock or Return Pipe disable in its scripts; pipes back to `ta4_03` and on to `ta4_15`. Her cage switch needs Thudley (logic) | **shuffled**; tested: leaving on foot needs Carrie (spikes), the Return Pipe works. Logic per `return_pipe_escapes` |
   | Fleep | yes (outhouse stage switch) | none: `sp2_01` has a pipe to Flipside and the Return Pipe works. Scene's pointer-mode calls froze the game without him (fixed, `FLEEP_ONLY`) | **shuffled**. Tested: no trap, no freeze |
   | Cudge | yes | first visit: the entry pipe closes behind Mario; re-entering at 189–192 kept it hidden (removed). Join needs the three tablets | **shuffled**. Tested: no issues without him |
-  | Dottie | yes | needs Dottie to leave on foot (Luigi maybe: testing); Return Pipe works | **shuffled**; in `return_pipe_escapes` |
+  | Dottie | yes | needs Dottie or Luigi to leave on foot (tested); Return Pipe works | **shuffled**; in `return_pipe_escapes` |
 - **Pit Keys** are dropped by a random enemy on each Pit floor and open that floor's door (the `dan_01` locks). **Leave the Pit Key system completely untouched.**
 - Pillar and chapter-clear scenes found for all 8 hearts (see `story_us0.json`).
 - **Still to find:** where the Crystal Ball, Random House Key and Cooking Disk 1 are given (probably main.dol scripts or NPC dialogue the scan doesn't cover).
