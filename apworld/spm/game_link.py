@@ -48,7 +48,8 @@ STORY_SLOT_COUNT = 9
 GP_PTR = 0x8056D198  # US 1.0: pointer to SpmarioGlobals
 GSW0_OFFSET = 0x140
 
-STATE_NAMES = {0: "boot", 1: "title", 2: "in game"}
+STATE_BOOT, STATE_TITLE, STATE_IN_GAME = 0, 1, 2  # mailbox.h ModState
+STATE_NAMES = {STATE_BOOT: "boot", STATE_TITLE: "title", STATE_IN_GAME: "in game"}
 
 
 class MailboxError(Exception):
