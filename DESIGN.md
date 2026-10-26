@@ -228,6 +228,7 @@ Filler (when the pool has more locations than progression items): coins, consuma
    - `Received <item> from <location>`: an item for this game, found here or in another world (then also `from <player>`).
    - `Sent <AP item name> to <player> from <location>`: an item for another world, found here.
    Needs Archipelago location names and the server's item/player info; until then the watcher prints raw checks.
+7. **Next feature (user request):** a location holding another world's item plays the normal item-get with Mario holding up the AP icon (item 5's "AP Item"/"AP Junk" entries) and the text **"Sent <item name> to <player>!"** instead of "You got X!". First version uses placeholder names. Work: an item-table entry that uses a new icon in `wicon.tpl`/`wicon.bin`, and a hook on the item-get message.
 
 ## 7. Open questions
 
