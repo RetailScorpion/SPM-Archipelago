@@ -22,6 +22,8 @@ import time
 from mailbox import DEBUG_JOINS_GIVE_NOTHING, DEBUG_JOINS_GIVE_PLACEHOLDER, JOIN_ITEM_OTHER_WORLD, Mailbox, MailboxError, STATE_NAMES
 
 POC_LOCATION_BASE = 0x10000
+JOIN_LOCATION_BASE = 0x20000  # + Pixl item id (mod/source/joins.cpp)
+JOIN_LOCATION_OTHER_WORLD = 0x1000
 
 # A few handy ids from the game's item table (spm-docs items.txt). Characters and Pixls must use
 # the inventory ids (216-231); the later "Thoreau" etc. entries (477+) are separate copies that
@@ -32,6 +34,9 @@ NAMED_ITEMS = {
     "fleep": 226, "cudge": 227, "dottie": 228, "piccolo": 229, "barry": 230, "dashell": 231,
     "ruinskey": 16, "returnpipe": 50, "mushroom": 6, "hpplus": 89,
 }
+
+
+PIXL_NAMES = {v: k.capitalize() for k, v in NAMED_ITEMS.items() if 221 <= v < 232}
 
 
 def format_story(context, slots, live):
@@ -47,8 +52,14 @@ def watch(mb: Mailbox, lock: threading.Lock):
             locations = mb.poll_sent()
             story = mb.story_state()
         for loc in locations:
-            item = loc - POC_LOCATION_BASE
-            print(f"\n[game] picked up item {item} (location {loc:#x})\n> ", end="", flush=True)
+            if loc >= JOIN_LOCATION_BASE:
+                pixl = (loc - JOIN_LOCATION_BASE) & 0xFFF
+                name = PIXL_NAMES.get(pixl, str(pixl))
+                held = " (held another world's item)" if loc & JOIN_LOCATION_OTHER_WORLD else ""
+                print(f"\n[check] {name}'s join location collected{held} (location {loc:#x})\n> ", end="", flush=True)
+            else:
+                item = loc - POC_LOCATION_BASE
+                print(f"\n[game] picked up item {item} (location {loc:#x})\n> ", end="", flush=True)
         # print on map changes (context) and on story progress within the current map
         if story[0] != (last_story or (None,))[0] or story[2] != (last_story or (0, 0, None))[2]:
             print(f"\n[story] {format_story(*story)}\n> ", end="", flush=True)

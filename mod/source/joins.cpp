@@ -45,6 +45,11 @@ using spm::evtmgr::EvtScriptCode;
 #define PIXL_BARRY 230
 #define PIXL_DASHELL 231
 
+// Location ids the joins report to the client: JOIN_LOCATION_BASE + Pixl item id (stand-ins until
+// Archipelago location ids exist). Bit JOIN_LOCATION_OTHER_WORLD marks "held another world's item".
+#define JOIN_LOCATION_BASE 0x20000
+#define JOIN_LOCATION_OTHER_WORLD 0x1000
+
 // What a join gives with DEBUG_JOINS_GIVE_PLACEHOLDER when the client hasn't picked an item
 #define DEFAULT_PLACEHOLDER_ITEM 71  // Gold Bar
 
@@ -183,6 +188,7 @@ static EVT_DEFINE_USER_FUNC(ap_join_gift)
         delivery::giveLocal(mb.placeholderItem ? mb.placeholderItem : DEFAULT_PLACEHOLDER_ITEM);
     else
         spm::mario_pouch::pouchAddItem(item);
+    mailbox::sendLocation(JOIN_LOCATION_BASE + item + (given == JOIN_ITEM_OTHER_WORLD ? JOIN_LOCATION_OTHER_WORLD : 0));
     wii::os::OSReport("[spmap] joins: location for Pixl %d collected\n", item);
     return 2;
 }
