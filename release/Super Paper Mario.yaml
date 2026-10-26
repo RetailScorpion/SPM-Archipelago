@@ -1,0 +1,101 @@
+# Super Paper Mario (no-logic prototype) player options.
+#
+# Each option can be a single value, or weights to pick one at random, for example:
+#   shuffle_catch_cards:
+#     'true': 50
+#     'false': 50
+
+name: Player{number}
+# Your name in-game, limited to 16 characters.
+#     {player} will be replaced with the player's slot number.
+#     {PLAYER} will be replaced with the player's slot number, if that slot number is greater than 1.
+#     {number} will be replaced with the counter value of the name.
+#     {NUMBER} will be replaced with the counter value of the name, if the counter value is greater than 1.
+
+description: Super Paper Mario prototype
+
+game: Super Paper Mario
+
+requires:
+  version: 0.6.7
+
+Super Paper Mario:
+  # This is a no-logic prototype: every location counts as reachable from the start, so any item can be
+  # anywhere. Use the Return Pipe to leave rooms you can't get out of yet.
+
+  shuffle_pixls:
+    # Shuffle the eight story Pixls (Thoreau to Dottie). Off: each joins at its vanilla spot.
+    'true': 50
+    'false': 0
+
+  shuffle_optional_pixls:
+    # Shuffle Barry, Dashell and Piccolo. Off: each joins at its vanilla spot.
+    'true': 0
+    'false': 50
+
+  shuffle_key_items:
+    # Shuffle the key items whose spots the prototype handles (Fort Keys, the Water/Stone/Fire Tablets,
+    # Cooking Disks, the Golden Card). Off: they stay at their vanilla spots.
+    # The story keys (Ruins Keys, Door Keys, Dimension Keys, ...) are always vanilla in this prototype.
+    'true': 50
+    'false': 0
+
+  shuffle_overworld_items:
+    # Shuffle items in chests and lying around in levels and hubs. Off: they stay vanilla.
+    'true': 50
+    'false': 0
+
+  shuffle_catch_cards:
+    # Shuffle catch cards found in chests or lying around. Off: they stay vanilla.
+    'true': 0
+    'false': 50
+
+  # Archipelago's common options
+
+  progression_balancing:
+    # A system that moves progression earlier, to try to prevent the player from getting stuck waiting
+    # for others. 0 = off, 50 = default, 99 = as early as possible.
+    random: 0
+    random-low: 0
+    random-high: 0
+    disabled: 0 # equivalent to 0
+    normal: 50 # equivalent to 50
+    extreme: 0 # equivalent to 99
+
+  accessibility:
+    # full: all locations can be reached. minimal: only what's needed to finish is guaranteed.
+    # (With no logic yet, everything counts as reachable either way.)
+    full: 50
+    minimal: 0
+
+  local_items:
+    # Forces these items to be in their native world.
+    []
+
+  non_local_items:
+    # Forces these items to be outside their native world.
+    []
+
+  start_inventory:
+    # Start with these items.
+    {}
+
+  start_hints:
+    # Start with these item's locations prefilled into the !hint command.
+    []
+
+  start_location_hints:
+    # Start with these locations and their item prefilled into the !hint command.
+    []
+
+  exclude_locations:
+    # Prevent these locations from having an important item.
+    []
+
+  priority_locations:
+    # Prevent these locations from having an unimportant item.
+    []
+
+  item_links:
+    # Share part of your item pool with other players.
+    []

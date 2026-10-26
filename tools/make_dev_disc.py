@@ -17,6 +17,9 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import wicon  # noqa: E402
 
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "apworld", "spm"))
+import patcher  # noqa: E402
+
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CLEAN = os.path.join(ROOT, "disc", "DATA")
 DEV = os.path.join(ROOT, "build", "devdisc")
@@ -30,9 +33,9 @@ def main():
         shutil.copytree(CLEAN, DEV)
 
     dol = os.path.join(DEV, "sys", "main.dol")
-    os.remove(dol)
-    subprocess.run([sys.executable, "-E", os.path.join(ROOT, "tools", "patch_dol.py"),
-                    os.path.join(CLEAN, "sys", "main.dol"), LOADER, dol], check=True)
+    patched = patcher.patch_dol(open(os.path.join(CLEAN, "sys", "main.dol"), "rb").read(), open(LOADER).read())
+    open(dol, "wb").write(patched)
+    print(f"main.dol: rel loader added at {patcher.PAYLOAD_ADDR:#x}")
 
     icons = wicon.build(os.path.join(CLEAN, "files"), os.path.join(DEV, "files"))
     print("Archipelago icons added as icon ids", ", ".join(map(str, icons)))

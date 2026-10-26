@@ -1,15 +1,17 @@
 # Super Paper Mario prototype: setup
 
 ## You need
-- A US Super Paper Mario disc image (revision 0, game ID R8PE01), extracted with Dolphin (right-click the game > Properties > Filesystem > Extract Entire Disc).
-- Dolphin, the Archipelago Launcher (0.6.7) and `spm.apworld` (double-click it to install).
+- A Super Paper Mario (USA) revision 0 disc image (game ID R8PE01).
+- Dolphin, Archipelago 0.6.7, and this APworld installed (double-click `spm.apworld`).
 
 ## Steps
-1. Build the patched game from your extracted disc with the Super Paper Mario Patcher (in the Launcher).
-2. In Dolphin, open the patched game's `sys/main.dol`.
-3. Start the Super Paper Mario Client from the Launcher and connect to your room.
-4. Load your save. **Connect before entering any level**, so the client can place the items.
+1. In Dolphin, right-click Super Paper Mario > Properties > Filesystem > right-click the disc > **Extract Entire Disc**, into an empty folder.
+2. In the Archipelago Launcher, open **Super Paper Mario Patcher** and pick that folder. It patches it in place (originals are kept as `.orig`). Run it again after updating the APworld.
+3. In Dolphin, File > Open > `sys/main.dol` in the patched folder (inside `DATA/` if there is one).
+4. In the Launcher, open **Super Paper Mario Client** and connect to your room.
+5. Load your save. **Connect before entering any level**, so the client can place the items.
 
 ## Known limits
-- No logic: you may need items from late chapters early. Use the Return Pipe to escape rooms you can't leave.
-- Pure Hearts, characters and many story-gated items are still vanilla.
+- No logic: you may need items from late chapters early. Use the Return Pipe to leave rooms you can't get out of.
+- Pure Hearts, characters, the story keys, ? blocks and shops are still vanilla.
+- Gecko cheat codes can't be used with the patched game.

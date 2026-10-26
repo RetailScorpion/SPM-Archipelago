@@ -21,3 +21,4 @@ __pycache__/
 *.pyc
 mod/out/
 __pycache__/
+apworld/spm/bin/

@@ -30,7 +30,13 @@ def launch_client(*args):
     launch_subprocess(main, name="SPMClient", args=args)
 
 
+def launch_patcher(*args):
+    from .patcher import launch_patcher as run
+    launch_subprocess(run, name="SPMPatcher", args=args)
+
+
 components.append(Component("Super Paper Mario Client", func=launch_client, component_type=Type.CLIENT))
+components.append(Component("Super Paper Mario Patcher", func=launch_patcher, component_type=Type.TOOL))
 
 
 class SPMItem(Item):
