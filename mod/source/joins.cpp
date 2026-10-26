@@ -331,8 +331,9 @@ void init()
     wii::os::OSReport("[spmap] joins: patched\n");
 }
 
-// A save can have Pixls but none selected (from a join before ap_join_select existed): select one
-static void repairPixlSelection()
+// A save can have Pixls but none selected (from a join before ap_join_select existed, or a Pixl
+// received from the client, which pouchAddItem doesn't select): select one
+void repairPixlSelection()
 {
     s32 first = -1;
     for (auto & info : spm::mario_pouch::pouchGetPtr()->pixls)

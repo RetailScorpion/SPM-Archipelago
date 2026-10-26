@@ -35,4 +35,10 @@ void init();
 */
 void onMapChange();
 
+/*
+    If Mario has Pixls but none is selected, selects the first one. pouchAddItem doesn't select a
+    new Pixl, so a Pixl received while having none would otherwise leave none selected.
+*/
+void repairPixlSelection();
+
 }

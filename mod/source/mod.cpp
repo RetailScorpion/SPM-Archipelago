@@ -133,7 +133,11 @@ static bool pouchAddItemHook(s32 itemId)
         mailbox::sendLocation(POC_LOCATION_BASE + itemId);
         wii::os::OSReport("[spmap] picked up item %d\n", itemId);
     }
-    return pouchAddItemReal(itemId);
+    bool added = pouchAddItemReal(itemId);
+    // A first Pixl gets selected right away (pouchAddItem doesn't select it)
+    if (itemId >= ITEM_ID_FAIRY_START && itemId < ITEM_ID_FAIRY_MAX)
+        joins::repairPixlSelection();
+    return added;
 }
 
 void delivery::giveLocal(s32 itemId)
