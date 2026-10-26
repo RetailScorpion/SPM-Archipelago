@@ -137,6 +137,7 @@ Menu
 ### Known requirements (found while testing; fold into the logic pass)
 - **Carrie's location** (`ta4_12`, Fort Francis): needs `ground_pound` (Thudley presses the switch that opens her cage), plus `carry` unless `return_pipe_escapes` is on (leaving on foot means hovering over spikes with Carrie; the Return Pipe works there, tested).
 - **Fleep's location** (`sp2_01` outhouse, Planet Blobule): needs the **Ancient Clue** (item 25, found in `sp2_08`), which you hand to the outhouse.
+- **`sp2_01` door `doa2_l`** (toward `sp2_03`, the Ancient Clue in `sp2_08`, and every other check beyond it): blocked by a wall of blocks (`b_10`–`b_42`, while Chapter 4 < 142) that needs a way to break blocks: `hammer` (Cudge), `ground_pound` (Thudley) or `bomb` (Boomer). So the Ancient Clue, and with it Fleep's location, needs one of those three.
 - **Every Pixl join scene** calls `evt_pouch_set_pixl_selected(<pixl>)` right after the gift. Without that Pixl the game deselects every Pixl. Fixed: `ap_join_select` only selects a Pixl Mario has, and map loads repair saves with none selected.
 - **Fleep's join scene** then calls `0x800f2838(1)` and `0x800f2878(1)` (a Fleep mode for something Tippi's pointer uses). Without Fleep, pointing at the screen afterwards freezes the game (found by the user). Fixed: both run only if Mario has Fleep (`FLEEP_ONLY`); re-entering `sp2_01` never calls them either.
 
