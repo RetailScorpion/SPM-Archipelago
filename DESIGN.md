@@ -161,7 +161,7 @@ v1 has a single "intended" logic: no tricks, no damage boosts. A `logic_difficul
 | `flip` | start_with / vanilla / random | start_with | `start_with`: you can flip from the start. `vanilla`: Flip is locked to Bestovius in 1-1. `random`: Flip can be anywhere in the multiworld. Bestovius's lesson is a location in all three |
 | `sammer_gauntlet` | on / off | off | The 100-duel Sammer's Kingdom always opens after Ch6, and its TTYD partner card rewards are always checks. `off`: they only hold filler. `on`: they can hold progression. See §2 |
 | `return_pipe_escapes` | on / off | off | Rooms you can only leave on foot with the Pixl found there (but can always leave with the Return Pipe). **On:** the logic may expect that check before you have its Pixl, and you pipe out afterwards. **Off:** the check is in logic only once you have that Pixl (you can still get it earlier). Rooms so far: Carrie's (`ta4_12`), Dottie's (`gn4_03`). See "Known requirements" in §4 |
-| `optional_pixls` | on / off | off | Barry, Dashell, Piccolo and their locations |
+| `optional_pixls` | on / off | off | Barry, Dashell, Piccolo and their locations. Their joins: Barry `ta1_01` (3-1 bush), Dashell `dan_30` (Flipside Pit floor 100; also scripted in `dan_70`, Flopside), Piccolo `mac_19`. Their scenes aren't gated by story value (Barry tested at Chapter 3 = 126). **Next:** add `GIFT` patches for them and test with `nojoin` |
 | `overworld_items` | on / off | off | Item pickups lying in levels and hubs |
 | `item_blocks` | on / off | off | ? blocks and hidden blocks that give items (not coins) |
 | `shop_items` | on / off | off | Each hub shop slot sells an Archipelago item |
