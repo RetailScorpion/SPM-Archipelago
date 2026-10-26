@@ -70,6 +70,7 @@ enum PatchKind
     CASE_NEVER, // CASE_SMALL(a) -> CASE_SMALL(b), where b makes it unreachable
     HAVE_NEVER, // IF_NOT_EQUAL(LW(0), 0) -> IF_NOT_EQUAL(LW(0), LW(0)): never true
     SKIP,       // USER_FUNC(sSkippable[b], ...) with a args -> USER_FUNC(ap_skip, ...): does nothing
+    FLEEP_ONLY, // USER_FUNC(sFleepOnly[b].real, x) -> USER_FUNC(sFleepOnly[b].wrapper, x): runs only with Fleep
 };
 
 // Functions a SKIP patch may replace
@@ -136,6 +137,8 @@ static const Patch sPatches[] = {
 
     {STAGE, 0x9b328, 2, 0, "Fleep: outhouse stage"},
     {GIFT, 0x9beec, PIXL_FLEEP, 0, "Fleep join"},
+    {FLEEP_ONLY, 0x9c2e4, 0, 0, "Fleep: pointer mode on (crashes without him)"},
+    {FLEEP_ONLY, 0x9c2f0, 0, 1, "Fleep: pointer mode set (crashes without him)"},
 
     {GATE, 0xb9ee4, 192, PIXL_CUDGE, "Cudge: him"},
     {GATE, 0xb9fe8, 192, PIXL_CUDGE, "Cudge: tablet slots"},
@@ -189,6 +192,25 @@ static EVT_DEFINE_USER_FUNC(ap_join_select)
         spm::mario_pouch::pouchSetPixlSelected(item);
     return 2;
 }
+
+// The calls in Fleep's join scene that only work if Mario really has him
+static EVT_DEFINE_USER_FUNC(ap_fleep_mode_on)
+{
+    return havePixl(PIXL_FLEEP) ? gamesyms::evt_fleep_mode_on(evt, isFirstCall) : 2;
+}
+static EVT_DEFINE_USER_FUNC(ap_fleep_mode_set)
+{
+    return havePixl(PIXL_FLEEP) ? gamesyms::evt_fleep_mode_set(evt, isFirstCall) : 2;
+}
+using UserFunc = s32(spm::evtmgr::EvtEntry * evt, bool isFirstCall);
+static const struct
+{
+    UserFunc * real;
+    UserFunc * wrapper;
+} sFleepOnly[] = {
+    {gamesyms::evt_fleep_mode_on, ap_fleep_mode_on},
+    {gamesyms::evt_fleep_mode_set, ap_fleep_mode_set},
+};
 
 static bool expect(const EvtScriptCode * at, const s32 * words, s32 n, const char * what)
 {
@@ -265,6 +287,13 @@ static void apply(const Patch & p)
             const s32 orig[] = {EVT_CMD(2, OP_IF_NOT_EQUAL), LW_VAR(0), 0};
             if (expect(at, orig, 3, p.what))
                 at[2] = LW_VAR(0);
+            break;
+        }
+        case FLEEP_ONLY:
+        {
+            const s32 orig[] = {EVT_CMD(2, OP_USER_FUNC), reinterpret_cast<s32>(sFleepOnly[p.b].real), 1};
+            if (expect(at, orig, 3, p.what))
+                at[1] = reinterpret_cast<s32>(sFleepOnly[p.b].wrapper);
             break;
         }
         case SKIP:

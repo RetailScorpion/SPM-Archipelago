@@ -30,6 +30,11 @@ extern const spm::evtmgr::EvtScriptCode door_enter_evt[];
 // 0 < story value < 16 (before Bestovius)
 extern u32 mario_flip_story_check[];
 
+// Only in Fleep's join scene, after the join: evt_fleep_mode_on(1) and evt_fleep_mode_set(1) put
+// something Tippi's pointer uses into a Fleep mode (names are guesses); pointing crashes without Fleep
+EVT_DECLARE_USER_FUNC(evt_fleep_mode_on, 1)
+EVT_DECLARE_USER_FUNC(evt_fleep_mode_set, 1)
+
 // relF: Flipside Tower dimension doors (door = chapter - 1)
 
 // evt_mac_set_door_dest(mapDoorDesc, map, entrance)

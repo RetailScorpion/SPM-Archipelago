@@ -10,6 +10,11 @@
 // In the "can the current character use their ability" check (0x80147A08): the
 // bl evtGetValue(GSW(0)) whose result blocks Mario's flip when 0 < value < 16
 80147AB4:mario_flip_story_check
+// Called only by Fleep's join scene (sp2_01), right after the join (names are guesses): with 1, the
+// first sets MarioWork flag 0x00200000 and gives an object callback 0x8012CA18, mode 6; the second
+// changes that object's mode. Tippi's pointer crashes afterwards if Mario has no Fleep
+800F2838:evt_fleep_mode_on
+800F2878:evt_fleep_mode_set
 
 // relF: Flipside Tower dimension doors
 1,1,cb4:evt_mac_set_door_dest
