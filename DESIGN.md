@@ -135,7 +135,7 @@ Menu
 - Duplicate key items (three Ruins Keys, for example) are tracked by count. Using a key on any matching door works.
 
 ### Known requirements (found while testing; fold into the logic pass)
-- **Carrie's location** (`ta4_12`, Fort Francis): needs `ground_pound` (Thudley presses the switch that opens her cage).
+- **Carrie's location** (`ta4_12`, Fort Francis): needs `ground_pound` (Thudley presses the switch that opens her cage), plus `carry` unless `return_pipe_escapes` is on (leaving on foot means hovering over spikes with Carrie; the Return Pipe works there, tested).
 
 ### Logic difficulty
 v1 has a single "intended" logic: no tricks, no damage boosts. A `logic_difficulty` option can come later, once speedrun tricks are documented.
@@ -154,6 +154,7 @@ v1 has a single "intended" logic: no tricks, no damage boosts. A `logic_difficul
 | `starting_open_doors` | 0–7 | 0 | X random chapter doors (from 1–7, never 8) open at the start, regardless of pillars |
 | `flip` | start_with / vanilla / random | start_with | `start_with`: you can flip from the start. `vanilla`: Flip is locked to Bestovius in 1-1. `random`: Flip can be anywhere in the multiworld. Bestovius's lesson is a location in all three |
 | `sammer_gauntlet` | on / off | off | The 100-duel Sammer's Kingdom always opens after Ch6, and its TTYD partner card rewards are always checks. `off`: they only hold filler. `on`: they can hold progression. See §2 |
+| `return_pipe_escapes` | on / off | off | Rooms you can only leave on foot with the Pixl found there (but can always leave with the Return Pipe). **On:** the logic may expect that check before you have its Pixl, and you pipe out afterwards. **Off:** the check is in logic only once you have that Pixl (you can still get it earlier). Rooms so far: Carrie's (`ta4_12`). See "Known requirements" in §4 |
 | `optional_pixls` | on / off | off | Barry, Dashell, Piccolo and their locations |
 | `overworld_items` | on / off | off | Item pickups lying in levels and hubs |
 | `item_blocks` | on / off | off | ? blocks and hidden blocks that give items (not coins) |
@@ -335,7 +336,7 @@ Found with Dolphin's debugger (memory breakpoints) and the new `tools/evtdis.py`
   | Boomer | yes (chest stage switch) | none: room doesn't trap you | **shuffled** (tested out of order, Chapter 2 at 74) |
   | Slim | yes ("have Slim" check removed) | room: none. **2-3 (Merlee's Mansion, "Breaking the Bank") needs Slim to finish and the Return Pipe is disabled there** (2-2 always allows it): softlock without him | **shuffled**; fix built: the mansion's Return Pipe disable (`IF_SMALL(GSW(0), 89)` in `mi3_01`–`mi3_06`) never runs (`joins.cpp`). Untested |
   | Thudley | yes (scene stage switch) | room (`ta2_04`): dead end; bars close behind Mario and only pounding the pile (needs Thudley) opens them; Return Pipe always off there | **shuffled**; bars never close or reopen (`SKIP` patches); the pile still sets 108. Tested: no trap without him |
-  | Carrie | yes | user: needs Carrie to leave. Room (`ta4_12`): no lock or Return Pipe disable in its scripts; pipes back to `ta4_03` and on to `ta4_15`. Her cage switch needs Thudley (logic) | shuffled; test Return Pipe escape |
+  | Carrie | yes | user: needs Carrie to leave. Room (`ta4_12`): no lock or Return Pipe disable in its scripts; pipes back to `ta4_03` and on to `ta4_15`. Her cage switch needs Thudley (logic) | **shuffled**; tested: leaving on foot needs Carrie (spikes), the Return Pipe works. Logic per `return_pipe_escapes` |
   | Fleep | yes (outhouse stage switch) | ? | shuffled; test Return Pipe escape |
   | Cudge | yes | exit pipe off at 189–192: removed | shuffled; test Return Pipe escape |
   | Dottie | yes | user: needs Dottie to leave | shuffled; test Return Pipe escape |
