@@ -5,14 +5,15 @@ location by level and map, with its vanilla item and rough spot. Every level is 
 status (Complete, checked/total, or no checks). The map you're in is marked.
 Refreshes when something changes. Read-only: it never writes to the game.
 
-Positions are the game's own coordinates: x runs left to right along the level, y is height, and z is
-depth (negative = further back, only reachable in 3D for most spots).
+Positions are the game's own coordinates: x runs left to right along the level, y is height, z is
+depth. Mario's own position is shown at the top, to compare.
 
 Usage: py -3 -E tracker.py [--missing]   (--missing: hide checked locations)
 """
 
 import json
 import os
+import struct
 import sys
 import time
 
@@ -22,7 +23,9 @@ from mailbox import GP_PTR, GSWF_OFFSET, Mailbox
 
 LOCATIONS = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "ap_locations.json")
 MAP_NAME_OFFSET = 0x44  # SpmarioGlobals mapName
-POLL_SECONDS = 1.0
+MARIO_WORK = 0x804CD458  # marioGetPtr() (US 1.0)
+MARIO_POSITION = 0x5C    # MarioWork position (x, y, z floats)
+POLL_SECONDS = 0.5
 
 
 def connect_dolphin():
@@ -43,22 +46,29 @@ def current_map():
     return dme.read_bytes(dme.read_word(GP_PTR) + MAP_NAME_OFFSET, 32).split(b"\0")[0].decode(errors="replace")
 
 
+def mario_position():
+    return struct.unpack(">3f", dme.read_bytes(MARIO_WORK + MARIO_POSITION, 12))
+
+
 def describe_spot(loc):
     if loc["pos"] is None:
         return f"{loc['where']}, position set by the script"
     x, y, z = loc["pos"]
-    depth = ", back (3D)" if z < -50 else ""
-    return f"{loc['where']} at x {x:g}, height {y:g}{depth}"
+    return f"{loc['where']} at x {x:g}, height {y:g}, depth {z:g}"
 
 
-def render(levels, locations, flags, here, missing_only):
+def render(levels, locations, flags, here, missing_only, mario=None):
     """Every level, with its status; under it, its locations (only the unchecked ones with --missing)."""
     by_level = {title: [] for title in levels}
     for loc in locations:
         by_level.setdefault(loc["name"].split(" - ")[0], []).append((loc, Mailbox.flag_set(flags, loc["flag"])))
     total = sum(len(v) for v in by_level.values())
     done_total = sum(done for v in by_level.values() for _, done in v)
-    lines = [f"Super Paper Mario tracker: {done_total}/{total} checked   (you're in {here})", ""]
+    lines = [f"Super Paper Mario tracker: {done_total}/{total} checked   (you're in {here})"]
+    if mario is not None:
+        x, y, z = mario
+        lines.append(f"Mario: x {x:.0f}, height {y:.0f}, depth {z:.0f}")
+    lines.append("")
     for title, entries in by_level.items():
         done = sum(d for _, d in entries)
         if not entries:
@@ -86,7 +96,7 @@ def main():
     while True:
         try:
             connect_dolphin()
-            screen = render(levels, locations, read_flags(), current_map(), missing_only)
+            screen = render(levels, locations, read_flags(), current_map(), missing_only, mario_position())
         except RuntimeError as e:
             dme.un_hook()
             screen = f"Waiting for the game: {e}"
