@@ -6,7 +6,7 @@ status (Complete, checked/total, or no checks). The map you're in is marked.
 Refreshes when something changes. Read-only: it never writes to the game.
 
 Positions are the game's own coordinates: x runs left to right along the level, y is height, z is
-depth. Mario's own position is shown at the top, to compare.
+depth. coords.py shows Mario's own position, to compare.
 
 Usage: py -3 -E tracker.py [--missing]   (--missing: hide checked locations)
 """
@@ -25,7 +25,7 @@ LOCATIONS = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file_
 MAP_NAME_OFFSET = 0x44  # SpmarioGlobals mapName
 MARIO_WORK = 0x804CD458  # marioGetPtr() (US 1.0)
 MARIO_POSITION = 0x5C    # MarioWork position (x, y, z floats)
-POLL_SECONDS = 0.5
+POLL_SECONDS = 1.0
 
 
 def connect_dolphin():
@@ -96,7 +96,9 @@ def main():
     while True:
         try:
             connect_dolphin()
-            screen = render(levels, locations, read_flags(), current_map(), missing_only, mario_position())
+            # No Mario position here (coords.py shows it): the screen only redraws, and scrolls back to the
+            # top, when a check or the map changes
+            screen = render(levels, locations, read_flags(), current_map(), missing_only)
         except RuntimeError as e:
             dme.un_hook()
             screen = f"Waiting for the game: {e}"
