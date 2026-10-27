@@ -5,7 +5,7 @@ This is a **no-logic prototype**: every location is considered reachable from th
 
 Depending on your options: the story Pixls, the optional Pixls (Barry, Dashell, Piccolo), key items, items in chests and lying around, and catch cards.
 
-Pure Hearts, characters and the story itself are vanilla.
+Pure Hearts, characters and the story itself are vanilla. The doors to Chapters 1-7 are all open from the start.
 
 ## What is the goal?
 Finish Chapter 8.

@@ -13,6 +13,8 @@ Depending on your YAML options:
 
 **Not yet:** Pure Hearts, characters (Peach, Bowser, Luigi), the story keys (Ruins Keys, Door Keys, Dimension Keys, Orbs, …), ? blocks, shops and the Pit rewards. These stay vanilla.
 
+**Chapter doors:** the doors to Chapters 1-7 in Flipside Tower are all open from the start, so every chapter can be visited right away. Chapter 8's door works as in vanilla. (The real door rules, opened by Pure Hearts, come later.)
+
 **Goal:** finish Chapter 8.
 
 Items from other worlds show up in Super Paper Mario as the Archipelago icon. Items you receive from other worlds pop up on Mario with the normal item-get.
@@ -36,7 +38,6 @@ Items from other worlds show up in Super Paper Mario as the Archipelago icon. It
 - No logic: you may need a late Pixl early. The **Return Pipe** (from Merlon at the start) gets you out of rooms you can't leave.
 - "Sent \<item\> to \<player\>!" may sometimes show "Placeholder Item". The client's log always shows the real item.
 - Some story events still check the story's progress rather than whether you have the right item. For example, Old Man Watchitt in Yold Town calls the bridge builder based on the story, not on whether you have Thoreau.
-- The Chapter 2 door opens as soon as you're in Flipside, even before you finish Chapter 1. The chapter doors aren't randomized yet.
 - Gecko cheat codes can't be used with the patched game.
 
 Please report what you find, especially **what each location needs to reach**. That's the logic this prototype is meant to map out. The full list of checks is in [`logic/checks.md`](logic/checks.md).

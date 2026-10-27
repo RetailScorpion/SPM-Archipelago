@@ -152,27 +152,14 @@ EVT_END()
     - which doors get the section menu: every door whose chapter has reached two or more sections
       (vanilla: every finished chapter, judged from the hub's single story value)
     - the menu uses the mod's message and select script
+    - every tower door (Chapters 1-7) is open. Vanilla opens the first N by the hub's story value, and
+      the mod's fixed hub value (65) opened Chapter 2's early; until the pillar/door system decides
+      which doors are open, the no-logic prototype opens them all (more locations to reach).
+      Chapter 8's door is in Flopside and isn't affected.
 */
 EVT_BEGIN(ap_door_setup_evt)
-    // Number of open doors, from the hub value (vanilla)
-    SWITCH(GSW(0))
-        CASE_SMALL(8)
-            SET(LW(0), 0)
-        CASE_SMALL(65)
-            SET(LW(0), 1)
-        CASE_SMALL(100)
-            SET(LW(0), 2)
-        CASE_SMALL(128)
-            SET(LW(0), 3)
-        CASE_SMALL(177)
-            SET(LW(0), 4)
-        CASE_SMALL(224)
-            SET(LW(0), 5)
-        CASE_SMALL(303)
-            SET(LW(0), 6)
-        CASE_ETC()
-            SET(LW(0), 7)
-    END_SWITCH()
+    // Number of open doors (vanilla: 0-7 from the hub value)
+    SET(LW(0), TOWER_DOOR_COUNT)
     SET(LW(1), 0)
     DO(7)
         IF_SMALL(LW(1), LW(0))
