@@ -15,6 +15,8 @@ Depending on your YAML options:
 
 **Chapter doors:** the doors to Chapters 1-7 in Flipside Tower are all open from the start, so every chapter can be visited right away. Chapter 8's door works as in vanilla. (The real door rules, opened by Pure Hearts, come later.)
 
+**Cutscenes:** by default (`skip_cutscenes`), a new file skips the opening and starts at Merlon's scene in Flipside Tower, where he gives you the first Pure Heart, and the Count Bleck scenes between chapters are skipped, along with the Peach and Luigi intermissions. Turn the option off to watch the story.
+
 **Goal:** finish Chapter 8.
 
 Items from other worlds show up in Super Paper Mario as the Archipelago icon. Items you receive from other worlds pop up on Mario with the normal item-get.

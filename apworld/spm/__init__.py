@@ -103,4 +103,4 @@ class SPMWorld(World):
         return "Shroom Shake"
 
     def fill_slot_data(self) -> dict:
-        return {"options": self.options.as_dict(*CATEGORY_OPTIONS.values()), "id_base": ID_BASE}
+        return {"options": self.options.as_dict(*CATEGORY_OPTIONS.values(), "skip_cutscenes"), "id_base": ID_BASE}

@@ -7,6 +7,8 @@ Depending on your options: the story Pixls, the optional Pixls (Barry, Dashell, 
 
 Pure Hearts, characters and the story itself are vanilla. The doors to Chapters 1-7 are all open from the start.
 
+With `skip_cutscenes` (on by default), new files start at Merlon giving you the first Pure Heart, and the Count Bleck scenes between chapters are skipped.
+
 ## What is the goal?
 Finish Chapter 8.
 

@@ -14,7 +14,7 @@
 namespace mod::mailbox {
 
 #define MAILBOX_MAGIC "SPMAP_MAILBOX_v1"
-#define MAILBOX_VERSION 7
+#define MAILBOX_VERSION 8
 
 // debugFlags bits
 #define DEBUG_JOINS_GIVE_NOTHING 0x1      // Pixl joins mark their location but don't give the Pixl
@@ -62,8 +62,11 @@ struct Mailbox
 /* 0x124 */ u32 savedRecvCount;   // items from the server the loaded save has handled; 0xFFFFFFFF = no save
 /* 0x128 */ void * locNames;      // apitem::LocName[locNamesMax]: names for locations holding other worlds' items
 /* 0x12C */ u32 locNamesMax;
+
+    // Options (written by the client from the slot's options)
+/* 0x130 */ u32 playCutscenes;    // 1 = play the story scenes the mod can skip (skip_cutscenes off); 0 = skip
 };
-static_assert(sizeof(Mailbox) == 0x130);
+static_assert(sizeof(Mailbox) == 0x134);
 
 // joinItems value: the location holds another world's item
 #define JOIN_ITEM_OTHER_WORLD 0xFFFF

@@ -7,7 +7,7 @@ import time
 import dolphin_memory_engine as dme
 
 MAGIC = b"SPMAP_MAILBOX_v1"
-VERSION = 7
+VERSION = 8
 RECV_SIZE = 16
 SENT_SIZE = 32
 
@@ -35,6 +35,7 @@ OFF_RELF_BASE = 0x120
 OFF_SAVED_RECV = 0x124
 OFF_LOC_NAMES = 0x128
 OFF_LOC_NAMES_MAX = 0x12C
+OFF_PLAY_CUTSCENES = 0x130
 RECV_ALREADY_GIVEN = 0x8000
 NO_SAVE = 0xFFFFFFFF
 LOC_NAME_SIZE = 0x40  # apitem::LocName: u16 flag, u16 pad, char item[36], char player[24]
@@ -138,6 +139,9 @@ class Mailbox:
             struct.pack_into(">HH36s24s", data, i * LOC_NAME_SIZE, flag, 0,
                              item.encode("ascii", "replace")[:35], player.encode("ascii", "replace")[:23])
         dme.write_bytes(table, bytes(data))
+
+    def set_play_cutscenes(self, play: bool):
+        dme.write_word(self.addr + OFF_PLAY_CUTSCENES, 1 if play else 0)
 
     def read_flags(self) -> bytes:
         """All 8192 GSWF save flags as 1024 bytes (the raw words)."""

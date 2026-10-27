@@ -47,6 +47,7 @@ class SPMContext(CommonContext):
         self.placed = False        # placements written for the current game session
         self.queued_upto = None    # server item index queued into the mailbox
         self.goal_sent = False
+        self.slot_options = {}
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
@@ -56,6 +57,7 @@ class SPMContext(CommonContext):
 
     def on_package(self, cmd: str, args: dict):
         if cmd == "Connected":
+            self.slot_options = args.get("slot_data", {}).get("options", {})
             self.scouted = {}
             self.placed = False
             self.goal_sent = False
@@ -148,6 +150,9 @@ async def game_watcher(ctx: SPMContext):
                 ctx.placed = False
                 ctx.game_status = f"Connected to the game (mailbox at {mb.addr:#010x})"
                 logger.info(ctx.game_status)
+            if ctx.slot is not None:
+                # Before a save is loaded too: a new file's opening checks it right away
+                ctx.mailbox.set_play_cutscenes(not ctx.slot_options.get("skip_cutscenes", True))
             if ctx.slot is not None and ctx.mailbox.mod_state() == STATE_IN_GAME:
                 if not ctx.placed and ctx.scouted:
                     ctx.write_placements()

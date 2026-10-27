@@ -50,6 +50,13 @@ Super Paper Mario:
     'true': 0
     'false': 50
 
+  skip_cutscenes:
+    # Skip the opening and the Count Bleck scenes between chapters (plus the Peach and Luigi
+    # intermissions after Chapters 1 and 2). A new file starts at Merlon's scene in Flipside Tower,
+    # where he gives you the first Pure Heart. Off: watch the story as in vanilla.
+    'true': 50
+    'false': 0
+
   # Archipelago's common options
 
   progression_balancing:

@@ -7,7 +7,6 @@
 */
 
 #include <common.h>
-#include <msl/string.h>
 #include <spm/fontmgr.h>
 #include <spm/item_data_ids.h>
 #include <spm/itemdrv.h>
@@ -20,6 +19,7 @@
 #include <wii/os.h>
 
 #include "apitem.h"
+#include "cutscenes.h"
 #include "delivery.h"
 #include "doors.h"
 #include "flip.h"
@@ -247,32 +247,9 @@ static void seq_gameMainHook(spm::seqdrv::SeqWork * wp)
 }
 
 static spm::seqdef::SeqFunc * seq_mapChangeInitReal;
-/*
-    A new file skips the opening (the Bleck and Peach scenes, Mario's house, meeting Tippi) and starts
-    where that ends: story value 2, arriving in Flipside Tower (mac_02), where Merlon's scene plays and
-    he gives Mario the first Pure Heart. Vanilla ends the Tippi scene with exactly this: SET(GSW(0), 2)
-    and a map change to mac_02 with the default entrance.
-    Only the opening maps (aa1_*, aa2_*) at story value 0 count: aa4_01 is the title screen's
-    background and aa3_01 the ending. Afterwards the value is 2, so this never happens again.
-*/
-#define INTRO_SKIP_MAP "mac_02"
-#define INTRO_SKIP_STORY_VALUE 2
-
-static void skipIntro(spm::seqdrv::SeqWork * wp)
-{
-    const char * map = wp->p0;
-    if (spm::spmario::gp->gsw0 != 0 || map == nullptr
-        || (msl::string::strncmp(map, "aa1_", 4) != 0 && msl::string::strncmp(map, "aa2_", 4) != 0))
-        return;
-    wii::os::OSReport("[spmap] new file: skipping the opening (%s) to Flipside Tower\n", map);
-    spm::spmario::gp->gsw0 = INTRO_SKIP_STORY_VALUE;
-    wp->p0 = INTRO_SKIP_MAP;
-    wp->p1 = nullptr;
-}
-
 static void seq_mapChangeInitHook(spm::seqdrv::SeqWork * wp)
 {
-    skipIntro(wp);
+    cutscenes::onMapChange(wp);
 
     // A map change deletes world items; an uncollected received item gets spawned again in the new map
     if (sSpawnedItem != -1)

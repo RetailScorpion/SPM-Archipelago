@@ -117,6 +117,14 @@ void onMapChange(const char * nextMap)
     if (gStory.context <= STORY_CONTEXT_HUB && gsw0 < STORY_PROLOGUE_END)
         next = STORY_CONTEXT_NONE;
 
+    // Castle Bleck between chapters: the Count Bleck scene after the prologue or a chapter, and the
+    // Peach / Luigi intermissions, use Chapter 8's maps (ls*) at the story's value from before
+    // Chapter 8. Those keep the value they arrive with (no context), rather than Chapter 8's. Chapter
+    // 8 itself is entered from the hub (Flopside), or loaded from a save at 359 or more.
+    if (next == STORY_CHAPTER_COUNT && gStory.context != STORY_CONTEXT_HUB
+        && gStory.context != STORY_CHAPTER_COUNT && gsw0 < sChapterStart[STORY_CHAPTER_COUNT])
+        next = STORY_CONTEXT_NONE;
+
     // The chapter being left was kept in sync every frame; a final store catches the last change.
     // Never backwards: a scene played late (a Pixl join, say) still sets its original value.
     if (gStory.context > STORY_CONTEXT_HUB && gsw0 > loadSlot(gStory.context))
