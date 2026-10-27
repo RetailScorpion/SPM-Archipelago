@@ -17,9 +17,10 @@
         357 while Mario is there, which switches its door doa6_l on with Nolrem's door event (story
         values 356-358); going through it plays his last lines and enters Chapter 8
 
-    Peach, Luigi and the Helmet given directly are stand-ins (user's decision, 2026-10-26). Once they're
-    shuffled, each becomes a location like the Pixl joins (joins.cpp): its scene is gated on the
-    location's own flag instead of the story value, and gives whatever the seed placed there.
+    Peach, Luigi and the Helmet are locations, like the Pixl joins: each is collected once, when its
+    trigger first holds, gated on its own save flag (AP_GSWF_GIFT) rather than the story value, and gives
+    whatever the seed placed there (mailbox giftItems; its vanilla item without a client). The vanilla
+    scenes themselves don't play.
 */
 
 namespace mod::hubstory {

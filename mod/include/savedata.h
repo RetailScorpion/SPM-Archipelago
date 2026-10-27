@@ -26,6 +26,9 @@ namespace mod::savedata {
 #define AP_GSWF_JOIN(pixlItemId) (AP_GSWF_JOIN_BASE + (pixlItemId) - 221)
 // Unflagged key item spots, which the mod gives these as their save flag (locations.cpp)
 #define AP_GSWF_LOC_BASE (AP_GSWF_BASE + 32)
+// Story gifts the mod hands out in place of hub / skipped scenes (hubstory.cpp), one location each
+#define AP_GSWF_GIFT_BASE (AP_GSWF_BASE + 16)
+#define AP_GSWF_GIFT(index) (AP_GSWF_GIFT_BASE + (index))
 
 // Vanilla flags the mod relies on
 #define GSWF_TIPPI_PRESENT 403  // written by the save code from the guide state, restored on load
