@@ -54,6 +54,9 @@ Please report what you find, especially **what each location needs to reach**. T
 - **[Ninja](https://github.com/ninja-build/ninja)** (Apache 2.0): `ninja_syntax.py`, bundled in the mod's build script.
 - **[devkitPro](https://devkitpro.org)**: the PowerPC toolchain the mod is built with.
 
+## License
+This project is open source under the **GNU General Public License v3** (see [`LICENSE`](LICENSE)), the same as spm-rel-loader and the `mod/` part of spm-headers, which it includes. You're free to use, change and share it, as long as what you share stays open source under the same license, with its source available.
+
 Super Paper Mario is © Nintendo / Intelligent Systems. This project contains no game files: you need your own copy of the game.
 
 ## For developers

@@ -1,4 +1,4 @@
-"""Builds the release zip: the APworld, the YAML template and the README.
+"""Builds the release zip: the APworld, the YAML template, the README and the license.
 
 Usage: py -3 -E tools/make_release.py      (build the mod first: configure.py + ninja in mod/)
 Writes build/release/SuperPaperMario_AP_<version>.zip
@@ -23,6 +23,7 @@ def main():
         z.write(os.path.join(ROOT, "build", "spm.apworld"), "spm.apworld")
         z.write(os.path.join(ROOT, "release", "Super Paper Mario.yaml"), "Super Paper Mario.yaml")
         z.write(os.path.join(ROOT, "README.md"), "README.md")
+        z.write(os.path.join(ROOT, "LICENSE"), "LICENSE")
     print(f"Wrote {out}")
 
 
