@@ -190,7 +190,11 @@ def main():
     item_ids = sorted({loc["item"] for loc in locations})
     item_table = unique_item_names(names, item_ids)
 
-    json.dump({"id_base": ID_BASE, "locations": locations,
+    # Every level's title in play order (for trackers), whether or not it has locations yet
+    level_titles = [f"{c}-{l} {levels.get((c, l), '')}".strip() for c in range(1, 9) for l in range(1, 5)]
+    level_titles += ["Flipside/Flopside", "Pit of 100 Trials"]
+
+    json.dump({"id_base": ID_BASE, "levels": level_titles, "locations": locations,
                "items": [{"id": ID_BASE + i, "spm": i, "name": item_table[i], "category": category(i)} for i in item_ids]},
               open(OUT_JSON, "w"), indent=1)
 

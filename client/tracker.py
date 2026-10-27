@@ -1,7 +1,8 @@
 """Quick auto tracker: which locations you've checked, read live from the game through Dolphin.
 
 Reads each location's save flag (the same way the Archipelago client detects checks) and lists every
-location by level and map, with its vanilla item and rough spot. The map you're in is marked.
+location by level and map, with its vanilla item and rough spot. Every level is listed with its
+status (Complete, checked/total, or no checks). The map you're in is marked.
 Refreshes when something changes. Read-only: it never writes to the game.
 
 Positions are the game's own coordinates: x runs left to right along the level, y is height, and z is
@@ -50,33 +51,42 @@ def describe_spot(loc):
     return f"{loc['where']} at x {x:g}, height {y:g}{depth}"
 
 
-def render(locations, flags, here, missing_only):
-    checked = [Mailbox.flag_set(flags, loc["flag"]) for loc in locations]
-    lines = [f"Super Paper Mario tracker: {sum(checked)}/{len(locations)} checked   (you're in {here})", ""]
-    level = None
-    for loc, done in zip(locations, checked):
-        if missing_only and done:
-            continue
-        title = loc["name"].split(" - ")[0]
-        if title != level:
-            level = title
-            lines.append(title)
-        item = loc["name"].split(" - ", 1)[1].rsplit(" (", 1)[0]
-        marker = "<- here" if loc["map"] == here else ""
-        lines.append(f"  [{'x' if done else ' '}] {loc['map']:7} {item:28} {describe_spot(loc)} {marker}")
+def render(levels, locations, flags, here, missing_only):
+    """Every level, with its status; under it, its locations (only the unchecked ones with --missing)."""
+    by_level = {title: [] for title in levels}
+    for loc in locations:
+        by_level.setdefault(loc["name"].split(" - ")[0], []).append((loc, Mailbox.flag_set(flags, loc["flag"])))
+    total = sum(len(v) for v in by_level.values())
+    done_total = sum(done for v in by_level.values() for _, done in v)
+    lines = [f"Super Paper Mario tracker: {done_total}/{total} checked   (you're in {here})", ""]
+    for title, entries in by_level.items():
+        done = sum(d for _, d in entries)
+        if not entries:
+            status = "no checks"
+        elif done == len(entries):
+            status = "Complete"
+        else:
+            status = f"{done}/{len(entries)}"
+        lines.append(f"{title}  -  {status}")
+        for loc, checked in entries:
+            if missing_only and checked:
+                continue
+            item = loc["name"].split(" - ", 1)[1].rsplit(" (", 1)[0]
+            marker = "<- here" if loc["map"] == here else ""
+            lines.append(f"  [{'x' if checked else ' '}] {loc['map']:7} {item:28} {describe_spot(loc)} {marker}")
     return "\n".join(lines)
 
 
 def main():
     missing_only = "--missing" in sys.argv
-    data = json.load(open(LOCATIONS))["locations"]
-    # Chapter order: by the level title (1-1 ... 8-4), then hubs and the Pit
-    locations = sorted(data, key=lambda l: (not l["name"][0].isdigit(), l["name"].split(" - ")[0], l["map"], l["name"]))
+    data = json.load(open(LOCATIONS))
+    levels = data["levels"]
+    locations = sorted(data["locations"], key=lambda l: (l["map"], l["name"]))
     last = None
     while True:
         try:
             connect_dolphin()
-            screen = render(locations, read_flags(), current_map(), missing_only)
+            screen = render(levels, locations, read_flags(), current_map(), missing_only)
         except RuntimeError as e:
             dme.un_hook()
             screen = f"Waiting for the game: {e}"
