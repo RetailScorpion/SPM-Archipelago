@@ -24,6 +24,7 @@
 #include "doors.h"
 #include "flip.h"
 #include "gamesyms.h"
+#include "hubstory.h"
 #include "joins.h"
 #include "mailbox.h"
 #include "patch.h"
@@ -34,7 +35,7 @@
 namespace mod {
 
 // Matches the APworld's world_version (apworld/spm/archipelago.json); shown on the title screen
-#define MOD_VERSION "0.1.1"
+#define MOD_VERSION "0.1.2"
 
 // Stand-in location ids for the proof of concept: picking up item X reports location POC_LOCATION_BASE + X
 #define POC_LOCATION_BASE 0x10000
@@ -262,6 +263,7 @@ static void seq_mapChangeInitHook(spm::seqdrv::SeqWork * wp)
     storyvalue::onMapChange(wp->p0);
     tippi::onMapChange(storyvalue::gStory.context, spm::spmario::gp->gsw0);
     joins::onMapChange();
+    hubstory::onMapChange(wp->p0);
 
     seq_mapChangeInitReal(wp);
 }

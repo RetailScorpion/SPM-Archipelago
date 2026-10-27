@@ -41,6 +41,8 @@ Items from other worlds show up in Super Paper Mario as the Archipelago icon. It
 - "Sent \<item\> to \<player\>!" may sometimes show "Placeholder Item". The client's log always shows the real item.
 - Some story events still check the story's progress rather than whether you have the right item. For example, Old Man Watchitt in Yold Town calls the bridge builder based on the story, not on whether you have Thoreau.
 - Gecko cheat codes can't be used with the patched game.
+- **Story events in Flipside and Flopside are simplified:** the hubs don't follow the story, so the prototype gives their results directly. Peach joins when you finish Chapter 1, Luigi when you first enter Chapter 7, and the Helmet when you first enter Chapter 4. Chapter 6 moves on to its destroyed world once the duels are done. Castle Bleck's door (Chapter 8) opens in Flopside Tower once Chapters 1-7 are finished.
+- Chapter 3 still takes Tippi away when you enter it; changing maps brings her back.
 
 Please report what you find, especially **what each location needs to reach**. That's the logic this prototype is meant to map out. The full list of checks is in [`logic/checks.md`](logic/checks.md).
 

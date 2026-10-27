@@ -106,6 +106,17 @@ s32 sectionsReached(s32 chapter)
     return reached;
 }
 
+void advanceChapter(s32 chapter, s32 value)
+{
+    if (value <= loadSlot(chapter))
+        return;
+    storeSlot(chapter, value);
+    if (gStory.context == chapter)
+        spm::spmario::gp->gsw0 = value;
+    refreshDebugCopy();
+    wii::os::OSReport("[spmap] story: chapter %d advanced to %d\n", chapter, value);
+}
+
 void onMapChange(const char * nextMap)
 {
     s32 & gsw0 = spm::spmario::gp->gsw0;

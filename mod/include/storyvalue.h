@@ -70,6 +70,12 @@ s32 getChapterValue(s32 chapter);
 // Whether a chapter's ending has played
 bool isChapterFinished(s32 chapter);
 
+/*
+    Moves a chapter's story value forward to value (never backwards), as if that chapter's own scene
+    had set it. For story steps vanilla plays in the hub, whose writes the mod discards.
+*/
+void advanceChapter(s32 chapter, s32 value);
+
 // How many of a chapter's sections (X-1 to X-4) have been reached: 1-4. Chapters 6 and 8 don't
 // follow the four-section pattern and only report 1 or (finished) 4.
 s32 sectionsReached(s32 chapter);
