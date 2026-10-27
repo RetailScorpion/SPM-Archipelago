@@ -17,7 +17,7 @@ from CommonClient import ClientCommandProcessor, CommonContext, get_base_parser,
 from NetUtils import ClientStatus
 
 from .data import ID_BASE, LOCATIONS
-from .game_link import JOIN_ITEM_OTHER_WORLD, NO_SAVE, RECV_SIZE, STATE_IN_GAME, Mailbox, MailboxError
+from .game_link import GIFT_FLAG_BASE, JOIN_ITEM_OTHER_WORLD, NO_SAVE, RECV_SIZE, STATE_IN_GAME, Mailbox, MailboxError
 
 GAME = "Super Paper Mario"
 AP_ITEM = 63               # the mod's stand-in for other worlds' items (apitem.cpp)
@@ -93,6 +93,8 @@ class SPMContext(CommonContext):
                               self.player_names.get(network_item.player, "someone")))
             if kind == "join":
                 mb.set_join_item(vanilla, JOIN_ITEM_OTHER_WORLD if foreign else shown)
+            elif kind == "gift":
+                mb.set_gift_item(flag - GIFT_FLAG_BASE, JOIN_ITEM_OTHER_WORLD if foreign else shown)
             for offset, original in patches:
                 if not mb.patch_relf(offset, original, shown):
                     failed += 1

@@ -48,6 +48,15 @@ ARGS = {"item": {"item": 1, "flag": 8},   # evt_item_entry(name, item, behaviour
 AP_GSWF_BASE = 7168
 AP_GSWF_JOIN_BASE = AP_GSWF_BASE + 1          # + Pixl item id - 221 (Thoreau .. Dashell: 11 flags)
 AP_GSWF_LOC_BASE = AP_GSWF_BASE + 32          # unflagged key spots, in KEY_SPOTS order
+AP_GSWF_GIFT_BASE = AP_GSWF_BASE + 16         # story gifts, in GIFTS order (mod/source/hubstory.cpp sGifts)
+
+# Story gifts the mod hands out in place of hub or skipped scenes (hubstory.cpp), in the mod's order:
+# (vanilla item, map shown for it, label). The Helmet is always vanilla: without it Outer Space's
+# movement breaks, and nothing blocks Chapter 4 without it yet.
+GIFTS = [(217, "mac_02", "Peach joins (Chapter 1 finished)"),
+         (219, "an1_07", "Luigi joins (entering Chapter 7)"),
+         (24, "sp1_01", "Helmet (entering Chapter 4)")]
+ALWAYS_VANILLA_GIFTS = {24}
 
 PIXLS = {221: ("Thoreau", "he2_07"), 222: ("Boomer", "mi1_07"), 223: ("Slim", "mi3_01"),
          224: ("Thudley", "ta2_04"), 225: ("Carrie", "ta4_12"), 226: ("Fleep", "sp2_01"),
@@ -106,6 +115,8 @@ def display_name(item, names):
 
 
 def category(item):
+    if 216 <= item < 220:
+        return "character"
     if 220 <= item < 232:
         return "optional_pixl" if item in OPTIONAL_PIXLS else "pixl"
     if 16 <= item < 65:
@@ -172,6 +183,11 @@ def main():
                           "where": "lying around", "pos": position(rel, at, "item"),
                           "patches": [{"offset": at + 4 * (2 + ARGS["item"]["item"]), "original": item}]})
 
+    # Story gifts, last so earlier locations keep their ids (given by the mod when their trigger first holds; placed through the mailbox)
+    for i, (item, map_name, label) in enumerate(GIFTS):
+        locations.append({"kind": "gift", "map": map_name, "item": item, "flag": AP_GSWF_GIFT_BASE + i,
+                          "label": label, "patches": [], "where": "given by the mod", "pos": None})
+
     # Names: "<level> - <vanilla item> (<map>)", numbered when one map has several of the same item
     seen = {}
     for loc in locations:
@@ -185,7 +201,7 @@ def main():
             loc["name"] = f"{loc['name']} #{repeats[loc['name']]}"
     for i, loc in enumerate(locations):
         loc["id"] = ID_BASE + i
-        loc["category"] = category(loc["item"])
+        loc["category"] = "fixed" if loc["kind"] == "gift" and loc["item"] in ALWAYS_VANILLA_GIFTS else category(loc["item"])
 
     item_ids = sorted({loc["item"] for loc in locations})
     item_table = unique_item_names(names, item_ids)

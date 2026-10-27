@@ -2387,6 +2387,45 @@
    "name": "3-4 Fort Francis - Fort Key (ta4_11)",
    "id": 1397771630,
    "category": "key_item"
+  },
+  {
+   "kind": "gift",
+   "map": "mac_02",
+   "item": 217,
+   "flag": 7184,
+   "label": "Peach joins (Chapter 1 finished)",
+   "patches": [],
+   "where": "given by the mod",
+   "pos": null,
+   "name": "Flipside/Flopside - Peach joins (Chapter 1 finished) (mac_02)",
+   "id": 1397771631,
+   "category": "character"
+  },
+  {
+   "kind": "gift",
+   "map": "an1_07",
+   "item": 219,
+   "flag": 7185,
+   "label": "Luigi joins (entering Chapter 7)",
+   "patches": [],
+   "where": "given by the mod",
+   "pos": null,
+   "name": "7-1 The Underwhere - Luigi joins (entering Chapter 7) (an1_07)",
+   "id": 1397771632,
+   "category": "character"
+  },
+  {
+   "kind": "gift",
+   "map": "sp1_01",
+   "item": 24,
+   "flag": 7186,
+   "label": "Helmet (entering Chapter 4)",
+   "patches": [],
+   "where": "given by the mod",
+   "pos": null,
+   "name": "4-1 Outer Space - Helmet (entering Chapter 4) (sp1_01)",
+   "id": 1397771633,
+   "category": "fixed"
   }
  ],
  "items": [
@@ -2400,6 +2439,12 @@
    "id": 1397771541,
    "spm": 21,
    "name": "Fort Key (21)",
+   "category": "key_item"
+  },
+  {
+   "id": 1397771544,
+   "spm": 24,
+   "name": "Helmet",
    "category": "key_item"
   },
   {
@@ -2575,6 +2620,18 @@
    "spm": 175,
    "name": "Mistake",
    "category": "overworld_item"
+  },
+  {
+   "id": 1397771737,
+   "spm": 217,
+   "name": "Peach",
+   "category": "character"
+  },
+  {
+   "id": 1397771739,
+   "spm": 219,
+   "name": "Luigi",
+   "category": "character"
   },
   {
    "id": 1397771741,

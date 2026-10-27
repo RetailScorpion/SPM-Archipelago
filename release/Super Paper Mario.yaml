@@ -50,6 +50,12 @@ Super Paper Mario:
     'true': 0
     'false': 50
 
+  randomize_characters:
+    # Shuffle Peach and Luigi. Off: Peach joins once you finish Chapter 1, and Luigi when you first
+    # enter Chapter 7.
+    'true': 0
+    'false': 50
+
   skip_cutscenes:
     # Skip the opening and the Count Bleck scenes between chapters (plus the Peach and Luigi
     # intermissions after Chapters 1 and 2). A new file starts at Merlon's scene in Flipside Tower,

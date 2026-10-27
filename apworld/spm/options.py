@@ -28,6 +28,12 @@ class ShuffleCatchCards(Toggle):
     display_name = "Shuffle Catch Cards"
 
 
+class RandomizeCharacters(Toggle):
+    """Shuffle Peach and Luigi. Off: Peach joins once you finish Chapter 1, and Luigi when you first
+    enter Chapter 7 (their vanilla moments, given directly by the prototype)."""
+    display_name = "Randomize Characters"
+
+
 class SkipCutscenes(DefaultOnToggle):
     """Skip the opening and the Count Bleck scenes between chapters (plus the Peach and Luigi
     intermissions after Chapters 1 and 2). A new file starts at Merlon's scene in Flipside Tower,
@@ -42,4 +48,5 @@ class SPMOptions(PerGameCommonOptions):
     shuffle_key_items: ShuffleKeyItems
     shuffle_overworld_items: ShuffleOverworldItems
     shuffle_catch_cards: ShuffleCatchCards
+    randomize_characters: RandomizeCharacters
     skip_cutscenes: SkipCutscenes

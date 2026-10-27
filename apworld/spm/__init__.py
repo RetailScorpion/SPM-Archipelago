@@ -22,7 +22,11 @@ CATEGORY_OPTIONS = {
     "key_item": "shuffle_key_items",
     "overworld_item": "shuffle_overworld_items",
     "catch_card": "shuffle_catch_cards",
+    "character": "randomize_characters",
 }
+# Location categories that are never shuffled (the Helmet's gift: Outer Space breaks without it, and
+# nothing blocks Chapter 4 without it yet)
+FIXED_CATEGORIES = {"fixed"}
 
 
 def launch_client(*args):
@@ -70,13 +74,15 @@ class SPMWorld(World):
             return SPMItem(name, ItemClassification.progression, None, self.player)
         spm = self.item_name_to_id[name] - ID_BASE
         category = ITEMS[spm][1]
-        if category in ("pixl", "optional_pixl", "key_item"):
+        if category in ("pixl", "optional_pixl", "key_item", "character"):
             classification = ItemClassification.progression
         else:
             classification = ItemClassification.filler
         return SPMItem(name, classification, ID_BASE + spm, self.player)
 
     def shuffled(self, category: str) -> bool:
+        if category in FIXED_CATEGORIES:
+            return False
         return bool(getattr(self.options, CATEGORY_OPTIONS[category]).value)
 
     def create_regions(self) -> None:

@@ -10,8 +10,9 @@ Depending on your YAML options:
 - key items whose spots the prototype handles: the Fort Keys, the Water/Stone/Fire Tablets, Cooking Disks and the Golden Card;
 - items in chests and lying around in levels and the hubs;
 - optionally, catch cards found in chests or lying around.
+- optionally, Peach and Luigi (`randomize_characters`): their spots become "Peach joins when Chapter 1 is finished" and "Luigi joins when you first enter Chapter 7", and can hold anything.
 
-**Not yet:** Pure Hearts, characters (Peach, Bowser, Luigi), the story keys (Ruins Keys, Door Keys, Dimension Keys, Orbs, …), ? blocks, shops and the Pit rewards. These stay vanilla.
+**Not yet:** Pure Hearts, Bowser, the story keys (Ruins Keys, Door Keys, Dimension Keys, Orbs, …), ? blocks, shops and the Pit rewards. These stay vanilla.
 
 **Chapter doors:** the doors to Chapters 1-7 in Flipside Tower are all open from the start, so every chapter can be visited right away. Chapter 8's door works as in vanilla. (The real door rules, opened by Pure Hearts, come later.)
 

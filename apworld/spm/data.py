@@ -6,6 +6,7 @@ ID_BASE = 0x53504d00
 ITEMS = {
     20: ('Fort Key (20)', 'key_item'),
     21: ('Fort Key (21)', 'key_item'),
+    24: ('Helmet', 'key_item'),
     30: ('Water Tablet', 'key_item'),
     31: ('Stone Tablet', 'key_item'),
     32: ('Fire Tablet', 'key_item'),
@@ -35,6 +36,8 @@ ITEMS = {
     102: ('Primordial Fruit', 'overworld_item'),
     171: ('Space Food', 'overworld_item'),
     175: ('Mistake', 'overworld_item'),
+    217: ('Peach', 'character'),
+    219: ('Luigi', 'character'),
     221: ('Thoreau', 'pixl'),
     222: ('Boomer', 'pixl'),
     223: ('Slim', 'pixl'),
@@ -195,4 +198,7 @@ LOCATIONS = [
     ('3-2 The Tile Pool - Gold Bar (ta2_02)', 'flagged', 'overworld_item', 71, 823, [(1233504, 71)]),
     ('3-4 Fort Francis - Fort Key (ta4_10)', 'flagged', 'key_item', 21, 811, [(1294492, 21)]),
     ('3-4 Fort Francis - Fort Key (ta4_11)', 'flagged', 'key_item', 20, 812, [(1301504, 20)]),
+    ('Flipside/Flopside - Peach joins (Chapter 1 finished) (mac_02)', 'gift', 'character', 217, 7184, []),
+    ('7-1 The Underwhere - Luigi joins (entering Chapter 7) (an1_07)', 'gift', 'character', 219, 7185, []),
+    ('4-1 Outer Space - Helmet (entering Chapter 4) (sp1_01)', 'gift', 'fixed', 24, 7186, []),
 ]
