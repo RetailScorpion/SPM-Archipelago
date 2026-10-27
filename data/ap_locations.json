@@ -8,6 +8,8 @@
    "flag": 7169,
    "label": "Thoreau joins",
    "patches": [],
+   "where": "Pixl join scene",
+   "pos": null,
    "name": "1-2 Mount Lineland - Thoreau joins (he2_07)",
    "id": 1397771520,
    "category": "pixl"
@@ -19,6 +21,8 @@
    "flag": 7170,
    "label": "Boomer joins",
    "patches": [],
+   "where": "Pixl join scene",
+   "pos": null,
    "name": "2-1 Gloam Valley - Boomer joins (mi1_07)",
    "id": 1397771521,
    "category": "pixl"
@@ -30,6 +34,8 @@
    "flag": 7171,
    "label": "Slim joins",
    "patches": [],
+   "where": "Pixl join scene",
+   "pos": null,
    "name": "2-3 Merlee's Mansion - Slim joins (mi3_01)",
    "id": 1397771522,
    "category": "pixl"
@@ -41,6 +47,8 @@
    "flag": 7172,
    "label": "Thudley joins",
    "patches": [],
+   "where": "Pixl join scene",
+   "pos": null,
    "name": "3-2 The Tile Pool - Thudley joins (ta2_04)",
    "id": 1397771523,
    "category": "pixl"
@@ -52,6 +60,8 @@
    "flag": 7173,
    "label": "Carrie joins",
    "patches": [],
+   "where": "Pixl join scene",
+   "pos": null,
    "name": "3-4 Fort Francis - Carrie joins (ta4_12)",
    "id": 1397771524,
    "category": "pixl"
@@ -63,6 +73,8 @@
    "flag": 7174,
    "label": "Fleep joins",
    "patches": [],
+   "where": "Pixl join scene",
+   "pos": null,
    "name": "4-2 Planet Blobule - Fleep joins (sp2_01)",
    "id": 1397771525,
    "category": "pixl"
@@ -74,6 +86,8 @@
    "flag": 7175,
    "label": "Cudge joins",
    "patches": [],
+   "where": "Pixl join scene",
+   "pos": null,
    "name": "5-2 Gap of Crag - Cudge joins (gn2_02)",
    "id": 1397771526,
    "category": "pixl"
@@ -85,6 +99,8 @@
    "flag": 7176,
    "label": "Dottie joins",
    "patches": [],
+   "where": "Pixl join scene",
+   "pos": null,
    "name": "5-4 Floro Caverns - Dottie joins (gn4_03)",
    "id": 1397771527,
    "category": "pixl"
@@ -96,6 +112,8 @@
    "flag": 7177,
    "label": "Piccolo joins",
    "patches": [],
+   "where": "Pixl join scene",
+   "pos": null,
    "name": "Flipside/Flopside - Piccolo joins (mac_19)",
    "id": 1397771528,
    "category": "optional_pixl"
@@ -107,6 +125,8 @@
    "flag": 7178,
    "label": "Barry joins",
    "patches": [],
+   "where": "Pixl join scene",
+   "pos": null,
    "name": "3-1 The Bitlands - Barry joins (ta1_01)",
    "id": 1397771529,
    "category": "optional_pixl"
@@ -118,6 +138,8 @@
    "flag": 7179,
    "label": "Dashell joins",
    "patches": [],
+   "where": "Pixl join scene",
+   "pos": null,
    "name": "Pit of 100 Trials - Dashell joins (dan_30)",
    "id": 1397771530,
    "category": "optional_pixl"
@@ -134,6 +156,8 @@
      "original": 81
     }
    ],
+   "where": "lying around",
+   "pos": null,
    "name": "7-1 The Underwhere - Super Shroom Shake (an1_02)",
    "id": 1397771531,
    "category": "overworld_item"
@@ -149,6 +173,12 @@
      "offset": 1691560,
      "original": 85
     }
+   ],
+   "where": "lying around",
+   "pos": [
+    675,
+    200,
+    100
    ],
    "name": "7-1 The Underwhere - Long-Last Shake (an1_07)",
    "id": 1397771532,
@@ -166,6 +196,12 @@
      "original": 310
     }
    ],
+   "where": "chest",
+   "pos": [
+    -725,
+    0,
+    90
+   ],
    "name": "7-1 The Underwhere - Dry Bones Card (an1_07)",
    "id": 1397771533,
    "category": "catch_card"
@@ -181,6 +217,12 @@
      "offset": 1706732,
      "original": 355
     }
+   ],
+   "where": "chest",
+   "pos": [
+    175,
+    825,
+    100
    ],
    "name": "7-2 Underwhere Road - Dark Boo Card (an2_02)",
    "id": 1397771534,
@@ -198,6 +240,12 @@
      "original": 80
     }
    ],
+   "where": "chest",
+   "pos": [
+    -900,
+    1125,
+    0
+   ],
    "name": "7-3 Overthere Stair - Shroom Shake (an3_02)",
    "id": 1397771535,
    "category": "overworld_item"
@@ -213,6 +261,12 @@
      "offset": 1771476,
      "original": 451
     }
+   ],
+   "where": "chest",
+   "pos": [
+    1125,
+    1.1,
+    -50
    ],
    "name": "7-3 Overthere Stair - Zombie Shroom Card (an3_04)",
    "id": 1397771536,
@@ -230,6 +284,12 @@
      "original": 387
     }
    ],
+   "where": "chest",
+   "pos": [
+    775,
+    2050,
+    75
+   ],
    "name": "7-3 Overthere Stair - Rawbus Card (an3_12)",
    "id": 1397771537,
    "category": "catch_card"
@@ -245,6 +305,12 @@
      "offset": 1795680,
      "original": 341
     }
+   ],
+   "where": "chest",
+   "pos": [
+    -800,
+    950,
+    0
    ],
    "name": "7-3 Overthere Stair - Ruff Puff Card (an3_13)",
    "id": 1397771538,
@@ -262,6 +328,12 @@
      "original": 67
     }
    ],
+   "where": "chest",
+   "pos": [
+    400,
+    2487.5,
+    0
+   ],
    "name": "7-3 Overthere Stair - Thunder Rage (an3_14)",
    "id": 1397771539,
    "category": "overworld_item"
@@ -277,6 +349,12 @@
      "offset": 1798084,
      "original": 85
     }
+   ],
+   "where": "chest",
+   "pos": [
+    100,
+    1825,
+    -35
    ],
    "name": "7-3 Overthere Stair - Long-Last Shake (an3_14)",
    "id": 1397771540,
@@ -294,6 +372,12 @@
      "original": 71
     }
    ],
+   "where": "chest",
+   "pos": [
+    0,
+    7060,
+    0
+   ],
    "name": "7-3 Overthere Stair - Gold Bar (an3_15)",
    "id": 1397771541,
    "category": "overworld_item"
@@ -309,6 +393,12 @@
      "offset": 1803876,
      "original": 84
     }
+   ],
+   "where": "chest",
+   "pos": [
+    625,
+    2250,
+    100
    ],
    "name": "7-3 Overthere Stair - Life Shroom (an3_15)",
    "id": 1397771542,
@@ -326,6 +416,12 @@
      "original": 68
     }
    ],
+   "where": "lying around",
+   "pos": [
+    1800,
+    450,
+    100
+   ],
    "name": "7-4 The Overthere - Shooting Star (an4_05)",
    "id": 1397771543,
    "category": "overworld_item"
@@ -341,6 +437,12 @@
      "offset": 1851376,
      "original": 82
     }
+   ],
+   "where": "chest",
+   "pos": [
+    1737.5,
+    275,
+    0
    ],
    "name": "7-4 The Overthere - Ultra Shroom Shake (an4_09)",
    "id": 1397771544,
@@ -358,6 +460,12 @@
      "original": 437
     }
    ],
+   "where": "chest",
+   "pos": [
+    1000,
+    0,
+    -150
+   ],
    "name": "7-4 The Overthere - Spiky Skellobit Card (an4_09)",
    "id": 1397771545,
    "category": "catch_card"
@@ -373,6 +481,12 @@
      "offset": 1868864,
      "original": 436
     }
+   ],
+   "where": "chest",
+   "pos": [
+    -125,
+    350,
+    0
    ],
    "name": "7-4 The Overthere - Skellobit Card (an4_12)",
    "id": 1397771546,
@@ -390,6 +504,12 @@
      "original": 440
     }
    ],
+   "where": "chest",
+   "pos": [
+    125,
+    350,
+    0
+   ],
    "name": "7-4 The Overthere - Skellobomber Card (an4_12)",
    "id": 1397771547,
    "category": "catch_card"
@@ -405,6 +525,12 @@
      "offset": 1443712,
      "original": 61
     }
+   ],
+   "where": "chest",
+   "pos": [
+    2837,
+    75,
+    -90
    ],
    "name": "5-1 Downtown of Crag - Cooking Disk 6 (gn1_01)",
    "id": 1397771548,
@@ -422,6 +548,12 @@
      "original": 363
     }
    ],
+   "where": "chest",
+   "pos": [
+    -525,
+    75,
+    75
+   ],
    "name": "5-1 Downtown of Crag - Moon Cleft Card (gn1_02)",
    "id": 1397771549,
    "category": "catch_card"
@@ -437,6 +569,12 @@
      "offset": 1467156,
      "original": 30
     }
+   ],
+   "where": "chest",
+   "pos": [
+    175,
+    0,
+    0
    ],
    "name": "5-2 Gap of Crag - Water Tablet (gn2_01)",
    "id": 1397771550,
@@ -454,6 +592,12 @@
      "original": 102
     }
    ],
+   "where": "lying around",
+   "pos": [
+    -325,
+    600,
+    35
+   ],
    "name": "5-2 Gap of Crag - Primordial Fruit (gn2_01)",
    "id": 1397771551,
    "category": "overworld_item"
@@ -470,6 +614,12 @@
      "original": 75
     }
    ],
+   "where": "lying around",
+   "pos": [
+    1600,
+    0,
+    -37.5
+   ],
    "name": "5-2 Gap of Crag - Mighty Tonic (gn2_02)",
    "id": 1397771552,
    "category": "overworld_item"
@@ -485,6 +635,12 @@
      "offset": 1477020,
      "original": 82
     }
+   ],
+   "where": "lying around",
+   "pos": [
+    20,
+    340,
+    -165
    ],
    "name": "5-2 Gap of Crag - Ultra Shroom Shake (gn2_02)",
    "id": 1397771553,
@@ -506,6 +662,12 @@
      "original": 31
     }
    ],
+   "where": "lying around",
+   "pos": [
+    800,
+    151,
+    40
+   ],
    "name": "5-2 Gap of Crag - Stone Tablet (gn2_03)",
    "id": 1397771554,
    "category": "key_item"
@@ -526,6 +688,12 @@
      "original": 32
     }
    ],
+   "where": "lying around",
+   "pos": [
+    700,
+    0,
+    0
+   ],
    "name": "5-2 Gap of Crag - Fire Tablet (gn2_04)",
    "id": 1397771555,
    "category": "key_item"
@@ -541,6 +709,12 @@
      "offset": 1490908,
      "original": 303
     }
+   ],
+   "where": "chest",
+   "pos": [
+    300,
+    250,
+    -30
    ],
    "name": "5-2 Gap of Crag - Stone Buzzy Card (gn2_05)",
    "id": 1397771556,
@@ -558,6 +732,12 @@
      "original": 80
     }
    ],
+   "where": "chest",
+   "pos": [
+    350,
+    0,
+    -110
+   ],
    "name": "5-3 Floro Caverns - Shroom Shake (gn3_05)",
    "id": 1397771557,
    "category": "overworld_item"
@@ -573,6 +753,12 @@
      "offset": 1511204,
      "original": 343
     }
+   ],
+   "where": "lying around",
+   "pos": [
+    350,
+    125,
+    25
    ],
    "name": "5-3 Floro Caverns - Spania Card (gn3_08)",
    "id": 1397771558,
@@ -590,6 +776,12 @@
      "original": 69
     }
    ],
+   "where": "lying around",
+   "pos": [
+    212.5,
+    0,
+    -50
+   ],
    "name": "5-4 Floro Caverns - POW Block (gn4_09)",
    "id": 1397771559,
    "category": "overworld_item"
@@ -605,6 +797,12 @@
      "offset": 1538148,
      "original": 430
     }
+   ],
+   "where": "chest",
+   "pos": [
+    -687.5,
+    125,
+    0
    ],
    "name": "5-4 Floro Caverns - Floro Cragnien Card (gn4_12)",
    "id": 1397771560,
@@ -622,6 +820,12 @@
      "original": 373
     }
    ],
+   "where": "lying around",
+   "pos": [
+    1050,
+    400,
+    12
+   ],
    "name": "1-1 Lineland Road - Squiglet Card (he1_01)",
    "id": 1397771561,
    "category": "catch_card"
@@ -637,6 +841,12 @@
      "offset": 958512,
      "original": 65
     }
+   ],
+   "where": "lying around",
+   "pos": [
+    1080,
+    100,
+    -215
    ],
    "name": "1-1 Lineland Road - Fire Burst (he1_01)",
    "id": 1397771562,
@@ -654,6 +864,12 @@
      "original": 282
     }
    ],
+   "where": "lying around",
+   "pos": [
+    -1425,
+    0,
+    -60
+   ],
    "name": "1-1 Lineland Road - Goomba Card (he1_02)",
    "id": 1397771563,
    "category": "catch_card"
@@ -669,6 +885,12 @@
      "offset": 964048,
      "original": 80
     }
+   ],
+   "where": "chest",
+   "pos": [
+    10,
+    100,
+    25
    ],
    "name": "1-1 Lineland Road - Shroom Shake (he1_03)",
    "id": 1397771564,
@@ -686,6 +908,12 @@
      "original": 291
     }
    ],
+   "where": "chest",
+   "pos": [
+    2975,
+    0,
+    0
+   ],
    "name": "1-1 Lineland Road - Koopa Troopa Card (he1_05)",
    "id": 1397771565,
    "category": "catch_card"
@@ -701,6 +929,12 @@
      "offset": 2180604,
      "original": 70
     }
+   ],
+   "where": "lying around",
+   "pos": [
+    -30,
+    0,
+    -70
    ],
    "name": "1-1 Lineland Road - Shell Shock (he1_06)",
    "id": 1397771566,
@@ -718,6 +952,12 @@
      "original": 80
     }
    ],
+   "where": "lying around",
+   "pos": [
+    30,
+    0,
+    -70
+   ],
    "name": "1-1 Lineland Road - Shroom Shake (he1_06)",
    "id": 1397771567,
    "category": "overworld_item"
@@ -733,6 +973,12 @@
      "offset": 972240,
      "original": 296
     }
+   ],
+   "where": "chest",
+   "pos": [
+    1200,
+    0,
+    0
    ],
    "name": "1-2 Mount Lineland - Paratroopa Card (he2_01)",
    "id": 1397771568,
@@ -750,6 +996,12 @@
      "original": 382
     }
    ],
+   "where": "lying around",
+   "pos": [
+    175,
+    250,
+    -140
+   ],
    "name": "1-2 Mount Lineland - Boomboxer Card (he2_03)",
    "id": 1397771569,
    "category": "catch_card"
@@ -765,6 +1017,12 @@
      "offset": 997276,
      "original": 524
     }
+   ],
+   "where": "lying around",
+   "pos": [
+    -100,
+    150,
+    -65
    ],
    "name": "1-2 Mount Lineland - Red & Green Card (he2_05)",
    "id": 1397771570,
@@ -782,6 +1040,12 @@
      "original": 374
     }
    ],
+   "where": "lying around",
+   "pos": [
+    1125,
+    0,
+    -20
+   ],
    "name": "1-3 Yold Desert - Squig Card (he3_01)",
    "id": 1397771571,
    "category": "catch_card"
@@ -797,6 +1061,12 @@
      "offset": 1005872,
      "original": 74
     }
+   ],
+   "where": "lying around",
+   "pos": [
+    1125,
+    0,
+    175
    ],
    "name": "1-3 Yold Desert - Courage Shell (he3_02)",
    "id": 1397771572,
@@ -814,6 +1084,12 @@
      "original": 77
     }
    ],
+   "where": "lying around",
+   "pos": [
+    -425,
+    0,
+    150
+   ],
    "name": "1-3 Yold Desert - Ghost Shroom (he3_06)",
    "id": 1397771573,
    "category": "overworld_item"
@@ -829,6 +1105,12 @@
      "offset": 1021720,
      "original": 84
     }
+   ],
+   "where": "chest",
+   "pos": [
+    650,
+    0,
+    0
    ],
    "name": "1-4 Yold Ruins - Life Shroom (he4_02)",
    "id": 1397771574,
@@ -846,6 +1128,12 @@
      "original": 298
     }
    ],
+   "where": "chest",
+   "pos": [
+    925,
+    0,
+    0
+   ],
    "name": "1-4 Yold Ruins - Buzzy Beetle Card (he4_07)",
    "id": 1397771575,
    "category": "catch_card"
@@ -861,6 +1149,12 @@
      "offset": 1892116,
      "original": 85
     }
+   ],
+   "where": "chest",
+   "pos": [
+    -950,
+    200,
+    -75
    ],
    "name": "8-1 Castle Bleck Entry - Long-Last Shake (ls1_06)",
    "id": 1397771576,
@@ -878,6 +1172,12 @@
      "original": 79
     }
    ],
+   "where": "chest",
+   "pos": [
+    -800,
+    200,
+    75
+   ],
    "name": "8-1 Castle Bleck Entry - Stop Watch (ls1_06)",
    "id": 1397771577,
    "category": "overworld_item"
@@ -893,6 +1193,12 @@
      "offset": 1927484,
      "original": 74
     }
+   ],
+   "where": "chest",
+   "pos": [
+    -100,
+    275,
+    -175
    ],
    "name": "8-2 Castle Bleck Foyer - Courage Shell (ls2_02)",
    "id": 1397771578,
@@ -910,6 +1216,12 @@
      "original": 84
     }
    ],
+   "where": "chest",
+   "pos": [
+    100,
+    275,
+    -175
+   ],
    "name": "8-2 Castle Bleck Foyer - Life Shroom (ls2_02)",
    "id": 1397771579,
    "category": "overworld_item"
@@ -925,6 +1237,12 @@
      "offset": 1934532,
      "original": 67
     }
+   ],
+   "where": "lying around",
+   "pos": [
+    200,
+    0,
+    -75
    ],
    "name": "8-2 Castle Bleck Foyer - Thunder Rage (ls2_05)",
    "id": 1397771580,
@@ -942,6 +1260,12 @@
      "original": 82
     }
    ],
+   "where": "chest",
+   "pos": [
+    1100,
+    0,
+    0
+   ],
    "name": "8-2 Castle Bleck Foyer - Ultra Shroom Shake (ls2_08)",
    "id": 1397771581,
    "category": "overworld_item"
@@ -957,6 +1281,12 @@
      "offset": 1955840,
      "original": 175
     }
+   ],
+   "where": "lying around",
+   "pos": [
+    -250,
+    0,
+    0
    ],
    "name": "8-2 Castle Bleck Foyer - Mistake (ls2_16) #1",
    "id": 1397771582,
@@ -974,6 +1304,12 @@
      "original": 175
     }
    ],
+   "where": "lying around",
+   "pos": [
+    -200,
+    0,
+    0
+   ],
    "name": "8-2 Castle Bleck Foyer - Mistake (ls2_16) #2",
    "id": 1397771583,
    "category": "overworld_item"
@@ -989,6 +1325,12 @@
      "offset": 1955936,
      "original": 175
     }
+   ],
+   "where": "lying around",
+   "pos": [
+    -150,
+    0,
+    0
    ],
    "name": "8-2 Castle Bleck Foyer - Mistake (ls2_16) #3",
    "id": 1397771584,
@@ -1006,6 +1348,12 @@
      "original": 175
     }
    ],
+   "where": "lying around",
+   "pos": [
+    -100,
+    0,
+    0
+   ],
    "name": "8-2 Castle Bleck Foyer - Mistake (ls2_16) #4",
    "id": 1397771585,
    "category": "overworld_item"
@@ -1021,6 +1369,12 @@
      "offset": 1956032,
      "original": 175
     }
+   ],
+   "where": "lying around",
+   "pos": [
+    -50,
+    0,
+    0
    ],
    "name": "8-2 Castle Bleck Foyer - Mistake (ls2_16) #5",
    "id": 1397771586,
@@ -1038,6 +1392,12 @@
      "original": 175
     }
    ],
+   "where": "lying around",
+   "pos": [
+    0,
+    0,
+    0
+   ],
    "name": "8-2 Castle Bleck Foyer - Mistake (ls2_16) #6",
    "id": 1397771587,
    "category": "overworld_item"
@@ -1053,6 +1413,12 @@
      "offset": 1956128,
      "original": 175
     }
+   ],
+   "where": "lying around",
+   "pos": [
+    50,
+    0,
+    0
    ],
    "name": "8-2 Castle Bleck Foyer - Mistake (ls2_16) #7",
    "id": 1397771588,
@@ -1070,6 +1436,12 @@
      "original": 175
     }
    ],
+   "where": "lying around",
+   "pos": [
+    100,
+    0,
+    0
+   ],
    "name": "8-2 Castle Bleck Foyer - Mistake (ls2_16) #8",
    "id": 1397771589,
    "category": "overworld_item"
@@ -1085,6 +1457,12 @@
      "offset": 1956224,
      "original": 175
     }
+   ],
+   "where": "lying around",
+   "pos": [
+    150,
+    0,
+    0
    ],
    "name": "8-2 Castle Bleck Foyer - Mistake (ls2_16) #9",
    "id": 1397771590,
@@ -1102,6 +1480,12 @@
      "original": 175
     }
    ],
+   "where": "lying around",
+   "pos": [
+    200,
+    0,
+    0
+   ],
    "name": "8-2 Castle Bleck Foyer - Mistake (ls2_16) #10",
    "id": 1397771591,
    "category": "overworld_item"
@@ -1117,6 +1501,12 @@
      "offset": 1973720,
      "original": 66
     }
+   ],
+   "where": "chest",
+   "pos": [
+    -1000,
+    0,
+    -310
    ],
    "name": "8-3 Castle Bleck Interior - Ice Storm (ls3_03)",
    "id": 1397771592,
@@ -1134,6 +1524,12 @@
      "original": 67
     }
    ],
+   "where": "chest",
+   "pos": [
+    1000,
+    0,
+    -310
+   ],
    "name": "8-3 Castle Bleck Interior - Thunder Rage (ls3_11)",
    "id": 1397771593,
    "category": "overworld_item"
@@ -1149,6 +1545,12 @@
      "offset": 2002620,
      "original": 68
     }
+   ],
+   "where": "chest",
+   "pos": [
+    900,
+    0,
+    1240
    ],
    "name": "8-4 Castle Bleck Inner Sanctum - Shooting Star (ls4_07)",
    "id": 1397771594,
@@ -1166,6 +1568,12 @@
      "original": 81
     }
    ],
+   "where": "chest",
+   "pos": [
+    -100,
+    0,
+    1240
+   ],
    "name": "8-4 Castle Bleck Inner Sanctum - Super Shroom Shake (ls4_08)",
    "id": 1397771595,
    "category": "overworld_item"
@@ -1181,6 +1589,12 @@
      "offset": 2005596,
      "original": 82
     }
+   ],
+   "where": "chest",
+   "pos": [
+    400,
+    0,
+    620
    ],
    "name": "8-4 Castle Bleck Inner Sanctum - Ultra Shroom Shake (ls4_09)",
    "id": 1397771596,
@@ -1198,6 +1612,12 @@
      "original": 57
     }
    ],
+   "where": "chest",
+   "pos": [
+    0,
+    900,
+    250
+   ],
    "name": "Flipside/Flopside - Cooking Disk 2 (mac_01)",
    "id": 1397771597,
    "category": "key_item"
@@ -1213,6 +1633,12 @@
      "offset": 843932,
      "original": 520
     }
+   ],
+   "where": "chest",
+   "pos": [
+    50,
+    400,
+    -75
    ],
    "name": "Flipside/Flopside - The InterNed Card (mac_04)",
    "id": 1397771598,
@@ -1230,6 +1656,12 @@
      "original": 534
     }
    ],
+   "where": "chest",
+   "pos": [
+    700,
+    0,
+    -125
+   ],
    "name": "Flipside/Flopside - The InterChet Card (mac_07)",
    "id": 1397771599,
    "category": "catch_card"
@@ -1245,6 +1677,12 @@
      "offset": 851420,
      "original": 507
     }
+   ],
+   "where": "chest",
+   "pos": [
+    150,
+    0,
+    0
    ],
    "name": "Flipside/Flopside - Merluvlee Card (mac_08)",
    "id": 1397771600,
@@ -1262,6 +1700,12 @@
      "original": 505
     }
    ],
+   "where": "chest",
+   "pos": [
+    -100,
+    0,
+    0
+   ],
    "name": "Flipside/Flopside - Merlon Card (mac_08)",
    "id": 1397771601,
    "category": "catch_card"
@@ -1277,6 +1721,12 @@
      "offset": 871320,
      "original": 58
     }
+   ],
+   "where": "chest",
+   "pos": [
+    0,
+    900,
+    250
    ],
    "name": "Flipside/Flopside - Cooking Disk 3 (mac_11)",
    "id": 1397771602,
@@ -1294,6 +1744,12 @@
      "original": 64
     }
    ],
+   "where": "chest",
+   "pos": [
+    450,
+    400,
+    -860
+   ],
    "name": "Flipside/Flopside - Golden Card (mac_14)",
    "id": 1397771603,
    "category": "key_item"
@@ -1309,6 +1765,12 @@
      "offset": 903836,
      "original": 60
     }
+   ],
+   "where": "chest",
+   "pos": [
+    450,
+    400,
+    -940
    ],
    "name": "Flipside/Flopside - Cooking Disk 5 (mac_14)",
    "id": 1397771604,
@@ -1326,6 +1788,12 @@
      "original": 485
     }
    ],
+   "where": "chest",
+   "pos": [
+    -700,
+    0,
+    -125
+   ],
    "name": "Flipside/Flopside - Piccolo Card (mac_17)",
    "id": 1397771605,
    "category": "catch_card"
@@ -1341,6 +1809,12 @@
      "offset": 916780,
      "original": 486
     }
+   ],
+   "where": "chest",
+   "pos": [
+    -200,
+    0,
+    75
    ],
    "name": "Flipside/Flopside - Barry Card (mac_18)",
    "id": 1397771606,
@@ -1358,6 +1832,12 @@
      "original": 59
     }
    ],
+   "where": "lying around",
+   "pos": [
+    -370,
+    30,
+    -1955
+   ],
    "name": "Flipside/Flopside - Cooking Disk 4 (mac_19)",
    "id": 1397771607,
    "category": "key_item"
@@ -1373,6 +1853,12 @@
      "offset": 1057756,
      "original": 365
     }
+   ],
+   "where": "chest",
+   "pos": [
+    -150,
+    0,
+    0
    ],
    "name": "2-1 Gloam Valley - Shlurp Card (mi1_04)",
    "id": 1397771608,
@@ -1390,6 +1876,12 @@
      "original": 337
     }
    ],
+   "where": "chest",
+   "pos": [
+    150,
+    0,
+    0
+   ],
    "name": "2-1 Gloam Valley - Swooper Card (mi1_04)",
    "id": 1397771609,
    "category": "catch_card"
@@ -1405,6 +1897,12 @@
      "offset": 1066028,
      "original": 511
     }
+   ],
+   "where": "chest",
+   "pos": [
+    0,
+    0,
+    -225
    ],
    "name": "2-1 Gloam Valley - Watchitt Card (mi1_07)",
    "id": 1397771610,
@@ -1422,6 +1920,12 @@
      "original": 79
     }
    ],
+   "where": "chest",
+   "pos": [
+    0,
+    520,
+    -275
+   ],
    "name": "2-2 Merlee's Mansion - Stop Watch (mi2_01)",
    "id": 1397771611,
    "category": "overworld_item"
@@ -1438,6 +1942,12 @@
      "original": 345
     }
    ],
+   "where": "chest",
+   "pos": [
+    0,
+    237.5,
+    -87.5
+   ],
    "name": "2-2 Merlee's Mansion - Cursya Card (mi2_01)",
    "id": 1397771612,
    "category": "catch_card"
@@ -1453,6 +1963,12 @@
      "offset": 1112836,
      "original": 354
     }
+   ],
+   "where": "chest",
+   "pos": [
+    712.5,
+    200,
+    -37.5
    ],
    "name": "2-3 Merlee's Mansion - Boo Card (mi3_01)",
    "id": 1397771613,
@@ -1474,6 +1990,12 @@
      "original": 80
     }
    ],
+   "where": "lying around",
+   "pos": [
+    0,
+    0,
+    -550
+   ],
    "name": "2-4 Merlee's Basement - Shroom Shake (mi4_10)",
    "id": 1397771614,
    "category": "overworld_item"
@@ -1489,6 +2011,12 @@
      "offset": 1347828,
      "original": 409
     }
+   ],
+   "where": "lying around",
+   "pos": [
+    1100,
+    137.5,
+    -50
    ],
    "name": "4-1 Outer Space - Foton Card (sp1_02)",
    "id": 1397771615,
@@ -1506,6 +2034,12 @@
      "original": 88
     }
    ],
+   "where": "lying around",
+   "pos": [
+    850,
+    87.5,
+    25
+   ],
    "name": "4-1 Outer Space - Catch Card SP (sp1_05)",
    "id": 1397771616,
    "category": "overworld_item"
@@ -1521,6 +2055,12 @@
      "offset": 1361508,
      "original": 82
     }
+   ],
+   "where": "lying around",
+   "pos": [
+    1037.5,
+    100,
+    0
    ],
    "name": "4-2 Planet Blobule - Ultra Shroom Shake (sp2_01)",
    "id": 1397771617,
@@ -1538,6 +2078,12 @@
      "original": 171
     }
    ],
+   "where": "lying around",
+   "pos": [
+    475,
+    0,
+    -100
+   ],
    "name": "4-2 Planet Blobule - Space Food (sp2_04)",
    "id": 1397771618,
    "category": "overworld_item"
@@ -1553,6 +2099,12 @@
      "offset": 1378176,
      "original": 68
     }
+   ],
+   "where": "lying around",
+   "pos": [
+    -1025,
+    150,
+    30.0
    ],
    "name": "4-3 Outer Limits - Shooting Star (sp3_01)",
    "id": 1397771619,
@@ -1570,6 +2122,12 @@
      "original": 77
     }
    ],
+   "where": "lying around",
+   "pos": [
+    387.5,
+    600,
+    -25
+   ],
    "name": "4-3 Outer Limits - Ghost Shroom (sp3_04)",
    "id": 1397771620,
    "category": "overworld_item"
@@ -1585,6 +2143,12 @@
      "offset": 1390812,
      "original": 88
     }
+   ],
+   "where": "lying around",
+   "pos": [
+    -587.5,
+    1250,
+    -25.0
    ],
    "name": "4-3 Outer Limits - Catch Card SP (sp3_04)",
    "id": 1397771621,
@@ -1602,6 +2166,12 @@
      "original": 325
     }
    ],
+   "where": "chest",
+   "pos": [
+    1562,
+    325,
+    -137.5
+   ],
    "name": "3-1 The Bitlands - Piranha Plant Card (ta1_01)",
    "id": 1397771622,
    "category": "catch_card"
@@ -1617,6 +2187,12 @@
      "offset": 1228088,
      "original": 66
     }
+   ],
+   "where": "lying around",
+   "pos": [
+    445,
+    75,
+    -165
    ],
    "name": "3-1 The Bitlands - Ice Storm (ta1_01)",
    "id": 1397771623,
@@ -1634,6 +2210,12 @@
      "original": 88
     }
    ],
+   "where": "lying around",
+   "pos": [
+    -1330,
+    58,
+    -165
+   ],
    "name": "3-1 The Bitlands - Catch Card SP (ta1_02)",
    "id": 1397771624,
    "category": "overworld_item"
@@ -1649,6 +2231,12 @@
      "offset": 1207480,
      "original": 67
     }
+   ],
+   "where": "chest",
+   "pos": [
+    0,
+    0,
+    0
    ],
    "name": "3-1 The Bitlands - Thunder Rage (ta1_05)",
    "id": 1397771625,
@@ -1666,6 +2254,12 @@
      "original": 88
     }
    ],
+   "where": "lying around",
+   "pos": [
+    175,
+    0,
+    -25
+   ],
    "name": "3-1 The Bitlands - Catch Card SP (ta1_06)",
    "id": 1397771626,
    "category": "overworld_item"
@@ -1681,6 +2275,12 @@
      "offset": 1210012,
      "original": 317
     }
+   ],
+   "where": "chest",
+   "pos": [
+    0,
+    0,
+    -50
    ],
    "name": "3-1 The Bitlands - Magikoopa Card (ta1_07)",
    "id": 1397771627,
@@ -1698,6 +2298,12 @@
      "original": 71
     }
    ],
+   "where": "chest",
+   "pos": [
+    350,
+    350,
+    -50
+   ],
    "name": "3-2 The Tile Pool - Gold Bar (ta2_02)",
    "id": 1397771628,
    "category": "overworld_item"
@@ -1714,6 +2320,12 @@
      "original": 21
     }
    ],
+   "where": "chest",
+   "pos": [
+    150,
+    150,
+    -120
+   ],
    "name": "3-4 Fort Francis - Fort Key (ta4_10)",
    "id": 1397771629,
    "category": "key_item"
@@ -1729,6 +2341,12 @@
      "offset": 1301504,
      "original": 20
     }
+   ],
+   "where": "chest",
+   "pos": [
+    -200,
+    1050,
+    -50
    ],
    "name": "3-4 Fort Francis - Fort Key (ta4_11)",
    "id": 1397771630,

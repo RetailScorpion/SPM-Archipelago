@@ -65,6 +65,26 @@ def word(data, offset):
     return struct.unpack_from(">i", data, offset)[0]
 
 
+# Position argument (x, y, z) of each spawning function, as argument indices
+POS_ARGS = {"item": 3, "chest": 2}  # evt_item_entry(name, item, behaviour, x, y, z, ...); evt_mobj_thako(type, name, x, y, z, ...)
+FLOAT_BASE = -240000000
+VAR_LIMIT = -1000000  # evt variables are encoded far below this; plain numbers are above it
+
+
+def position(data, at, kind):
+    """The spawn position from the instruction's arguments, or None if it's computed by the script."""
+    out = []
+    for i in range(3):
+        v = word(data, at + 4 * (2 + POS_ARGS[kind] + i))
+        if -250000000 < v < -220000000:  # an evt float
+            out.append(round((v - FLOAT_BASE) / 1024.0, 1))
+        elif v > VAR_LIMIT:
+            out.append(v)
+        else:
+            return None  # a variable: the script works it out (often where an enemy fell or a scene ends)
+    return out
+
+
 def item_names():
     names = {int(k): v for k, v in json.load(open(ITEM_NAMES, encoding="utf-8")).items()}
     for k, v in names.items():
@@ -114,7 +134,7 @@ def main():
     # Pixl joins, in story order (the optional ones last)
     for pixl, (pixl_name, map_name) in sorted(PIXLS.items(), key=lambda p: (p[0] in OPTIONAL_PIXLS, p[0])):
         locations.append({"kind": "join", "map": map_name, "item": pixl, "flag": AP_GSWF_JOIN_BASE + pixl - 221,
-                          "label": f"{pixl_name} joins", "patches": []})
+                          "label": f"{pixl_name} joins", "patches": [], "where": "Pixl join scene", "pos": None})
 
     # Flagged pickups and chests: one location per flag, with every instruction that spawns it
     by_flag = {}
@@ -134,7 +154,9 @@ def main():
         assert word(rel, item_offset) == loc["item"], loc
         assert word(rel, flag_offset) == GSWF_BASE + int(m[1]), loc
         entry = by_flag.setdefault(int(m[1]), {"kind": "flagged", "map": loc["maps"][0], "item": loc["item"],
-                                               "flag": int(m[1]), "label": None, "patches": []})
+                                               "flag": int(m[1]), "label": None, "patches": [],
+                                               "where": "chest" if loc["type"] == "chest" else "lying around",
+                                               "pos": position(rel, at, loc["type"])})
         assert entry["item"] == loc["item"], (entry, loc)
         entry["patches"].append({"offset": item_offset, "original": loc["item"]})
     locations += sorted(by_flag.values(), key=lambda e: (e["map"], e["flag"]))
@@ -147,6 +169,7 @@ def main():
         loc = next(x for x in scan if x.get("at") == hex(at))
         locations.append({"kind": "key_spot", "map": loc["maps"][0], "item": item, "flag": AP_GSWF_LOC_BASE + n,
                           "label": None, "spot": n, "spawn": at, "gates": gates,
+                          "where": "lying around", "pos": position(rel, at, "item"),
                           "patches": [{"offset": at + 4 * (2 + ARGS["item"]["item"]), "original": item}]})
 
     # Names: "<level> - <vanilla item> (<map>)", numbered when one map has several of the same item
