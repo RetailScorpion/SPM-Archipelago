@@ -20,7 +20,7 @@ Items from other worlds show up in Super Paper Mario as the Archipelago icon. It
 ## What you need
 - A **Super Paper Mario (USA) revision 0** disc image (game ID `R8PE01`). The patcher checks this.
 - [Dolphin](https://dolphin-emu.org), recent.
-- [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases) **0.6.7**.
+- [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases) **0.6.7 or higher** (tested on 0.6.7).
 - From this release: `spm.apworld` and `Super Paper Mario.yaml`.
 
 ## Setup

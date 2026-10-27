@@ -2,7 +2,7 @@
 
 ## You need
 - A Super Paper Mario (USA) revision 0 disc image (game ID R8PE01).
-- Dolphin, Archipelago 0.6.7, and this APworld installed (double-click `spm.apworld`).
+- Dolphin, Archipelago 0.6.7 or higher (tested on 0.6.7), and this APworld installed (double-click `spm.apworld`).
 
 ## Steps
 1. In Dolphin, right-click Super Paper Mario > Properties > Filesystem > right-click the disc > **Extract Entire Disc**, into an empty folder.
