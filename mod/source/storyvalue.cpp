@@ -92,6 +92,14 @@ bool isChapterFinished(s32 chapter)
     return loadSlot(chapter) >= sChapterFinished[chapter];
 }
 
+bool isChapterFinishedInSave(const spm::nandmgr::SaveFile * save, s32 chapter)
+{
+    const s8 * gsw = save->spmarioGlobals.gsw;
+    s32 id = AP_GSW_STORY_SLOTS + (chapter - 1) * 2;
+    s32 value = static_cast<u8>(gsw[id]) << 8 | static_cast<u8>(gsw[id + 1]);
+    return value >= sChapterFinished[chapter];
+}
+
 s32 sectionsReached(s32 chapter)
 {
     if (isChapterFinished(chapter))

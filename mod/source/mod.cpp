@@ -22,6 +22,7 @@
 #include "cutscenes.h"
 #include "delivery.h"
 #include "doors.h"
+#include "filesel.h"
 #include "flip.h"
 #include "gamesyms.h"
 #include "hubstory.h"
@@ -279,6 +280,7 @@ void main()
     mailbox::gMailbox.storyState = &storyvalue::gStory;
     doors::init();
     flip::init();
+    filesel::init();
     joins::init();
     apitem::init();
 

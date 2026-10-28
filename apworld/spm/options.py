@@ -29,15 +29,17 @@ class ShuffleCatchCards(Toggle):
 
 
 class RandomizeCharacters(Toggle):
-    """Shuffle Peach and Luigi. Off: Peach joins once you finish Chapter 1, and Luigi when you first
-    enter Chapter 7 (their vanilla moments, given directly by the prototype)."""
+    """Shuffle Peach, Luigi and Bowser. Their join scenes become locations: Peach in Flipside Tower
+    (entered from Merlon's house once Chapter 1 is finished), Luigi in the Underwhere (7-1),
+    Bowser after his fight in 3-1. Off: each scene gives its own character."""
     display_name = "Randomize Characters"
 
 
 class SkipCutscenes(DefaultOnToggle):
     """Skip the opening and the Count Bleck scenes between chapters (plus the Peach and Luigi
-    intermissions after Chapters 1 and 2). A new file starts at Merlon's scene in Flipside Tower,
-    where he gives you the first Pure Heart. Off: watch the story as in vanilla."""
+    intermissions after Chapters 1 and 2). A new file skips Merlon's scenes too: it starts in
+    Flipside Tower with the first Pure Heart in its pillar, the Lineland door open and the Return
+    Pipe. Off: watch the story as in vanilla."""
     display_name = "Skip Cutscenes"
 
 

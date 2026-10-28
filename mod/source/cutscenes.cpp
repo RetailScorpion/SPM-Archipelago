@@ -1,19 +1,26 @@
 #include <common.h>
 #include <msl/string.h>
+#include <spm/mario_pouch.h>
 #include <spm/spmario.h>
 #include <wii/os.h>
 
 #include "cutscenes.h"
 #include "mailbox.h"
+#include "storyvalue.h"
 
 namespace mod::cutscenes {
 
 #define BLECK_SCENE_MAP "ls4_11"
 
+#define ITEM_RETURN_PIPE 50
+
 /*
     A new file: the opening maps (aa1_*, aa2_*) at story value 0. aa4_01 is the title screen's
     background and aa3_01 the ending. Vanilla ends the Tippi scene with SET(GSW(0), 2) and a map change
-    to mac_02 (Flipside Tower) with the default entrance, which starts Merlon's scene.
+    to mac_02 (Flipside Tower), where Merlon's scenes (2-9) give the first Pure Heart and the Return
+    Pipe. Those are skipped too: the file starts in Flipside Tower at the prologue's end, so the hub
+    gets its fixed value (Pure Heart 1 in its pillar, the Lineland door open), and Mario gets the
+    Return Pipe Merlon would have given (story value 8).
 */
 static bool skipOpening(spm::seqdrv::SeqWork * wp)
 {
@@ -21,8 +28,9 @@ static bool skipOpening(spm::seqdrv::SeqWork * wp)
     if (spm::spmario::gp->gsw0 != 0
         || (msl::string::strncmp(map, "aa1_", 4) != 0 && msl::string::strncmp(map, "aa2_", 4) != 0))
         return false;
-    wii::os::OSReport("[spmap] cutscenes: new file, skipping the opening (%s) to Flipside Tower\n", map);
-    spm::spmario::gp->gsw0 = 2;
+    wii::os::OSReport("[spmap] cutscenes: new file, skipping the opening (%s) and Merlon to Flipside Tower\n", map);
+    spm::spmario::gp->gsw0 = STORY_PROLOGUE_END;
+    spm::mario_pouch::pouchAddItem(ITEM_RETURN_PIPE);
     wp->p0 = "mac_02";
     wp->p1 = nullptr;
     return true;

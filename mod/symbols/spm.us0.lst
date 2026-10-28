@@ -10,6 +10,10 @@
 // In the "can the current character use their ability" check (0x80147A08): the
 // bl evtGetValue(GSW(0)) whose result blocks Mario's flip when 0 < value < 16
 80147AB4:mario_flip_story_check
+// File select (seq_load_sub draw, per save r17, heart index r23): lwz r3, 0x148(r17) (the save's
+// GSW 0); lwz r0, 0(r21) (threshold table 0x803E9108: 4, 53, 95, 125, 173, 220, 286, 353);
+// cmplw r3, r0; blt (skip drawing heart r23)
+8017EF8C:filesel_heart_check
 // Called only by Fleep's join scene (sp2_01), right after the join (names are guesses): with 1, the
 // first sets MarioWork flag 0x00200000 and gives an object callback 0x8012CA18, mode 6; the second
 // changes that object's mode. Tippi's pointer crashes afterwards if Mario has no Fleep

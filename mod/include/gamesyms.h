@@ -30,6 +30,10 @@ extern const spm::evtmgr::EvtScriptCode door_enter_evt[];
 // 0 < story value < 16 (before Bestovius)
 extern u32 mario_flip_story_check[];
 
+// The file select's "does this save show Pure Heart N" test: four instructions comparing the
+// save's GSW 0 (r17 = save file) with heart r23's threshold, then blt past the heart's icon
+extern u32 filesel_heart_check[];
+
 // Only in Fleep's join scene, after the join: evt_fleep_mode_on(1) and evt_fleep_mode_set(1) put
 // something Tippi's pointer uses into a Fleep mode (names are guesses); pointing crashes without Fleep
 EVT_DECLARE_USER_FUNC(evt_fleep_mode_on, 1)
