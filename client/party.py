@@ -1,4 +1,4 @@
-"""Party editor: add and remove characters and Pixls in the running game, for testing.
+"""Party editor: add and remove characters, Pixls and the Save Block in the running game, for testing.
 
 Writes the pouch's character and Pixl lists directly, the way pouchAddItem fills them, through Dolphin.
 Only the inventory changes: no location flags, nothing sent to the Archipelago server.
@@ -6,6 +6,7 @@ Only the inventory changes: no location flags, nothing sent to the Archipelago s
     Mario stays until the next map change (or until you pick another in the Pixl menu).
   - The character Mario is playing as can't be removed: switch to Mario first.
   - Mario himself is never listed.
+  - The Save Block (key item 45) needs the mod version that has it; on older ones item 45 is a 7-3 prop.
 
 Usage: py -3 -E party.py
 """
@@ -18,6 +19,8 @@ import dolphin_memory_engine as dme
 from tracker import MARIO_WORK, connect_dolphin, current_map
 
 POUCH = 0x804CEA28          # MarioPouchWork (US 1.0)
+KEY_ITEMS = POUCH + 0x20     # u16[32], 0 = empty
+KEY_ITEM_SLOTS = 32
 CHARACTERS = POUCH + 0xB4   # PouchCharOrPixlInfo[4]: u8 selectable, u8 selected, u16 itemType
 PIXLS = POUCH + 0xC4        # PouchCharOrPixlInfo[16]
 CHARACTER_SLOTS = 4
@@ -28,6 +31,7 @@ CHARACTER_ITEM_BASE = 216            # Mario 216, Peach 217, Bowser 218, Luigi 2
 CHARACTER_NAMES = {217: "Peach", 218: "Bowser", 219: "Luigi"}
 PIXL_NAMES = {221: "Thoreau", 222: "Boomer", 223: "Slim", 224: "Thudley", 225: "Carrie", 226: "Fleep",
               227: "Cudge", 228: "Dottie", 229: "Piccolo", 230: "Barry", 231: "Dashell"}
+KEY_ITEM_NAMES = {45: "Save Block"}  # mod saveblock.h SAVE_BLOCK_ITEM_ID
 REFRESH_MS = 500
 
 
@@ -59,6 +63,24 @@ def toggle_character(item, want):
         entries = [e for e in entries if e[2] != item]
     write_list(CHARACTERS, entries, CHARACTER_SLOTS)
     return f"{CHARACTER_NAMES[item]} {'added' if want else 'removed'}"
+
+
+def read_key_items():
+    data = dme.read_bytes(KEY_ITEMS, 2 * KEY_ITEM_SLOTS)
+    return [v for v in struct.unpack(f">{KEY_ITEM_SLOTS}H", data) if v != 0]
+
+
+def toggle_key_item(item, want):
+    items = read_key_items()
+    if want and item not in items:
+        if len(items) >= KEY_ITEM_SLOTS:
+            return "No free key item slot"
+        items.append(item)
+    elif not want and item in items:
+        items = [i for i in items if i != item]
+    items += [0] * (KEY_ITEM_SLOTS - len(items))
+    dme.write_bytes(KEY_ITEMS, struct.pack(f">{KEY_ITEM_SLOTS}H", *items))
+    return f"{KEY_ITEM_NAMES[item]} {'added' if want else 'removed'}"
 
 
 def toggle_pixl(item, want):
@@ -110,6 +132,7 @@ def main():
 
     section("Characters", CHARACTER_NAMES, toggle_character)
     section("Pixls", PIXL_NAMES, toggle_pixl)
+    section("Key items", KEY_ITEM_NAMES, toggle_key_item)
 
     def refresh(schedule=True):
         try:
@@ -119,6 +142,7 @@ def main():
             items = {e[2] for e in held(read_list(CHARACTERS, CHARACTER_SLOTS))}
             pixls = held(read_list(PIXLS, PIXL_SLOTS))
             items |= {e[2] for e in pixls}
+            items |= set(read_key_items())
             selected = next((e[2] for e in pixls if e[1]), None)
             for item, (var, box) in boxes.items():
                 var.set(item in items)
