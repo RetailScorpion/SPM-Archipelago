@@ -174,7 +174,7 @@ const char * message(const char * msgName)
     if (msl::string::strcmp(msgName, NAME_KEY) == 0)
         return sCurrent->item;
     if (msl::string::strcmp(msgName, DESC_KEY) == 0)
-        return "An item for another world.";
+        return sTrapActive ? "That means this is a trap." : "An item for another world.";
     if (sTrapActive && msl::string::strcmp(msgName, ITEM_GET_KEY) == 0)
         return "You are a <col c00000ff>FOOL</col>!";
     if (sActiveFrames > 0 && msl::string::strcmp(msgName, ITEM_GET_KEY) == 0)
