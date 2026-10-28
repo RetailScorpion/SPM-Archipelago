@@ -100,13 +100,21 @@ def render(levels, locations, flags, here, missing_only, mario=None):
     return "\n".join(lines)
 
 
+def load_locations():
+    data = json.load(open(LOCATIONS))
+    return data["levels"], sorted(data["locations"], key=lambda l: (l["map"], l["name"]))
+
+
 def main():
     missing_only = "--missing" in sys.argv
-    data = json.load(open(LOCATIONS))
-    levels = data["levels"]
-    locations = sorted(data["locations"], key=lambda l: (l["map"], l["name"]))
     last = None
+    loaded_mtime = None
     while True:
+        # Reload when the data is regenerated (new locations), so a running tracker stays current
+        mtime = os.path.getmtime(LOCATIONS)
+        if mtime != loaded_mtime:
+            levels, locations = load_locations()
+            loaded_mtime = mtime
         try:
             connect_dolphin()
             # No Mario position here (coords.py shows it): the screen only redraws, and scrolls back to the
