@@ -263,6 +263,7 @@ static void seq_gameMainHook(spm::seqdrv::SeqWork * wp)
     mailbox::gMailbox.savedRecvCount = savedRecvCount();
     seq_gameMainReal(wp);
     storyvalue::sync();
+    joins::tick();
     apitem::tick();
     spawnNextReceived();
 }

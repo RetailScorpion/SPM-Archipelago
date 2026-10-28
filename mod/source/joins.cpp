@@ -98,7 +98,7 @@ enum PatchKind
                 // character's location (gift b), then switches to the character only if Mario has them
     GIFT_GATE,  // IF_LARGE_EQUAL(GSW(0), a) -> IF_EQUAL(GSWF(gift location b), 0)
     ALWAYS,     // IF_SMALL(GSW(0), a) -> IF_SMALL(GSW(0), STORY_VALUE_NEVER): always true
-    CASE_PEACH, // CASE_SMALL(a) -> CASE_SMALL(GSW(AP_GSW_PEACH_SCENE)), set by hubstory
+    CASE_GSW,   // CASE_SMALL(a) -> CASE_SMALL(GSW(b)): a save byte the mod sets (hubstory, tick)
     LESSON_IF,  // IF with opcode b on (GSW(0), a) -> the same on GSW(AP_GSW_LESSON), set by hubstory
     LESSON,     // SET(GSW(0), a) -> USER_FUNC(ap_lesson, a): collects Bestovius's lesson location
 };
@@ -193,7 +193,7 @@ static const Patch sPatches[] = {
     // character. Their own evt_pouch_add_item is skipped; ap_char_join gives what was placed there.
     // Peach: Flipside Tower (mac_02) plays her scene, entering from Merlon's house, for story values
     // 59-62; the CASE now compares with a value hubstory sets once Chapter 1 is finished
-    {CASE_PEACH, 0x1bdd4, 63, 0, "Peach: join scene trigger"},
+    {CASE_GSW, 0x1bdd4, 63, AP_GSW_PEACH_SCENE, "Peach: join scene trigger"},
     {SKIP, 0xcaf8, 1, POUCH_ADD_ITEM, "Peach: vanilla join"},
     {CHAR_JOIN, 0xcb04, CHARACTER_PEACH, hubstory::GIFT_PEACH, "Peach join"},
     // Bowser: 3-1 (ta1_04) after his fight; the fight still waits for Chapter 3's own value (< 104)
@@ -204,6 +204,11 @@ static const Patch sPatches[] = {
     {ALWAYS, 0xede18, 297, 0, "Luigi: join scene (upper bound)"},
     {SKIP, 0xeda4c, 1, POUCH_ADD_ITEM, "Luigi: vanilla join"},
     {CHAR_JOIN, 0xeda20, CHARACTER_LUIGI, hubstory::GIFT_LUIGI, "Luigi join"},
+
+    // Watchitt (he2_03) sends for the bridge builder at Chapter 1's value 25 (Thoreau's join scene
+    // played) and says "go get help" below it. His "go get help" CASE now compares with a byte tick()
+    // keeps from whether Mario has Thoreau, so the bridge scene plays once he does, whatever the value
+    {CASE_GSW, 0x40f1c, 25, AP_GSW_WATCHITT, "Watchitt: waits for Thoreau"},
 
     // Bestovius (he1_06): talking to him gives the flip lesson below Chapter 1's story value 15 and
     // only chats from 16 on. His talk script now asks a value hubstory sets from the lesson's own
@@ -446,11 +451,11 @@ static void apply(const Patch & p)
                 at[2] = STORY_VALUE_NEVER;
             break;
         }
-        case CASE_PEACH:
+        case CASE_GSW:
         {
             const s32 orig[] = {EVT_CMD(1, OP_CASE_SMALL), p.a};
             if (expect(at, orig, 2, p.what))
-                at[1] = GSW_VAR(AP_GSW_PEACH_SCENE);
+                at[1] = GSW_VAR(p.b);
             break;
         }
         case LESSON_IF:
@@ -504,6 +509,15 @@ void repairPixlSelection()
         spm::mario_pouch::pouchSetPixlSelected(first);
         wii::os::OSReport("[spmap] joins: no Pixl was selected, selected %d\n", first);
     }
+}
+
+// Watchitt's patched CASE_SMALL: below this value he says "go get help"
+#define WATCHITT_WAIT 26  // past 25, his "send for the builder" case
+#define WATCHITT_NEVER 0  // below every Chapter 1 value
+
+void tick()
+{
+    savedata::setGswByte(AP_GSW_WATCHITT, havePixl(PIXL_THOREAU) ? WATCHITT_NEVER : WATCHITT_WAIT);
 }
 
 void onMapChange()

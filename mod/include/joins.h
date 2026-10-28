@@ -36,6 +36,11 @@ void init();
 void onMapChange();
 
 /*
+    Call every frame in game: keeps the save bytes patched scripts read from the party up to date.
+*/
+void tick();
+
+/*
     If Mario has Pixls but none is selected, selects the first one. pouchAddItem doesn't select a
     new Pixl, so a Pixl received while having none would otherwise leave none selected.
 */
