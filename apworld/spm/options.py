@@ -81,6 +81,18 @@ class TrapPercentage(Range):
     default = 10
 
 
+class SaveBlock(Choice):
+    """The Save Block: a key item that saves your game from the key item menu, anywhere.
+    shuffle: it's somewhere in the multiworld.
+    start_with: you have it from the start.
+    off: there's no Save Block."""
+    display_name = "Save Block"
+    option_shuffle = 0
+    option_start_with = 1
+    option_off = 2
+    default = 1
+
+
 @dataclass
 class SPMOptions(PerGameCommonOptions):
     shuffle_pixls: ShufflePixls
@@ -94,3 +106,4 @@ class SPMOptions(PerGameCommonOptions):
     starting_chapters: StartingChapters
     starting_chapter_count: StartingChapterCount
     trap_percentage: TrapPercentage
+    save_block: SaveBlock

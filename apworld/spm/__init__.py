@@ -33,6 +33,8 @@ CATEGORY_OPTIONS = {
 HEART_ITEM_FIRST = 1001
 TOWER_CHAPTERS = range(1, 8)
 HEARTS = {f"Pure Heart {n}": HEART_ITEM_FIRST + n - 1 for n in TOWER_CHAPTERS}
+SAVE_BLOCK_ITEM = "Save Block"
+SAVE_BLOCK_SPM = 45   # mod saveblock.h SAVE_BLOCK_ITEM_ID: a real key item the game can spawn
 TRAP_ITEM = "Cursya Trap"
 TRAP_ITEM_SPM = 1100  # mod apitem.h TRAP_ITEM_ID
 PEACH_LOCATION = "Flipside/Flopside - Peach joins (mac_02)"  # her scene waits for Chapter 1's end
@@ -81,7 +83,8 @@ class SPMWorld(World):
 
     item_name_to_id = {**{name: ID_BASE + spm for spm, (name, _) in ITEMS.items()},
                        **{name: ID_BASE + spm for name, spm in HEARTS.items()},
-                       TRAP_ITEM: ID_BASE + TRAP_ITEM_SPM}
+                       TRAP_ITEM: ID_BASE + TRAP_ITEM_SPM,
+                       SAVE_BLOCK_ITEM: ID_BASE + SAVE_BLOCK_SPM}
     location_name_to_id = {loc[0]: ID_BASE + i for i, loc in enumerate(LOCATIONS)}
 
     def create_item(self, name: str) -> SPMItem:
@@ -89,6 +92,8 @@ class SPMWorld(World):
             return SPMItem(name, ItemClassification.progression, None, self.player)
         if name in HEARTS:
             return SPMItem(name, ItemClassification.progression, ID_BASE + HEARTS[name], self.player)
+        if name == SAVE_BLOCK_ITEM:
+            return SPMItem(name, ItemClassification.useful, ID_BASE + SAVE_BLOCK_SPM, self.player)
         if name == TRAP_ITEM:
             return SPMItem(name, ItemClassification.trap, ID_BASE + TRAP_ITEM_SPM, self.player)
         spm = self.item_name_to_id[name] - ID_BASE
@@ -138,9 +143,14 @@ class SPMWorld(World):
             else:
                 locked.append((name, category, item))
 
-        # The Pure Hearts of the chapters that start closed take the place of filler: first from the
-        # pool, then by freeing locations that would have kept their vanilla filler
+        # The Pure Hearts of the chapters that start closed (and a shuffled Save Block) take the place
+        # of filler: first from the pool, then by freeing locations that would have kept their filler
         hearts = [self.create_item(f"Pure Heart {n}") for n in TOWER_CHAPTERS if n not in self.starting_chapters]
+        save_block = self.options.save_block
+        if save_block == save_block.option_shuffle:
+            hearts.append(self.create_item(SAVE_BLOCK_ITEM))
+        elif save_block == save_block.option_start_with:
+            self.multiworld.push_precollected(self.create_item(SAVE_BLOCK_ITEM))
         need = len(hearts)
         for item in [item for item in pool if item.classification == ItemClassification.filler][:need]:
             pool.remove(item)
@@ -149,7 +159,7 @@ class SPMWorld(World):
                     if entry[2].classification == ItemClassification.filler and entry[1] not in FIXED_CATEGORIES]
         freed = set(name for name, _, _ in self.random.sample(freeable, min(need, len(freeable))))
         if len(freed) < need:
-            raise OptionError(f"{self.player_name}: not enough locations for {len(hearts)} Pure Hearts")
+            raise OptionError(f"{self.player_name}: not enough locations for {len(hearts)} added items")
         for name, _, item in locked:
             if name not in freed:
                 self.get_location(name).place_locked_item(item)

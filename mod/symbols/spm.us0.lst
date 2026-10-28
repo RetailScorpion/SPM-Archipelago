@@ -17,6 +17,10 @@
 // marioStatusApplyStatuses(status, lv), as marioTakeDamage calls it. spm-headers' us0 lst lists that
 // name at 804CEA28 first (the pouch, not code) and only later at the real address, and the first wins
 80154448:mario_status_apply
+// Key item menu (pluswinKeyItemMain), using the selected key item: cmplwi r0, 0x24 (Floro Sprout);
+// bne +0x48 (to the Return Pipe's check at +0x4c). The Floro Sprout's path starts at +8 and runs its
+// script with bl evtEntryType at +0x2c (r3 = script, r4-r6 = 0), then stores the entry for the menu
+80188374:keyitem_menu_use_check
 // Called only by Fleep's join scene (sp2_01), right after the join (names are guesses): with 1, the
 // first sets MarioWork flag 0x00200000 and gives an object callback 0x8012CA18, mode 6; the second
 // changes that object's mode. Tippi's pointer crashes afterwards if Mario has no Fleep

@@ -30,6 +30,7 @@
 #include "mailbox.h"
 #include "patch.h"
 #include "savedata.h"
+#include "saveblock.h"
 #include "storyvalue.h"
 #include "tippi.h"
 
@@ -302,6 +303,7 @@ void main()
     doors::init();
     flip::init();
     filesel::init();
+    saveblock::init();
     joins::init();
     apitem::init();
 

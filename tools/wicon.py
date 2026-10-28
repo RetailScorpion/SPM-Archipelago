@@ -22,7 +22,8 @@ import tpl  # noqa: E402
 
 AP_ICONS = [os.path.join(ROOT, "assets", "icons", "ap_progression.png"),
             os.path.join(ROOT, "assets", "icons", "ap_filler.png"),
-            os.path.join(ROOT, "assets", "icons", "ap_blank.png")]  # traps: Mario holds up nothing
+            os.path.join(ROOT, "assets", "icons", "ap_blank.png"),  # traps: Mario holds up nothing
+            os.path.join(ROOT, "assets", "icons", "save_block.png")]  # from the save block's textures
 OUT_ICONS = os.path.join(ROOT, "apworld", "spm", "bin", "ap_icons.bin")
 
 
