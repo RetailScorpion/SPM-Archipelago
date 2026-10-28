@@ -14,6 +14,9 @@
 // GSW 0); lwz r0, 0(r21) (threshold table 0x803E9108: 4, 53, 95, 125, 173, 220, 286, 353);
 // cmplw r3, r0; blt (skip drawing heart r23)
 8017EF8C:filesel_heart_check
+// marioStatusApplyStatuses(status, lv), as marioTakeDamage calls it. spm-headers' us0 lst lists that
+// name at 804CEA28 first (the pouch, not code) and only later at the real address, and the first wins
+80154448:mario_status_apply
 // Called only by Fleep's join scene (sp2_01), right after the join (names are guesses): with 1, the
 // first sets MarioWork flag 0x00200000 and gives an object callback 0x8012CA18, mode 6; the second
 // changes that object's mode. Tippi's pointer crashes afterwards if Mario has no Fleep

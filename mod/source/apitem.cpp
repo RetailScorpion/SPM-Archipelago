@@ -9,6 +9,7 @@
 #include <wii/os.h>
 
 #include "apitem.h"
+#include "gamesyms.h"
 #include "mailbox.h"
 #include "patch.h"
 
@@ -86,7 +87,7 @@ static void curse()
     {
         if (roll < c.weight)
         {
-            spm::mario_status::marioStatusApplyStatuses(c.status, CURSE_LEVEL);
+            gamesyms::mario_status_apply(c.status, CURSE_LEVEL);
             wii::os::OSReport("[spmap] apitem: trap, cursed with %s\n", c.name);
             return;
         }

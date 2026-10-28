@@ -34,6 +34,10 @@ extern u32 mario_flip_story_check[];
 // save's GSW 0 (r17 = save file) with heart r23's threshold, then blt past the heart's icon
 extern u32 filesel_heart_check[];
 
+// marioStatusApplyStatuses (spm/mario_status.h), at its real address: spm-headers' us0 lst has a
+// wrong first entry for it (the pouch's data address)
+void mario_status_apply(s32 status, s32 lv);
+
 // Only in Fleep's join scene, after the join: evt_fleep_mode_on(1) and evt_fleep_mode_set(1) put
 // something Tippi's pointer uses into a Fleep mode (names are guesses); pointing crashes without Fleep
 EVT_DECLARE_USER_FUNC(evt_fleep_mode_on, 1)
