@@ -11,16 +11,24 @@ Connect before entering levels: placements only apply once the client has writte
 """
 
 import asyncio
+import random
 
 import Utils
 from CommonClient import ClientCommandProcessor, CommonContext, get_base_parser, gui_enabled, logger, server_loop
 from NetUtils import ClientStatus
 
 from .data import ID_BASE, LOCATIONS
-from .game_link import GIFT_FLAG_BASE, JOIN_ITEM_OTHER_WORLD, NO_SAVE, RECV_SIZE, STATE_IN_GAME, Mailbox, MailboxError
+from .game_link import (GIFT_FLAG_BASE, JOIN_ITEM_OTHER_WORLD, LOC_KIND_OTHER_WORLD, LOC_KIND_TRAP, NO_SAVE, RECV_SIZE,
+                        STATE_IN_GAME, Mailbox, MailboxError)
 
 GAME = "Super Paper Mario"
 AP_ITEM = 63               # the mod's stand-in for other worlds' items (apitem.cpp)
+SERVER_ONLY_FIRST = 1001   # SPM ids from here (Pure Hearts, traps) aren't game items: shown as the AP item
+HEARTS = range(1001, 1009) # Pure Hearts, always delivered from the server (mod doors.h PURE_HEART_ITEM_FIRST)
+TRAP = 1100                # Cursya Trap (mod apitem.h TRAP_ITEM_ID): found here, the mod plays it itself
+# What a trap here looks like: one of the key items placed in the game's own spots (Pixls have no
+# world-item sprite, characters crash the world-item pickup)
+DISGUISES = sorted({vanilla for _, _, category, vanilla, _, _ in LOCATIONS if category == "key_item"})
 GOAL_CHAPTER = 8
 GOAL_STORY_VALUE = 417     # ls4_12, the final boss arena
 POLL_SECONDS = 0.5
@@ -48,6 +56,7 @@ class SPMContext(CommonContext):
         self.queued_upto = None    # server item index queued into the mailbox
         self.goal_sent = False
         self.slot_options = {}
+        self.starting_chapters = []
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
@@ -58,6 +67,7 @@ class SPMContext(CommonContext):
     def on_package(self, cmd: str, args: dict):
         if cmd == "Connected":
             self.slot_options = args.get("slot_data", {}).get("options", {})
+            self.starting_chapters = args.get("slot_data", {}).get("starting_chapters", [])
             self.scouted = {}
             self.placed = False
             self.goal_sent = False
@@ -76,9 +86,15 @@ class SPMContext(CommonContext):
 
     def item_shown(self, network_item) -> tuple[int, bool]:
         """(SPM item id shown at a location, belongs to another world)."""
-        if network_item.player == self.slot:
+        if network_item.player == self.slot and network_item.item - ID_BASE < SERVER_ONLY_FIRST:
             return network_item.item - ID_BASE, False
         return AP_ITEM, True
+
+    def disguise(self, location: int) -> int:
+        """A trap's look: a key item not received yet (the same one each time for a location)."""
+        received = {item.item - ID_BASE for item in self.items_received if item.player == self.slot}
+        choices = [item for item in DISGUISES if item not in received] or DISGUISES
+        return random.Random(f"{self.seed_name}-{location}").choice(choices)
 
     def write_placements(self):
         mb = self.mailbox
@@ -88,9 +104,14 @@ class SPMContext(CommonContext):
             if network_item is None:
                 continue
             shown, foreign = self.item_shown(network_item)
-            if foreign:
+            if network_item.player == self.slot and network_item.item - ID_BASE == TRAP:
+                # Spawned items look like a key item; joins and gifts give the AP item. The mod turns
+                # either into the trap's item-get
+                names.append((flag, "Cursya Trap", "", LOC_KIND_TRAP))
+                shown = self.disguise(ID_BASE + i)
+            elif foreign:
                 names.append((flag, self.item_names.lookup_in_slot(network_item.item, network_item.player),
-                              self.player_names.get(network_item.player, "someone")))
+                              self.player_names.get(network_item.player, "someone"), LOC_KIND_OTHER_WORLD))
             if kind == "join":
                 mb.set_join_item(vanilla, JOIN_ITEM_OTHER_WORLD if foreign else shown)
             elif kind == "gift":
@@ -128,7 +149,8 @@ class SPMContext(CommonContext):
         own_locations = {ID_BASE + i for i in range(len(LOCATIONS))}
         while self.queued_upto < len(self.items_received) and mb.recv_pending() < RECV_SIZE:
             item = self.items_received[self.queued_upto]
-            given_here = item.player == self.slot and item.location in own_locations
+            given_here = (item.player == self.slot and item.location in own_locations
+                          and item.item - ID_BASE not in HEARTS)
             mb.queue_received(item.item - ID_BASE, given_here)
             self.queued_upto += 1
 
@@ -155,6 +177,7 @@ async def game_watcher(ctx: SPMContext):
             if ctx.slot is not None:
                 # Before a save is loaded too: a new file's opening checks it right away
                 ctx.mailbox.set_play_cutscenes(not ctx.slot_options.get("skip_cutscenes", True))
+                ctx.mailbox.set_starting_hearts(ctx.starting_chapters)
             if ctx.slot is not None and ctx.mailbox.mod_state() == STATE_IN_GAME:
                 if not ctx.placed and ctx.scouted:
                     ctx.write_placements()

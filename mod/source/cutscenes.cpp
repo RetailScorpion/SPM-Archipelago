@@ -19,8 +19,8 @@ namespace mod::cutscenes {
     background and aa3_01 the ending. Vanilla ends the Tippi scene with SET(GSW(0), 2) and a map change
     to mac_02 (Flipside Tower), where Merlon's scenes (2-9) give the first Pure Heart and the Return
     Pipe. Those are skipped too: the file starts in Flipside Tower at the prologue's end, so the hub
-    gets its fixed value (Pure Heart 1 in its pillar, the Lineland door open), and Mario gets the
-    Return Pipe Merlon would have given (story value 8).
+    gets its fixed value, and Mario gets the Return Pipe Merlon would have given (story value 8).
+    Which doors are open comes from the seed's Pure Hearts (doors.h).
 */
 static bool skipOpening(spm::seqdrv::SeqWork * wp)
 {

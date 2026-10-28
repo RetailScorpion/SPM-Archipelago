@@ -7,7 +7,7 @@ import time
 import dolphin_memory_engine as dme
 
 MAGIC = b"SPMAP_MAILBOX_v1"
-VERSION = 10
+VERSION = 11
 RECV_SIZE = 16
 SENT_SIZE = 32
 
@@ -37,10 +37,12 @@ OFF_LOC_NAMES = 0x128
 OFF_LOC_NAMES_MAX = 0x12C
 OFF_PLAY_CUTSCENES = 0x130
 OFF_GIFT_ITEMS = 0x134
+OFF_STARTING_HEARTS = 0x144
 GIFT_FLAG_BASE = 7168 + 16  # AP_GSWF_GIFT_BASE (mod/include/savedata.h)
 RECV_ALREADY_GIVEN = 0x8000
 NO_SAVE = 0xFFFFFFFF
-LOC_NAME_SIZE = 0x40  # apitem::LocName: u16 flag, u16 pad, char item[36], char player[24]
+LOC_NAME_SIZE = 0x40  # apitem::LocName: u16 flag, u16 kind, char item[36], char player[24]
+LOC_KIND_OTHER_WORLD, LOC_KIND_TRAP = 0, 1  # apitem.h LocKind
 GSWF_OFFSET = 0x144   # SpmarioGlobals gswf[256]: flag n is bit (n & 31) of word (n >> 5)
 DEBUG_JOINS_GIVE_NOTHING = 0x1
 DEBUG_JOINS_GIVE_PLACEHOLDER = 0x2
@@ -133,18 +135,23 @@ class Mailbox:
         return True
 
     def write_loc_names(self, entries):
-        """entries: [(flag, item name, player name)] for locations holding other worlds' items."""
+        """entries: [(flag, item name, player name, kind)] for locations holding other worlds' items
+        (kind 0) or this world's traps (kind 1, LOC_KIND_TRAP)."""
         table = dme.read_word(self.addr + OFF_LOC_NAMES)
         count = dme.read_word(self.addr + OFF_LOC_NAMES_MAX)
         data = bytearray(LOC_NAME_SIZE * count)
-        for i, (flag, item, player) in enumerate(entries[:count]):
-            struct.pack_into(">HH36s24s", data, i * LOC_NAME_SIZE, flag, 0,
+        for i, (flag, item, player, kind) in enumerate(entries[:count]):
+            struct.pack_into(">HH36s24s", data, i * LOC_NAME_SIZE, flag, kind,
                              item.encode("ascii", "replace")[:35], player.encode("ascii", "replace")[:23])
         dme.write_bytes(table, bytes(data))
 
     def set_gift_item(self, index: int, item_id: int):
         """What a story gift location gives (0 = vanilla, JOIN_ITEM_OTHER_WORLD = another world's item)."""
         dme.write_bytes(self.addr + OFF_GIFT_ITEMS + 2 * index, struct.pack(">H", item_id))
+
+    def set_starting_hearts(self, hearts):
+        """The Pure Hearts the seed starts with (numbers 1-8)."""
+        dme.write_word(self.addr + OFF_STARTING_HEARTS, sum(1 << (n - 1) for n in hearts))
 
     def set_play_cutscenes(self, play: bool):
         dme.write_word(self.addr + OFF_PLAY_CUTSCENES, 1 if play else 0)

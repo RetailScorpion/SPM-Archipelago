@@ -12,6 +12,7 @@ void init()
     msl::string::memset(&gMailbox, 0, sizeof(gMailbox));
     gMailbox.version = MAILBOX_VERSION;
     gMailbox.modState = STATE_BOOT;
+    gMailbox.startingHearts = STARTING_HEARTS_NO_CLIENT;
     // magic last, so a client that finds it sees a fully initialised mailbox
     msl::string::memcpy(gMailbox.magic, MAILBOX_MAGIC, sizeof(gMailbox.magic));
 }

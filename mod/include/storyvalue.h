@@ -1,7 +1,6 @@
 #pragma once
 
 #include <common.h>
-#include <spm/nandmgr.h>
 
 /*
     Per-chapter story value (GSW 0).
@@ -70,9 +69,6 @@ s32 getChapterValue(s32 chapter);
 
 // Whether a chapter's ending has played
 bool isChapterFinished(s32 chapter);
-
-// The same for a save file that isn't loaded (the file select)
-bool isChapterFinishedInSave(const spm::nandmgr::SaveFile * save, s32 chapter);
 
 /*
     Moves a chapter's story value forward to value (never backwards), as if that chapter's own scene

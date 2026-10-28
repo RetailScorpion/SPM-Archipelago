@@ -21,7 +21,8 @@ import patcher  # noqa: E402
 import tpl  # noqa: E402
 
 AP_ICONS = [os.path.join(ROOT, "assets", "icons", "ap_progression.png"),
-            os.path.join(ROOT, "assets", "icons", "ap_filler.png")]
+            os.path.join(ROOT, "assets", "icons", "ap_filler.png"),
+            os.path.join(ROOT, "assets", "icons", "ap_blank.png")]  # traps: Mario holds up nothing
 OUT_ICONS = os.path.join(ROOT, "apworld", "spm", "bin", "ap_icons.bin")
 
 

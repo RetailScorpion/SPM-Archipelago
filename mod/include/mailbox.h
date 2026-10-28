@@ -14,7 +14,7 @@
 namespace mod::mailbox {
 
 #define MAILBOX_MAGIC "SPMAP_MAILBOX_v1"
-#define MAILBOX_VERSION 10
+#define MAILBOX_VERSION 11
 
 // debugFlags bits
 #define DEBUG_JOINS_GIVE_NOTHING 0x1      // Pixl joins mark their location but don't give the Pixl
@@ -69,8 +69,14 @@ struct Mailbox
     // Story gift locations (hubstory.cpp sGifts order), written by the client: what each
     // gives; 0 = its vanilla item, JOIN_ITEM_OTHER_WORLD = another world's item
 /* 0x134 */ u16 giftItems[8];
+
+    // Pure Hearts the seed starts with (bit n - 1 = heart n), written by the client;
+    // STARTING_HEARTS_NO_CLIENT until it does, which opens every door without giving any heart
+/* 0x144 */ u32 startingHearts;
 };
-static_assert(sizeof(Mailbox) == 0x144);
+static_assert(sizeof(Mailbox) == 0x148);
+
+#define STARTING_HEARTS_NO_CLIENT 0xFFFFFFFF
 
 // joinItems value: the location holds another world's item
 #define JOIN_ITEM_OTHER_WORLD 0xFFFF

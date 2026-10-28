@@ -15,10 +15,27 @@
     Pipe from 1-3, say) doesn't mean replaying from 1-1. A door gets the menu once its chapter has
     reached its second section; before that it's a plain door to X-1.
 
-    Which doors are open still comes from the hub value for now; pillars will decide that later.
+    Door N (Chapters 1-7) is open once Pure Heart N is held (AP_GSWF_HEART): the seed's starting
+    hearts (mailbox startingHearts, set into the save on map changes) or one received from the
+    server. Pillars aren't involved yet. Without a client every door is open.
 */
 
 namespace mod::doors {
+
+#define PURE_HEART_COUNT 8
+// Item ids for Pure Hearts 1-8 from the server (not game items; Archipelago item id - id base)
+#define PURE_HEART_ITEM_FIRST 1001
+
+bool isHeartItem(s32 itemId);
+
+// heart: 1-8
+void giveHeart(s32 heart);
+bool isDoorOpen(s32 heart);
+
+/*
+    Gives the save the seed's starting hearts. Call on every map change, before the map's scripts.
+*/
+void onMapChange();
 
 /*
     Redirects the tower's setup to the mod's script. Call once at boot (relF is already loaded).

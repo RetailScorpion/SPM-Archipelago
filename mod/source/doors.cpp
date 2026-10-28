@@ -8,6 +8,7 @@
 #include <spm/evt_msg.h>
 #include <spm/evtmgr_cmd.h>
 #include <spm/msgdrv.h>
+#include <spm/swdrv.h>
 #include <wii/os.h>
 #include <msl/stdio.h>
 #include <msl/string.h>
@@ -15,7 +16,9 @@
 #include "apitem.h"
 #include "doors.h"
 #include "gamesyms.h"
+#include "mailbox.h"
 #include "patch.h"
+#include "savedata.h"
 #include "storyvalue.h"
 
 namespace mod::doors {
@@ -79,6 +82,41 @@ static const char * msgSearchHook(const char * msgName)
 }
 
 /*
+    Pure Hearts
+*/
+
+bool isHeartItem(s32 itemId)
+{
+    return itemId >= PURE_HEART_ITEM_FIRST && itemId < PURE_HEART_ITEM_FIRST + PURE_HEART_COUNT;
+}
+
+void giveHeart(s32 heart)
+{
+    spm::swdrv::swSet(AP_GSWF_HEART(heart));
+    wii::os::OSReport("[spmap] doors: Pure Heart %d received\n", heart);
+}
+
+bool isDoorOpen(s32 heart)
+{
+    return mailbox::gMailbox.startingHearts == STARTING_HEARTS_NO_CLIENT || spm::swdrv::swGet(AP_GSWF_HEART(heart));
+}
+
+void onMapChange()
+{
+    u32 starting = mailbox::gMailbox.startingHearts;
+    if (starting == STARTING_HEARTS_NO_CLIENT)
+        return;
+    for (s32 heart = 1; heart <= PURE_HEART_COUNT; heart++)
+    {
+        if ((starting & (1 << (heart - 1))) && !spm::swdrv::swGet(AP_GSWF_HEART(heart)))
+        {
+            spm::swdrv::swSet(AP_GSWF_HEART(heart));
+            wii::os::OSReport("[spmap] doors: starting with Pure Heart %d\n", heart);
+        }
+    }
+}
+
+/*
     Script functions
 */
 
@@ -118,6 +156,17 @@ static EVT_DEFINE_USER_FUNC(ap_door_valid_choice)
 }
 static constexpr s32 ap_door_valid_choice_parameter_count = 3;
 
+// ap_door_open(door, &result): the door is open (its Pure Heart is held)
+static EVT_DEFINE_USER_FUNC(ap_door_open)
+{
+    (void) isFirstCall;
+    spm::evtmgr::EvtScriptCode * args = evt->pCurData;
+    s32 door = spm::evtmgr_cmd::evtGetValue(evt, args[0]);
+    spm::evtmgr_cmd::evtSetValue(evt, args[1], isDoorOpen(door + 1));
+    return 2;
+}
+static constexpr s32 ap_door_open_parameter_count = 2;
+
 /*
     Copy of mac_door_select_evt (relF 0xB8DCC), run when a section-select door is used.
     LW(0) = map door desc, LW(1) = door message, LW(2) = section list message.
@@ -152,21 +201,16 @@ EVT_END()
     - which doors get the section menu: every door whose chapter has reached two or more sections
       (vanilla: every finished chapter, judged from the hub's single story value)
     - the menu uses the mod's message and select script
-    - every tower door (Chapters 1-7) is open. Vanilla opens the first N by the hub's story value, and
-      the mod's fixed hub value (65) opened Chapter 2's early; until the pillar/door system decides
-      which doors are open, the no-logic prototype opens them all (more locations to reach).
+    - a door is open when its Pure Heart is held (isDoorOpen). Vanilla opens the first N by the hub's
+      story value. LW(0) stays the vanilla count of 7, which the menu setup uses.
       Chapter 8's door is in Flopside and isn't affected.
 */
 EVT_BEGIN(ap_door_setup_evt)
-    // Number of open doors (vanilla: 0-7 from the hub value)
+    // Vanilla: number of open doors (0-7 from the hub value)
     SET(LW(0), TOWER_DOOR_COUNT)
     SET(LW(1), 0)
     DO(7)
-        IF_SMALL(LW(1), LW(0))
-            SET(LF(0), 1)
-        ELSE()
-            SET(LF(0), 0)
-        END_IF()
+        USER_FUNC(ap_door_open, LW(1), LF(0))
         USER_FUNC(evt_mac_door_info, LW(1), LW(2), LW(3), LW(4), LW(5), LW(6))
         IF_NOT_EQUAL(LF(0), 0)
             USER_FUNC(ap_door_has_select, LW(1), LW(8))

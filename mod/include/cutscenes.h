@@ -5,7 +5,7 @@
 /*
     The skip_cutscenes option: story scenes the randomizer skips unless the player wants to watch.
       - a new file's opening (Count Bleck and Peach, Mario's house, meeting Tippi) and Merlon's
-        scenes after it: starts in Flipside Tower with Pure Heart 1 placed and the Return Pipe
+        scenes after it: starts in Flipside Tower with the Return Pipe
       - the Count Bleck scene after the prologue and after each of Chapters 1-7 (Castle Bleck's throne
         room, ls4_11), and the playable Peach and Luigi intermissions after Chapters 1 and 2
     Each skip jumps to where the skipped scenes would have sent Mario, as the scenes themselves do

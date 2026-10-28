@@ -31,6 +31,9 @@ namespace mod::savedata {
 // Story gift locations (hubstory.cpp sGifts order: Peach, Luigi, Helmet, Bowser, Bestovius), one flag each
 #define AP_GSWF_GIFT_BASE (AP_GSWF_BASE + 16)
 #define AP_GSWF_GIFT(index) (AP_GSWF_GIFT_BASE + (index))
+// Pure Hearts held, one flag each (heart 1-8); heart n opens tower door n (doors.cpp)
+#define AP_GSWF_HEART_BASE (AP_GSWF_BASE + 24)
+#define AP_GSWF_HEART(n) (AP_GSWF_HEART_BASE + (n) - 1)
 
 // Vanilla flags the mod relies on
 #define GSWF_TIPPI_PRESENT 403  // written by the save code from the guide state, restored on load

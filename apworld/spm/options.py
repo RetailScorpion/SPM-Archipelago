@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from Options import DefaultOnToggle, PerGameCommonOptions, Toggle
+from Options import Choice, DefaultOnToggle, OptionSet, PerGameCommonOptions, Range, Toggle
 
 
 class ShufflePixls(DefaultOnToggle):
@@ -38,9 +38,47 @@ class RandomizeCharacters(Toggle):
 class SkipCutscenes(DefaultOnToggle):
     """Skip the opening and the Count Bleck scenes between chapters (plus the Peach and Luigi
     intermissions after Chapters 1 and 2). A new file skips Merlon's scenes too: it starts in
-    Flipside Tower with the first Pure Heart in its pillar, the Lineland door open and the Return
-    Pipe. Off: watch the story as in vanilla."""
+    Flipside Tower with the Return Pipe. Off: watch the story as in vanilla."""
     display_name = "Skip Cutscenes"
+
+
+class StartingChapterMode(Choice):
+    """How the chapters whose doors are open at the start are picked. Every other chapter's door
+    opens when you receive its Pure Heart, which is shuffled into the item pool.
+    chosen: the chapters listed in Starting Chapters.
+    random_chapters: Starting Chapter Count chapters, picked at random.
+    random_amount: a random number of chapters (1 to 7), picked at random."""
+    display_name = "Starting Chapter Mode"
+    option_chosen = 0
+    option_random_chapters = 1
+    option_random_amount = 2
+    default = 0
+
+
+class StartingChapters(OptionSet):
+    """The chapters open at the start, for Starting Chapter Mode: chosen (1 to 7; Chapter 8's door
+    opens after Chapters 1-7, as in vanilla)."""
+    display_name = "Starting Chapters"
+    valid_keys = {f"Chapter {n}" for n in range(1, 8)}
+    default = frozenset({"Chapter 1"})
+
+
+class StartingChapterCount(Range):
+    """How many chapters are open at the start, for Starting Chapter Mode: random_chapters."""
+    display_name = "Starting Chapter Count"
+    range_start = 1
+    range_end = 7
+    default = 1
+
+
+class TrapPercentage(Range):
+    """Percentage of the shuffled filler items replaced by Cursya Traps. In Super Paper Mario a trap
+    looks like a key item or Pixl you haven't found; collecting it gives you nothing ("You are a
+    FOOL!") and a random Cursya curse: slow, flipped controls, no jump or no skills."""
+    display_name = "Trap Percentage"
+    range_start = 0
+    range_end = 100
+    default = 10
 
 
 @dataclass
@@ -52,3 +90,7 @@ class SPMOptions(PerGameCommonOptions):
     shuffle_catch_cards: ShuffleCatchCards
     randomize_characters: RandomizeCharacters
     skip_cutscenes: SkipCutscenes
+    starting_chapter_mode: StartingChapterMode
+    starting_chapters: StartingChapters
+    starting_chapter_count: StartingChapterCount
+    trap_percentage: TrapPercentage

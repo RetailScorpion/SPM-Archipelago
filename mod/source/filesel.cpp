@@ -5,11 +5,9 @@
 #include "filesel.h"
 #include "gamesyms.h"
 #include "patch.h"
-#include "storyvalue.h"
+#include "savedata.h"
 
 namespace mod::filesel {
-
-#define STORY_FIRST_HEART 4  // Merlon has given Pure Heart 1
 
 // The instructions at filesel_heart_check
 static const u32 sExpected[4] = {
@@ -31,11 +29,11 @@ static const u32 MR_R4_R23 = 0x7EE4BB78;
 
 static u32 sStub[3];
 
+// heart: 0-7, the icon's index
 static s32 heartShown(const spm::nandmgr::SaveFile * save, s32 heart)
 {
-    if (heart == 0)
-        return save->spmarioGlobals.gsw0 >= STORY_FIRST_HEART;
-    return storyvalue::isChapterFinishedInSave(save, heart);
+    s32 flag = AP_GSWF_HEART(heart + 1);
+    return (save->spmarioGlobals.gswf[flag / 32] >> (flag % 32)) & 1;
 }
 
 void init()

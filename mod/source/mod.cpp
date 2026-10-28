@@ -140,6 +140,25 @@ static void spawnNextReceived()
         return;
     }
 
+    // A trap from the server: the AP item's item-get, as a trap
+    if (!local && itemId == apitem::TRAP_ITEM_ID)
+    {
+        apitem::armTrap();
+        wii::mtx::Vec3 & at = spm::mario::marioGetPtr()->position;
+        spm::itemdrv::itemEntry(RECV_ITEM_NAME, apitem::AP_ITEM_ID, 0, at.x, at.y, at.z, nullptr, 0);
+        sSpawnedItem = apitem::AP_ITEM_ID;
+        wii::os::OSReport("[spmap] spawned received trap\n");
+        return;
+    }
+
+    // Pure Hearts aren't game items: held as a save flag, which opens their door
+    if (!local && doors::isHeartItem(itemId))
+    {
+        doors::giveHeart(itemId - PURE_HEART_ITEM_FIRST + 1);
+        receivedHandled();
+        return;
+    }
+
     // Characters crash the world-item pickup (they're never world items in vanilla), so they're
     // added directly for now; they'll need their own presentation
     if (itemId >= ITEM_ID_CHAR_START && itemId < ITEM_ID_CHAR_MAX)
@@ -265,6 +284,7 @@ static void seq_mapChangeInitHook(spm::seqdrv::SeqWork * wp)
     tippi::onMapChange(storyvalue::gStory.context, spm::spmario::gp->gsw0);
     joins::onMapChange();
     hubstory::onMapChange(wp->p0);
+    doors::onMapChange();
 
     seq_mapChangeInitReal(wp);
 }
