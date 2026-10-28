@@ -2,6 +2,7 @@
 #include <evt_cmd.h>
 #include <spm/evt_door.h>
 #include <spm/evt_map.h>
+#include <spm/evt_mario.h>
 #include <spm/evt_pouch.h>
 #include <spm/evt_snd.h>
 #include <spm/evtmgr_cmd.h>
@@ -13,6 +14,7 @@
 #include "apitem.h"
 #include "delivery.h"
 #include "gamesyms.h"
+#include "hubstory.h"
 #include "joins.h"
 #include "mailbox.h"
 #include "savedata.h"
@@ -26,6 +28,7 @@ using spm::evtmgr::EvtScriptCode;
 #define OP_IF_EQUAL 24
 #define OP_IF_NOT_EQUAL 25
 #define OP_IF_SMALL 26
+#define OP_IF_LARGE_EQUAL 29
 #define OP_SWITCH 34
 #define OP_CASE_SMALL 38
 #define OP_USER_FUNC 92
@@ -45,6 +48,12 @@ using spm::evtmgr::EvtScriptCode;
 #define PIXL_PICCOLO 229
 #define PIXL_BARRY 230
 #define PIXL_DASHELL 231
+
+// Characters as evt_mario_set_character takes them; their items are CHARACTER_ITEM_BASE + character
+#define CHARACTER_PEACH 1
+#define CHARACTER_BOWSER 2
+#define CHARACTER_LUIGI 3
+#define CHARACTER_ITEM_BASE 216
 
 // Location ids the joins report to the client: JOIN_LOCATION_BASE + Pixl item id (stand-ins until
 // Archipelago location ids exist). Bit JOIN_LOCATION_OTHER_WORLD marks "held another world's item".
@@ -84,7 +93,15 @@ enum PatchKind
     HAVE_NEVER, // IF_NOT_EQUAL(LW(0), 0) -> IF_NOT_EQUAL(LW(0), LW(0)): never true
     SKIP,       // USER_FUNC(sSkippable[b], ...) with a args -> USER_FUNC(ap_skip, ...): does nothing
     FLEEP_ONLY, // USER_FUNC(sFleepOnly[b].real, x) -> USER_FUNC(sFleepOnly[b].wrapper, x): runs only with Fleep
+    CHAR_JOIN,  // USER_FUNC(evt_mario_set_character, a) -> USER_FUNC(ap_char_join, a): collects the
+                // character's location (gift b), then switches to the character only if Mario has them
+    GIFT_GATE,  // IF_LARGE_EQUAL(GSW(0), a) -> IF_EQUAL(GSWF(gift location b), 0)
+    ALWAYS,     // IF_SMALL(GSW(0), a) -> IF_SMALL(GSW(0), STORY_VALUE_NEVER): always true
+    CASE_PEACH, // CASE_SMALL(a) -> CASE_SMALL(GSW(AP_GSW_PEACH_SCENE)), set by hubstory
 };
+
+// Past every story value, for ALWAYS
+#define STORY_VALUE_NEVER 30000
 
 // Functions a SKIP patch may replace
 enum Skippable
@@ -92,11 +109,13 @@ enum Skippable
     DOOR_ENABLE_DISABLE,
     SFX_3D,
     MAP_PLAYANIM,
+    POUCH_ADD_ITEM,
 };
 static const void * const sSkippable[] = {
     reinterpret_cast<const void *>(spm::evt_door::evt_door_enable_disable_map_door_desc),
     reinterpret_cast<const void *>(spm::evt_snd::evt_snd_sfxon_3d),
     reinterpret_cast<const void *>(spm::evt_map::evt_map_playanim),
+    reinterpret_cast<const void *>(spm::evt_pouch::evt_pouch_add_item),
 };
 
 struct Patch
@@ -166,6 +185,22 @@ static const Patch sPatches[] = {
     {GIFT, 0x33684, PIXL_PICCOLO, 0, "Piccolo join"},
     {GIFT, 0x7b024, PIXL_BARRY, 0, "Barry join"},
     {GIFT, 0x15b6d4, PIXL_DASHELL, 0, "Dashell join"},
+
+    // Characters: the join scenes collect a gift location (hubstory.cpp) instead of adding the
+    // character. Their own evt_pouch_add_item is skipped; ap_char_join gives what was placed there.
+    // Peach: Flipside Tower (mac_02) plays her scene, entering from Merlon's house, for story values
+    // 59-62; the CASE now compares with a value hubstory sets once Chapter 1 is finished
+    {CASE_PEACH, 0x1bdd4, 63, 0, "Peach: join scene trigger"},
+    {SKIP, 0xcaf8, 1, POUCH_ADD_ITEM, "Peach: vanilla join"},
+    {CHAR_JOIN, 0xcb04, CHARACTER_PEACH, hubstory::GIFT_PEACH, "Peach join"},
+    // Bowser: 3-1 (ta1_04) after his fight; the fight still waits for Chapter 3's own value (< 104)
+    {SKIP, 0x74744, 1, POUCH_ADD_ITEM, "Bowser: vanilla join"},
+    {CHAR_JOIN, 0x74724, CHARACTER_BOWSER, hubstory::GIFT_BOWSER, "Bowser join"},
+    // Luigi: the Underwhere (an1_07) plays his scene for story values 295-296, before Chapter 7's start
+    {GIFT_GATE, 0xede0c, 295, hubstory::GIFT_LUIGI, "Luigi: join scene"},
+    {ALWAYS, 0xede18, 297, 0, "Luigi: join scene (upper bound)"},
+    {SKIP, 0xeda4c, 1, POUCH_ADD_ITEM, "Luigi: vanilla join"},
+    {CHAR_JOIN, 0xeda20, CHARACTER_LUIGI, hubstory::GIFT_LUIGI, "Luigi join"},
 };
 
 // ap_join_gift(pixlItemId): a Pixl join location. Marks it collected; until Archipelago is
@@ -235,6 +270,34 @@ static EVT_DEFINE_USER_FUNC(ap_fleep_mode_set)
 {
     return havePixl(PIXL_FLEEP) ? gamesyms::evt_fleep_mode_set(evt, isFirstCall) : 2;
 }
+static bool haveCharacter(s32 character)
+{
+    for (auto & info : spm::mario_pouch::pouchGetPtr()->characters)
+    {
+        if (info.itemType == CHARACTER_ITEM_BASE + character)
+            return true;
+    }
+    return false;
+}
+
+// Gift location of each character's join scene, set up by init() from the CHAR_JOIN patches
+static hubstory::Gift sCharacterGift[CHARACTER_LUIGI + 1];
+
+// ap_char_join(character): a character's join scene. Collects its location (once), then switches
+// to the character only if Mario has them: switching to one he doesn't have breaks his controls
+static EVT_DEFINE_USER_FUNC(ap_char_join)
+{
+    s32 character = spm::evtmgr_cmd::evtGetValue(evt, evt->pCurData[0]);
+    if (isFirstCall)
+        hubstory::collectGift(sCharacterGift[character]);
+    if (!haveCharacter(character))
+    {
+        wii::os::OSReport("[spmap] joins: character %d not in the party, staying as is\n", character);
+        return 2;
+    }
+    return spm::evt_mario::evt_mario_set_character(evt, isFirstCall);
+}
+
 using UserFunc = s32(spm::evtmgr::EvtEntry * evt, bool isFirstCall);
 static const struct
 {
@@ -327,6 +390,41 @@ static void apply(const Patch & p)
             const s32 orig[] = {EVT_CMD(2, OP_USER_FUNC), reinterpret_cast<s32>(sFleepOnly[p.b].real), 1};
             if (expect(at, orig, 3, p.what))
                 at[1] = reinterpret_cast<s32>(sFleepOnly[p.b].wrapper);
+            break;
+        }
+        case CHAR_JOIN:
+        {
+            const s32 orig[] = {EVT_CMD(1, OP_USER_FUNC), reinterpret_cast<s32>(spm::evt_mario::evt_mario_set_character), p.a};
+            if (expect(at, orig, 3, p.what))
+            {
+                sCharacterGift[p.a] = static_cast<hubstory::Gift>(p.b);
+                at[1] = reinterpret_cast<s32>(ap_char_join);
+            }
+            break;
+        }
+        case GIFT_GATE:
+        {
+            const s32 orig[] = {EVT_CMD(2, OP_IF_LARGE_EQUAL), GSW_VAR(0), p.a};
+            if (expect(at, orig, 3, p.what))
+            {
+                at[0] = EVT_CMD(2, OP_IF_EQUAL);
+                at[1] = GSWF_VAR(AP_GSWF_GIFT(p.b));
+                at[2] = 0;
+            }
+            break;
+        }
+        case ALWAYS:
+        {
+            const s32 orig[] = {EVT_CMD(2, OP_IF_SMALL), GSW_VAR(0), p.a};
+            if (expect(at, orig, 3, p.what))
+                at[2] = STORY_VALUE_NEVER;
+            break;
+        }
+        case CASE_PEACH:
+        {
+            const s32 orig[] = {EVT_CMD(1, OP_CASE_SMALL), p.a};
+            if (expect(at, orig, 2, p.what))
+                at[1] = GSW_VAR(AP_GSW_PEACH_SCENE);
             break;
         }
         case SKIP:

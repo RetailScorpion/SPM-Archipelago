@@ -50,12 +50,14 @@ AP_GSWF_JOIN_BASE = AP_GSWF_BASE + 1          # + Pixl item id - 221 (Thoreau ..
 AP_GSWF_LOC_BASE = AP_GSWF_BASE + 32          # unflagged key spots, in KEY_SPOTS order
 AP_GSWF_GIFT_BASE = AP_GSWF_BASE + 16         # story gifts, in GIFTS order (mod/source/hubstory.cpp sGifts)
 
-# Story gifts the mod hands out in place of hub or skipped scenes (hubstory.cpp), in the mod's order:
-# (vanilla item, map shown for it, label). The Helmet is always vanilla: without it Outer Space's
-# movement breaks, and nothing blocks Chapter 4 without it yet.
-GIFTS = [(217, "mac_02", "Peach joins (Chapter 1 finished)"),
-         (219, "an1_07", "Luigi joins (entering Chapter 7)"),
-         (24, "sp1_01", "Helmet (entering Chapter 4)")]
+# Story gift locations (hubstory.cpp sGifts), in the mod's order: (vanilla item, map, label). New ones
+# go at the end, so earlier location ids don't change. The characters' are their join scenes; the
+# Helmet is always vanilla: without it Outer Space's movement breaks, and nothing blocks Chapter 4
+# without it yet.
+GIFTS = [(217, "mac_02", "Peach joins"),
+         (219, "an1_07", "Luigi joins"),
+         (24, "sp1_01", "Helmet (entering Chapter 4)"),
+         (218, "ta1_04", "Bowser joins")]
 ALWAYS_VANILLA_GIFTS = {24}
 
 PIXLS = {221: ("Thoreau", "he2_07"), 222: ("Boomer", "mi1_07"), 223: ("Slim", "mi3_01"),

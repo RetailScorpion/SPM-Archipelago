@@ -1,5 +1,6 @@
 #include <common.h>
 #include <msl/string.h>
+#include <spm/mario_pouch.h>
 #include <spm/spmario.h>
 #include <spm/swdrv.h>
 #include <wii/os.h>
@@ -26,9 +27,8 @@ namespace mod::hubstory {
 */
 enum Trigger
 {
-    CHAPTER_1_FINISHED,
+    SCENE,              // collected by its join scene (joins.cpp ap_char_join), never here
     ENTERED_CHAPTER_4,
-    ENTERED_CHAPTER_7,
 };
 
 static const struct
@@ -37,39 +37,41 @@ static const struct
     Trigger trigger;
     const char * what;
 } sGifts[] = {
-    {217, CHAPTER_1_FINISHED, "Peach joins"},   // vanilla: Flipside Tower scene, story value 63
-    {219, ENTERED_CHAPTER_7, "Luigi joins"},    // vanilla: the Underwhere, story value 297
-    {24, ENTERED_CHAPTER_4, "the Helmet"},      // vanilla: Merlon's Goldfish Bowl quest, 131-134
+    {217, SCENE, "Peach joins"},               // Flipside Tower scene (vanilla story values 59-62)
+    {219, SCENE, "Luigi joins"},               // the Underwhere, an1_07 (vanilla 295-296)
+    {24, ENTERED_CHAPTER_4, "the Helmet"},     // vanilla: Merlon's Goldfish Bowl quest, 131-134
+    {218, SCENE, "Bowser joins"},              // 3-1, after his fight (Chapter 3's own value, < 104)
 };
 
-static bool triggered(Trigger trigger, s32 context)
+// Peach's join scene: Flipside Tower's init runs it for CASE_SMALL(63) of its story value SWITCH, which
+// joins.cpp points at AP_GSW_PEACH_SCENE. Past the hub value when the scene is due, 0 (never) otherwise
+#define PEACH_SCENE_ON (STORY_HUB_VALUE + 1)
+
+s32 collectGift(Gift gift)
 {
-    switch (trigger)
-    {
-        case CHAPTER_1_FINISHED:
-            return storyvalue::isChapterFinished(1);
-        case ENTERED_CHAPTER_4:
-            return context == 4;
-        case ENTERED_CHAPTER_7:
-            return context == 7;
-    }
-    return false;
+    s32 flag = AP_GSWF_GIFT(gift);
+    if (spm::swdrv::swGet(flag))
+        return 0;
+    // The flag first: it marks the location collected (the client reports it) and, for another
+    // world's item, tells the AP item-get whose names to show
+    spm::swdrv::swSet(flag);
+    u16 placed = mailbox::gMailbox.giftItems[gift];
+    s32 item = placed == 0 ? sGifts[gift].vanillaItem : placed == JOIN_ITEM_OTHER_WORLD ? apitem::AP_ITEM_ID : placed;
+    // A scene's own character joins quietly, as in vanilla; anything else gets the item-get
+    if (sGifts[gift].trigger == SCENE && item == sGifts[gift].vanillaItem)
+        spm::mario_pouch::pouchAddItem(item);
+    else
+        delivery::giveLocal(item);
+    wii::os::OSReport("[spmap] hubstory: %s location collected, giving item %d\n", sGifts[gift].what, item);
+    return item;
 }
 
 static void collectGifts(s32 context)
 {
     for (u32 i = 0; i < sizeof(sGifts) / sizeof(sGifts[0]); i++)
     {
-        s32 flag = AP_GSWF_GIFT(i);
-        if (spm::swdrv::swGet(flag) || !triggered(sGifts[i].trigger, context))
-            continue;
-        // The flag first: it marks the location collected (the client reports it) and, for another
-        // world's item, tells the AP item-get whose names to show
-        spm::swdrv::swSet(flag);
-        u16 placed = mailbox::gMailbox.giftItems[i];
-        s32 item = placed == 0 ? sGifts[i].vanillaItem : placed == JOIN_ITEM_OTHER_WORLD ? apitem::AP_ITEM_ID : placed;
-        delivery::giveLocal(item);
-        wii::os::OSReport("[spmap] hubstory: %s location collected, giving item %d\n", sGifts[i].what, item);
+        if (sGifts[i].trigger == ENTERED_CHAPTER_4 && context == 4)
+            collectGift(static_cast<Gift>(i));
     }
 }
 
@@ -88,6 +90,9 @@ void onMapChange(const char * nextMap)
     s32 context = storyvalue::gStory.context;
 
     collectGifts(context);
+
+    bool peachDue = storyvalue::isChapterFinished(1) && !spm::swdrv::swGet(AP_GSWF_GIFT(GIFT_PEACH));
+    savedata::setGswByte(AP_GSW_PEACH_SCENE, peachDue ? PEACH_SCENE_ON : 0);
 
     if (storyvalue::getChapterValue(6) == CHAPTER_6_DUELS_DONE)
         storyvalue::advanceChapter(6, CHAPTER_6_WORLD_ENDED);

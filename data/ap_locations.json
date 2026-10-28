@@ -2393,11 +2393,11 @@
    "map": "mac_02",
    "item": 217,
    "flag": 7184,
-   "label": "Peach joins (Chapter 1 finished)",
+   "label": "Peach joins",
    "patches": [],
    "where": "given by the mod",
    "pos": null,
-   "name": "Flipside/Flopside - Peach joins (Chapter 1 finished) (mac_02)",
+   "name": "Flipside/Flopside - Peach joins (mac_02)",
    "id": 1397771631,
    "category": "character"
   },
@@ -2406,11 +2406,11 @@
    "map": "an1_07",
    "item": 219,
    "flag": 7185,
-   "label": "Luigi joins (entering Chapter 7)",
+   "label": "Luigi joins",
    "patches": [],
    "where": "given by the mod",
    "pos": null,
-   "name": "7-1 The Underwhere - Luigi joins (entering Chapter 7) (an1_07)",
+   "name": "7-1 The Underwhere - Luigi joins (an1_07)",
    "id": 1397771632,
    "category": "character"
   },
@@ -2426,6 +2426,19 @@
    "name": "4-1 Outer Space - Helmet (entering Chapter 4) (sp1_01)",
    "id": 1397771633,
    "category": "fixed"
+  },
+  {
+   "kind": "gift",
+   "map": "ta1_04",
+   "item": 218,
+   "flag": 7187,
+   "label": "Bowser joins",
+   "patches": [],
+   "where": "given by the mod",
+   "pos": null,
+   "name": "3-1 The Bitlands - Bowser joins (ta1_04)",
+   "id": 1397771634,
+   "category": "character"
   }
  ],
  "items": [
@@ -2625,6 +2638,12 @@
    "id": 1397771737,
    "spm": 217,
    "name": "Peach",
+   "category": "character"
+  },
+  {
+   "id": 1397771738,
+   "spm": 218,
+   "name": "Bowser",
    "category": "character"
   },
   {

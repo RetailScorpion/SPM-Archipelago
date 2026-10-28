@@ -4,11 +4,13 @@
 
 /*
     Story steps vanilla plays in the hubs (or tied to story values the per-chapter values skip past),
-    given directly instead. The hubs sit at a fixed story value (STORY_HUB_VALUE), so their story
-    scenes never play; the mod gives what they give, when the chapter that leads to them is done:
-      - Peach joins: when Chapter 1 is finished (vanilla: Flipside Tower scene, story value 63)
-      - Luigi joins: on first entering a Chapter 7 map (vanilla: the Underwhere, story value 297, before
-        Chapter 7's start value)
+    given directly or replayed on the mod's own conditions. The hubs sit at a fixed story value
+    (STORY_HUB_VALUE), so their story scenes never play on their own:
+      - Peach joins: her vanilla join scene (Flipside Tower, entering from Merlon's house, vanilla story
+        values 59-62) plays once Chapter 1 is finished and her location isn't collected yet
+      - Luigi joins: his vanilla scene in the Underwhere (an1_07, vanilla story values 295-296) plays
+        until his location is collected (joins.cpp re-gates it)
+      - Bowser joins: his vanilla scene after the 3-1 fight (ta1_04), still on Chapter 3's own value
       - the Helmet: on first entering a Chapter 4 map (vanilla: Merlon's Goldfish Bowl quest in the hub,
         story values 131-134; without it Outer Space's movement breaks)
       - Sammer's Kingdom is destroyed: Chapter 6 moves from 280 (the duels done) to 281 (vanilla:
@@ -17,13 +19,28 @@
         357 while Mario is there, which switches its door doa6_l on with Nolrem's door event (story
         values 356-358); going through it plays his last lines and enters Chapter 8
 
-    Peach, Luigi and the Helmet are locations, like the Pixl joins: each is collected once, when its
-    trigger first holds, gated on its own save flag (AP_GSWF_GIFT) rather than the story value, and gives
-    whatever the seed placed there (mailbox giftItems; its vanilla item without a client). The vanilla
-    scenes themselves don't play.
+    Peach, Luigi, Bowser and the Helmet are locations, like the Pixl joins: each is collected once,
+    gated on its own save flag (AP_GSWF_GIFT) rather than the story value, and gives whatever the seed
+    placed there (mailbox giftItems; its vanilla item without a client). The characters' join scenes
+    collect theirs (collectGift, from joins.cpp's ap_char_join); the Helmet is given on its trigger.
 */
 
 namespace mod::hubstory {
+
+// Gift location indices (AP_GSWF_GIFT, mailbox giftItems)
+enum Gift
+{
+    GIFT_PEACH,
+    GIFT_LUIGI,
+    GIFT_HELMET,
+    GIFT_BOWSER,
+};
+
+/*
+    Collects a gift location if it isn't yet: sets its flag and gives what was placed there. Returns
+    the item given, or 0 if it was already collected.
+*/
+s32 collectGift(Gift gift);
 
 /*
     Call on every map change, after storyvalue::onMapChange (it uses the new map's context).

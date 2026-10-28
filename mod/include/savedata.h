@@ -16,6 +16,7 @@ namespace mod::savedata {
 #define AP_GSW_BASE 1792
 #define AP_GSW_STORY_SLOTS (AP_GSW_BASE + 0)  // 8 chapters x 2 bytes (big-endian), 0 = chapter not started
 #define AP_GSW_JOIN_STAGES (AP_GSW_BASE + 16) // story value seen by patched join SWITCHes (joins.cpp)
+#define AP_GSW_PEACH_SCENE (AP_GSW_BASE + 19) // story value Flipside Tower's patched Peach CASE compares with (hubstory.cpp)
 #define AP_GSW_RECV_COUNT (AP_GSW_BASE + 20)  // 2 bytes (big-endian): items from the server handled by this save
 
 // GSWF flags 7168-8191 (1024 flags)
@@ -26,7 +27,7 @@ namespace mod::savedata {
 #define AP_GSWF_JOIN(pixlItemId) (AP_GSWF_JOIN_BASE + (pixlItemId) - 221)
 // Unflagged key item spots, which the mod gives these as their save flag (locations.cpp)
 #define AP_GSWF_LOC_BASE (AP_GSWF_BASE + 32)
-// Story gifts the mod hands out in place of hub / skipped scenes (hubstory.cpp), one location each
+// Story gift locations (hubstory.cpp sGifts order: Peach, Luigi, Helmet, Bowser), one flag each
 #define AP_GSWF_GIFT_BASE (AP_GSWF_BASE + 16)
 #define AP_GSWF_GIFT(index) (AP_GSWF_GIFT_BASE + (index))
 
