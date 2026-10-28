@@ -30,6 +30,7 @@ using spm::evtmgr::EvtScriptCode;
 #define OP_IF_SMALL 26
 #define OP_IF_LARGE_EQUAL 29
 #define OP_SWITCH 34
+#define OP_SET 50
 #define OP_CASE_SMALL 38
 #define OP_USER_FUNC 92
 #define EVT_CMD(argc, op) (((argc) << 16) | (op))
@@ -98,6 +99,8 @@ enum PatchKind
     GIFT_GATE,  // IF_LARGE_EQUAL(GSW(0), a) -> IF_EQUAL(GSWF(gift location b), 0)
     ALWAYS,     // IF_SMALL(GSW(0), a) -> IF_SMALL(GSW(0), STORY_VALUE_NEVER): always true
     CASE_PEACH, // CASE_SMALL(a) -> CASE_SMALL(GSW(AP_GSW_PEACH_SCENE)), set by hubstory
+    LESSON_IF,  // IF with opcode b on (GSW(0), a) -> the same on GSW(AP_GSW_LESSON), set by hubstory
+    LESSON,     // SET(GSW(0), a) -> USER_FUNC(ap_lesson, a): collects Bestovius's lesson location
 };
 
 // Past every story value, for ALWAYS
@@ -201,6 +204,21 @@ static const Patch sPatches[] = {
     {ALWAYS, 0xede18, 297, 0, "Luigi: join scene (upper bound)"},
     {SKIP, 0xeda4c, 1, POUCH_ADD_ITEM, "Luigi: vanilla join"},
     {CHAR_JOIN, 0xeda20, CHARACTER_LUIGI, hubstory::GIFT_LUIGI, "Luigi join"},
+
+    // Bestovius (he1_06): talking to him gives the flip lesson below Chapter 1's story value 15 and
+    // only chats from 16 on. His talk script now asks a value hubstory sets from the lesson's own
+    // location flag, so the lesson stays available whatever Chapter 1's value is
+    {LESSON_IF, 0x1645f8, 421, OP_IF_LARGE_EQUAL, "Bestovius: chat 421"},
+    {LESSON_IF, 0x164628, 354, OP_IF_LARGE_EQUAL, "Bestovius: chat 354"},
+    {LESSON_IF, 0x164658, 287, OP_IF_LARGE_EQUAL, "Bestovius: chat 287"},
+    {LESSON_IF, 0x164688, 221, OP_IF_LARGE_EQUAL, "Bestovius: chat 221"},
+    {LESSON_IF, 0x1646b8, 174, OP_IF_LARGE_EQUAL, "Bestovius: chat 174"},
+    {LESSON_IF, 0x1646e8, 126, OP_IF_LARGE_EQUAL, "Bestovius: chat 126"},
+    {LESSON_IF, 0x164718, 96, OP_IF_LARGE_EQUAL, "Bestovius: chat 96"},
+    {LESSON_IF, 0x164748, 17, OP_IF_LARGE_EQUAL, "Bestovius: chat 17"},
+    {LESSON_IF, 0x164778, 16, OP_IF_LARGE_EQUAL, "Bestovius: chat 16"},
+    {LESSON_IF, 0x1647a8, 15, OP_IF_SMALL, "Bestovius: first offer"},
+    {LESSON, 0x164df0, 16, 0, "Bestovius: lesson"},
 };
 
 // ap_join_gift(pixlItemId): a Pixl join location. Marks it collected; until Archipelago is
@@ -296,6 +314,14 @@ static EVT_DEFINE_USER_FUNC(ap_char_join)
         return 2;
     }
     return spm::evt_mario::evt_mario_set_character(evt, isFirstCall);
+}
+
+// ap_lesson(value): the end of Bestovius's lesson, where vanilla sets Chapter 1's value to 16
+static EVT_DEFINE_USER_FUNC(ap_lesson)
+{
+    (void) isFirstCall;
+    hubstory::onLesson(spm::evtmgr_cmd::evtGetValue(evt, evt->pCurData[0]));
+    return 2;
 }
 
 using UserFunc = s32(spm::evtmgr::EvtEntry * evt, bool isFirstCall);
@@ -394,7 +420,7 @@ static void apply(const Patch & p)
         }
         case CHAR_JOIN:
         {
-            const s32 orig[] = {EVT_CMD(1, OP_USER_FUNC), reinterpret_cast<s32>(spm::evt_mario::evt_mario_set_character), p.a};
+            const s32 orig[] = {EVT_CMD(2, OP_USER_FUNC), reinterpret_cast<s32>(spm::evt_mario::evt_mario_set_character), p.a};
             if (expect(at, orig, 3, p.what))
             {
                 sCharacterGift[p.a] = static_cast<hubstory::Gift>(p.b);
@@ -425,6 +451,23 @@ static void apply(const Patch & p)
             const s32 orig[] = {EVT_CMD(1, OP_CASE_SMALL), p.a};
             if (expect(at, orig, 2, p.what))
                 at[1] = GSW_VAR(AP_GSW_PEACH_SCENE);
+            break;
+        }
+        case LESSON_IF:
+        {
+            const s32 orig[] = {EVT_CMD(2, p.b), GSW_VAR(0), p.a};
+            if (expect(at, orig, 3, p.what))
+                at[1] = GSW_VAR(AP_GSW_LESSON);
+            break;
+        }
+        case LESSON:
+        {
+            const s32 orig[] = {EVT_CMD(2, OP_SET), GSW_VAR(0), p.a};
+            if (expect(at, orig, 3, p.what))
+            {
+                at[0] = EVT_CMD(2, OP_USER_FUNC);
+                at[1] = reinterpret_cast<s32>(ap_lesson);
+            }
             break;
         }
         case SKIP:

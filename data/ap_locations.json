@@ -2439,6 +2439,19 @@
    "name": "3-1 The Bitlands - Bowser joins (ta1_04)",
    "id": 1397771634,
    "category": "character"
+  },
+  {
+   "kind": "gift",
+   "map": "he1_06",
+   "item": 80,
+   "flag": 7188,
+   "label": "Bestovius's lesson",
+   "patches": [],
+   "where": "given by the mod",
+   "pos": null,
+   "name": "1-1 Lineland Road - Bestovius's lesson (he1_06)",
+   "id": 1397771635,
+   "category": "overworld_item"
   }
  ],
  "items": [

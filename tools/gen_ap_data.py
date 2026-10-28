@@ -57,7 +57,8 @@ AP_GSWF_GIFT_BASE = AP_GSWF_BASE + 16         # story gifts, in GIFTS order (mod
 GIFTS = [(217, "mac_02", "Peach joins"),
          (219, "an1_07", "Luigi joins"),
          (24, "sp1_01", "Helmet (entering Chapter 4)"),
-         (218, "ta1_04", "Bowser joins")]
+         (218, "ta1_04", "Bowser joins"),
+         (80, "he1_06", "Bestovius's lesson")]
 ALWAYS_VANILLA_GIFTS = {24}
 
 PIXLS = {221: ("Thoreau", "he2_07"), 222: ("Boomer", "mi1_07"), 223: ("Slim", "mi3_01"),

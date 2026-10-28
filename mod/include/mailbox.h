@@ -14,7 +14,7 @@
 namespace mod::mailbox {
 
 #define MAILBOX_MAGIC "SPMAP_MAILBOX_v1"
-#define MAILBOX_VERSION 9
+#define MAILBOX_VERSION 10
 
 // debugFlags bits
 #define DEBUG_JOINS_GIVE_NOTHING 0x1      // Pixl joins mark their location but don't give the Pixl
@@ -66,11 +66,11 @@ struct Mailbox
     // Options (written by the client from the slot's options)
 /* 0x130 */ u32 playCutscenes;    // 1 = play the story scenes the mod can skip (skip_cutscenes off); 0 = skip
 
-    // Story gift locations (hubstory.cpp: Peach, Luigi, the Helmet), written by the client: what each
+    // Story gift locations (hubstory.cpp sGifts order), written by the client: what each
     // gives; 0 = its vanilla item, JOIN_ITEM_OTHER_WORLD = another world's item
-/* 0x134 */ u16 giftItems[4];
+/* 0x134 */ u16 giftItems[8];
 };
-static_assert(sizeof(Mailbox) == 0x13C);
+static_assert(sizeof(Mailbox) == 0x144);
 
 // joinItems value: the location holds another world's item
 #define JOIN_ITEM_OTHER_WORLD 0xFFFF

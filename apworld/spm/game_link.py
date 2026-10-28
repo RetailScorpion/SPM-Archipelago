@@ -7,7 +7,7 @@ import time
 import dolphin_memory_engine as dme
 
 MAGIC = b"SPMAP_MAILBOX_v1"
-VERSION = 9
+VERSION = 10
 RECV_SIZE = 16
 SENT_SIZE = 32
 

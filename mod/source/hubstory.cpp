@@ -41,11 +41,27 @@ static const struct
     {219, SCENE, "Luigi joins"},               // the Underwhere, an1_07 (vanilla 295-296)
     {24, ENTERED_CHAPTER_4, "the Helmet"},     // vanilla: Merlon's Goldfish Bowl quest, 131-134
     {218, SCENE, "Bowser joins"},              // 3-1, after his fight (Chapter 3's own value, < 104)
+    {80, SCENE, "Bestovius's lesson"},         // 1-1, he1_06 (vanilla 15-16); a Shroom Shake stands in
+                                               // for the flip, which isn't an item
 };
+
+#define CHARACTER_ITEM_FIRST 217
+#define CHARACTER_ITEM_LAST 219
 
 // Peach's join scene: Flipside Tower's init runs it for CASE_SMALL(63) of its story value SWITCH, which
 // joins.cpp points at AP_GSW_PEACH_SCENE. Past the hub value when the scene is due, 0 (never) otherwise
 #define PEACH_SCENE_ON (STORY_HUB_VALUE + 1)
+
+// Bestovius's talk script (joins.cpp LESSON_IF) compares with AP_GSW_LESSON instead of Chapter 1's
+// value: 0 offers the lesson, LESSON_DONE (past the lesson, below his later chats) only chats
+#define LESSON_DONE 17
+
+void onLesson(s32 value)
+{
+    collectGift(GIFT_BESTOVIUS);
+    savedata::setGswByte(AP_GSW_LESSON, LESSON_DONE);
+    storyvalue::advanceChapter(1, value);
+}
 
 s32 collectGift(Gift gift)
 {
@@ -58,7 +74,7 @@ s32 collectGift(Gift gift)
     u16 placed = mailbox::gMailbox.giftItems[gift];
     s32 item = placed == 0 ? sGifts[gift].vanillaItem : placed == JOIN_ITEM_OTHER_WORLD ? apitem::AP_ITEM_ID : placed;
     // A scene's own character joins quietly, as in vanilla; anything else gets the item-get
-    if (sGifts[gift].trigger == SCENE && item == sGifts[gift].vanillaItem)
+    if (item == sGifts[gift].vanillaItem && item >= CHARACTER_ITEM_FIRST && item <= CHARACTER_ITEM_LAST)
         spm::mario_pouch::pouchAddItem(item);
     else
         delivery::giveLocal(item);
@@ -93,6 +109,7 @@ void onMapChange(const char * nextMap)
 
     bool peachDue = storyvalue::isChapterFinished(1) && !spm::swdrv::swGet(AP_GSWF_GIFT(GIFT_PEACH));
     savedata::setGswByte(AP_GSW_PEACH_SCENE, peachDue ? PEACH_SCENE_ON : 0);
+    savedata::setGswByte(AP_GSW_LESSON, spm::swdrv::swGet(AP_GSWF_GIFT(GIFT_BESTOVIUS)) ? LESSON_DONE : 0);
 
     if (storyvalue::getChapterValue(6) == CHAPTER_6_DUELS_DONE)
         storyvalue::advanceChapter(6, CHAPTER_6_WORLD_ENDED);

@@ -203,4 +203,5 @@ LOCATIONS = [
     ('7-1 The Underwhere - Luigi joins (an1_07)', 'gift', 'character', 219, 7185, []),
     ('4-1 Outer Space - Helmet (entering Chapter 4) (sp1_01)', 'gift', 'fixed', 24, 7186, []),
     ('3-1 The Bitlands - Bowser joins (ta1_04)', 'gift', 'character', 218, 7187, []),
+    ("1-1 Lineland Road - Bestovius's lesson (he1_06)", 'gift', 'overworld_item', 80, 7188, []),
 ]
