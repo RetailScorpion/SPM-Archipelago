@@ -21,6 +21,10 @@
 // bne +0x48 (to the Return Pipe's check at +0x4c). The Floro Sprout's path starts at +8 and runs its
 // script with bl evtEntryType at +0x2c (r3 = script, r4-r6 = 0), then stores the entry for the menu
 80188374:keyitem_menu_use_check
+// Key item menu drawing, per item (r25 = item id): cmpwi r25, 0x32; bne normal; then the Return
+// Pipe's enable bytes decide whether its icon / name is drawn greyed out
+80188B1C:keyitem_icon_pipe_check
+80188C18:keyitem_name_pipe_check
 // Called only by Fleep's join scene (sp2_01), right after the join (names are guesses): with 1, the
 // first sets MarioWork flag 0x00200000 and gives an object callback 0x8012CA18, mode 6; the second
 // changes that object's mode. Tippi's pointer crashes afterwards if Mario has no Fleep

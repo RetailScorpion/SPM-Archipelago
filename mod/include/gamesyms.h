@@ -40,6 +40,9 @@ void mario_status_apply(s32 status, s32 lv);
 
 // Key item menu: the "is it the Floro Sprout" test when a key item is used (cmplwi r0, 0x24; bne)
 extern u32 keyitem_menu_use_check[];
+// Key item menu drawing: "is this the Return Pipe" before greying out its icon / its name
+extern u32 keyitem_icon_pipe_check[];
+extern u32 keyitem_name_pipe_check[];
 
 // Only in Fleep's join scene, after the join: evt_fleep_mode_on(1) and evt_fleep_mode_set(1) put
 // something Tippi's pointer uses into a Fleep mode (names are guesses); pointing crashes without Fleep
