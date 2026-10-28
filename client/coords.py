@@ -7,6 +7,7 @@ Usage: py -3 -E coords.py
 """
 
 import json
+import os
 import tkinter as tk
 
 import dolphin_memory_engine as dme
@@ -18,7 +19,15 @@ REFRESH_MS = 200
 
 
 def main():
-    locations = json.load(open(LOCATIONS))["locations"]
+    # Reloaded when the data is regenerated (new locations), so a running window stays current
+    loaded = {"mtime": None, "locations": []}
+
+    def current_locations():
+        mtime = os.path.getmtime(LOCATIONS)
+        if mtime != loaded["mtime"]:
+            loaded["locations"] = json.load(open(LOCATIONS))["locations"]
+            loaded["mtime"] = mtime
+        return loaded["locations"]
 
     root = tk.Tk()
     root.title("SPM coords")
@@ -40,7 +49,7 @@ def main():
             flags = read_flags()
             position.config(text=f"x {x:.0f}   height {y:.0f}   depth {z:.0f}")
             here.config(text=f"Map: {map_name}")
-            left = [loc for loc in locations if loc["map"] == map_name and not Mailbox.flag_set(flags, loc["flag"])]
+            left = [loc for loc in current_locations() if loc["map"] == map_name and not Mailbox.flag_set(flags, loc["flag"])]
             if left:
                 rows = []
                 for loc in left:
