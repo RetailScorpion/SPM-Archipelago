@@ -126,11 +126,12 @@ class Mailbox:
         dme.write_bytes(slot, struct.pack(">H", item_id | (RECV_ALREADY_GIVEN if already_given else 0)))
         dme.write_word(self.addr + OFF_RECV_COUNT, count + 1)
 
-    def patch_relf(self, offset: int, original: int, value: int) -> bool:
-        """Writes a word at a relF file offset if it's the original or already the value."""
+    def patch_relf(self, offset: int, original: int, value: int, also=()) -> bool:
+        """Writes a word at a relF file offset if it's the original, already the value or one of also
+        (values written there before)."""
         addr = self.relf_base() + offset
         current = struct.unpack(">i", dme.read_bytes(addr, 4))[0]
-        if current not in (original, value):
+        if current not in (original, value, *also):
             return False
         dme.write_bytes(addr, struct.pack(">i", value))
         return True

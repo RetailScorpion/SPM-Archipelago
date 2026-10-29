@@ -25,6 +25,7 @@ from .game_link import (GIFT_FLAG_BASE, JOIN_ITEM_OTHER_WORLD, LOC_KIND_OTHER_WO
 
 GAME = "Super Paper Mario"
 AP_ITEM = 63               # the mod's stand-in for other worlds' items (apitem.cpp)
+COIN = 1                  # what a spot holds once its item was already delivered to the loaded save
 SERVER_ONLY_FIRST = 1001   # SPM ids from here (Pure Hearts, traps) aren't game items: shown as the AP item
 HEARTS = range(1001, 1009) # Pure Hearts, always delivered from the server (mod doors.h PURE_HEART_ITEM_FIRST)
 TRAP = 1100                # Cursya Trap (mod apitem.h TRAP_ITEM_ID): found here, the mod plays it itself
@@ -59,6 +60,7 @@ class SPMContext(CommonContext):
         self.goal_sent = False
         self.last_frame = None     # the game's frame counter at the last poll
         self.last_flags = None     # the save flags at the last poll
+        self.coin_locations = set()  # location indexes whose item the loaded save already got delivered
         self.slot_options = {}
         self.starting_chapters = []
 
@@ -100,6 +102,18 @@ class SPMContext(CommonContext):
         choices = [item for item in DISGUISES if item not in received] or DISGUISES
         return random.Random(f"{self.seed_name}-{location}").choice(choices)
 
+    def received_here(self, flags) -> set[int]:
+        """Locations (indexes) holding this world's items that the loaded save got delivered rather than
+        found there (found after it was saved, or sent by mistake): they hold a coin instead, so
+        picking them up again doesn't give the item twice. Pure Hearts never come from their spot."""
+        found = set()
+        for item in self.items_received[:self.queued_upto or 0]:
+            index = item.location - ID_BASE
+            if (item.player == self.slot and 0 <= index < len(LOCATIONS) and item.item - ID_BASE not in HEARTS
+                    and not Mailbox.flag_set(flags, LOCATIONS[index][4])):
+                found.add(index)
+        return found
+
     def write_placements(self):
         mb = self.mailbox
         names, failed = [], 0
@@ -108,6 +122,17 @@ class SPMContext(CommonContext):
             if network_item is None:
                 continue
             shown, foreign = self.item_shown(network_item)
+            placed = shown
+            if i in self.coin_locations:
+                shown = COIN
+                if kind == "join":
+                    mb.set_join_item(vanilla, COIN)
+                elif kind == "gift":
+                    mb.set_gift_item(flag - GIFT_FLAG_BASE, COIN)
+                for offset, original in patches:
+                    if not mb.patch_relf(offset, original, COIN, (placed, self.disguise(ID_BASE + i))):
+                        failed += 1
+                continue
             if network_item.player == self.slot and network_item.item - ID_BASE == TRAP:
                 # Spawned items look like a key item; joins and gifts give the AP item. The mod turns
                 # either into the trap's item-get
@@ -123,7 +148,7 @@ class SPMContext(CommonContext):
             elif kind == "gift":
                 mb.set_gift_item(flag - GIFT_FLAG_BASE, JOIN_ITEM_OTHER_WORLD if foreign else shown)
             for offset, original in patches:
-                if not mb.patch_relf(offset, original, shown):
+                if not mb.patch_relf(offset, original, shown, (placed, COIN)):
                     failed += 1
         mb.write_loc_names(names)
         if failed:
@@ -206,6 +231,11 @@ async def game_watcher(ctx: SPMContext):
                     flags = ctx.mailbox.read_flags()
                     ctx.check_locations(flags)
                     ctx.feed_items(flags)
+                    # Spots whose item the loaded save already got hold a coin (from the next map load)
+                    coins = ctx.received_here(flags)
+                    if ctx.scouted and coins != ctx.coin_locations:
+                        ctx.coin_locations = coins
+                        ctx.write_placements()
                     ctx.check_goal()
         except MailboxError as e:
             if ctx.game_status != str(e):
