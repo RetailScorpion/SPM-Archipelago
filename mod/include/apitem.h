@@ -49,6 +49,9 @@ void init();
 // Call every frame in game: ends the AP item-get a little after its last collection frame
 void tick();
 
+// Call on every map change
+void onMapChange();
+
 // The next AP item-get is a trap (one received from the server)
 void armTrap();
 

@@ -288,6 +288,7 @@ static void seq_mapChangeInitHook(spm::seqdrv::SeqWork * wp)
     hubstory::onMapChange(wp->p0);
     doors::onMapChange();
     saveblock::onMapChange(wp->p0);
+    apitem::onMapChange();
 
     seq_mapChangeInitReal(wp);
 }

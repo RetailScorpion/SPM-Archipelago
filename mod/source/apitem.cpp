@@ -1,6 +1,8 @@
 #include <common.h>
 #include <msl/stdio.h>
 #include <msl/string.h>
+#include <spm/evt_mobj.h>
+#include <spm/evtmgr_cmd.h>
 #include <spm/item_data.h>
 #include <spm/itemdrv.h>
 #include <spm/mario_status.h>
@@ -46,6 +48,62 @@ static const LocName * findLocation(s32 flag)
             return &loc;
     }
     return nullptr;
+}
+
+/*
+    Chests set their flag only after their item-get, and their item carries no flag. So the chests
+    the map creates are remembered (evt_mobj_thako), and an item-get with no flag of its own takes
+    the names of the nearest unopened chest whose location is in the table.
+*/
+struct Chest
+{
+    s32 flag;
+    f32 x, y, z;
+};
+#define CHESTS_MAX 16
+static Chest sChests[CHESTS_MAX];
+static s32 sChestCount;
+// How far a chest's item can appear from the chest
+#define CHEST_ITEM_RANGE 200.0f
+
+static s32 (*evtMobjThakoReal)(spm::evtmgr::EvtEntry * evt, bool isFirstCall);
+static s32 evtMobjThakoHook(spm::evtmgr::EvtEntry * evt, bool isFirstCall)
+{
+    // evt_mobj_thako(type, name, x, y, z, interactScript, openScript, item, opened flag)
+    spm::evtmgr::EvtScriptCode * args = evt->pCurData;
+    s32 flag = args[8] - GSWF_VAR_BASE;
+    if (isFirstCall && flag >= 0 && flag < GSWF_COUNT && sChestCount < CHESTS_MAX)
+    {
+        sChests[sChestCount++] = {flag, spm::evtmgr_cmd::evtGetFloat(evt, args[2]),
+                                  spm::evtmgr_cmd::evtGetFloat(evt, args[3]), spm::evtmgr_cmd::evtGetFloat(evt, args[4])};
+    }
+    return evtMobjThakoReal(evt, isFirstCall);
+}
+
+static const LocName * nearestChest(const wii::mtx::Vec3 & at)
+{
+    const LocName * best = nullptr;
+    f32 bestDist = CHEST_ITEM_RANGE * CHEST_ITEM_RANGE;
+    for (s32 i = 0; i < sChestCount; i++)
+    {
+        const Chest & c = sChests[i];
+        const LocName * loc = findLocation(c.flag);
+        if (loc == nullptr || spm::swdrv::swGet(c.flag))
+            continue;
+        f32 dx = c.x - at.x, dy = c.y - at.y, dz = c.z - at.z;
+        f32 dist = dx * dx + dy * dy + dz * dz;
+        if (dist < bestDist)
+        {
+            bestDist = dist;
+            best = loc;
+        }
+    }
+    return best;
+}
+
+void onMapChange()
+{
+    sChestCount = 0;
 }
 
 // Frames the AP item's item-get stays active after the last frame of its collection. The game looks
@@ -121,6 +179,11 @@ static bool itemCollectPouchItemHook(spm::itemdrv::ItemEntry * item)
             if (const LocName * loc = findLocation(flag))
                 sCurrent = loc;
         }
+        else if (sCurrent == &sPlaceholder)
+        {
+            if (const LocName * loc = nearestChest(item->position))
+                sCurrent = loc;
+        }
         // A trap, whatever it looks like: the AP item with a blank icon, before the item-get starts
         if (sCurrent->kind == LOC_KIND_TRAP && !sTrapActive)
         {
@@ -144,6 +207,7 @@ void init()
     mailbox::gMailbox.locNamesMax = LOC_NAMES_MAX;
     swSetReal = patch::hookFunction(spm::swdrv::swSet, swSetHook);
     itemCollectPouchItemReal = patch::hookFunction(spm::itemdrv::itemCollectPouchItem, itemCollectPouchItemHook);
+    evtMobjThakoReal = patch::hookFunction(spm::evt_mobj::evt_mobj_thako, evtMobjThakoHook);
     wii::os::OSReport("[spmap] apitem: item %d is the Archipelago item\n", AP_ITEM_ID);
 }
 
