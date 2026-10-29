@@ -1,4 +1,4 @@
-"""Dark colours for the client's windows (tracker, coords, party).
+"""Dark colours for the client's windows (tracker, coords, Archipelago tools).
 
 apply(root) right after tk.Tk(): every widget then defaults to the dark palette, and on Windows the
 title bar goes dark too. Widgets that pick their own colour use the constants below.
@@ -10,7 +10,7 @@ import sys
 BACKGROUND = "#1e1e1e"
 TEXT = "#d4d4d4"
 MUTED = "#9a9a9a"       # secondary lines (status, "you're in")
-HIGHLIGHT = "#ff6b6b"   # the selected Pixl in the party editor
+HIGHLIGHT = "#ff6b6b"   # the selected Pixl in the Archipelago tools
 BUTTON = "#333333"
 SELECTION = "#264f78"
 DISABLED = "#6a6a6a"

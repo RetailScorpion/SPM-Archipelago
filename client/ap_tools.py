@@ -1,4 +1,4 @@
-"""Party editor: add and remove characters, Pixls and the Save Block, and set coins, in the running game, for testing.
+"""SPM Archipelago Tools: add and remove characters, Pixls and the Save Block, and set coins, in the running game, for testing.
 
 Writes the pouch's character and Pixl lists directly, the way pouchAddItem fills them, through Dolphin.
 Only the inventory changes: no location flags, nothing sent to the Archipelago server.
@@ -8,7 +8,7 @@ Only the inventory changes: no location flags, nothing sent to the Archipelago s
   - Mario himself is never listed.
   - The Save Block (key item 45) needs the mod version that has it; on older ones item 45 is a 7-3 prop.
 
-Usage: py -3 -E party.py
+Usage: pyw -3 -E ap_tools.py
 """
 
 import struct
@@ -114,7 +114,7 @@ def toggle_pixl(item, want):
 def main():
     root = tk.Tk()
     theme.apply(root)
-    root.title("SPM party")
+    root.title("SPM Archipelago Tools")
     root.attributes("-topmost", True)
     font = ("Consolas", 12)
     status = tk.Label(root, font=font, anchor="w", justify="left", fg=theme.MUTED, wraplength=360)
