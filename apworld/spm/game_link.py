@@ -52,6 +52,7 @@ GSW_OFFSET = 0x544
 STORY_SLOT_COUNT = 9
 GP_PTR = 0x8056D198  # US 1.0: pointer to SpmarioGlobals
 GSW0_OFFSET = 0x140
+FRAME_COUNTER_OFFSET = 0x14  # SpmarioGlobals frameCounter: counts up every frame the game runs
 
 STATE_BOOT, STATE_TITLE, STATE_IN_GAME = 0, 1, 2  # mailbox.h ModState
 STATE_NAMES = {STATE_BOOT: "boot", STATE_TITLE: "title", STATE_IN_GAME: "in game"}
@@ -160,6 +161,9 @@ class Mailbox:
     def read_flags(self) -> bytes:
         """All 8192 GSWF save flags as 1024 bytes (the raw words)."""
         return dme.read_bytes(dme.read_word(GP_PTR) + GSWF_OFFSET, 1024)
+
+    def frame_counter(self) -> int:
+        return dme.read_word(dme.read_word(GP_PTR) + FRAME_COUNTER_OFFSET)
 
     @staticmethod
     def flag_set(flags: bytes, flag: int) -> bool:

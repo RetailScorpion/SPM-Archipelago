@@ -57,6 +57,8 @@ class SPMContext(CommonContext):
         self.placed = False        # placements written for the current game session
         self.queued_upto = None    # server item index queued into the mailbox
         self.goal_sent = False
+        self.last_frame = None     # the game's frame counter at the last poll
+        self.last_flags = None     # the save flags at the last poll
         self.slot_options = {}
         self.starting_chapters = []
 
@@ -128,8 +130,19 @@ class SPMContext(CommonContext):
             logger.warning(f"{failed} item placements didn't match the game; are you on US 1.0 with the matching mod?")
         logger.info(f"Placed items at {len(self.scouted)} locations")
 
-    def check_locations(self):
-        flags = self.mailbox.read_flags()
+    def game_running(self) -> bool:
+        """The game moved on since the last poll. While Dolphin resets, the old mod's mailbox still says
+        a save is loaded but nothing runs, and memory is half old, half rebooted: nothing is read then."""
+        frame = self.mailbox.frame_counter()
+        running = self.last_frame is not None and frame != self.last_frame
+        self.last_frame = frame
+        return running
+
+    def check_locations(self, flags):
+        # Only flags that read the same twice in a row (one poll apart) count
+        stable, self.last_flags = self.last_flags == flags, flags
+        if not stable:
+            return
         new = []
         for i, (_, _, _, _, flag, _) in enumerate(LOCATIONS):
             location = ID_BASE + i
@@ -138,7 +151,7 @@ class SPMContext(CommonContext):
         if new:
             Utils.async_start(self.send_msgs([{"cmd": "LocationChecks", "locations": new}]))
 
-    def feed_items(self):
+    def feed_items(self, flags):
         mb = self.mailbox
         # Pending first: the mod updates the saved count before marking an entry handled, so with
         # nothing pending the count read after it is current
@@ -150,11 +163,14 @@ class SPMContext(CommonContext):
         # A save was loaded (or reloaded): queue again from what that save has handled
         if self.queued_upto is None or (pending == 0 and self.queued_upto != saved):
             self.queued_upto = saved
-        own_locations = {ID_BASE + i for i in range(len(LOCATIONS))}
         while self.queued_upto < len(self.items_received) and mb.recv_pending() < RECV_SIZE:
             item = self.items_received[self.queued_upto]
-            given_here = (item.player == self.slot and item.location in own_locations
-                          and item.item - ID_BASE not in HEARTS)
+            # Found here: the game gave it then, if the loaded save has that location (a save from before
+            # it was found, or a check sent by mistake, gets it delivered instead)
+            index = item.location - ID_BASE
+            given_here = (item.player == self.slot and 0 <= index < len(LOCATIONS)
+                          and item.item - ID_BASE not in HEARTS
+                          and Mailbox.flag_set(flags, LOCATIONS[index][4]))
             mb.queue_received(item.item - ID_BASE, given_here)
             self.queued_upto += 1
 
@@ -186,9 +202,11 @@ async def game_watcher(ctx: SPMContext):
                 if not ctx.placed and ctx.scouted:
                     ctx.write_placements()
                     ctx.placed = True
-                ctx.check_locations()
-                ctx.feed_items()
-                ctx.check_goal()
+                if ctx.game_running():
+                    flags = ctx.mailbox.read_flags()
+                    ctx.check_locations(flags)
+                    ctx.feed_items(flags)
+                    ctx.check_goal()
         except MailboxError as e:
             if ctx.game_status != str(e):
                 ctx.game_status = str(e)
