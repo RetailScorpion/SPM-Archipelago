@@ -16,6 +16,7 @@ import tkinter as tk
 
 import dolphin_memory_engine as dme
 
+import theme
 from tracker import MARIO_WORK, connect_dolphin, current_map
 
 POUCH = 0x804CEA28          # MarioPouchWork (US 1.0)
@@ -112,10 +113,11 @@ def toggle_pixl(item, want):
 
 def main():
     root = tk.Tk()
+    theme.apply(root)
     root.title("SPM party")
     root.attributes("-topmost", True)
     font = ("Consolas", 12)
-    status = tk.Label(root, font=font, anchor="w", justify="left", fg="#555", wraplength=360)
+    status = tk.Label(root, font=font, anchor="w", justify="left", fg=theme.MUTED, wraplength=360)
     status.pack(fill="x", padx=8, pady=(8, 4))
 
     boxes = {}
@@ -164,7 +166,7 @@ def main():
             selected = next((e[2] for e in pixls if e[1]), None)
             for item, (var, box) in boxes.items():
                 var.set(item in items)
-                box.config(state="normal", fg="#c00000" if item == selected else "black")
+                box.config(state="normal", fg=theme.HIGHLIGHT if item == selected else theme.TEXT)
             coins.config(state="normal")
             if status.cget("text").startswith("Waiting"):
                 status.config(text="Ready (selected Pixl in red)")

@@ -21,6 +21,7 @@ import tkinter as tk
 
 import dolphin_memory_engine as dme
 
+import theme
 from mailbox import GP_PTR, GSWF_OFFSET, Mailbox
 
 LOCATIONS = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "ap_locations.json")
@@ -109,6 +110,7 @@ def load_locations():
 def main():
     missing_only = "--missing" in sys.argv
     root = tk.Tk()
+    theme.apply(root)
     root.title("SPM tracker")
     root.geometry("1100x800")
     scroll = tk.Scrollbar(root)

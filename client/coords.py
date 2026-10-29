@@ -12,6 +12,7 @@ import tkinter as tk
 
 import dolphin_memory_engine as dme
 
+import theme
 from mailbox import Mailbox
 from tracker import LOCATIONS, connect_dolphin, current_map, describe_spot, mario_position, read_flags
 
@@ -30,13 +31,14 @@ def main():
         return loaded["locations"]
 
     root = tk.Tk()
+    theme.apply(root)
     root.title("SPM coords")
     root.attributes("-topmost", True)
     root.resizable(True, True)
     font = ("Consolas", 12)
     position = tk.Label(root, font=("Consolas", 16, "bold"), anchor="w", justify="left")
     position.pack(fill="x", padx=8, pady=(8, 0))
-    here = tk.Label(root, font=font, anchor="w", justify="left", fg="#555")
+    here = tk.Label(root, font=font, anchor="w", justify="left", fg=theme.MUTED)
     here.pack(fill="x", padx=8)
     nearby = tk.Label(root, font=font, anchor="w", justify="left")
     nearby.pack(fill="x", padx=8, pady=(4, 8))
