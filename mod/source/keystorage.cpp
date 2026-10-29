@@ -1,10 +1,14 @@
 #include <common.h>
 #include <msl/stdio.h>
+#include <spm/camdrv.h>
+#include <spm/dispdrv.h>
 #include <spm/fontmgr.h>
 #include <spm/item_data.h>
 #include <spm/mario_pouch.h>
 #include <spm/msgdrv.h>
+#include <spm/windowdrv.h>
 #include <wii/gx.h>
+#include <wii/mtx.h>
 #include <wii/os.h>
 
 #include "keystorage.h"
@@ -14,7 +18,11 @@ namespace mod::keystorage {
 
 // How long the "went to storage" message stays up
 #define MESSAGE_FRAMES 300
-#define MESSAGE_Y -120.0f
+#define MESSAGE_Y -120.0f   // top of the text (2D coordinates: y up, 0 = centre)
+#define MESSAGE_SCALE 0.7f
+#define FONT_HEIGHT 20.0f
+#define BOX_PAD_X 14.0f
+#define BOX_PAD_Y 8.0f
 
 static char sMessage[96];
 static s32 sMessageFrames;
@@ -54,21 +62,36 @@ bool store(s32 itemId)
     return false;
 }
 
+// The message on a dark box, so it reads on any map
+static void dispMessage(s32 cameraId, void * param)
+{
+    (void) cameraId;
+    (void) param;
+    f32 textWidth = spm::fontmgr::FontGetMessageWidth(sMessage) * MESSAGE_SCALE;
+    f32 x = -textWidth / 2;
+
+    wii::mtx::Mtx34 mtx;
+    wii::mtx::PSMTXIdentity(mtx);
+    wii::gx::GXColor box = {0, 0, 0, 0xC0};
+    spm::windowdrv::windowDispGX2_Waku_col(mtx, 0, &box, x - BOX_PAD_X, MESSAGE_Y + BOX_PAD_Y,
+                                           textWidth + 2 * BOX_PAD_X, FONT_HEIGHT * MESSAGE_SCALE + 2 * BOX_PAD_Y, 8.0f);
+
+    wii::gx::GXColor colour = {255, 255, 255, 255};
+    spm::fontmgr::FontDrawStart();
+    spm::fontmgr::FontDrawEdge();
+    spm::fontmgr::FontDrawColor(&colour);
+    spm::fontmgr::FontDrawScale(MESSAGE_SCALE);
+    spm::fontmgr::FontDrawNoiseOff();
+    spm::fontmgr::FontDrawRainbowColorOff();
+    spm::fontmgr::FontDrawString(x, MESSAGE_Y, sMessage);
+}
+
 void tick()
 {
     if (sMessageFrames <= 0)
         return;
     sMessageFrames--;
-    f32 scale = 0.7f;
-    wii::gx::GXColor colour = {255, 255, 255, 255};
-    spm::fontmgr::FontDrawStart();
-    spm::fontmgr::FontDrawEdge();
-    spm::fontmgr::FontDrawColor(&colour);
-    spm::fontmgr::FontDrawScale(scale);
-    spm::fontmgr::FontDrawNoiseOff();
-    spm::fontmgr::FontDrawRainbowColorOff();
-    f32 x = -((spm::fontmgr::FontGetMessageWidth(sMessage) * scale) / 2);
-    spm::fontmgr::FontDrawString(x, MESSAGE_Y, sMessage);
+    spm::dispdrv::dispEntry(spm::camdrv::CAM_ID_DEBUG_3D, 2, 0.0f, dispMessage, nullptr);
 }
 
 }
