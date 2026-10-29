@@ -61,6 +61,7 @@ class SPMContext(CommonContext):
         self.last_frame = None     # the game's frame counter at the last poll
         self.last_flags = None     # the save flags at the last poll
         self.coin_locations = set()  # location indexes whose item the loaded save already got delivered
+        self.was_in_game = False   # the mod reported a loaded save at the last poll
         self.slot_options = {}
         self.starting_chapters = []
 
@@ -223,7 +224,13 @@ async def game_watcher(ctx: SPMContext):
                 # Before a save is loaded too: a new file's opening checks it right away
                 ctx.mailbox.set_play_cutscenes(not ctx.slot_options.get("skip_cutscenes", True))
                 ctx.mailbox.set_starting_hearts(ctx.starting_chapters)
-            if ctx.slot is not None and ctx.mailbox.mod_state() == STATE_IN_GAME:
+            in_game = ctx.slot is not None and ctx.mailbox.mod_state() == STATE_IN_GAME
+            if in_game and not ctx.was_in_game:
+                # A save was (re)loaded: that reloads relF with vanilla items, so place them again
+                ctx.placed = False
+                ctx.last_flags = None
+            ctx.was_in_game = in_game
+            if in_game:
                 if not ctx.placed and ctx.scouted:
                     ctx.write_placements()
                     ctx.placed = True

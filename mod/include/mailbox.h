@@ -27,7 +27,7 @@ namespace mod::mailbox {
 enum ModState : u32
 {
     STATE_BOOT = 0,     // mod loaded, not in a save yet
-    STATE_TITLE = 1,    // on the title or file select screen
+    STATE_TITLE = 1,    // no save loaded: title, game over or file select screen
     STATE_IN_GAME = 2,  // in a map; items can be given
 };
 

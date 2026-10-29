@@ -218,19 +218,40 @@ void delivery::giveLocal(s32 itemId)
     Sequence hooks
 */
 
-static spm::seqdef::SeqFunc * seq_titleMainReal;
-static void seq_titleMainHook(spm::seqdrv::SeqWork * wp)
+// Out of the game (title, game over, file select): no save is loaded. The file select reads every
+// save slot, so the client mustn't read checks then, and loading a save reloads relF (vanilla items)
+static void noSaveLoaded()
 {
     mailbox::Mailbox & mb = mailbox::gMailbox;
     mb.modState = mailbox::STATE_TITLE;
     storyvalue::resetContext();
-    // No save loaded: drop queued deliveries; the client queues them again from the next save's count
+    // Drop queued deliveries; the client queues them again from the next save's count
     mb.savedRecvCount = 0xFFFFFFFF;
     mb.recvHandled = mb.recvCount;
     sSpawnedItem = -1;
     sLocalCount = 0;
+}
+
+static spm::seqdef::SeqFunc * seq_titleMainReal;
+static void seq_titleMainHook(spm::seqdrv::SeqWork * wp)
+{
+    noSaveLoaded();
     seq_titleMainReal(wp);
     drawText("SPM Archipelago " MOD_VERSION, 200.0f, {255, 255, 255, 255});
+}
+
+static spm::seqdef::SeqFunc * seq_gameOverMainReal;
+static void seq_gameOverMainHook(spm::seqdrv::SeqWork * wp)
+{
+    noSaveLoaded();
+    seq_gameOverMainReal(wp);
+}
+
+static spm::seqdef::SeqFunc * seq_loadMainReal;
+static void seq_loadMainHook(spm::seqdrv::SeqWork * wp)
+{
+    noSaveLoaded();
+    seq_loadMainReal(wp);
 }
 
 // Debug warp requested by the client (for testing): change map like a door would
@@ -311,6 +332,10 @@ void main()
 
     seq_titleMainReal = spm::seqdef::seq_data[spm::seqdrv::SEQ_TITLE].main;
     spm::seqdef::seq_data[spm::seqdrv::SEQ_TITLE].main = seq_titleMainHook;
+    seq_gameOverMainReal = spm::seqdef::seq_data[spm::seqdrv::SEQ_GAMEOVER].main;
+    spm::seqdef::seq_data[spm::seqdrv::SEQ_GAMEOVER].main = seq_gameOverMainHook;
+    seq_loadMainReal = spm::seqdef::seq_data[spm::seqdrv::SEQ_LOAD].main;
+    spm::seqdef::seq_data[spm::seqdrv::SEQ_LOAD].main = seq_loadMainHook;
     seq_gameMainReal = spm::seqdef::seq_data[spm::seqdrv::SEQ_GAME].main;
     spm::seqdef::seq_data[spm::seqdrv::SEQ_GAME].main = seq_gameMainHook;
     seq_mapChangeInitReal = spm::seqdef::seq_data[spm::seqdrv::SEQ_MAPCHANGE].init;
