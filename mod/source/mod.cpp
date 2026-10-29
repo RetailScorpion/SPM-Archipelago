@@ -27,6 +27,7 @@
 #include "gamesyms.h"
 #include "hubstory.h"
 #include "joins.h"
+#include "keystorage.h"
 #include "mailbox.h"
 #include "patch.h"
 #include "savedata.h"
@@ -196,6 +197,9 @@ static bool pouchAddItemHook(s32 itemId)
     // The AP item only exists for its item-get; it never goes in the inventory
     if (itemId == apitem::AP_ITEM_ID)
         return true;
+    // A key item with all 32 slots taken goes to storage
+    if (itemId >= ITEM_ID_KEY_START && itemId < ITEM_ID_KEY_MAX && keystorage::keyItemsFull() && keystorage::store(itemId))
+        return true;
     bool added = pouchAddItemReal(itemId);
     // A first Pixl gets selected right away (pouchAddItem doesn't select it)
     if (itemId >= ITEM_ID_FAIRY_START && itemId < ITEM_ID_FAIRY_MAX)
@@ -288,6 +292,7 @@ static void seq_gameMainHook(spm::seqdrv::SeqWork * wp)
     storyvalue::sync();
     joins::tick();
     apitem::tick();
+    keystorage::tick();
     spawnNextReceived();
 }
 

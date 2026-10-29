@@ -7,16 +7,21 @@ Only the inventory changes: no location flags, nothing sent to the Archipelago s
   - The character Mario is playing as can't be removed: switch to Mario first.
   - Mario himself is never listed.
   - The Save Block (key item 45) needs the mod version that has it; on older ones item 45 is a 7-3 prop.
+  - Key item storage: the mod puts key items there when all 32 slots are full (mod keystorage.h, kept in
+    the save). Move or swap them with carried ones here; stored items don't count as held.
 
 Usage: pyw -3 -E ap_tools.py
 """
 
+import json
+import os
 import struct
 import tkinter as tk
 
 import dolphin_memory_engine as dme
 
 import theme
+from mailbox import GP_PTR
 from tracker import MARIO_WORK, connect_dolphin, current_map
 
 POUCH = 0x804CEA28          # MarioPouchWork (US 1.0)
@@ -35,6 +40,10 @@ CHARACTER_NAMES = {217: "Peach", 218: "Bowser", 219: "Luigi"}
 PIXL_NAMES = {221: "Thoreau", 222: "Boomer", 223: "Slim", 224: "Thudley", 225: "Carrie", 226: "Fleep",
               227: "Cudge", 228: "Dottie", 229: "Piccolo", 230: "Barry", 231: "Dashell"}
 KEY_ITEM_NAMES = {45: "Save Block"}  # mod saveblock.h SAVE_BLOCK_ITEM_ID
+GSW_BYTES = 0x544                    # SpmarioGlobals gsw[2048]
+KEY_STORAGE_GSW = 1792 + 32          # mod savedata.h AP_GSW_KEY_STORAGE: u16[32], big-endian, 0 = empty
+KEY_STORAGE_SLOTS = 32
+ITEM_NAMES_FILE = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "item_names_us0.json")
 REFRESH_MS = 500
 
 
@@ -90,6 +99,31 @@ def set_coins(value):
     before = struct.unpack(">i", dme.read_bytes(COINS, 4))[0]
     dme.write_bytes(COINS, struct.pack(">i", value))
     return f"Coins: {before} -> {value} (the counter may show the old amount until it redraws)"
+
+
+def write_key_items(items):
+    items = [i for i in items if i]
+    dme.write_bytes(KEY_ITEMS, struct.pack(f">{KEY_ITEM_SLOTS}H", *(items + [0] * (KEY_ITEM_SLOTS - len(items)))))
+
+
+def key_storage_addr():
+    return dme.read_word(GP_PTR) + GSW_BYTES + KEY_STORAGE_GSW
+
+
+def read_key_storage():
+    data = dme.read_bytes(key_storage_addr(), 2 * KEY_STORAGE_SLOTS)
+    return [v for v in struct.unpack(f">{KEY_STORAGE_SLOTS}H", data) if v != 0]
+
+
+def write_key_storage(items):
+    items = [i for i in items if i]
+    dme.write_bytes(key_storage_addr(), struct.pack(f">{KEY_STORAGE_SLOTS}H", *(items + [0] * (KEY_STORAGE_SLOTS - len(items)))))
+
+
+def key_item_names():
+    names = {int(k): v for k, v in json.load(open(ITEM_NAMES_FILE)).items()}
+    names.update(KEY_ITEM_NAMES)
+    return names
 
 
 def toggle_pixl(item, want):
@@ -154,6 +188,82 @@ def main():
     coins = tk.Button(root, text=f"{MAX_COINS} coins", font=font, command=coins_clicked)
     coins.pack(anchor="w", padx=8, pady=(4, 8))
 
+    # Key item storage: carried key items on the left, stored ones on the right
+    names = key_item_names()
+    store_frame = tk.LabelFrame(root, text="Key item storage", font=font, padx=6, pady=4)
+    store_frame.pack(fill="both", expand=True, padx=8, pady=4)
+    carry_label = tk.Label(store_frame, text="Carrying", font=font, anchor="w")
+    carry_label.grid(row=0, column=0, sticky="w")
+    store_label = tk.Label(store_frame, text="Storage", font=font, anchor="w")
+    store_label.grid(row=0, column=2, sticky="w")
+    carry_list = tk.Listbox(store_frame, font=font, height=10, width=22, exportselection=False)
+    carry_list.grid(row=1, column=0, sticky="nsew")
+    store_list = tk.Listbox(store_frame, font=font, height=10, width=22, exportselection=False)
+    store_list.grid(row=1, column=2, sticky="nsew")
+    store_frame.rowconfigure(1, weight=1)
+    store_frame.columnconfigure(0, weight=1)
+    store_frame.columnconfigure(2, weight=1)
+    buttons = tk.Frame(store_frame)
+    buttons.grid(row=1, column=1, padx=6)
+    lists = {"carry": [], "store": []}
+
+    def picked(listbox, items):
+        sel = listbox.curselection()
+        return sel[0] if sel and sel[0] < len(items) else None
+
+    def storage_action(action):
+        try:
+            connect_dolphin()
+            carry, store = read_key_items(), read_key_storage()
+            c, s = picked(carry_list, carry), picked(store_list, store)
+            if action == "store":
+                if c is None:
+                    raise RuntimeError("Pick a carried key item")
+                if len(store) >= KEY_STORAGE_SLOTS:
+                    raise RuntimeError("Storage is full")
+                item = carry.pop(c)
+                store.append(item)
+                text = f"{names.get(item, item)} put in storage"
+            elif action == "carry":
+                if s is None:
+                    raise RuntimeError("Pick a stored key item")
+                if len(carry) >= KEY_ITEM_SLOTS:
+                    raise RuntimeError("Key items are full: swap instead")
+                item = store.pop(s)
+                carry.append(item)
+                text = f"{names.get(item, item)} taken out of storage"
+            else:
+                if c is None or s is None:
+                    raise RuntimeError("Pick one on each side")
+                carry[c], store[s] = store[s], carry[c]
+                text = f"Swapped {names.get(store[s], store[s])} for {names.get(carry[c], carry[c])}"
+            write_key_items(carry)
+            write_key_storage(store)
+            status.config(text=text)
+        except RuntimeError as e:
+            status.config(text=str(e))
+        refresh(schedule=False)
+
+    store_button = tk.Button(buttons, text="Store ->", font=font, command=lambda: storage_action("store"))
+    store_button.pack(fill="x", pady=2)
+    carry_button = tk.Button(buttons, text="<- Carry", font=font, command=lambda: storage_action("carry"))
+    carry_button.pack(fill="x", pady=2)
+    swap_button = tk.Button(buttons, text="Swap", font=font, command=lambda: storage_action("swap"))
+    swap_button.pack(fill="x", pady=2)
+    storage_widgets = (store_button, carry_button, swap_button, carry_list, store_list)
+
+    def show_list(listbox, key, items, label, title, slots):
+        label.config(text=f"{title} ({len(items)}/{slots})")
+        if items == lists[key]:
+            return
+        lists[key] = items
+        sel = listbox.curselection()
+        listbox.delete(0, "end")
+        for item in items:
+            listbox.insert("end", names.get(item, f"item {item}"))
+        if sel and sel[0] < len(items):
+            listbox.selection_set(sel[0])
+
     def refresh(schedule=True):
         try:
             connect_dolphin()
@@ -168,6 +278,10 @@ def main():
                 var.set(item in items)
                 box.config(state="normal", fg=theme.HIGHLIGHT if item == selected else theme.TEXT)
             coins.config(state="normal")
+            for widget in storage_widgets:
+                widget.config(state="normal")
+            show_list(carry_list, "carry", read_key_items(), carry_label, "Carrying", KEY_ITEM_SLOTS)
+            show_list(store_list, "store", read_key_storage(), store_label, "Storage", KEY_STORAGE_SLOTS)
             if status.cget("text").startswith("Waiting"):
                 status.config(text="Ready (selected Pixl in red)")
         except RuntimeError as e:
@@ -175,6 +289,8 @@ def main():
             for var, box in boxes.values():
                 box.config(state="disabled")
             coins.config(state="disabled")
+            for widget in storage_widgets:
+                widget.config(state="disabled")
             status.config(text=f"Waiting for the game: {e}")
         if schedule:
             root.after(REFRESH_MS, refresh)

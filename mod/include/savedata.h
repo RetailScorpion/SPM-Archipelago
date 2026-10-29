@@ -26,6 +26,7 @@ namespace mod::savedata {
 #define PEACH_CHAIN_START 60
 #define PEACH_CHAIN_SOUP 62
 #define PEACH_CHAIN_DONE 63
+#define AP_GSW_KEY_STORAGE (AP_GSW_BASE + 32) // 32 x 2 bytes (big-endian): key items in storage, 0 = empty (keystorage.cpp)
 
 // GSWF flags 7168-8191 (1024 flags)
 #define AP_GSWF_BASE 7168
