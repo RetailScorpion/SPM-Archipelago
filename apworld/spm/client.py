@@ -64,6 +64,7 @@ class SPMContext(CommonContext):
         self.coin_locations = set()  # location indexes whose item the loaded save already got delivered
         self.was_in_game = False   # the mod reported a loaded save at the last poll
         self.stalled_polls = 0     # polls in a row with the mod's frame count not moving
+        self.mailbox_addr = None   # where the mailbox was found last
         self.slot_options = {}
         self.starting_chapters = []
 
@@ -227,8 +228,12 @@ async def game_watcher(ctx: SPMContext):
             if ctx.mailbox is None:
                 mb = Mailbox()
                 mb.connect()
+                # Found again where it was (the game paused: e.g. the Wii Remote disconnected): same mod,
+                # same items. A reload or reset is caught by the mod leaving the game first (was_in_game)
+                if mb.addr != ctx.mailbox_addr:
+                    ctx.placed = False
+                    ctx.mailbox_addr = mb.addr
                 ctx.mailbox = mb
-                ctx.placed = False
                 status = f"Connected to the game (mailbox at {mb.addr:#010x})"
                 if status != ctx.game_status:
                     ctx.game_status = status
