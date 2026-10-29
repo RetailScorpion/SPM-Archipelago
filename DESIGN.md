@@ -270,6 +270,7 @@ Filler (when the pool has more locations than progression items): coins, consuma
 - [ ] **How the game decides you can flip.** If native code compares the story value directly, story-value virtualization changes when flip is available. Flip needs its own flag either way.
 - [ ] Fleep's recruitment doesn't appear in the sequence list (4-2's "bathroom" steps, seq 141–145, may be him). Slim's and Thudley's joins also seem to be flag-based, not story values.
 - [ ] Find native code that reads `gp->gsw0` directly, bypassing `swByteGet` (needs disassembly).
+- [ ] **First thing in the next build (user, 2026-10-28): Chapter 6's World of Nothing, and a check for beating Mr. L.** When Sammer's Kingdom ends (the mod moves Chapter 6 from 280 to 281 on a map change, `hubstory.cpp`), set Chapter 6's value high enough that door 6 leads to the white void (`wa1_27`, "???"; vanilla 282 is "after entering the World of Nothing door", 284-286 are the void). Find which value door 6 and `wa1_27` check. Then make beating the Brobot L-type fight at the void's end (vanilla 285 -> 286) a new location: a gift-style flag, added at the end of the location list so earlier ids don't change.
 
 ## 8. Findings from the disc (US 1.0, R8PE01 rev 0)
 
