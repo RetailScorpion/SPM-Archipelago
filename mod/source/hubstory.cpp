@@ -107,7 +107,7 @@ void onMapChange(const char * nextMap)
 
     collectGifts(context);
 
-    bool peachDue = storyvalue::isChapterFinished(1) && !spm::swdrv::swGet(AP_GSWF_GIFT(GIFT_PEACH));
+    bool peachDue = !spm::swdrv::swGet(AP_GSWF_GIFT(GIFT_PEACH));
     savedata::setGswByte(AP_GSW_PEACH_SCENE, peachDue ? PEACH_SCENE_ON : 0);
     savedata::setGswByte(AP_GSW_LESSON, spm::swdrv::swGet(AP_GSWF_GIFT(GIFT_BESTOVIUS)) ? LESSON_DONE : 0);
 
