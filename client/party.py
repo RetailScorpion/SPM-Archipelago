@@ -1,4 +1,4 @@
-"""Party editor: add and remove characters, Pixls and the Save Block in the running game, for testing.
+"""Party editor: add and remove characters, Pixls and the Save Block, and set coins, in the running game, for testing.
 
 Writes the pouch's character and Pixl lists directly, the way pouchAddItem fills them, through Dolphin.
 Only the inventory changes: no location flags, nothing sent to the Archipelago server.
@@ -19,6 +19,8 @@ import dolphin_memory_engine as dme
 from tracker import MARIO_WORK, connect_dolphin, current_map
 
 POUCH = 0x804CEA28          # MarioPouchWork (US 1.0)
+COINS = POUCH + 0x1C        # s32
+MAX_COINS = 999
 KEY_ITEMS = POUCH + 0x20     # u16[32], 0 = empty
 KEY_ITEM_SLOTS = 32
 CHARACTERS = POUCH + 0xB4   # PouchCharOrPixlInfo[4]: u8 selectable, u8 selected, u16 itemType
@@ -83,6 +85,12 @@ def toggle_key_item(item, want):
     return f"{KEY_ITEM_NAMES[item]} {'added' if want else 'removed'}"
 
 
+def set_coins(value):
+    before = struct.unpack(">i", dme.read_bytes(COINS, 4))[0]
+    dme.write_bytes(COINS, struct.pack(">i", value))
+    return f"Coins: {before} -> {value} (the counter may show the old amount until it redraws)"
+
+
 def toggle_pixl(item, want):
     entries = held(read_list(PIXLS, PIXL_SLOTS))
     have = any(e[2] == item for e in entries)
@@ -134,6 +142,16 @@ def main():
     section("Pixls", PIXL_NAMES, toggle_pixl)
     section("Key items", KEY_ITEM_NAMES, toggle_key_item)
 
+    def coins_clicked():
+        try:
+            connect_dolphin()
+            status.config(text=set_coins(MAX_COINS))
+        except RuntimeError as e:
+            status.config(text=str(e))
+
+    coins = tk.Button(root, text=f"{MAX_COINS} coins", font=font, command=coins_clicked)
+    coins.pack(anchor="w", padx=8, pady=(4, 8))
+
     def refresh(schedule=True):
         try:
             connect_dolphin()
@@ -147,12 +165,14 @@ def main():
             for item, (var, box) in boxes.items():
                 var.set(item in items)
                 box.config(state="normal", fg="#c00000" if item == selected else "black")
+            coins.config(state="normal")
             if status.cget("text").startswith("Waiting"):
                 status.config(text="Ready (selected Pixl in red)")
         except RuntimeError as e:
             dme.un_hook()
             for var, box in boxes.values():
                 box.config(state="disabled")
+            coins.config(state="disabled")
             status.config(text=f"Waiting for the game: {e}")
         if schedule:
             root.after(REFRESH_MS, refresh)
