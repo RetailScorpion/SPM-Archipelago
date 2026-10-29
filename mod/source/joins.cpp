@@ -207,7 +207,8 @@ static const Patch sPatches[] = {
     {PEACH, 0x0317c, 60, EVT_CMD(2, OP_IF_LARGE), "Peach: mac_01 Merlon's spot"},
     {PEACH, 0x036e4, 0, EVT_CMD(1, OP_SWITCH), "Peach: mac_01 unconscious scene trigger"},
     {PEACH, 0x02908, 61, EVT_CMD(2, OP_SET), "Peach: mac_01 unconscious scene end"},
-    {PEACH, 0x00434, 61, EVT_CMD(2, OP_IF_SMALL_EQUAL), "Peach: mac_01 giving the soup"},
+    // (Giving the soup at 61, before Saffron, walks a townsperson over who never arrives there: that
+    // check keeps reading the hub value, so it takes the "after Saffron" branch)
     {PEACH, 0x19c78, 61, EVT_CMD(2, OP_IF_LARGE_EQUAL), "Peach: mac_02 scene actors (from)"},
     {PEACH, 0x19c84, 63, EVT_CMD(2, OP_IF_SMALL), "Peach: mac_02 scene actors (to)"},
     {PEACH, 0x0d4ec, 63, EVT_CMD(2, OP_SET), "Peach: join scene end"},

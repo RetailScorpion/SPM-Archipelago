@@ -120,7 +120,8 @@ void onMapChange(const char * nextMap)
     else if (chain < PEACH_CHAIN_START || chain >= PEACH_CHAIN_DONE)
         chain = PEACH_CHAIN_START;
     savedata::setGswByte(AP_GSW_PEACH_CHAIN, chain);
-    savedata::setGswByte(AP_GSW_PEACH_SCENE, chain == PEACH_CHAIN_SOUP ? PEACH_SCENE_ON : 0);
+    // Due once she can be given the soup, as in vanilla (61-62): a Spicy Soup from anywhere works
+    savedata::setGswByte(AP_GSW_PEACH_SCENE, chain > PEACH_CHAIN_START && chain < PEACH_CHAIN_DONE ? PEACH_SCENE_ON : 0);
     savedata::setGswByte(AP_GSW_LESSON, spm::swdrv::swGet(AP_GSWF_GIFT(GIFT_BESTOVIUS)) ? LESSON_DONE : 0);
 
     if (spm::swdrv::swGet(AP_GSWF_GIFT(GIFT_HELMET)) || spm::mario_pouch::pouchCheckHaveItem(HELMET_ITEM))
