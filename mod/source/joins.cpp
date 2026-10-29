@@ -35,6 +35,7 @@ using spm::evtmgr::EvtScriptCode;
 #define OP_SWITCH 34
 #define OP_SET 50
 #define OP_CASE_SMALL 38
+#define OP_RUN_EVT 93
 #define OP_USER_FUNC 92
 #define EVT_CMD(argc, op) (((argc) << 16) | (op))
 #define GSW_VAR(id) (-170000000 + (id))
@@ -106,6 +107,7 @@ enum PatchKind
     LESSON,     // SET(GSW(0), a) -> USER_FUNC(ap_lesson, a): collects Bestovius's lesson location
     PEACH,      // instruction b on GSW(0) (with constant a, unless b is a SWITCH) -> the same on
                 // GSW(AP_GSW_PEACH_CHAIN), Peach's revival chain's own story value (hubstory)
+    PEACH_JOIN, // RUN_EVT(Peach's join scene at offset a) -> RUN_EVT(ap_peach_join_evt)
 };
 
 // Past every story value, for ALWAYS
@@ -209,6 +211,12 @@ static const Patch sPatches[] = {
     {PEACH, 0x19c78, 61, EVT_CMD(2, OP_IF_LARGE_EQUAL), "Peach: mac_02 scene actors (from)"},
     {PEACH, 0x19c84, 63, EVT_CMD(2, OP_IF_SMALL), "Peach: mac_02 scene actors (to)"},
     {PEACH, 0x0d4ec, 63, EVT_CMD(2, OP_SET), "Peach: join scene end"},
+    // mac_02 SWITCHes for the scene whose other cases the hub value never reaches: who counts as
+    // inside Merlon's house (61-62 adds the Mario NPC the scene waits on), its music and its sound
+    {PEACH, 0x1aee0, 0, EVT_CMD(1, OP_SWITCH), "Peach: Merlon's house NPCs"},
+    {PEACH, 0x1bab4, 0, EVT_CMD(1, OP_SWITCH), "Peach: scene music"},
+    {PEACH, 0x1bb6c, 0, EVT_CMD(1, OP_SWITCH), "Peach: scene sound"},
+    {PEACH_JOIN, 0x1bdf4, 0xca08, 0, "Peach: join scene without Peach"},
     // The join scene runs for CASE_SMALL(63) of mac_02's story value SWITCH (hub value), entering from
     // Merlon's house; the CASE compares with a value hubstory sets once the chain reaches 62
     {CASE_GSW, 0x1bdd4, 63, AP_GSW_PEACH_SCENE, "Peach: join scene trigger"},
@@ -372,6 +380,35 @@ static EVT_DEFINE_USER_FUNC(ap_lesson)
     return 2;
 }
 
+// Peach's vanilla join scene (relF), set up by init() from the PEACH_JOIN patch
+static const EvtScriptCode * sPeachScene;
+
+// ap_peach_join(&scene): before Peach's join scene. Collects her location first, so a Peach placed
+// there joins; with Peach, scene = the vanilla scene. Without her (it's played as Peach, with a Mario
+// NPC beside her), scene = 0 and her chain just ends here
+static EVT_DEFINE_USER_FUNC(ap_peach_join)
+{
+    (void) isFirstCall;
+    hubstory::collectGift(hubstory::GIFT_PEACH);
+    const EvtScriptCode * scene = haveCharacter(CHARACTER_PEACH) ? sPeachScene : nullptr;
+    if (scene == nullptr)
+    {
+        savedata::setGswByte(AP_GSW_PEACH_CHAIN, PEACH_CHAIN_DONE);
+        wii::os::OSReport("[spmap] joins: Peach not in the party, her join scene skipped\n");
+    }
+    spm::evtmgr_cmd::evtSetValue(evt, evt->pCurData[0], reinterpret_cast<s32>(scene));
+    return 2;
+}
+static constexpr s32 ap_peach_join_parameter_count = 1;
+
+EVT_BEGIN(ap_peach_join_evt)
+    USER_FUNC(ap_peach_join, LW(1))
+    IF_NOT_EQUAL(LW(1), 0)
+        RUN_CHILD_EVT(LW(1))
+    END_IF()
+    RETURN()
+EVT_END()
+
 using UserFunc = s32(spm::evtmgr::EvtEntry * evt, bool isFirstCall);
 static const struct
 {
@@ -515,6 +552,16 @@ static void apply(const Patch & p, EvtScriptCode * base)
             {
                 at[0] = EVT_CMD(2, OP_USER_FUNC);
                 at[1] = reinterpret_cast<s32>(ap_lesson);
+            }
+            break;
+        }
+        case PEACH_JOIN:
+        {
+            const s32 orig[] = {EVT_CMD(1, OP_RUN_EVT), reinterpret_cast<s32>(gamesyms::relF_section5 + p.a / sizeof(EvtScriptCode))};
+            if (expect(at, orig, 2, p.what))
+            {
+                sPeachScene = reinterpret_cast<const EvtScriptCode *>(at[1]);
+                at[1] = reinterpret_cast<s32>(ap_peach_join_evt);
             }
             break;
         }

@@ -54,12 +54,6 @@ static const struct
 #define CHARACTER_ITEM_FIRST 217
 #define CHARACTER_ITEM_LAST 219
 
-// Peach's revival chain (joins.cpp PEACH patches) reads and sets AP_GSW_PEACH_CHAIN like vanilla's
-// story value: 60 unconscious in mac_01, 61 Saffron asked, 62 Spicy Soup cooked, 63 joined
-#define PEACH_CHAIN_START 60
-#define PEACH_CHAIN_SOUP 62
-#define PEACH_CHAIN_DONE 63
-
 // Peach's join scene: mac_02's init runs it for CASE_SMALL(63) of its story value SWITCH, which
 // joins.cpp points at AP_GSW_PEACH_SCENE. Past the hub value when the scene is due, 0 (never) otherwise
 #define PEACH_SCENE_ON (STORY_HUB_VALUE + 1)
