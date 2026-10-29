@@ -76,7 +76,7 @@ static void dispMessage(s32 cameraId, void * param)
     spm::windowdrv::windowDispGX2_Waku_col(mtx, 0, &box, x - BOX_PAD_X, MESSAGE_Y + BOX_PAD_Y,
                                            textWidth + 2 * BOX_PAD_X, FONT_HEIGHT * MESSAGE_SCALE + 2 * BOX_PAD_Y, 8.0f);
 
-    wii::gx::GXColor colour = {255, 255, 255, 255};
+    wii::gx::GXColor colour = {255, 80, 80, 255};  // red, to stand out
     spm::fontmgr::FontDrawStart();
     spm::fontmgr::FontDrawEdge();
     spm::fontmgr::FontDrawColor(&colour);
