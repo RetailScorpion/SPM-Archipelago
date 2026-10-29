@@ -35,6 +35,7 @@ DISGUISES = sorted({vanilla for _, _, category, vanilla, _, _ in LOCATIONS if ca
 GOAL_CHAPTER = 8
 GOAL_STORY_VALUE = 417     # ls4_12, the final boss arena
 POLL_SECONDS = 0.5
+STALLED_POLLS_RECONNECT = 5  # polls without the game running before looking for the mailbox again
 
 
 class SPMCommandProcessor(ClientCommandProcessor):
@@ -62,6 +63,7 @@ class SPMContext(CommonContext):
         self.last_flags = None     # the save flags at the last poll
         self.coin_locations = set()  # location indexes whose item the loaded save already got delivered
         self.was_in_game = False   # the mod reported a loaded save at the last poll
+        self.stalled_polls = 0     # polls in a row with the mod's frame count not moving
         self.slot_options = {}
         self.starting_chapters = []
 
@@ -157,11 +159,20 @@ class SPMContext(CommonContext):
         logger.info(f"Placed items at {len(self.scouted)} locations")
 
     def game_running(self) -> bool:
-        """The game moved on since the last poll. While Dolphin resets, the old mod's mailbox still says
-        a save is loaded but nothing runs, and memory is half old, half rebooted: nothing is read then."""
-        frame = self.mailbox.frame_counter()
+        """The mod ran in a loaded save since the last poll. A Dolphin reset keeps memory: the old mod's
+        mailbox still says a save is loaded while the game reboots, with memory half old, half new.
+        Nothing is read then."""
+        frame = self.mailbox.game_frames()
         running = self.last_frame is not None and frame != self.last_frame
+        self.stalled_polls = 0 if running else self.stalled_polls + 1
         self.last_frame = frame
+        if self.stalled_polls >= STALLED_POLLS_RECONNECT:
+            # Paused, or reset with the new mod's mailbox elsewhere: look for it again (quietly: the
+            # status only changes, and is logged, if it's somewhere else now)
+            self.stalled_polls = 0
+            self.last_frame = None
+            self.mailbox = None
+            return False
         return running
 
     def check_locations(self, flags):
@@ -218,8 +229,10 @@ async def game_watcher(ctx: SPMContext):
                 mb.connect()
                 ctx.mailbox = mb
                 ctx.placed = False
-                ctx.game_status = f"Connected to the game (mailbox at {mb.addr:#010x})"
-                logger.info(ctx.game_status)
+                status = f"Connected to the game (mailbox at {mb.addr:#010x})"
+                if status != ctx.game_status:
+                    ctx.game_status = status
+                    logger.info(status)
             if ctx.slot is not None:
                 # Before a save is loaded too: a new file's opening checks it right away
                 ctx.mailbox.set_play_cutscenes(not ctx.slot_options.get("skip_cutscenes", True))
@@ -234,7 +247,7 @@ async def game_watcher(ctx: SPMContext):
                 if not ctx.placed and ctx.scouted:
                     ctx.write_placements()
                     ctx.placed = True
-                if ctx.game_running():
+                if ctx.game_running() and ctx.mailbox is not None:
                     flags = ctx.mailbox.read_flags()
                     ctx.check_locations(flags)
                     ctx.feed_items(flags)

@@ -7,7 +7,7 @@ import time
 import dolphin_memory_engine as dme
 
 MAGIC = b"SPMAP_MAILBOX_v1"
-VERSION = 11
+VERSION = 12
 RECV_SIZE = 16
 SENT_SIZE = 32
 
@@ -38,6 +38,7 @@ OFF_LOC_NAMES_MAX = 0x12C
 OFF_PLAY_CUTSCENES = 0x130
 OFF_GIFT_ITEMS = 0x134
 OFF_STARTING_HEARTS = 0x144
+OFF_GAME_FRAMES = 0x148
 GIFT_FLAG_BASE = 7168 + 16  # AP_GSWF_GIFT_BASE (mod/include/savedata.h)
 RECV_ALREADY_GIVEN = 0x8000
 NO_SAVE = 0xFFFFFFFF
@@ -52,7 +53,6 @@ GSW_OFFSET = 0x544
 STORY_SLOT_COUNT = 9
 GP_PTR = 0x8056D198  # US 1.0: pointer to SpmarioGlobals
 GSW0_OFFSET = 0x140
-FRAME_COUNTER_OFFSET = 0x14  # SpmarioGlobals frameCounter: counts up every frame the game runs
 
 STATE_BOOT, STATE_TITLE, STATE_IN_GAME = 0, 1, 2  # mailbox.h ModState
 STATE_NAMES = {STATE_BOOT: "boot", STATE_TITLE: "title", STATE_IN_GAME: "in game"}
@@ -163,8 +163,9 @@ class Mailbox:
         """All 8192 GSWF save flags as 1024 bytes (the raw words)."""
         return dme.read_bytes(dme.read_word(GP_PTR) + GSWF_OFFSET, 1024)
 
-    def frame_counter(self) -> int:
-        return dme.read_word(dme.read_word(GP_PTR) + FRAME_COUNTER_OFFSET)
+    def game_frames(self) -> int:
+        """Frames the mod has run in a loaded save; stops while Dolphin resets."""
+        return dme.read_word(self.addr + OFF_GAME_FRAMES)
 
     @staticmethod
     def flag_set(flags: bytes, flag: int) -> bool:

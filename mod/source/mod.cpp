@@ -281,6 +281,7 @@ static spm::seqdef::SeqFunc * seq_gameMainReal;
 static void seq_gameMainHook(spm::seqdrv::SeqWork * wp)
 {
     mailbox::gMailbox.modState = mailbox::STATE_IN_GAME;
+    mailbox::gMailbox.gameFrames++;
     handleWarpRequest();
     mailbox::gMailbox.savedRecvCount = savedRecvCount();
     seq_gameMainReal(wp);

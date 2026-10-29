@@ -14,7 +14,7 @@
 namespace mod::mailbox {
 
 #define MAILBOX_MAGIC "SPMAP_MAILBOX_v1"
-#define MAILBOX_VERSION 11
+#define MAILBOX_VERSION 12
 
 // debugFlags bits
 #define DEBUG_JOINS_GIVE_NOTHING 0x1      // Pixl joins mark their location but don't give the Pixl
@@ -73,8 +73,12 @@ struct Mailbox
     // Pure Hearts the seed starts with (bit n - 1 = heart n), written by the client;
     // STARTING_HEARTS_NO_CLIENT until it does, which opens every door without giving any heart
 /* 0x144 */ u32 startingHearts;
+
+    // Counts up every frame in a loaded save (written by the mod). The client reads checks only while
+    // it moves: a Dolphin reset keeps memory, so this mailbox still says "in game" while the game reboots
+/* 0x148 */ u32 gameFrames;
 };
-static_assert(sizeof(Mailbox) == 0x148);
+static_assert(sizeof(Mailbox) == 0x14C);
 
 #define STARTING_HEARTS_NO_CLIENT 0xFFFFFFFF
 
