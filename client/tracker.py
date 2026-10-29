@@ -4,19 +4,20 @@ Reads each location's save flag (the same way the Archipelago client detects che
 location by level and map, with its vanilla item and rough spot (or how to trigger it, for the
 story gifts: character joins, the Helmet, Bestovius's lesson), plus the Pure Hearts held. Every level is listed with its
 status (Complete, checked/total, or no checks). The map you're in is marked.
-Refreshes when something changes. Read-only: it never writes to the game.
+Refreshes when something changes, in its own window that keeps where you've scrolled to. Read-only:
+it never writes to the game.
 
 Positions are the game's own coordinates: x runs left to right along the level, y is height, z is
 depth. coords.py shows Mario's own position, to compare.
 
-Usage: py -3 -E tracker.py [--missing]   (--missing: hide checked locations)
+Usage: pyw -3 -E tracker.py [--missing]   (--missing: hide checked locations)
 """
 
 import json
 import os
 import struct
 import sys
-import time
+import tkinter as tk
 
 import dolphin_memory_engine as dme
 
@@ -26,7 +27,7 @@ LOCATIONS = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file_
 MAP_NAME_OFFSET = 0x44  # SpmarioGlobals mapName
 MARIO_WORK = 0x804CD458  # marioGetPtr() (US 1.0)
 MARIO_POSITION = 0x5C    # MarioWork position (x, y, z floats)
-POLL_SECONDS = 1.0
+POLL_MS = 1000
 HEART_FLAG_BASE = 7168 + 24  # AP_GSWF_HEART(1) (mod/include/savedata.h)
 HEART_COUNT = 7              # the tower's doors
 
@@ -107,27 +108,42 @@ def load_locations():
 
 def main():
     missing_only = "--missing" in sys.argv
-    last = None
-    loaded_mtime = None
-    while True:
+    root = tk.Tk()
+    root.title("SPM tracker")
+    root.geometry("1100x800")
+    scroll = tk.Scrollbar(root)
+    scroll.pack(side="right", fill="y")
+    text = tk.Text(root, font=("Consolas", 11), wrap="none", yscrollcommand=scroll.set)
+    text.pack(side="left", fill="both", expand=True)
+    scroll.config(command=text.yview)
+    state = {"last": None, "mtime": None, "levels": None, "locations": None}
+
+    def refresh():
         # Reload when the data is regenerated (new locations), so a running tracker stays current
         mtime = os.path.getmtime(LOCATIONS)
-        if mtime != loaded_mtime:
-            levels, locations = load_locations()
-            loaded_mtime = mtime
+        if mtime != state["mtime"]:
+            state["levels"], state["locations"] = load_locations()
+            state["mtime"] = mtime
         try:
             connect_dolphin()
-            # No Mario position here (coords.py shows it): the screen only redraws, and scrolls back to the
-            # top, when a check or the map changes
-            screen = render(levels, locations, read_flags(), current_map(), missing_only)
+            # No Mario position here (coords.py shows it): the text only changes when a check or the map does
+            screen = render(state["levels"], state["locations"], read_flags(), current_map(), missing_only)
         except RuntimeError as e:
             dme.un_hook()
             screen = f"Waiting for the game: {e}"
-        if screen != last:
-            os.system("cls" if os.name == "nt" else "clear")
-            print(screen)
-            last = screen
-        time.sleep(POLL_SECONDS)
+        if screen != state["last"]:
+            # Replace the text but stay scrolled where you were
+            top = text.yview()[0]
+            text.config(state="normal")
+            text.delete("1.0", "end")
+            text.insert("1.0", screen)
+            text.config(state="disabled")
+            text.yview_moveto(top)
+            state["last"] = screen
+        root.after(POLL_MS, refresh)
+
+    refresh()
+    root.mainloop()
 
 
 if __name__ == "__main__":
