@@ -20,6 +20,9 @@
     is collected from it, the item-get becomes the AP item with a blank icon and "You are a FOOL!",
     and once it's over Mario gets a random Cursya curse. Traps found in other worlds come from the
     server (TRAP_ITEM_ID) and play the same way.
+
+    Other worlds' filler (LOC_KIND_OTHER_WORLD_FILLER) shows the grey AP icon: the AP item is created
+    with it (each world item keeps the icon it was created with) and its item-get holds it up.
 */
 
 namespace mod::apitem {
@@ -30,8 +33,9 @@ constexpr s32 TRAP_ITEM_ID = 1100;
 
 enum LocKind : u16
 {
-    LOC_KIND_OTHER_WORLD = 0,
+    LOC_KIND_OTHER_WORLD = 0,         // progression or useful: the colour AP icon
     LOC_KIND_TRAP = 1,
+    LOC_KIND_OTHER_WORLD_FILLER = 2,  // filler (or another world's trap): the grey AP icon
 };
 
 // One location holding another world's item (written by the client; mailbox locNames)

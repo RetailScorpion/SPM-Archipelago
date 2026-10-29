@@ -270,7 +270,6 @@ Filler (when the pool has more locations than progression items): coins, consuma
 - [ ] **How the game decides you can flip.** If native code compares the story value directly, story-value virtualization changes when flip is available. Flip needs its own flag either way.
 - [ ] Fleep's recruitment doesn't appear in the sequence list (4-2's "bathroom" steps, seq 141–145, may be him). Slim's and Thudley's joins also seem to be flag-based, not story values.
 - [ ] Find native code that reads `gp->gsw0` directly, bypassing `swByteGet` (needs disassembly).
-- [ ] **Grey AP icon for junk.** Other worlds' filler items should show the grey AP icon (wicon 403, `assets/icons/ap_filler.png`, already in wicon.bin) instead of the colour one (402). Needs the client to pass the item's classification (NetworkItem flags) with each location name, and the mod to pick the icon per item-get.
 
 ## 8. Findings from the disc (US 1.0, R8PE01 rev 0)
 

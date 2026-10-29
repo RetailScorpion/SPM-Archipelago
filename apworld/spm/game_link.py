@@ -42,7 +42,7 @@ GIFT_FLAG_BASE = 7168 + 16  # AP_GSWF_GIFT_BASE (mod/include/savedata.h)
 RECV_ALREADY_GIVEN = 0x8000
 NO_SAVE = 0xFFFFFFFF
 LOC_NAME_SIZE = 0x40  # apitem::LocName: u16 flag, u16 kind, char item[36], char player[24]
-LOC_KIND_OTHER_WORLD, LOC_KIND_TRAP = 0, 1  # apitem.h LocKind
+LOC_KIND_OTHER_WORLD, LOC_KIND_TRAP, LOC_KIND_OTHER_WORLD_FILLER = 0, 1, 2  # apitem.h LocKind
 GSWF_OFFSET = 0x144   # SpmarioGlobals gswf[256]: flag n is bit (n & 31) of word (n >> 5)
 DEBUG_JOINS_GIVE_NOTHING = 0x1
 DEBUG_JOINS_GIVE_PLACEHOLDER = 0x2
@@ -136,7 +136,8 @@ class Mailbox:
 
     def write_loc_names(self, entries):
         """entries: [(flag, item name, player name, kind)] for locations holding other worlds' items
-        (kind 0) or this world's traps (kind 1, LOC_KIND_TRAP)."""
+        (kind 0, or LOC_KIND_OTHER_WORLD_FILLER for filler: the grey icon) or this world's traps (kind 1,
+        LOC_KIND_TRAP)."""
         table = dme.read_word(self.addr + OFF_LOC_NAMES)
         count = dme.read_word(self.addr + OFF_LOC_NAMES_MAX)
         data = bytearray(LOC_NAME_SIZE * count)

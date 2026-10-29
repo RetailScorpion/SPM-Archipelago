@@ -19,6 +19,7 @@ namespace mod::apitem {
 
 // Added to wicon.bin after the game's 402 icons: 402 progression (colour), 403 filler (greyscale)
 #define AP_ICON_PROGRESSION 402
+#define AP_ICON_FILLER 403
 #define AP_ICON_BLANK 404  // a trap's item-get: Mario holds up nothing
 
 #define NAME_KEY "ap_item_name"
@@ -153,6 +154,35 @@ static void curse()
     }
 }
 
+static bool isFiller(const LocName * loc)
+{
+    return loc != nullptr && loc->kind == LOC_KIND_OTHER_WORLD_FILLER;
+}
+
+// Spawning the AP item: a filler location's gets the grey icon (the item keeps the icon it's created
+// with). The location: the item's own flag (pickups), else the nearest unopened chest (a chest's
+// item), else the names already remembered (joins and gifts: their flag is set first, swSetHook)
+static spm::itemdrv::ItemEntry * (*itemEntryReal)(const char * name, s32 type, s32 behaviour, f32 x, f32 y, f32 z,
+                                                  spm::evtmgr::EvtScriptCode * pickupScript, s32 switchNumber);
+static spm::itemdrv::ItemEntry * itemEntryHook(const char * name, s32 type, s32 behaviour, f32 x, f32 y, f32 z,
+                                              spm::evtmgr::EvtScriptCode * pickupScript, s32 switchNumber)
+{
+    if (type != AP_ITEM_ID)
+        return itemEntryReal(name, type, behaviour, x, y, z, pickupScript, switchNumber);
+    s32 flag = switchNumber - GSWF_VAR_BASE;
+    const wii::mtx::Vec3 at = {x, y, z};
+    const LocName * loc = flag >= 0 && flag < GSWF_COUNT ? findLocation(flag) : nearestChest(at);
+    if (loc == nullptr)
+        loc = sCurrent;
+    spm::item_data::ItemData & data = spm::item_data::itemDataTable[AP_ITEM_ID];
+    s16 icon = data.iconId;
+    if (isFiller(loc))
+        data.iconId = AP_ICON_FILLER;
+    spm::itemdrv::ItemEntry * entry = itemEntryReal(name, type, behaviour, x, y, z, pickupScript, switchNumber);
+    data.iconId = icon;
+    return entry;
+}
+
 // A location's flag being set: remembers its names for the coming item-get. Chests and Pixl joins set
 // their flag before the item appears; pickups set it only after their item-get, so they're handled
 // by itemCollectPouchItemHook instead. Only remembers: the message is armed by the AP item itself.
@@ -191,6 +221,9 @@ static bool itemCollectPouchItemHook(spm::itemdrv::ItemEntry * item)
             spm::item_data::itemDataTable[AP_ITEM_ID].iconId = AP_ICON_BLANK;
             sTrapActive = true;
         }
+        // Filler: Mario holds up the grey icon (tick puts the colour one back after)
+        else if (item->type == AP_ITEM_ID && isFiller(sCurrent))
+            spm::item_data::itemDataTable[AP_ITEM_ID].iconId = AP_ICON_FILLER;
     }
     if (item->type == AP_ITEM_ID)
         sActiveFrames = ACTIVE_FRAMES;
@@ -208,6 +241,7 @@ void init()
     swSetReal = patch::hookFunction(spm::swdrv::swSet, swSetHook);
     itemCollectPouchItemReal = patch::hookFunction(spm::itemdrv::itemCollectPouchItem, itemCollectPouchItemHook);
     evtMobjThakoReal = patch::hookFunction(spm::evt_mobj::evt_mobj_thako, evtMobjThakoHook);
+    itemEntryReal = patch::hookFunction(spm::itemdrv::itemEntry, itemEntryHook);
     wii::os::OSReport("[spmap] apitem: item %d is the Archipelago item\n", AP_ITEM_ID);
 }
 
@@ -217,10 +251,10 @@ void tick()
     if (sActiveFrames > 0 && --sActiveFrames == 0)
     {
         sCurrent = &sPlaceholder;
+        spm::item_data::itemDataTable[AP_ITEM_ID].iconId = AP_ICON_PROGRESSION;
         if (sTrapActive)
         {
             sTrapActive = false;
-            spm::item_data::itemDataTable[AP_ITEM_ID].iconId = AP_ICON_PROGRESSION;
             curse();
         }
     }

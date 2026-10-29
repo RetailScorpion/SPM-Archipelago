@@ -14,11 +14,13 @@ import asyncio
 import random
 
 import Utils
+from BaseClasses import ItemClassification
 from CommonClient import ClientCommandProcessor, CommonContext, get_base_parser, gui_enabled, logger, server_loop
 from NetUtils import ClientStatus
 
 from .data import ID_BASE, LOCATIONS
-from .game_link import (GIFT_FLAG_BASE, JOIN_ITEM_OTHER_WORLD, LOC_KIND_OTHER_WORLD, LOC_KIND_TRAP, NO_SAVE, RECV_SIZE,
+from .game_link import (GIFT_FLAG_BASE, JOIN_ITEM_OTHER_WORLD, LOC_KIND_OTHER_WORLD, LOC_KIND_OTHER_WORLD_FILLER,
+                        LOC_KIND_TRAP, NO_SAVE, RECV_SIZE,
                         STATE_IN_GAME, Mailbox, MailboxError)
 
 GAME = "Super Paper Mario"
@@ -111,7 +113,9 @@ class SPMContext(CommonContext):
                 shown = self.disguise(ID_BASE + i)
             elif foreign:
                 names.append((flag, self.item_names.lookup_in_slot(network_item.item, network_item.player),
-                              self.player_names.get(network_item.player, "someone"), LOC_KIND_OTHER_WORLD))
+                              self.player_names.get(network_item.player, "someone"),
+                              LOC_KIND_OTHER_WORLD if network_item.flags & (ItemClassification.progression | ItemClassification.useful)
+                              else LOC_KIND_OTHER_WORLD_FILLER))
             if kind == "join":
                 mb.set_join_item(vanilla, JOIN_ITEM_OTHER_WORLD if foreign else shown)
             elif kind == "gift":
