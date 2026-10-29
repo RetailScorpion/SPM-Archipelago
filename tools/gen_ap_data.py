@@ -55,7 +55,7 @@ AP_GSWF_GIFT_BASE = AP_GSWF_BASE + 16         # story gifts, in GIFTS order (mod
 # go at the end, so earlier location ids don't change. The characters' are their join scenes; the
 # Helmet is always vanilla: without it Outer Space's movement breaks, and nothing blocks Chapter 4
 # without it yet.
-GIFTS = [(217, "mac_02", "Peach joins", "her scene: enter Flipside Tower from Merlon's house once Chapter 1 is finished"),
+GIFTS = [(217, "mac_02", "Peach joins", "give Saffron a Fire Burst, then her Spicy Soup to Peach in mac_01"),
          (219, "an1_07", "Luigi joins", "his scene: step onto the ledge on the right"),
          (24, "sp1_01", "Helmet (entering Chapter 4)", "given on entering any Chapter 4 map"),
          (218, "ta1_04", "Bowser joins", "after the fight with Bowser"),

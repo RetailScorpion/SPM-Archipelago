@@ -4,6 +4,7 @@
 #include <spm/evt_map.h>
 #include <spm/evt_mario.h>
 #include <spm/evt_pouch.h>
+#include <spm/evt_shop.h>
 #include <spm/evt_snd.h>
 #include <spm/evtmgr_cmd.h>
 #include <spm/item_data_ids.h>
@@ -28,6 +29,8 @@ using spm::evtmgr::EvtScriptCode;
 #define OP_IF_EQUAL 24
 #define OP_IF_NOT_EQUAL 25
 #define OP_IF_SMALL 26
+#define OP_IF_LARGE 27
+#define OP_IF_SMALL_EQUAL 28
 #define OP_IF_LARGE_EQUAL 29
 #define OP_SWITCH 34
 #define OP_SET 50
@@ -101,6 +104,8 @@ enum PatchKind
     CASE_GSW,   // CASE_SMALL(a) -> CASE_SMALL(GSW(b)): a save byte the mod sets (hubstory, tick)
     LESSON_IF,  // IF with opcode b on (GSW(0), a) -> the same on GSW(AP_GSW_LESSON), set by hubstory
     LESSON,     // SET(GSW(0), a) -> USER_FUNC(ap_lesson, a): collects Bestovius's lesson location
+    PEACH,      // instruction b on GSW(0) (with constant a, unless b is a SWITCH) -> the same on
+                // GSW(AP_GSW_PEACH_CHAIN), Peach's revival chain's own story value (hubstory)
 };
 
 // Past every story value, for ALWAYS
@@ -191,8 +196,21 @@ static const Patch sPatches[] = {
 
     // Characters: the join scenes collect a gift location (hubstory.cpp) instead of adding the
     // character. Their own evt_pouch_add_item is skipped; ap_char_join gives what was placed there.
-    // Peach: Flipside Tower (mac_02) plays her scene, entering from Merlon's house, for story values
-    // 59-62; the CASE now compares with a value hubstory sets once Chapter 1 is finished
+    // Peach: her revival chain reads and sets its own story value (AP_GSW_PEACH_CHAIN, 60-63) instead
+    // of GSW(0): mac_01 shows her unconscious with Merlon (60-62) and plays the "she fell from the
+    // sky" scene (60 -> 61), Saffron cooks the Spicy Soup from a Fire Burst (61 -> 62, sSaffronPatches),
+    // giving her the soup takes Mario to Merlon's house, where the join scene plays (62 -> 63)
+    {PEACH, 0x02f8c, 60, EVT_CMD(2, OP_IF_LARGE_EQUAL), "Peach: mac_01 Peach and Merlon (from)"},
+    {PEACH, 0x02f98, 63, EVT_CMD(2, OP_IF_SMALL), "Peach: mac_01 Peach and Merlon (to)"},
+    {PEACH, 0x0317c, 60, EVT_CMD(2, OP_IF_LARGE), "Peach: mac_01 Merlon's spot"},
+    {PEACH, 0x036e4, 0, EVT_CMD(1, OP_SWITCH), "Peach: mac_01 unconscious scene trigger"},
+    {PEACH, 0x02908, 61, EVT_CMD(2, OP_SET), "Peach: mac_01 unconscious scene end"},
+    {PEACH, 0x00434, 61, EVT_CMD(2, OP_IF_SMALL_EQUAL), "Peach: mac_01 giving the soup"},
+    {PEACH, 0x19c78, 61, EVT_CMD(2, OP_IF_LARGE_EQUAL), "Peach: mac_02 scene actors (from)"},
+    {PEACH, 0x19c84, 63, EVT_CMD(2, OP_IF_SMALL), "Peach: mac_02 scene actors (to)"},
+    {PEACH, 0x0d4ec, 63, EVT_CMD(2, OP_SET), "Peach: join scene end"},
+    // The join scene runs for CASE_SMALL(63) of mac_02's story value SWITCH (hub value), entering from
+    // Merlon's house; the CASE compares with a value hubstory sets once the chain reaches 62
     {CASE_GSW, 0x1bdd4, 63, AP_GSW_PEACH_SCENE, "Peach: join scene trigger"},
     {SKIP, 0xcaf8, 1, POUCH_ADD_ITEM, "Peach: vanilla join"},
     {CHAR_JOIN, 0xcb04, CHARACTER_PEACH, hubstory::GIFT_PEACH, "Peach join"},
@@ -224,6 +242,31 @@ static const Patch sPatches[] = {
     {LESSON_IF, 0x164778, 16, OP_IF_LARGE_EQUAL, "Bestovius: chat 16"},
     {LESSON_IF, 0x1647a8, 15, OP_IF_SMALL, "Bestovius: first offer"},
     {LESSON, 0x164df0, 16, 0, "Bestovius: lesson"},
+};
+
+// Saffron's cooking script (main.dol), offsets from saffronCookingScript: her Spicy Soup for Peach
+// (story values 61-62) follows Peach's chain value
+static const Patch sSaffronPatches[] = {
+    {PEACH, 0x020, 61, EVT_CMD(2, OP_IF_EQUAL), "Saffron: first visit"},
+    {PEACH, 0x150, 62, EVT_CMD(2, OP_SET), "Saffron: soup already held (first visit)"},
+    {PEACH, 0x200, 62, EVT_CMD(2, OP_SET), "Saffron: soup already held"},
+    {PEACH, 0x284, 62, EVT_CMD(2, OP_IF_EQUAL), "Saffron: soup cooked"},
+    {PEACH, 0x40c, 62, EVT_CMD(2, OP_IF_EQUAL), "Saffron: menu cancelled"},
+    {PEACH, 0x45c, 61, EVT_CMD(2, OP_IF_LARGE_EQUAL), "Saffron: only a Fire Burst (from)"},
+    {PEACH, 0x468, 62, EVT_CMD(2, OP_IF_SMALL_EQUAL), "Saffron: only a Fire Burst (to)"},
+    {PEACH, 0x54c, 0, EVT_CMD(1, OP_SWITCH), "Saffron: cooking declined"},
+    {PEACH, 0x5a8, 0, EVT_CMD(1, OP_SWITCH), "Saffron: cooking line"},
+    {PEACH, 0x858, 0, EVT_CMD(1, OP_SWITCH), "Saffron: cooking message"},
+    {PEACH, 0xa1c, 61, EVT_CMD(2, OP_IF_EQUAL), "Saffron: soup result (61)"},
+    {PEACH, 0xa5c, 62, EVT_CMD(2, OP_IF_EQUAL), "Saffron: soup result (62)"},
+    {PEACH, 0xb88, 61, EVT_CMD(2, OP_IF_EQUAL), "Saffron: soup handed over (61)"},
+    {PEACH, 0xbb8, 62, EVT_CMD(2, OP_SET), "Saffron: soup handed over (61) end"},
+    {PEACH, 0xbd4, 62, EVT_CMD(2, OP_IF_EQUAL), "Saffron: soup handed over (62)"},
+    {PEACH, 0xc04, 62, EVT_CMD(2, OP_SET), "Saffron: soup handed over (62) end"},
+    {PEACH, 0xc20, 61, EVT_CMD(2, OP_IF_EQUAL), "Saffron: soup held (61)"},
+    {PEACH, 0xc84, 62, EVT_CMD(2, OP_SET), "Saffron: soup held (61) end"},
+    {PEACH, 0xca0, 62, EVT_CMD(2, OP_IF_EQUAL), "Saffron: soup held (62)"},
+    {PEACH, 0xd04, 62, EVT_CMD(2, OP_SET), "Saffron: soup held (62) end"},
 };
 
 // ap_join_gift(pixlItemId): a Pixl join location. Marks it collected; until Archipelago is
@@ -352,9 +395,9 @@ static bool expect(const EvtScriptCode * at, const s32 * words, s32 n, const cha
     return true;
 }
 
-static void apply(const Patch & p)
+static void apply(const Patch & p, EvtScriptCode * base)
 {
-    EvtScriptCode * at = gamesyms::relF_section5 + p.offset / sizeof(EvtScriptCode);
+    EvtScriptCode * at = base + p.offset / sizeof(EvtScriptCode);
     switch (p.kind)
     {
         case GATE:
@@ -475,6 +518,13 @@ static void apply(const Patch & p)
             }
             break;
         }
+        case PEACH:
+        {
+            const s32 orig[] = {p.b, GSW_VAR(0), p.a};
+            if (expect(at, orig, p.b == EVT_CMD(1, OP_SWITCH) ? 2 : 3, p.what))
+                at[1] = GSW_VAR(AP_GSW_PEACH_CHAIN);
+            break;
+        }
         case SKIP:
         {
             const s32 orig[] = {EVT_CMD(p.a + 1, OP_USER_FUNC), reinterpret_cast<s32>(sSkippable[p.b])};
@@ -488,7 +538,10 @@ static void apply(const Patch & p)
 void init()
 {
     for (auto & p : sPatches)
-        apply(p);
+        apply(p, gamesyms::relF_section5);
+    EvtScriptCode * saffron = const_cast<EvtScriptCode *>(spm::evt_shop::saffronCookingScript);
+    for (auto & p : sSaffronPatches)
+        apply(p, saffron);
     wii::os::OSReport("[spmap] joins: patched\n");
 }
 

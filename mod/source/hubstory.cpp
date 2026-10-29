@@ -37,7 +37,7 @@ static const struct
     Trigger trigger;
     const char * what;
 } sGifts[] = {
-    {217, SCENE, "Peach joins"},               // Flipside Tower scene (vanilla story values 59-62)
+    {217, SCENE, "Peach joins"},               // Merlon's house, after her revival chain (vanilla 60-62)
     {219, SCENE, "Luigi joins"},               // the Underwhere, an1_07 (vanilla 295-296)
     {24, ENTERED_CHAPTER_4, "the Helmet"},     // vanilla: Merlon's Goldfish Bowl quest, 131-134
     {218, SCENE, "Bowser joins"},              // 3-1, after his fight (Chapter 3's own value, < 104)
@@ -48,7 +48,13 @@ static const struct
 #define CHARACTER_ITEM_FIRST 217
 #define CHARACTER_ITEM_LAST 219
 
-// Peach's join scene: Flipside Tower's init runs it for CASE_SMALL(63) of its story value SWITCH, which
+// Peach's revival chain (joins.cpp PEACH patches) reads and sets AP_GSW_PEACH_CHAIN like vanilla's
+// story value: 60 unconscious in mac_01, 61 Saffron asked, 62 Spicy Soup cooked, 63 joined
+#define PEACH_CHAIN_START 60
+#define PEACH_CHAIN_SOUP 62
+#define PEACH_CHAIN_DONE 63
+
+// Peach's join scene: mac_02's init runs it for CASE_SMALL(63) of its story value SWITCH, which
 // joins.cpp points at AP_GSW_PEACH_SCENE. Past the hub value when the scene is due, 0 (never) otherwise
 #define PEACH_SCENE_ON (STORY_HUB_VALUE + 1)
 
@@ -107,8 +113,14 @@ void onMapChange(const char * nextMap)
 
     collectGifts(context);
 
-    bool peachDue = !spm::swdrv::swGet(AP_GSWF_GIFT(GIFT_PEACH));
-    savedata::setGswByte(AP_GSW_PEACH_SCENE, peachDue ? PEACH_SCENE_ON : 0);
+    // The chain starts over from the beginning on a save from before it had its own value
+    s32 chain = savedata::getGswByte(AP_GSW_PEACH_CHAIN);
+    if (spm::swdrv::swGet(AP_GSWF_GIFT(GIFT_PEACH)))
+        chain = PEACH_CHAIN_DONE;
+    else if (chain < PEACH_CHAIN_START || chain >= PEACH_CHAIN_DONE)
+        chain = PEACH_CHAIN_START;
+    savedata::setGswByte(AP_GSW_PEACH_CHAIN, chain);
+    savedata::setGswByte(AP_GSW_PEACH_SCENE, chain == PEACH_CHAIN_SOUP ? PEACH_SCENE_ON : 0);
     savedata::setGswByte(AP_GSW_LESSON, spm::swdrv::swGet(AP_GSWF_GIFT(GIFT_BESTOVIUS)) ? LESSON_DONE : 0);
 
     if (storyvalue::getChapterValue(6) == CHAPTER_6_DUELS_DONE)

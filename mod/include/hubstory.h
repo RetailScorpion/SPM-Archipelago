@@ -6,8 +6,9 @@
     Story steps vanilla plays in the hubs (or tied to story values the per-chapter values skip past),
     given directly or replayed on the mod's own conditions. The hubs sit at a fixed story value
     (STORY_HUB_VALUE), so their story scenes never play on their own:
-      - Peach joins: her vanilla join scene (Flipside Tower, entering from Merlon's house, vanilla story
-        values 59-62) plays until her location is collected, from the start of the file
+      - Peach joins: her vanilla revival chain is there from the start of the file, on its own story
+        value: unconscious in mac_01, Saffron cooks a Fire Burst into Spicy Soup, the soup takes Mario
+        to Merlon's house for her join scene, which collects the location
       - Luigi joins: his vanilla scene in the Underwhere (an1_07, vanilla story values 295-296) plays
         until his location is collected (joins.cpp re-gates it)
       - Bowser joins: his vanilla scene after the 3-1 fight (ta1_04), still on Chapter 3's own value

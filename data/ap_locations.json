@@ -2395,7 +2395,7 @@
    "flag": 7184,
    "label": "Peach joins",
    "patches": [],
-   "where": "her scene: enter Flipside Tower from Merlon's house once Chapter 1 is finished",
+   "where": "give Saffron a Fire Burst, then her Spicy Soup to Peach in mac_01",
    "pos": null,
    "name": "Flipside/Flopside - Peach joins (mac_02)",
    "id": 1397771631,
