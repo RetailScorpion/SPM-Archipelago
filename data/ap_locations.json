@@ -2395,7 +2395,7 @@
    "flag": 7184,
    "label": "Peach joins",
    "patches": [],
-   "where": "give Saffron a Fire Burst, then her Spicy Soup to Peach in mac_01",
+   "where": "talk to Peach in mac_01 holding a Spicy Soup (Saffron cooks one from a Fire Burst)",
    "pos": null,
    "name": "Flipside/Flopside - Peach joins (mac_02)",
    "id": 1397771631,

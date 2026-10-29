@@ -16,7 +16,7 @@ namespace mod::savedata {
 #define AP_GSW_BASE 1792
 #define AP_GSW_STORY_SLOTS (AP_GSW_BASE + 0)  // 8 chapters x 2 bytes (big-endian), 0 = chapter not started
 #define AP_GSW_JOIN_STAGES (AP_GSW_BASE + 16) // story value seen by patched join SWITCHes (joins.cpp)
-#define AP_GSW_PEACH_SCENE (AP_GSW_BASE + 19) // story value Flipside Tower's patched Peach CASE compares with (hubstory.cpp)
+// AP_GSW_BASE + 19: unused (was Peach's join scene trigger)
 #define AP_GSW_RECV_COUNT (AP_GSW_BASE + 20)  // 2 bytes (big-endian): items from the server handled by this save
 #define AP_GSW_WATCHITT (AP_GSW_BASE + 23)    // value Watchitt's patched "go get help" CASE compares with (joins.cpp)
 #define AP_GSW_LESSON (AP_GSW_BASE + 22)      // story value Bestovius's patched talk script compares with (hubstory.cpp)
