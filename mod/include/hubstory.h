@@ -13,7 +13,8 @@
         until his location is collected (joins.cpp re-gates it)
       - Bowser joins: his vanilla scene after the 3-1 fight (ta1_04), still on Chapter 3's own value
       - the Helmet: on first entering a Chapter 4 map (vanilla: Merlon's Goldfish Bowl quest in the hub,
-        story values 131-134; without it Outer Space's movement breaks)
+        story values 131-134; without it Outer Space's movement breaks). Once it's collected (or the
+        Helmet is held), Chapter 4 moves to 135, where Outer Space lets Mario swim
       - Sammer's Kingdom is destroyed: Chapter 6 moves from 280 (the duels done) to 281 (vanilla:
         Flipside Tower scene), so the next visit goes to the empty world
       - the Castle Bleck door: once Chapters 1-7 are finished, Flopside Tower (mac_12) gets story value

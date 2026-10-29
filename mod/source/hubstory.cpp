@@ -17,6 +17,12 @@ namespace mod::hubstory {
 #define CHAPTER_6_DUELS_DONE 280   // Sammer's Kingdom, end of the story's duels
 #define CHAPTER_6_WORLD_ENDED 281  // set by the Flipside Tower scene after them
 
+// Chapter 4 starts at 129 (vanilla: just teleported back to Flipside, without the Helmet). With the
+// Helmet it moves to 135, past vanilla's Helmet intermission and its "put the Helmet on" scene (134,
+// which would play over the Helmet's item-get): the Outer Space maps turn on swimming from 135
+#define HELMET_ITEM 24
+#define CHAPTER_4_HELMET 135
+
 #define CASTLE_BLECK_DOOR_MAP "mac_12"  // Flopside Tower
 #define CASTLE_BLECK_DOOR_VALUE 357     // its door doa6_l leads to Chapter 8 for 356-358
 
@@ -122,6 +128,9 @@ void onMapChange(const char * nextMap)
     savedata::setGswByte(AP_GSW_PEACH_CHAIN, chain);
     savedata::setGswByte(AP_GSW_PEACH_SCENE, chain == PEACH_CHAIN_SOUP ? PEACH_SCENE_ON : 0);
     savedata::setGswByte(AP_GSW_LESSON, spm::swdrv::swGet(AP_GSWF_GIFT(GIFT_BESTOVIUS)) ? LESSON_DONE : 0);
+
+    if (spm::swdrv::swGet(AP_GSWF_GIFT(GIFT_HELMET)) || spm::mario_pouch::pouchCheckHaveItem(HELMET_ITEM))
+        storyvalue::advanceChapter(4, CHAPTER_4_HELMET);
 
     if (storyvalue::getChapterValue(6) == CHAPTER_6_DUELS_DONE)
         storyvalue::advanceChapter(6, CHAPTER_6_WORLD_ENDED);
