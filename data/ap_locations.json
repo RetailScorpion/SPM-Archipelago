@@ -2390,14 +2390,14 @@
   },
   {
    "kind": "gift",
-   "map": "mac_02",
+   "map": "mac_01",
    "item": 217,
    "flag": 7184,
    "label": "Peach joins",
    "patches": [],
    "where": "talk to Peach in mac_01 holding a Spicy Soup (Saffron cooks one from a Fire Burst)",
    "pos": null,
-   "name": "Flipside/Flopside - Peach joins (mac_02)",
+   "name": "Flipside/Flopside - Peach joins (mac_01)",
    "id": 1397771631,
    "category": "character"
   },
