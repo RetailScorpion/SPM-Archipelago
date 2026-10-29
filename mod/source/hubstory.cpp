@@ -43,7 +43,7 @@ static const struct
     Trigger trigger;
     const char * what;
 } sGifts[] = {
-    {217, SCENE, "Peach joins"},               // mac_01, giving her the Spicy Soup (vanilla 60-62)
+    {217, SCENE, "Peach joins"},               // mac_01 giving her the Spicy Soup, or the join scene (vanilla 60-62)
     {219, SCENE, "Luigi joins"},               // the Underwhere, an1_07 (vanilla 295-296)
     {24, ENTERED_CHAPTER_4, "the Helmet"},     // vanilla: Merlon's Goldfish Bowl quest, 131-134
     {218, SCENE, "Bowser joins"},              // 3-1, after his fight (Chapter 3's own value, < 104)
@@ -53,6 +53,10 @@ static const struct
 
 #define CHARACTER_ITEM_FIRST 217
 #define CHARACTER_ITEM_LAST 219
+
+// Peach's join scene: mac_02's init runs it for CASE_SMALL(63) of its story value SWITCH, which
+// joins.cpp points at AP_GSW_PEACH_SCENE. Past the hub value when the scene is due, 0 (never) otherwise
+#define PEACH_SCENE_ON (STORY_HUB_VALUE + 1)
 
 // Bestovius's talk script (joins.cpp LESSON_IF) compares with AP_GSW_LESSON instead of Chapter 1's
 // value: 0 offers the lesson, LESSON_DONE (past the lesson, below his later chats) only chats
@@ -116,6 +120,8 @@ void onMapChange(const char * nextMap)
     else if (chain < PEACH_CHAIN_START || chain >= PEACH_CHAIN_DONE)
         chain = PEACH_CHAIN_START;
     savedata::setGswByte(AP_GSW_PEACH_CHAIN, chain);
+    // Due once she can be given the soup, as in vanilla (61-62): a Spicy Soup from anywhere works
+    savedata::setGswByte(AP_GSW_PEACH_SCENE, chain > PEACH_CHAIN_START && chain < PEACH_CHAIN_DONE ? PEACH_SCENE_ON : 0);
     savedata::setGswByte(AP_GSW_LESSON, spm::swdrv::swGet(AP_GSWF_GIFT(GIFT_BESTOVIUS)) ? LESSON_DONE : 0);
 
     if (spm::swdrv::swGet(AP_GSWF_GIFT(GIFT_HELMET)) || spm::mario_pouch::pouchCheckHaveItem(HELMET_ITEM))

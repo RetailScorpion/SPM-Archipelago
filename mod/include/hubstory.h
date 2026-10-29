@@ -8,7 +8,8 @@
     (STORY_HUB_VALUE), so their story scenes never play on their own:
       - Peach joins: her vanilla revival chain is there from the start of the file, on its own story
         value: unconscious in mac_01, Saffron cooks a Fire Burst into Spicy Soup. Talking to her with
-        the soup collects the location (no join scene: vanilla's is played as Peach)
+        the soup collects the location. With cutscenes on and Peach in the party, vanilla's scenes
+        play instead: the soup takes Mario to Merlon's house, where the join scene collects it
       - Luigi joins: his vanilla scene in the Underwhere (an1_07, vanilla story values 295-296) plays
         until his location is collected (joins.cpp re-gates it)
       - Bowser joins: his vanilla scene after the 3-1 fight (ta1_04), still on Chapter 3's own value

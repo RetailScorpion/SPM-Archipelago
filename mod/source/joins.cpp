@@ -36,6 +36,7 @@ using spm::evtmgr::EvtScriptCode;
 #define OP_SWITCH 34
 #define OP_SET 50
 #define OP_CASE_SMALL 38
+#define OP_RUN_EVT 93
 #define OP_USER_FUNC 92
 #define EVT_CMD(argc, op) (((argc) << 16) | (op))
 #define GSW_VAR(id) (-170000000 + (id))
@@ -110,8 +111,9 @@ enum PatchKind
     LESSON,     // SET(GSW(0), a) -> USER_FUNC(ap_lesson, a): collects Bestovius's lesson location
     PEACH,      // instruction b on GSW(0) (with constant a, unless b is a SWITCH) -> the same on
                 // GSW(AP_GSW_PEACH_CHAIN), Peach's revival chain's own story value (hubstory)
+    PEACH_JOIN, // RUN_EVT(Peach's join scene at offset a) -> RUN_EVT(ap_peach_join_evt)
     PEACH_TALK, // evt_npc_set_property(npc, 9 (talk), script at offset a) -> the talk script is
-                // ap_peach_soup_evt
+                // ap_peach_soup_evt, which runs that script only for the scenes
 };
 
 // Past every story value, for ALWAYS
@@ -205,14 +207,31 @@ static const Patch sPatches[] = {
     // Peach: her revival chain reads and sets its own story value (AP_GSW_PEACH_CHAIN, 60-63) instead
     // of GSW(0): mac_01 shows her unconscious with Merlon (60-62) and plays the "she fell from the
     // sky" scene (60 -> 61), Saffron cooks the Spicy Soup from a Fire Burst (61 -> 62, sSaffronPatches).
-    // Talking to her with a Spicy Soup collects her location (ap_peach_soup_evt, 63) instead of
-    // vanilla's scenes in mac_01 and Merlon's house, which are played as Peach
+    // Talking to her with the soup (ap_peach_soup_evt) collects her location (63); with cutscenes on
+    // and Peach in the party it runs vanilla's instead, which takes Mario to Merlon's house, where the
+    // join scene plays (62 -> 63)
     {PEACH, 0x02f8c, 60, EVT_CMD(2, OP_IF_LARGE_EQUAL), "Peach: mac_01 Peach and Merlon (from)"},
     {PEACH, 0x02f98, 63, EVT_CMD(2, OP_IF_SMALL), "Peach: mac_01 Peach and Merlon (to)"},
     {PEACH, 0x0317c, 60, EVT_CMD(2, OP_IF_LARGE), "Peach: mac_01 Merlon's spot"},
     {PEACH, 0x036e4, 0, EVT_CMD(1, OP_SWITCH), "Peach: mac_01 unconscious scene trigger"},
     {PEACH, 0x02908, 61, EVT_CMD(2, OP_SET), "Peach: mac_01 unconscious scene end"},
     {PEACH_TALK, 0x03168, 0x00230, 0, "Peach: talk with the Spicy Soup"},
+    // (Giving the soup at 61, before Saffron, walks a townsperson over who never arrives there: that
+    // check keeps reading the hub value, so it takes the "after Saffron" branch)
+    {PEACH, 0x19c78, 61, EVT_CMD(2, OP_IF_LARGE_EQUAL), "Peach: mac_02 scene actors (from)"},
+    {PEACH, 0x19c84, 63, EVT_CMD(2, OP_IF_SMALL), "Peach: mac_02 scene actors (to)"},
+    {PEACH, 0x0d4ec, 63, EVT_CMD(2, OP_SET), "Peach: join scene end"},
+    // mac_02 SWITCHes for the scene whose other cases the hub value never reaches: who counts as
+    // inside Merlon's house (61-62 adds the Mario NPC the scene waits on), its music and its sound
+    {PEACH, 0x1aee0, 0, EVT_CMD(1, OP_SWITCH), "Peach: Merlon's house NPCs"},
+    {PEACH, 0x1bab4, 0, EVT_CMD(1, OP_SWITCH), "Peach: scene music"},
+    {PEACH, 0x1bb6c, 0, EVT_CMD(1, OP_SWITCH), "Peach: scene sound"},
+    {PEACH_JOIN, 0x1bdf4, 0xca08, 0, "Peach: join scene without Peach"},
+    // The join scene runs for CASE_SMALL(63) of mac_02's story value SWITCH (hub value), entering from
+    // Merlon's house; the CASE compares with a value hubstory sets once the chain reaches 62
+    {CASE_GSW, 0x1bdd4, 63, AP_GSW_PEACH_SCENE, "Peach: join scene trigger"},
+    {SKIP, 0xcaf8, 1, POUCH_ADD_ITEM, "Peach: vanilla join"},
+    {CHAR_JOIN, 0xcb04, CHARACTER_PEACH, hubstory::GIFT_PEACH, "Peach join"},
     // Bowser: 3-1 (ta1_04) after his fight; the fight still waits for Chapter 3's own value (< 104)
     {SKIP, 0x74744, 1, POUCH_ADD_ITEM, "Bowser: vanilla join"},
     {CHAR_JOIN, 0x74724, CHARACTER_BOWSER, hubstory::GIFT_BOWSER, "Bowser join"},
@@ -371,28 +390,69 @@ static EVT_DEFINE_USER_FUNC(ap_lesson)
     return 2;
 }
 
-// ap_peach_revived(): Peach was given the Spicy Soup. Collects her location and ends her chain
-static EVT_DEFINE_USER_FUNC(ap_peach_revived)
+// Peach's vanilla join scene (relF), set up by init() from the PEACH_JOIN patch
+static const EvtScriptCode * sPeachScene;
+
+// ap_peach_join(&scene): before Peach's join scene. Collects her location first, so a Peach placed
+// there joins; with Peach, scene = the vanilla scene. Without her (it's played as Peach, with a Mario
+// NPC beside her), scene = 0 and her chain just ends here
+static EVT_DEFINE_USER_FUNC(ap_peach_join)
 {
-    (void) evt;
     (void) isFirstCall;
     hubstory::collectGift(hubstory::GIFT_PEACH);
-    savedata::setGswByte(AP_GSW_PEACH_CHAIN, PEACH_CHAIN_DONE);
+    const EvtScriptCode * scene = haveCharacter(CHARACTER_PEACH) ? sPeachScene : nullptr;
+    if (scene == nullptr)
+    {
+        savedata::setGswByte(AP_GSW_PEACH_CHAIN, PEACH_CHAIN_DONE);
+        wii::os::OSReport("[spmap] joins: Peach not in the party, her join scene skipped\n");
+    }
+    spm::evtmgr_cmd::evtSetValue(evt, evt->pCurData[0], reinterpret_cast<s32>(scene));
     return 2;
 }
-static constexpr s32 ap_peach_revived_parameter_count = 0;
+static constexpr s32 ap_peach_join_parameter_count = 1;
 
-// Talking to unconscious Peach (mac_01), which the map only allows while Mario has a Spicy Soup: the
-// soup goes, she leaves (moved away: mac_01 keeps setting her talk script until the soup is gone) and
-// her location is collected, its item given once Mario has control
-EVT_BEGIN(ap_peach_soup_evt)
-    USER_FUNC(spm::evt_mario::evt_mario_key_off, 0)
-    USER_FUNC(spm::evt_pouch::evt_pouch_check_have_item, ITEM_SPICY_SOUP, LW(0))
-    IF_NOT_EQUAL(LW(0), 0)
-        USER_FUNC(spm::evt_pouch::evt_pouch_remove_item, ITEM_SPICY_SOUP)
-        USER_FUNC(spm::evt_npc::evt_npc_set_position, PTR("peach"), 0, -1000, 0)
-        USER_FUNC(ap_peach_revived)
+EVT_BEGIN(ap_peach_join_evt)
+    USER_FUNC(ap_peach_join, LW(1))
+    IF_NOT_EQUAL(LW(1), 0)
+        RUN_CHILD_EVT(LW(1))
     END_IF()
+    RETURN()
+EVT_END()
+
+// Vanilla's soup talk script (relF), set up by init() from the PEACH_TALK patch
+static const EvtScriptCode * sPeachSoupScene;
+
+// ap_peach_soup(&scene): Mario talked to unconscious Peach (mac_01), which the map only allows while
+// he has a Spicy Soup. With cutscenes on and Peach in the party, scene = vanilla's soup scene (played
+// as Peach, as is the join scene it leads to). Otherwise scene = 0: the soup goes and her location is
+// collected, its item given once Mario has control
+static EVT_DEFINE_USER_FUNC(ap_peach_soup)
+{
+    (void) isFirstCall;
+    const EvtScriptCode * scene = nullptr;
+    if (mailbox::gMailbox.playCutscenes && haveCharacter(CHARACTER_PEACH))
+        scene = sPeachSoupScene;
+    else if (spm::mario_pouch::pouchCheckHaveItem(ITEM_SPICY_SOUP))
+    {
+        spm::mario_pouch::pouchRemoveItem(ITEM_SPICY_SOUP);
+        hubstory::collectGift(hubstory::GIFT_PEACH);
+        savedata::setGswByte(AP_GSW_PEACH_CHAIN, PEACH_CHAIN_DONE);
+    }
+    spm::evtmgr_cmd::evtSetValue(evt, evt->pCurData[0], reinterpret_cast<s32>(scene));
+    return 2;
+}
+static constexpr s32 ap_peach_soup_parameter_count = 1;
+
+// She leaves by moving away rather than being deleted: mac_01 keeps setting her talk script until
+// the soup is gone
+EVT_BEGIN(ap_peach_soup_evt)
+    USER_FUNC(ap_peach_soup, LW(1))
+    IF_NOT_EQUAL(LW(1), 0)
+        RUN_CHILD_EVT(LW(1))
+        RETURN()
+    END_IF()
+    USER_FUNC(spm::evt_mario::evt_mario_key_off, 0)
+    USER_FUNC(spm::evt_npc::evt_npc_set_position, PTR("peach"), 0, -1000, 0)
     USER_FUNC(spm::evt_mario::evt_mario_key_on)
     RETURN()
 EVT_END()
@@ -543,6 +603,16 @@ static void apply(const Patch & p, EvtScriptCode * base)
             }
             break;
         }
+        case PEACH_JOIN:
+        {
+            const s32 orig[] = {EVT_CMD(1, OP_RUN_EVT), reinterpret_cast<s32>(gamesyms::relF_section5 + p.a / sizeof(EvtScriptCode))};
+            if (expect(at, orig, 2, p.what))
+            {
+                sPeachScene = reinterpret_cast<const EvtScriptCode *>(at[1]);
+                at[1] = reinterpret_cast<s32>(ap_peach_join_evt);
+            }
+            break;
+        }
         case PEACH_TALK:
         {
             const s32 orig[] = {
@@ -550,7 +620,10 @@ static void apply(const Patch & p, EvtScriptCode * base)
                 reinterpret_cast<s32>(gamesyms::relF_section5 + p.a / sizeof(EvtScriptCode)),
             };
             if (expect(at, orig, 5, p.what))
+            {
+                sPeachSoupScene = reinterpret_cast<const EvtScriptCode *>(at[4]);
                 at[4] = reinterpret_cast<s32>(ap_peach_soup_evt);
+            }
             break;
         }
         case PEACH:
