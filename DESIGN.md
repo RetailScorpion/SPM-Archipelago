@@ -177,6 +177,7 @@ v1 has a single "intended" logic: no tricks, no damage boosts. A `logic_difficul
 | `starting_pure_heart` | chapter_1 / random | chapter_1 | Which heart Merlon gives. Ignored when `merlon_gift: random_item`. See "Starting heart rule" below |
 | `open_hubs` | on / off | on | On: every hub check tied to the story is available from the start. Off: each one waits for its vanilla story trigger. See "Hub checks" below |
 | `randomize_characters` | on / off | off | Peach, Bowser, Luigi in the pool |
+| `random_starting_character` | off / on | off | **Planned (user, 2026-10-29).** Start the file as Peach, Bowser or Luigi (or Mario) instead of Mario, picked by the seed. Mario goes in the item pool like the other characters (needs `randomize_characters`, or implies it). See "Random starting character" below |
 | `pillar_requirements` | vanilla / open | vanilla | `open` removes the ability gates around pillars 2–8, including the Fleep requirement for Flopside |
 | `pillar_door_shuffle` | on / off | off | Pillars 2–8 open doors 2–8 in random order; pillar 1 always opens door 1 |
 | `starting_open_doors` | 0–7 | 0 | X random chapter doors (from 1–7, never 8) open at the start, regardless of pillars |
@@ -232,6 +233,13 @@ In a solo seed with `starting_open_doors: 0` and `open_hubs: off`, sphere 1 can 
 Filler (when the pool has more locations than progression items): coins, consumables, HP Plus / Power Plus (balance check needed).
 
 **Pool size warning:** with only the core pool (8 hearts + 8 Pixls + about 20 story key items) there are about 36 locations and every one holds progression. That will generate, but it's tight. Enabling `overworld_items` adds most of the space for filler.
+
+**Random starting character** (`random_starting_character`, planned, user's request 2026-10-29). The file starts with one random character from Mario, Peach, Bowser and Luigi; the other three are items in the pool, Mario included.
+- Only Mario can flip, so a non-Mario start has no flipping until Mario is found. The logic must treat `flip` as needing Mario (and Bestovius's lesson, per the `flip` option), and every flip-gated check moves behind him.
+- The game always has Mario in the party (`pouch` characters, `MarioWork` character id). Needs checking: can the party start without Mario, can his slot be removed and re-added like the others (SPM Archipelago Tools can't remove the character you're playing as), and do scenes that switch to or from Mario (`ap_char_join`, chapter starts, cutscenes that force Mario) cope with him missing.
+- Scenes that hand control back "as Mario" may need to switch to whoever is held instead.
+- Chapter 8's party split needs Peach, Bowser and Luigi, and Mario carries on alone, so Chapter 8 also requires Mario.
+- Mario's join needs a location to give him from (a new item id; the start character's join spot gives a check instead).
 
 ## 6. Technical approach (summary)
 
