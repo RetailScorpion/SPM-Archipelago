@@ -15,7 +15,7 @@ Depending on your YAML options:
 - optionally, **Peach, Luigi and Bowser** (`randomize_characters`): their join scenes become locations and can hold anything;
 - **Cursya Traps** (`trap_percentage`, 10% of filler by default): they look like a key item you haven't found, give nothing ("You are a FOOL!") and put a random Cursya curse on Mario.
 
-Story gifts are locations too: Peach's, Luigi's and Bowser's join scenes, the Helmet, and Bestovius's flip lesson in 1-1. **Peach** is there from the start: unconscious in Flipside (`mac_01`). Bring her a Spicy Soup (Saffron cooks one from a Fire Burst) and talk to her to collect her check. Bowser's is his fight in 3-1, Luigi's is in the Underwhere (7-1), and the Helmet comes when you first enter Chapter 4.
+Story gifts are locations too: Peach's, Luigi's and Bowser's join scenes, and Bestovius's flip lesson in 1-1. **Peach** is there from the start: unconscious in Flipside (`mac_01`). Bring her a Spicy Soup (Saffron cooks one from a Fire Burst) and talk to her to collect her check. Bowser's is his fight in 3-1, and Luigi's is in the Underwhere (7-1). The **Helmet** isn't shuffled yet: you always get it when you first enter Chapter 4.
 
 **Not yet:** the story keys (Ruins Keys, Door Keys, Dimension Keys, Orbs, …), ? blocks, shops and the Pit rewards. These stay vanilla.
 
@@ -40,7 +40,7 @@ Items from other worlds show up in Super Paper Mario as the Archipelago icon (gr
 1. **Install the APworld:** double-click `spm.apworld`, or copy it into Archipelago's `custom_worlds` folder. Restart the Archipelago Launcher.
 2. **Extract the disc:** in Dolphin, right-click Super Paper Mario > **Properties** > **Filesystem** > right-click the disc > **Extract Entire Disc**, into an empty folder.
 3. **Patch it:** in the Launcher, open **Super Paper Mario Patcher** and pick that folder. It patches the folder in place and keeps the originals as `.orig` files. Run it again after updating the APworld.
-4. **Boot it:** in Dolphin, **File > Open**, and pick `sys/main.dol` inside the patched folder (inside `DATA/` if Dolphin made one).
+4. **Boot it:** in Dolphin, **File > Open**, and pick `sys/main.dol` inside the patched folder (inside `DATA/` if Dolphin made one). You can also click and drag your `main.dol` onto Dolphin's game select window.
 5. **Make your YAML** from `Super Paper Mario.yaml` and generate a game as usual.
 6. **Connect:** in the Launcher, open **Super Paper Mario Client**, connect to your room and enter your slot name.
 7. **Load your save, then play.** Connect the client **before entering any level**, so it can place the items.
