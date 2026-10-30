@@ -38,7 +38,7 @@
 namespace mod {
 
 // Matches the APworld's world_version (apworld/spm/archipelago.json); shown on the title screen
-#define MOD_VERSION "0.1.2"
+#define MOD_VERSION "0.1.3"
 
 // Stand-in location ids for the proof of concept: picking up item X reports location POC_LOCATION_BASE + X
 #define POC_LOCATION_BASE 0x10000
