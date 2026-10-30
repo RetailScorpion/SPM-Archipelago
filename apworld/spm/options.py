@@ -47,7 +47,7 @@ class StartingChapterMode(Choice):
     opens when you receive its Pure Heart, which is shuffled into the item pool.
     chosen: the chapters listed in Starting Chapters.
     random_chapters: Starting Chapter Count chapters, picked at random.
-    random_amount: a random number of chapters (1 to 7), picked at random."""
+    random_amount: a random number of chapters (1 to Starting Chapter Max), picked at random."""
     display_name = "Starting Chapter Mode"
     option_chosen = 0
     option_random_chapters = 1
@@ -69,6 +69,14 @@ class StartingChapterCount(Range):
     range_start = 1
     range_end = 7
     default = 1
+
+
+class StartingChapterMax(Range):
+    """The most chapters that can be open at the start, for Starting Chapter Mode: random_amount."""
+    display_name = "Starting Chapter Max"
+    range_start = 1
+    range_end = 7
+    default = 7
 
 
 class TrapPercentage(Range):
@@ -105,5 +113,6 @@ class SPMOptions(PerGameCommonOptions):
     starting_chapter_mode: StartingChapterMode
     starting_chapters: StartingChapters
     starting_chapter_count: StartingChapterCount
+    starting_chapter_max: StartingChapterMax
     trap_percentage: TrapPercentage
     save_block: SaveBlock

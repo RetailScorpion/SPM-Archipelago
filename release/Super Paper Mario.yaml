@@ -67,7 +67,7 @@ Super Paper Mario:
     # when you receive its Pure Heart, which is shuffled into the item pool.
     # chosen: the chapters listed in starting_chapters.
     # random_chapters: starting_chapter_count chapters, picked at random.
-    # random_amount: a random number of chapters (1 to 7), picked at random.
+    # random_amount: a random number of chapters (1 to starting_chapter_max), picked at random.
     chosen: 50
     random_chapters: 0
     random_amount: 0
@@ -78,6 +78,9 @@ Super Paper Mario:
   starting_chapter_count:
     # How many chapters are open at the start, for starting_chapter_mode: random_chapters (1 to 7).
     1
+  starting_chapter_max:
+    # The most chapters that can be open at the start, for starting_chapter_mode: random_amount (1 to 7).
+    7
   trap_percentage:
     # Percentage of the shuffled filler items replaced by Cursya Traps (0 to 100). A trap looks like a
     # key item or Pixl you haven't found; collecting it gives you nothing ("You are a FOOL!") and a

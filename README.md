@@ -19,7 +19,7 @@ Story gifts are locations too: Peach's, Luigi's and Bowser's join scenes, and Be
 
 **Not yet:** the story keys (Ruins Keys, Door Keys, Dimension Keys, Orbs, …), ? blocks, shops and the Pit rewards. These stay vanilla.
 
-**Chapter doors:** some chapters' doors in Flipside Tower are open from the start, picked by `starting_chapter_mode`: the ones you list (`starting_chapters`, default Chapter 1), a set number at random, or a random number at random. Every other chapter's door opens when you receive its Pure Heart. Chapter 8's door opens once Chapters 1-7 are finished, as in vanilla.
+**Chapter doors:** some chapters' doors in Flipside Tower are open from the start, picked by `starting_chapter_mode`: the ones you list (`starting_chapters`, default Chapter 1), a set number at random, or a random number at random (up to `starting_chapter_max`). Every other chapter's door opens when you receive its Pure Heart. Chapter 8's door opens once Chapters 1-7 are finished, as in vanilla.
 
 **Cutscenes:** by default (`skip_cutscenes`), a new file skips the opening and Merlon's scenes and starts in Flipside Tower with the Return Pipe. The Count Bleck scenes between chapters are skipped, along with the Peach and Luigi intermissions. Turn the option off to watch the story.
 

@@ -116,7 +116,7 @@ class SPMWorld(World):
                 raise OptionError(f"{self.player_name}: Starting Chapters needs at least one chapter")
         else:
             count = (self.options.starting_chapter_count.value if mode == mode.option_random_chapters
-                     else self.random.randint(1, len(TOWER_CHAPTERS)))
+                     else self.random.randint(1, self.options.starting_chapter_max.value))
             chapters = set(self.random.sample(list(TOWER_CHAPTERS), count))
         self.starting_chapters = sorted(chapters)
 
