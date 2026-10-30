@@ -9,24 +9,32 @@ Depending on your YAML options:
 - the eight story Pixls (Thoreau to Dottie), and optionally Barry, Dashell and Piccolo;
 - key items whose spots the prototype handles: the Fort Keys, the Water/Stone/Fire Tablets, Cooking Disks and the Golden Card;
 - items in chests and lying around in levels and the hubs;
-- optionally, catch cards found in chests or lying around.
-- optionally, Peach and Luigi (`randomize_characters`): their spots become "Peach joins when Chapter 1 is finished" and "Luigi joins when you first enter Chapter 7", and can hold anything.
+- optionally, catch cards found in chests or lying around;
+- the **Pure Hearts** of every chapter you don't start with (see Chapter doors below);
+- the **Save Block** (`save_block`), a key item that saves your game from the key item menu, anywhere. By default you start with it; it can also be shuffled or left out. It doesn't work in the Pits of 100 Trials;
+- optionally, **Peach, Luigi and Bowser** (`randomize_characters`): their join scenes become locations and can hold anything;
+- **Cursya Traps** (`trap_percentage`, 10% of filler by default): they look like a key item you haven't found, give nothing ("You are a FOOL!") and put a random Cursya curse on Mario.
 
-**Not yet:** Pure Hearts, Bowser, the story keys (Ruins Keys, Door Keys, Dimension Keys, Orbs, …), ? blocks, shops and the Pit rewards. These stay vanilla.
+Story gifts are locations too: Peach's, Luigi's and Bowser's join scenes, the Helmet, and Bestovius's flip lesson in 1-1. **Peach** is there from the start: unconscious in Flipside (`mac_01`). Bring her a Spicy Soup (Saffron cooks one from a Fire Burst) and talk to her to collect her check. Bowser's is his fight in 3-1, Luigi's is in the Underwhere (7-1), and the Helmet comes when you first enter Chapter 4.
 
-**Chapter doors:** the doors to Chapters 1-7 in Flipside Tower are all open from the start, so every chapter can be visited right away. Chapter 8's door works as in vanilla. (The real door rules, opened by Pure Hearts, come later.)
+**Not yet:** the story keys (Ruins Keys, Door Keys, Dimension Keys, Orbs, …), ? blocks, shops and the Pit rewards. These stay vanilla.
 
-**Cutscenes:** by default (`skip_cutscenes`), a new file skips the opening and starts at Merlon's scene in Flipside Tower, where he gives you the first Pure Heart, and the Count Bleck scenes between chapters are skipped, along with the Peach and Luigi intermissions. Turn the option off to watch the story.
+**Chapter doors:** some chapters' doors in Flipside Tower are open from the start, picked by `starting_chapter_mode`: the ones you list (`starting_chapters`, default Chapter 1), a set number at random, or a random number at random. Every other chapter's door opens when you receive its Pure Heart. Chapter 8's door opens once Chapters 1-7 are finished, as in vanilla.
+
+**Cutscenes:** by default (`skip_cutscenes`), a new file skips the opening and Merlon's scenes and starts in Flipside Tower with the Return Pipe. The Count Bleck scenes between chapters are skipped, along with the Peach and Luigi intermissions. Turn the option off to watch the story.
 
 **Goal:** finish Chapter 8.
 
-Items from other worlds show up in Super Paper Mario as the Archipelago icon. Items you receive from other worlds pop up on Mario with the normal item-get.
+Items from other worlds show up in Super Paper Mario as the Archipelago icon (grey for filler). Items you receive from other worlds pop up on Mario with the normal item-get.
+
+**Key item storage:** Mario can carry 32 key items. One received while all 32 slots are full goes into storage instead of being lost, with a red notice on screen. Use SPM Archipelago Tools (below) to swap it with one you carry.
 
 ## What you need
 - A **Super Paper Mario (USA) revision 0** disc image (game ID `R8PE01`). The patcher checks this.
 - [Dolphin](https://dolphin-emu.org), recent.
 - [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases) **0.6.7 or higher** (tested on 0.6.7).
-- From this release: `spm.apworld` and `Super Paper Mario.yaml`.
+- From this release: `spm.apworld` and `Super Paper Mario.yaml` (in `SuperPaperMario_AP_<version>.zip`).
+- Optional: `SPM_helpful_tools_<version>.zip`, see Helpful tools below.
 
 ## Setup
 1. **Install the APworld:** double-click `spm.apworld`, or copy it into Archipelago's `custom_worlds` folder. Restart the Archipelago Launcher.
@@ -38,12 +46,19 @@ Items from other worlds show up in Super Paper Mario as the Archipelago icon. It
 7. **Load your save, then play.** Connect the client **before entering any level**, so it can place the items.
 
 ## Known issues
-- No logic: you may need a late Pixl early. The **Return Pipe** (from Merlon at the start) gets you out of rooms you can't leave.
-- "Sent \<item\> to \<player\>!" may sometimes show "Placeholder Item". The client's log always shows the real item.
-- Some story events still check the story's progress rather than whether you have the right item. For example, Old Man Watchitt in Yold Town calls the bridge builder based on the story, not on whether you have Thoreau.
+- No logic: you may need a late Pixl early. The **Return Pipe** (you start with it, or Merlon gives it with cutscenes on) gets you out of rooms you can't leave.
+- Some story events still check the story's progress rather than whether you have the right item.
 - Gecko cheat codes can't be used with the patched game.
-- **Story events in Flipside and Flopside are simplified:** the hubs don't follow the story, so the prototype gives their results directly. Peach joins when you finish Chapter 1, Luigi when you first enter Chapter 7, and the Helmet when you first enter Chapter 4. Chapter 6 moves on to its destroyed world once the duels are done. Castle Bleck's door (Chapter 8) opens in Flopside Tower once Chapters 1-7 are finished.
+- **Story events in Flipside and Flopside are simplified:** the hubs don't follow the story. Chapter 6 moves on to its destroyed world once the duels are done, and Castle Bleck's door (Chapter 8) opens in Flopside Tower once Chapters 1-7 are finished.
 - Chapter 3 still takes Tippi away when you enter it; changing maps brings her back.
+
+## Helpful tools
+`SPM_helpful_tools_<version>.zip` has three optional windows that read the game live from Dolphin:
+- **SPM Tracker** (`client/tracker.py`): every location by level and map, checked or not. Add `--missing` to hide the checked ones.
+- **SPM Coords** (`client/coords.py`): Mario's position, the map, and that map's unchecked locations.
+- **SPM Archipelago Tools** (`client/ap_tools.py`): add or remove characters, Pixls and the Save Block, set coins, and swap key items between your slots and storage. This one writes to the game, so use it with care.
+
+They need [Python 3](https://www.python.org) and `py -3 -m pip install dolphin-memory-engine`. Start Dolphin with the game, then run one, for example `pyw -3 client	racker.py --missing`. Keep the zip's folders as they are. Details are in its `README.txt`.
 
 Please report what you find, especially **what each location needs to reach**. That's the logic this prototype is meant to map out. The full list of checks is in [`logic/checks.md`](logic/checks.md).
 
@@ -71,4 +86,4 @@ Super Paper Mario is © Nintendo / Intelligent Systems. This project contains no
 - `mod/`: the C++ mod (`py -3 configure.py us0`, then `ninja`, with `DEVKITPPC` set).
 - `apworld/spm/`: the APworld, client and patcher. `tools/build_apworld.py` regenerates its data and builds `build/spm.apworld`.
 - `tools/`: research and build tools: location scan, script disassemblers, data generator, dev disc builder.
-- `client/`: dev tools (mailbox watcher, debug client with warps).
+- `client/`: the helpful tools above, plus dev tools (mailbox watcher, debug client with warps).

@@ -51,18 +51,45 @@ Super Paper Mario:
     'false': 50
 
   randomize_characters:
-    # Shuffle Peach and Luigi. Off: Peach joins once you finish Chapter 1, and Luigi when you first
-    # enter Chapter 7.
+    # Shuffle Peach, Luigi and Bowser. Their join scenes are locations either way: Peach in Flipside
+    # (unconscious from the start: talk to her holding a Spicy Soup), Luigi in the Underwhere (7-1),
+    # Bowser after his fight in 3-1. Off: each scene gives its own character.
     'true': 0
     'false': 50
-
   skip_cutscenes:
     # Skip the opening and the Count Bleck scenes between chapters (plus the Peach and Luigi
-    # intermissions after Chapters 1 and 2). A new file starts at Merlon's scene in Flipside Tower,
-    # where he gives you the first Pure Heart. Off: watch the story as in vanilla.
+    # intermissions after Chapters 1 and 2). A new file skips Merlon's scenes too: it starts in
+    # Flipside Tower with the Return Pipe. Off: watch the story as in vanilla.
     'true': 50
     'false': 0
-
+  starting_chapter_mode:
+    # How the chapters whose doors are open at the start are picked. Every other chapter's door opens
+    # when you receive its Pure Heart, which is shuffled into the item pool.
+    # chosen: the chapters listed in starting_chapters.
+    # random_chapters: starting_chapter_count chapters, picked at random.
+    # random_amount: a random number of chapters (1 to 7), picked at random.
+    chosen: 50
+    random_chapters: 0
+    random_amount: 0
+  starting_chapters:
+    # The chapters open at the start, for starting_chapter_mode: chosen (Chapter 1 to Chapter 7;
+    # Chapter 8's door opens after Chapters 1-7, as in vanilla).
+    ['Chapter 1']
+  starting_chapter_count:
+    # How many chapters are open at the start, for starting_chapter_mode: random_chapters (1 to 7).
+    1
+  trap_percentage:
+    # Percentage of the shuffled filler items replaced by Cursya Traps (0 to 100). A trap looks like a
+    # key item or Pixl you haven't found; collecting it gives you nothing ("You are a FOOL!") and a
+    # random Cursya curse: slow, flipped controls, no jump or no skills.
+    10
+  save_block:
+    # The Save Block: a key item that saves your game from the key item menu, anywhere (not in the
+    # Pits of 100 Trials).
+    # shuffle: it's somewhere in the multiworld. start_with: you have it from the start. off: none.
+    shuffle: 0
+    start_with: 50
+    off: 0
   # Archipelago's common options
 
   progression_balancing:

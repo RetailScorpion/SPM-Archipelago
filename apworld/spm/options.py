@@ -29,9 +29,9 @@ class ShuffleCatchCards(Toggle):
 
 
 class RandomizeCharacters(Toggle):
-    """Shuffle Peach, Luigi and Bowser. Their join scenes become locations: Peach in Flipside Tower
-    (entered from Merlon's house once Chapter 1 is finished), Luigi in the Underwhere (7-1),
-    Bowser after his fight in 3-1. Off: each scene gives its own character."""
+    """Shuffle Peach, Luigi and Bowser. Their join scenes are locations: Peach in Flipside (unconscious
+    from the start: talk to her holding a Spicy Soup), Luigi in the Underwhere (7-1), Bowser after his
+    fight in 3-1. Off: each scene gives its own character."""
     display_name = "Randomize Characters"
 
 
