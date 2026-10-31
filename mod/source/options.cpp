@@ -27,7 +27,7 @@ static const OptionInfo sOptions[OPTION_COUNT] = {
     {"Music shuffle", false},
     {"Hold 1 to skip text", true},
     {"Shuffle fanfares", false},
-    {"Shuffle sound effects", false},
+    {"Shuffle player sounds", false},
 };
 
 // The window lists them in this order

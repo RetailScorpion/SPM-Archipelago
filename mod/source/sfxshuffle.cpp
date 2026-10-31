@@ -32,12 +32,21 @@ static bool isTvVariant(const char * name)
     return len > 3 && msl::string::strcmp(name + len - 3, TV_SUFFIX) == 0;
 }
 
-// Effects that take part: a real sound effect from the archive, and not a TV speaker variant (those
-// follow their base effect)
+/*
+    Only the player's own sounds take part for now (user's choice: shuffling everything sounds awful
+    until good and bad swaps are sorted out): the characters' (SFX_P_: steps, jumps, landings, voices)
+    and the Pixls' (SFX_F_). They swap among themselves; every other effect stays as it is.
+*/
+static bool playerSound(const char * name)
+{
+    return msl::string::strncmp(name, "SFX_P_", 6) == 0 || msl::string::strncmp(name, "SFX_F_", 6) == 0;
+}
+
+// Effects that take part: a player sound from the archive, and not a TV speaker variant (those follow
+// their base effect)
 static bool shuffled(const gamesyms::SfxEntry & e)
 {
-    return e.sound != 0 && e.sound < SFX_LOOP_SOUND_COUNT && msl::string::strcmp(e.name, "NULL") != 0
-        && !isTvVariant(e.name);
+    return e.sound != 0 && e.sound < SFX_LOOP_SOUND_COUNT && playerSound(e.name) && !isTvVariant(e.name);
 }
 
 // The table is sorted by name (the game looks names up with bsearch)
