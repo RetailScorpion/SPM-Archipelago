@@ -1,12 +1,12 @@
 """Finds which sound effects loop, from the game's sound archive (sound/wiimario_snd.brsar).
 
 A looping effect shuffled into a one-shot effect's place would never be stopped, so the mod's sound
-effect shuffle (mod/source/sfxshuffle.cpp) only swaps effects that loop with each other, and the rest
+effect shuffle (mod/source/sound_effect_shuffle.cpp) only swaps effects that loop with each other, and the rest
 with each other. Wave effects: a wave in their RWSD bank has its loop flag set. Sequenced effects:
 their sequence jumps back to itself (or opens a track that does). Anything this can't decode counts
 as looping (the harmless side: a one-shot in a looping effect's place just ends early).
 
-Usage: py -3 -E tools/sfxloops.py [--header out.h]   (reads disc/DATA/files/sound/wiimario_snd.brsar)
+Usage: py -3 -E tools/sfxloops.py [--header mod/include/sound_effect_loops.h]   (reads disc/DATA/files/sound/wiimario_snd.brsar)
 """
 
 import os
@@ -19,6 +19,7 @@ SEQ, STRM, WAVE = 1, 2, 3
 
 
 class Brsar:
+    """The game's sound archive (wiimario_snd.brsar): its sound list, names and files."""
     def __init__(self, data):
         self.d = data
         assert data[:4] == b"RSAR"
@@ -33,6 +34,7 @@ class Brsar:
         self.groups = self.table(self.ref(self.info + 32))
 
     def u32(self, at):
+        """The 4-byte number at a position."""
         return struct.unpack(">I", self.d[at:at + 4])[0]
 
     def ref(self, at, base=None):
@@ -40,15 +42,18 @@ class Brsar:
         return (self.info if base is None else base) + self.u32(at + 4)
 
     def table(self, at, base=None):
+        """A list of references at a position, as positions."""
         return [self.ref(at + 4 + 8 * i, base) for i in range(self.u32(at))]
 
     def name(self, i):
+        """The name with this number in the archive's name list, or None."""
         if i >= self.name_count:
             return None
         o = self.u32(self.names_at + 4 + 4 * i)
         return self.d[self.symb + o:self.d.index(b"\0", self.symb + o)].decode()
 
     def sound(self, i):
+        """(name, file number, kind, details position) of sound number i."""
         s = self.sounds[i]
         name_idx, file_id, _ = struct.unpack(">III", self.d[s:s + 12])
         kind = self.d[s + 22]
@@ -96,10 +101,12 @@ def wave_loops(b, file_id, sub):
 
 
 class Undecodable(Exception):
+    """A sequence command the decoder doesn't know."""
     pass
 
 
 def _varlen(d, p):
+    """Reads a variable-length number (7 bits per byte). Returns (value, next position)."""
     value = 0
     for _ in range(4):
         byte = d[p]
@@ -112,6 +119,7 @@ def _varlen(d, p):
 
 # Argument sizes after each command byte ("v" = variable-length number), NW4R RSEQ
 def _args(cmd):
+    """The sizes of a sequence command's arguments."""
     if cmd < 0x80:
         return [1, "v"]                     # note: velocity, length
     if cmd in (0x80, 0x81):
@@ -132,6 +140,7 @@ def _args(cmd):
 
 
 def _skip(d, p, sizes):
+    """The position after arguments of these sizes."""
     for size in sizes:
         if size == "v":
             _, p = _varlen(d, p)
@@ -228,6 +237,7 @@ LAST_EFFECT = 1233
 
 
 def write_header(path, loops):
+    """Writes the loop table as a C header for the mod (sound_effect_loops.h)."""
     bits = bytearray((LAST_EFFECT + 8) // 8)
     for i in loops:
         bits[i // 8] |= 1 << (i % 8)
@@ -244,6 +254,7 @@ def write_header(path, loops):
 
 
 def main():
+    """Finds the looping effects and, with --header, writes the mod's table."""
     b = Brsar(open(BRSAR, "rb").read())
     name, _, kind, _ = b.sound(LAST_EFFECT + 1)
     assert kind == STRM and name == "SYS_TITLE1", "not the US 1.0 sound archive"

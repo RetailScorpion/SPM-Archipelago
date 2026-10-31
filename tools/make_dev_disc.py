@@ -29,6 +29,7 @@ REL = os.path.join(ROOT, "mod", "out", "us0.rel")
 
 
 def main():
+    """Builds or updates build/devdisc: the patched game folder used for testing."""
     if not os.path.isdir(DEV):
         print("Copying the extracted disc (one time)...")
         shutil.copytree(CLEAN, DEV)

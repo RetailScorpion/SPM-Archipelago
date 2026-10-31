@@ -28,6 +28,7 @@ OUT_ICONS = os.path.join(ROOT, "apworld", "spm", "bin", "ap_icons.bin")
 
 
 def encode_icons(pngs=AP_ICONS) -> bytes:
+    """The icon pictures, converted for the patcher: width, height and RGB5A3 data each."""
     out = bytearray()
     for p in pngs:
         im = Image.open(p).convert("RGBA")
@@ -36,6 +37,7 @@ def encode_icons(pngs=AP_ICONS) -> bytes:
 
 
 def write_icons():
+    """Writes the converted icons to the APworld's bin/ap_icons.bin."""
     os.makedirs(os.path.dirname(OUT_ICONS), exist_ok=True)
     open(OUT_ICONS, "wb").write(encode_icons())
 

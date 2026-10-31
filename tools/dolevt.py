@@ -13,11 +13,13 @@ from evtdis import END_OPS, FLOAT_BASE, VAR_BASES, load_opcodes  # noqa: E402
 
 
 def main():
+    """Prints a script in main.dol as script commands."""
     addr = int(sys.argv[1], 0)
     count = int(sys.argv[2]) if len(sys.argv) > 2 else 200
     dol, ops, syms = Dol(), load_opcodes(), Symbols()
 
     def arg(v):
+        """A readable form of one script argument (a name for addresses in the game)."""
         u = v & 0xFFFFFFFF
         if 0x80000000 <= u < 0x81800000:
             name = syms.name(u)

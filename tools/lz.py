@@ -7,6 +7,7 @@ import sys
 
 
 def decompress_lz10(data: bytes) -> bytes:
+    """Unpacks LZ10-compressed data (how the game stores relF.rel on the disc)."""
     assert data[0] == 0x10, f"not LZ10 (type byte {data[0]:#x})"
     size = int.from_bytes(data[1:4], "little")
     pos = 4

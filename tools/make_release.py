@@ -58,6 +58,7 @@ data through the relative paths.
 
 
 def main():
+    """Builds the APworld, then the two release zips."""
     subprocess.run([sys.executable, "-E", os.path.join(ROOT, "tools", "build_apworld.py")], check=True)
     version = json.load(open(os.path.join(ROOT, "apworld", "spm", "archipelago.json")))["world_version"]
     out_dir = os.path.join(ROOT, "build", "release")

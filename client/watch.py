@@ -25,11 +25,13 @@ except OSError:
 
 
 def item_name(item):
+    """An item's name with its number, or "item N" if it has no name."""
     name = ITEM_NAMES.get(item)
     return f"{name} ({item})" if name else f"item {item}"
 
 
 def describe_location(loc):
+    """A readable line for a location the mod reported (a pickup or a Pixl join)."""
     if loc >= JOIN_LOCATION_BASE:
         pixl = (loc - JOIN_LOCATION_BASE) & 0xFFF
         held = ", held another world's item" if loc & JOIN_LOCATION_OTHER_WORLD else ""
@@ -41,6 +43,7 @@ MAP_NAME_OFFSET = 0x44  # SpmarioGlobals mapName
 
 
 def current_map():
+    """The name of the map Mario is in."""
     return dme.read_bytes(dme.read_word(GP_PTR) + MAP_NAME_OFFSET, 32).split(b"\0")[0].decode(errors="replace")
 
 
@@ -53,6 +56,7 @@ def place_name(map_name):
 
 
 def describe_story(story, map_name):
+    """The story state, with the map's place name when it isn't in a chapter."""
     text = format_story(*story)
     place = place_name(map_name)
     if place and text.startswith("other map"):
@@ -61,6 +65,7 @@ def describe_story(story, map_name):
 
 
 def connect():
+    """Waits until the game and the mod's mailbox are found, then returns the mailbox."""
     while True:
         mb = Mailbox()
         try:
@@ -72,6 +77,7 @@ def connect():
 
 
 def main():
+    """Prints what the mod reports (items given, checks, story changes) as it happens."""
     mb = connect()
     print(f"Watching the mailbox at {mb.addr:#010x}. Ctrl+C to quit.\n")
     sent = dme.read_word(mb.addr + OFF_SENT_COUNT)

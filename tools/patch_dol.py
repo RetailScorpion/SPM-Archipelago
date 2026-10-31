@@ -12,6 +12,7 @@ import patcher  # noqa: E402
 
 
 def main(dol_path, gecko_path, out_path):
+    """Builds the rel loader into a main.dol (the same as the patcher does)."""
     out = patcher.patch_dol(open(dol_path, "rb").read(), open(gecko_path).read())
     open(out_path, "wb").write(out)
     print(f"Patched main.dol, payload at {patcher.PAYLOAD_ADDR:#x}")

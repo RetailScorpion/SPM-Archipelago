@@ -35,7 +35,7 @@ OUT_PY = os.path.join(ROOT, "apworld", "spm", "data.py")
 # Archipelago ids: base + SPM item id for items, base + location index for locations
 ID_BASE = 0x53504D00  # "SPM\0"
 
-# evt opcodes and variable encodings (mod/source/joins.cpp)
+# evt opcodes and variable encodings (mod/include/script_patching.h)
 OP_USER_FUNC = 92
 GSWF_BASE = -130000000
 
@@ -44,13 +44,13 @@ GSWF_BASE = -130000000
 ARGS = {"item": {"item": 1, "flag": 8},   # evt_item_entry(name, item, behaviour, x, y, z, ?, script, flag, ?)
         "chest": {"item": 7, "flag": 8}}  # evt_mobj_thako(type, name, x, y, z, interact, open, item, opened)
 
-# Reserved save flags (mod/include/savedata.h)
+# Reserved save flags (mod/include/save_data.h)
 AP_GSWF_BASE = 7168
 AP_GSWF_JOIN_BASE = AP_GSWF_BASE + 1          # + Pixl item id - 221 (Thoreau .. Dashell: 11 flags)
 AP_GSWF_LOC_BASE = AP_GSWF_BASE + 32          # unflagged key spots, in KEY_SPOTS order
-AP_GSWF_GIFT_BASE = AP_GSWF_BASE + 16         # story gifts, in GIFTS order (mod/source/hubstory.cpp sGifts)
+AP_GSWF_GIFT_BASE = AP_GSWF_BASE + 16         # story gifts, in GIFTS order (mod/source/story_gifts.cpp sGifts)
 
-# Story gift locations (hubstory.cpp sGifts), in the mod's order: (vanilla item, map, label, how to get
+# Story gift locations (story_gifts.cpp sGifts), in the mod's order: (vanilla item, map, label, how to get
 # it, for the tracker). New ones
 # go at the end, so earlier location ids don't change. The characters' are their join scenes; the
 # Helmet is always vanilla: without it Outer Space's movement breaks, and nothing blocks Chapter 4
@@ -75,6 +75,7 @@ KEY_SPOTS = []
 
 
 def word(data, offset):
+    """The signed 4-byte number at a position in the data."""
     return struct.unpack_from(">i", data, offset)[0]
 
 
@@ -99,6 +100,7 @@ def position(data, at, kind):
 
 
 def item_names():
+    """Every item's name by id, using the names world items show in the game."""
     names = {int(k): v for k, v in json.load(open(ITEM_NAMES, encoding="utf-8")).items()}
     for k, v in names.items():
         names[k] = checks_list.WORLD_ITEM_NAMES.get(v, v)
@@ -119,6 +121,7 @@ def display_name(item, names):
 
 
 def category(item):
+    """Which option shuffles an item (pixl, key_item, overworld_item...)."""
     if 216 <= item < 220:
         return "character"
     if 220 <= item < 232:
@@ -131,6 +134,7 @@ def category(item):
 
 
 def level_title(map_name, levels):
+    """A map's level title, like "1-2 Mount Lineland"."""
     chapter, level = checks_list.place({"maps": [map_name]})
     if isinstance(chapter, int):
         return f"{chapter}-{level} {levels.get((chapter, level), '')}".strip()
@@ -138,6 +142,7 @@ def level_title(map_name, levels):
 
 
 def main():
+    """Builds the location list (data/ap_locations.json) and the APworld's data.py."""
     rel = open(RELF, "rb").read()
     names = item_names()
     names = {i: display_name(i, names) for i in names}

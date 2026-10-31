@@ -22,7 +22,7 @@ import time
 from mailbox import DEBUG_JOINS_GIVE_NOTHING, DEBUG_JOINS_GIVE_PLACEHOLDER, JOIN_ITEM_OTHER_WORLD, Mailbox, MailboxError, STATE_NAMES
 
 POC_LOCATION_BASE = 0x10000
-JOIN_LOCATION_BASE = 0x20000  # + Pixl item id (mod/source/joins.cpp)
+JOIN_LOCATION_BASE = 0x20000  # + Pixl item id (mod/source/pixl_joins.cpp)
 JOIN_LOCATION_OTHER_WORLD = 0x1000
 
 # A few handy ids from the game's item table (spm-docs items.txt). Characters and Pixls must use
@@ -40,12 +40,14 @@ PIXL_NAMES = {v: k.capitalize() for k, v in NAMED_ITEMS.items() if 221 <= v < 23
 
 
 def format_story(context, slots, live):
+    """One line describing the story state: where Mario is and each chapter's story value."""
     where = {-1: "other map", 0: "hub"}.get(context, f"chapter {context}")
     chapters = " ".join(f"{i}:{v}" for i, v in enumerate(slots) if i > 0)
     return f"{where}, story value {live} | hub {slots[0]} | {chapters}"
 
 
 def watch(mb: Mailbox, lock: threading.Lock):
+    """Prints checked locations and story changes as they happen (runs in the background)."""
     last_story = None
     while True:
         with lock:
@@ -68,6 +70,7 @@ def watch(mb: Mailbox, lock: threading.Lock):
 
 
 def main():
+    """Connects to the game, then reads commands typed in the console."""
     mb = Mailbox()
     try:
         mb.connect()

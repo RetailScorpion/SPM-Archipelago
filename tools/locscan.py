@@ -86,12 +86,14 @@ def load_item_names():
 
 
 def chapter_of(map_name):
+    """Which chapter a map belongs to (or "hub" / "other"), from its name."""
     if map_name.startswith("mac_"):
         return "hub"
     return CHAPTER_PREFIXES.get(map_name[:2], "other")
 
 
 class Scanner:
+    """Reads every map script in relF.rel and finds where items, chests, blocks and shops are."""
     def __init__(self):
         self.data = open(REL_PATH, "rb").read()
         self.rel = Rel(self.data)
@@ -142,6 +144,7 @@ class Scanner:
         return result
 
     def word(self, pos):
+        """The signed 4-byte number at a file position."""
         return struct.unpack_from(">i", self.data, pos)[0]
 
     def var(self, pos):
@@ -168,6 +171,7 @@ class Scanner:
         return None if v <= -10000000 else v
 
     def string_at(self, fo):
+        """The text at a file position, if it looks like text."""
         end = self.data.find(b"\0", fo)
         s = self.data[fo:end]
         if 0 < len(s) < 64 and all(32 <= c < 127 for c in s):
@@ -195,6 +199,7 @@ class Scanner:
         return found
 
     def reachable(self, root):
+        """Every script reachable from a starting script (through calls and runs)."""
         seen, stack = set(), [root]
         while stack:
             s = stack.pop()
@@ -241,11 +246,13 @@ class Scanner:
             yield ins, [c for block in stack for c in block]
 
     def item_name(self, item):
+        """An item's name, or "item N"."""
         if item is None:
             return None
         return self.items.get(item, f"item {item}")
 
     def extract(self, script_start):
+        """Every item-giving command in a script, with the conditions around it."""
         out = []
         script = self.decode(script_start)
         for (pos, name, argpos), conds in self.conditions_walk(script):
@@ -297,6 +304,7 @@ class Scanner:
         return out
 
     def chance_table(self, pos):
+        """A drop chance table (item, chance) at a position."""
         t = self.self_ptr.get(pos)
         if t is None:
             return None
@@ -309,6 +317,7 @@ class Scanner:
         return rows or None
 
     def shop_defs(self, pos, count):
+        """The shop lists (items and prices) at a position."""
         t = self.self_ptr.get(pos)
         if t is None:
             return []
@@ -367,6 +376,7 @@ def scan_dol(sc):
 
 
 def main():
+    """Scans every map and writes data/locations_us0.json and its readable copy."""
     sc = Scanner()
     maps = json.load(open(MAPS))
     script_maps = defaultdict(set)

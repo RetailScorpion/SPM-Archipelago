@@ -18,6 +18,7 @@ LST = os.path.join(ROOT, "mod", "spm-headers", "linker", "spm.us0.lst")
 
 
 class Dol:
+    """main.dol, with its section table, so code can be read by memory address."""
     def __init__(self, path=DOL):
         self.data = open(path, "rb").read()
         self.off = struct.unpack(">18I", self.data[0:0x48])
@@ -25,6 +26,7 @@ class Dol:
         self.size = struct.unpack(">18I", self.data[0x90:0xD8])
 
     def read(self, addr, n):
+        """n bytes at a memory address."""
         for i in range(18):
             if self.size[i] and self.addr[i] <= addr < self.addr[i] + self.size[i]:
                 o = self.off[i] + addr - self.addr[i]
@@ -33,6 +35,7 @@ class Dol:
 
 
 class Symbols:
+    """The game's function names and addresses (from the symbol lists), to name call targets."""
     def __init__(self, path=LST):
         syms = []
         for line in open(path):
@@ -47,6 +50,7 @@ class Symbols:
         self.syms, self.keys = syms, [s[0] for s in syms]
 
     def name(self, addr):
+        """The name of the function containing an address ("name+offset")."""
         i = bisect.bisect_right(self.keys, addr) - 1
         if i < 0:
             return f"{addr:#x}"
@@ -55,6 +59,7 @@ class Symbols:
 
 
 def disassemble(dol, syms, start, length):
+    """Prints the instructions at an address, with function names on calls."""
     md = Cs(CS_ARCH_PPC, CS_MODE_32 | CS_MODE_BIG_ENDIAN)
     md.skipdata = True
     for ins in md.disasm(dol.read(start, length), start):

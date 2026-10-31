@@ -18,6 +18,7 @@ R_DOLPHIN_END = 203
 
 
 class Rel:
+    """A REL file (like relF.rel): its sections and relocations."""
     def __init__(self, data: bytes):
         self.data = data
         (self.id, _, _, num_sections, section_info, _, _, self.version, self.bss_size,
@@ -28,6 +29,7 @@ class Rel:
             self.sections.append((off & ~1, size, bool(off & 1)))
 
     def imports(self):
+        """(module id, position) of each relocation list in the file."""
         for i in range(self.imp_size // 8):
             yield struct.unpack_from(">II", self.data, self.imp_offset + 8 * i)
 
@@ -51,7 +53,9 @@ class Rel:
                 yield section, pos, rtype, sec, addend
 
     def dol_relocs(self):
+        """The relocations that point into main.dol."""
         return self.relocs(0)
 
     def file_offset(self, section, offset):
+        """The file position of an offset in a section."""
         return self.sections[section][0] + offset

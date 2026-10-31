@@ -43,6 +43,7 @@ WORLD_ITEM_NAMES = {
 
 
 def level_names():
+    """Each level's name, from the game's message file: {(chapter, level): name}."""
     names = {}
     if os.path.exists(MESSAGES):
         parts = open(MESSAGES, "rb").read().split(b"\0")
@@ -54,6 +55,7 @@ def level_names():
 
 
 def kind(loc):
+    """What kind of check a location is, in words (chest, ? block, shop...)."""
     t, item = loc["type"], loc.get("item")
     if t == "block":
         return "? block (item_blocks)"
@@ -76,6 +78,7 @@ def kind(loc):
 
 
 def notes(loc):
+    """Notes about a location for the list (story-gated in vanilla, and any manual note)."""
     out = []
     if any("GSW(0)" in c for c in loc.get("conditions", [])):
         out.append("story-gated in vanilla")
@@ -85,6 +88,7 @@ def notes(loc):
 
 
 def place(loc):
+    """(chapter, level) of a location, from its first map's name."""
     m = loc["maps"][0]
     prefix = m[:2]
     if prefix in CHAPTERS and m[2].isdigit():
@@ -99,6 +103,7 @@ def place(loc):
 
 
 def main():
+    """Writes logic/checks.md, the list of every check by chapter and level."""
     locations = json.load(open(LOCATIONS))
     rows, seen = {}, set()
     for loc in locations:
@@ -131,6 +136,7 @@ def main():
     ]
 
     def table(entries):
+        """Adds a Markdown table of locations to the output lines."""
         lines.append("| Map | Check (vanilla item) | Kind | Notes |")
         lines.append("|---|---|---|---|")
         for map_name, name, k, n, _ in sorted(entries):

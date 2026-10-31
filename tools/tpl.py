@@ -3,6 +3,7 @@ import struct
 from PIL import Image
 
 def _decode_px(v):
+    """One RGB5A3 pixel as (red, green, blue, alpha), 0-255 each."""
     if v & 0x8000:
         r, g, b = (v >> 10) & 31, (v >> 5) & 31, v & 31
         return (r * 255 // 31, g * 255 // 31, b * 255 // 31, 255)
@@ -10,6 +11,7 @@ def _decode_px(v):
     return (r * 17, g * 17, b * 17, a * 255 // 7)
 
 def _encode_px(p):
+    """One (red, green, blue, alpha) pixel as RGB5A3."""
     r, g, b, a = p
     if a >= 0xE0:
         return 0x8000 | (r * 31 // 255) << 10 | (g * 31 // 255) << 5 | (b * 31 // 255)
@@ -24,6 +26,7 @@ def images(data):
         yield i, w, h, fmt, off
 
 def decode_rgb5a3(data, off, w, h):
+    """An RGB5A3 picture at a position in a file, as an image."""
     im = Image.new('RGBA', (w, h))
     px = im.load()
     pos = off
@@ -38,6 +41,7 @@ def decode_rgb5a3(data, off, w, h):
     return im
 
 def encode_rgb5a3(im):
+    """An image as RGB5A3 picture data (in 4x4 pixel tiles)."""
     im = im.convert('RGBA')
     w, h = im.size
     px = im.load()

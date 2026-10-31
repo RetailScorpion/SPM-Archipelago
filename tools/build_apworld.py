@@ -22,6 +22,7 @@ OPTIONS_BUTTON = os.path.join(ROOT, "assets", "pause", "options_button.png")  # 
 
 
 def main():
+    """Regenerates the data, copies the mod and loader into bin/, encodes the pictures, and zips the APworld."""
     subprocess.run([sys.executable, "-E", os.path.join(ROOT, "tools", "gen_ap_data.py")], check=True)
     # What the patcher bundles: the built mod, the rel loader's Gecko code and the encoded AP icons
     if not os.path.exists(MOD_REL):

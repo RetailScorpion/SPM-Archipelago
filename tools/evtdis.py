@@ -29,6 +29,7 @@ END_OPS = {1, 2}  # END_SCRIPT, RETURN
 
 
 def load_opcodes():
+    """The script command names, from evt_cmd.h: {command number: name}."""
     import re
     ops, cur = {1: "END_SCRIPT"}, None
     for line in open(EVT_CMD_H):
@@ -42,6 +43,7 @@ def load_opcodes():
 
 
 def load_symbols():
+    """The game's function names, from the symbol list: {address: name}."""
     syms = {}
     for line in open(LST):
         line = line.strip()
@@ -55,6 +57,7 @@ def load_symbols():
 
 
 class Disassembler:
+    """Turns scripts in relF.rel into readable script commands."""
     def __init__(self, rel_data, dol_data=None):
         self.data = rel_data
         self.rel = Rel(rel_data)
@@ -69,6 +72,7 @@ class Disassembler:
                     self.relocs[self.rel.file_offset(sec, off)] = (mod, target_sec, addend)
 
     def string_at(self, file_offset):
+        """The text at a file position, if it looks like text."""
         end = self.data.find(b"\0", file_offset)
         s = self.data[file_offset:end]
         if 0 < len(s) < 64 and all(32 <= c < 127 for c in s):
@@ -76,6 +80,7 @@ class Disassembler:
         return None
 
     def dol_string(self, addr):
+        """The text at an address in main.dol, if it looks like text."""
         if self.dol is None:
             return None
         off = struct.unpack(">18I", self.dol[0:0x48])
@@ -91,6 +96,7 @@ class Disassembler:
         return None
 
     def arg(self, file_offset):
+        """A readable form of one script argument (variable, number, text or function name)."""
         value = struct.unpack_from(">i", self.data, file_offset)[0]
         if file_offset in self.relocs:
             mod, target_sec, target = self.relocs[file_offset]
@@ -111,6 +117,7 @@ class Disassembler:
         return str(value)
 
     def disassemble(self, start, count=10000, stop_at_end=True):
+        """The script starting at a file position, as readable lines."""
         pos, depth, lines = start, 0, []
         for _ in range(count):
             hdr = struct.unpack_from(">I", self.data, pos)[0]

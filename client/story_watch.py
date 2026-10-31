@@ -11,6 +11,7 @@ from poc_client import format_story
 
 
 def main():
+    """Prints the story state every time it changes (to a file if one is given)."""
     out = open(sys.argv[1], "a", buffering=1) if len(sys.argv) > 1 else sys.stdout
     mb = Mailbox()
     last = None
