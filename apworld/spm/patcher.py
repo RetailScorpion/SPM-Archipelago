@@ -145,6 +145,11 @@ def patch_dol(clean: bytes, gecko_text: str) -> bytes:
 #
 # wicon.bin: u16 icon count, then a u16 offset per icon, then each icon's record: 6 zero bytes, u16
 # frame count, u16 texture index per frame, u16 0. Icon ids (the item table's iconId) index this list.
+#
+# Icon id 403 is reserved: the game checks for it in its icon drawing (iconDispGx2, `cmplwi 0x193;
+# beq`) and elsewhere, and draws the missing-texture image for it. The game has icons 0-401, so the
+# second icon added would be 403: add_icons puts a placeholder there and carries on at 404.
+RESERVED_ICON_IDS = {403}
 
 FORMAT_RGB5A3 = 5
 
@@ -186,7 +191,12 @@ def add_icons(bin_data: bytes, textures: list[int]) -> tuple[bytes, list[int]]:
     offsets = struct.unpack_from(f">{count}H", bin_data, 2)
     ends = list(offsets[1:]) + [len(bin_data)]
     records = [bin_data[o:e] for o, e in zip(offsets, ends)]
-    records += [b"\0" * 6 + struct.pack(">HHH", 1, t, 0) for t in textures]
+    ids = []
+    for t in textures:
+        while len(records) in RESERVED_ICON_IDS:
+            records.append(b"\0" * 6 + struct.pack(">HHH", 1, t, 0))  # placeholder, never used
+        ids.append(len(records))
+        records.append(b"\0" * 6 + struct.pack(">HHH", 1, t, 0))
     out = bytearray(struct.pack(">H", len(records)))
     pos = 2 + 2 * len(records)
     for r in records:
@@ -195,7 +205,7 @@ def add_icons(bin_data: bytes, textures: list[int]) -> tuple[bytes, list[int]]:
     for r in records:
         out += r
     assert len(out) < 0x10000, "wicon.bin offsets are 16-bit"
-    return bytes(out), list(range(count, len(records)))
+    return bytes(out), ids
 
 
 def ap_icon_images():

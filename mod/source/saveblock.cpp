@@ -12,7 +12,7 @@
 
 namespace mod::saveblock {
 
-#define SAVE_BLOCK_ICON 405  // after the AP icons (tools/wicon.py)
+#define SAVE_BLOCK_ICON 406  // after the AP icons (patcher.add_icons, which skips 403)
 #define NAME_KEY "ap_save_block_name"
 #define DESC_KEY "ap_save_block_desc"
 #define CANT_USE_KEY "ap_save_block_cant_use"

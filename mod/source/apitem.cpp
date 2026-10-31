@@ -17,10 +17,11 @@
 
 namespace mod::apitem {
 
-// Added to wicon.bin after the game's 402 icons: 402 progression (colour), 403 filler (greyscale)
+// Added to wicon.bin after the game's icons by the patcher, which skips 403 (an id the game reserves
+// and won't draw): 402 progression (colour), 404 filler (greyscale)
 #define AP_ICON_PROGRESSION 402
-#define AP_ICON_FILLER 403
-#define AP_ICON_BLANK 404  // a trap's item-get: Mario holds up nothing
+#define AP_ICON_FILLER 404
+#define AP_ICON_BLANK 405  // a trap's item-get: Mario holds up nothing
 
 #define NAME_KEY "ap_item_name"
 #define DESC_KEY "ap_item_desc"
