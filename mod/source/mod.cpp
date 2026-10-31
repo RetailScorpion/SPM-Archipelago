@@ -28,6 +28,7 @@
 #include "hubstory.h"
 #include "joins.h"
 #include "keystorage.h"
+#include "options.h"
 #include "mailbox.h"
 #include "patch.h"
 #include "savedata.h"
@@ -333,6 +334,7 @@ void main()
     flip::init();
     filesel::init();
     saveblock::init();
+    options::init();
     joins::init();
     apitem::init();
 

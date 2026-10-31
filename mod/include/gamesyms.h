@@ -44,6 +44,12 @@ extern u32 keyitem_menu_use_check[];
 extern u32 keyitem_icon_pipe_check[];
 extern u32 keyitem_name_pipe_check[];
 
+// Pause menu: the two "bl count maps found" calls that decide whether the Maps button is created and
+// whether the cursor can stop on it, and the Maps window's open function (options.cpp replaces it)
+extern u32 pluswin_open_maps_count[];
+extern u32 pluswin_check_maps_count[];
+void pluswinMapsWinOpen();
+
 // Only in Fleep's join scene, after the join: evt_fleep_mode_on(1) and evt_fleep_mode_set(1) put
 // something Tippi's pointer uses into a Fleep mode (names are guesses); pointing crashes without Fleep
 EVT_DECLARE_USER_FUNC(evt_fleep_mode_on, 1)

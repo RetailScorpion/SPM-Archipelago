@@ -7,6 +7,7 @@ just applies the new version:
                       codes are needed
   files/mod/mod.rel   the Archipelago mod
   files/wicon.tpl, files/wicon.bin   item icons, plus the two Archipelago icons
+  files/win/us/pause.tpl   the pause menu's unused Maps button becomes the Options button
 
 Only the standard library is used, so this runs inside the frozen Archipelago Launcher.
 Dolphin boots the result from sys/main.dol.
@@ -25,6 +26,7 @@ CLEAN_SHA1 = {
     "sys/main.dol": "4669c63d8365dfdced78e5c1518fe2a3f915a0c6",
     "files/wicon.tpl": "fc363d4a7c689d82d9a3152676c8ec1daff52e9a",
     "files/wicon.bin": "a200e7f8df9270532b9033bec2a123f2abb337e9",
+    "files/win/us/pause.tpl": "bf92332ad8d2ffbc167180eb44564d7eb87c73b9",
 }
 
 
@@ -214,6 +216,25 @@ def patch_icons(tpl_data: bytes, bin_data: bytes) -> tuple[bytes, bytes, list[in
     return tpl_out, bin_out, icons
 
 
+# pause.tpl: the Options button
+
+# The pause menu's Maps button (texture 7, 120x40 RGB5A3) is never shown in the US game; the mod shows
+# it as Options (mod options.cpp) with this picture (assets/pause/options_button.png, encoded by
+# tools/build_apworld.py)
+OPTIONS_TEXTURE = 7
+
+
+def patch_pause(tpl_data: bytes, button: bytes) -> bytes:
+    out = bytearray(tpl_data)
+    _, _, table = struct.unpack(">III", out[:12])
+    header, _ = struct.unpack(">II", out[table + 8 * OPTIONS_TEXTURE:table + 8 * OPTIONS_TEXTURE + 8])
+    height, width, fmt, data = struct.unpack(">HHII", out[header:header + 12])
+    if (width, height, fmt) != (120, 40, 5) or len(button) != width * height * 2:
+        raise PatchError("The Options button doesn't fit the Maps button's texture")
+    out[data:data + len(button)] = button
+    return bytes(out)
+
+
 # The whole folder
 
 def find_game_folder(path: str) -> str:
@@ -251,10 +272,12 @@ def patch_folder(path: str) -> str:
 
     dol = patch_dol(_original(root, "sys/main.dol"), bundled("loader_us0.txt").decode())
     tpl, icon_bin, _ = patch_icons(_original(root, "files/wicon.tpl"), _original(root, "files/wicon.bin"))
+    pause = patch_pause(_original(root, "files/win/us/pause.tpl"), bundled("options_button.bin"))
 
     open(os.path.join(root, "sys", "main.dol"), "wb").write(dol)
     open(os.path.join(root, "files", "wicon.tpl"), "wb").write(tpl)
     open(os.path.join(root, "files", "wicon.bin"), "wb").write(icon_bin)
+    open(os.path.join(root, "files", "win", "us", "pause.tpl"), "wb").write(pause)
     os.makedirs(os.path.join(root, "files", "mod"), exist_ok=True)
     open(os.path.join(root, "files", "mod", "mod.rel"), "wb").write(bundled("mod.rel"))
     return os.path.join(root, "sys", "main.dol")

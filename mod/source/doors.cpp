@@ -17,6 +17,7 @@
 #include "doors.h"
 #include "gamesyms.h"
 #include "mailbox.h"
+#include "options.h"
 #include "patch.h"
 #include "savedata.h"
 #include "saveblock.h"
@@ -74,6 +75,8 @@ static const char * msgSearchHook(const char * msgName)
     if (const char * text = apitem::message(msgName))
         return text;
     if (const char * text = saveblock::message(msgName))
+        return text;
+    if (const char * text = options::message(msgName))
         return text;
     if (msl::string::strncmp(msgName, SELECT_KEY_PREFIX, sizeof(SELECT_KEY_PREFIX) - 1) == 0)
     {

@@ -25,6 +25,16 @@
 // Pipe's enable bytes decide whether its icon / name is drawn greyed out
 80188B1C:keyitem_icon_pipe_check
 80188C18:keyitem_name_pipe_check
+// Pause menu (pluswinOpen 0x801851E8, pluswinMain 0x80185A58; EU0 names, US addresses are EU0 - 0xCEC
+// for these). The Maps button (button 7, texture 7) is only created, and the cursor only stops on it,
+// if any of the 12 map bits in the pouch (+0x30C) is set, which the US game never does: both places
+// call that count (bl 0x8014F394), one in pluswinOpen's button loop, one in the cursor check
+// pluswinCheckHaveMaps (0x801851B4, nav table 0x803E9F50). Selecting it plays SFX_SYS_MENU_DESIDE1,
+// calls pluswinMapsWinOpen and sets the menu to state 50, which waits until the window in
+// submenuEntryIds[0] is deleted, then goes back to the buttons
+80185308:pluswin_open_maps_count
+801851C0:pluswin_check_maps_count
+801907CC:pluswinMapsWinOpen
 // Called only by Fleep's join scene (sp2_01), right after the join (names are guesses): with 1, the
 // first sets MarioWork flag 0x00200000 and gives an object callback 0x8012CA18, mode 6; the second
 // changes that object's mode. Tippi's pointer crashes afterwards if Mario has no Fleep

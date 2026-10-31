@@ -20,6 +20,7 @@ namespace mod::savedata {
 #define AP_GSW_RECV_COUNT (AP_GSW_BASE + 20)  // 2 bytes (big-endian): items from the server handled by this save
 #define AP_GSW_WATCHITT (AP_GSW_BASE + 23)    // value Watchitt's patched "go get help" CASE compares with (joins.cpp)
 #define AP_GSW_LESSON (AP_GSW_BASE + 22)      // story value Bestovius's patched talk script compares with (hubstory.cpp)
+#define AP_GSW_OPTIONS (AP_GSW_BASE + 25)     // bit per option, set = not the default (options.cpp)
 #define AP_GSW_PEACH_CHAIN (AP_GSW_BASE + 24) // story value (60-63) Peach's patched revival scripts read and set (joins.cpp, hubstory.cpp)
 // Its values, as vanilla's story value: 60 unconscious in mac_01, 61 Saffron asked, 62 Spicy Soup
 // cooked, 63 joined

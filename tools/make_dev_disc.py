@@ -4,6 +4,7 @@
     sys/main.dol   clean dol + rel-loader (tools/patch_dol.py)
     files/mod/mod.rel   the mod (mod/out/us0.rel)
     files/wicon.tpl, files/wicon.bin   item icons plus the Archipelago icons (tools/wicon.py)
+    files/win/us/pause.tpl   the Options button (assets/pause/options_button.png)
 
 Usage: py -3 -E tools/make_dev_disc.py            (from the SPM_AP folder)
 Then in Dolphin: File > Open > build/devdisc/sys/main.dol
@@ -39,6 +40,13 @@ def main():
 
     icons = wicon.build(os.path.join(CLEAN, "files"), os.path.join(DEV, "files"))
     print("Archipelago icons added as icon ids", ", ".join(map(str, icons)))
+
+    pause = os.path.join("files", "win", "us", "pause.tpl")
+    from PIL import Image
+    from tpl import encode_rgb5a3
+    button = encode_rgb5a3(Image.open(os.path.join(ROOT, "assets", "pause", "options_button.png")))
+    open(os.path.join(DEV, pause), "wb").write(patcher.patch_pause(open(os.path.join(CLEAN, pause), "rb").read(), button))
+    print("Options button added")
 
     if not os.path.exists(REL):
         sys.exit(f"Mod not built yet: {REL} is missing (run configure.py and ninja in mod/)")

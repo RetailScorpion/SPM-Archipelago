@@ -18,6 +18,7 @@ CUSTOM_WORLDS = r"D:\Tools\Archipelago\custom_worlds"
 MOD_REL = os.path.join(ROOT, "mod", "out", "us0.rel")
 LOADER = os.path.join(ROOT, "ref", "spm-rel-loader", "spm-rel-loader", "loader", "loader us0.txt")
 BIN = os.path.join(SRC, "bin")
+OPTIONS_BUTTON = os.path.join(ROOT, "assets", "pause", "options_button.png")  # the pause menu's Options button
 
 
 def main():
@@ -29,6 +30,10 @@ def main():
     shutil.copyfile(MOD_REL, os.path.join(BIN, "mod.rel"))
     shutil.copyfile(LOADER, os.path.join(BIN, "loader_us0.txt"))
     subprocess.run([sys.executable, "-E", os.path.join(ROOT, "tools", "wicon.py")], check=True)
+    sys.path.insert(0, os.path.join(ROOT, "tools"))
+    from tpl import encode_rgb5a3
+    from PIL import Image
+    open(os.path.join(BIN, "options_button.bin"), "wb").write(encode_rgb5a3(Image.open(OPTIONS_BUTTON)))
     with zipfile.ZipFile(OUT, "w", zipfile.ZIP_DEFLATED) as z:
         for folder, dirs, files in os.walk(SRC):
             dirs[:] = [d for d in dirs if d != "__pycache__"]
