@@ -12,8 +12,10 @@ namespace mod::options {
 
 enum Option
 {
-    OPTION_MUSIC_SHUFFLE,  // every track plays in place of another, seeded by the file name
-    OPTION_SKIP_TEXT,      // holding 1 mashes through text
+    // New options go at the end: each one's saved bit is its position
+    OPTION_MUSIC_SHUFFLE,     // every looping song plays in place of another, seeded by the file name
+    OPTION_SKIP_TEXT,         // holding 1 mashes through text
+    OPTION_FANFARE_SHUFFLE,   // the same for tracks that play once (fanfares, chapter starts...)
     OPTION_COUNT
 };
 

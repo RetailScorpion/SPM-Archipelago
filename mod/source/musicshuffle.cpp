@@ -99,8 +99,12 @@ static void build(u32 seed)
     wii::os::OSReport("[spmap] musicshuffle: %d tracks shuffled for \"%s\"\n", sTrackCount, spm::spmario::gp->saveName);
 }
 
+// The track played instead, if its group's setting (Music shuffle / Shuffle fanfares) is on
 static const char * replacement(const char * name)
 {
+    bool once = isPlayOnce(name);
+    if (!options::get(once ? options::OPTION_FANFARE_SHUFFLE : options::OPTION_MUSIC_SHUFFLE))
+        return name;
     u32 seed = hashName(spm::spmario::gp->saveName);
     if (!sBuilt || seed != sSeed)
         build(seed);
@@ -116,7 +120,7 @@ static const char * replacement(const char * name)
 static s32 (*spsndBGMOn_f_dReal)(u32 flags, const char * name, s32 fadeMsec);
 static s32 spsndBGMOn_f_dHook(u32 flags, const char * name, s32 fadeMsec)
 {
-    if (name != nullptr && gamesyms::spsbgmlist != nullptr && options::get(options::OPTION_MUSIC_SHUFFLE))
+    if (name != nullptr && gamesyms::spsbgmlist != nullptr)
         name = replacement(name);
     return spsndBGMOn_f_dReal(flags, name, fadeMsec);
 }

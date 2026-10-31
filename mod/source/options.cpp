@@ -26,7 +26,11 @@ struct OptionInfo
 static const OptionInfo sOptions[OPTION_COUNT] = {
     {"Music shuffle", false},
     {"Hold 1 to skip text", true},
+    {"Shuffle fanfares", false},
 };
+
+// The window lists them in this order
+static const Option sOrder[OPTION_COUNT] = {OPTION_MUSIC_SHUFFLE, OPTION_FANFARE_SHUFFLE, OPTION_SKIP_TEXT};
 
 #define INSTR_LI_R3_1 0x38600001
 // PausewinEntry state the game gives a new button or window (pluswinOpen, pluswinMapsWinOpen)
@@ -96,9 +100,9 @@ static void windowDisp(spm::pausewin::PausewinEntry * entry)
     for (s32 i = 0; i < OPTION_COUNT; i++)
     {
         f32 rowY = y - ROWS_TOP - i * ROW_HEIGHT;
-        bool on = get(static_cast<Option>(i));
+        bool on = get(sOrder[i]);
         const wii::gx::GXColor & colour = i == sCursor ? yellow : white;
-        drawText(x + PAD, rowY, ROW_SCALE, colour, sOptions[i].name);
+        drawText(x + PAD, rowY, ROW_SCALE, colour, sOptions[sOrder[i]].name);
         drawText(x + WIN_WIDTH - PAD - VALUE_WIDTH, rowY, ROW_SCALE, on ? colour : grey, on ? "ON" : "OFF");
     }
     drawText(x + PAD, y - WIN_HEIGHT + PAD + 22.0f, 0.6f, grey, "2: change    1: back");
@@ -119,7 +123,7 @@ static void windowMain(spm::pausewin::PausewinEntry * entry)
     if (pressed & WPAD_BTN_2)
     {
         spm::spmario_snd::spsndSFXOn("SFX_SYS_MENU_DESIDE1");
-        toggle(static_cast<Option>(sCursor));
+        toggle(sOrder[sCursor]);
         return;
     }
     // The Wii Remote is held sideways: right is up, left is down
