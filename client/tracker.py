@@ -56,11 +56,9 @@ def mario_position():
 
 
 def checked_state(loc, flags, server):
-    """'x': checked in the loaded save. 's': checked on the server only (lost to a reset or a reload
-    without saving; the client re-delivers its item). ' ': not checked."""
-    if Mailbox.flag_set(flags, loc["flag"]):
-        return "x"
-    return "s" if loc["flag"] in server else " "
+    """'x': checked, in the loaded save or on the server (lost to a reset or a reload without saving;
+    the client re-delivers its item). ' ': not checked."""
+    return "x" if Mailbox.flag_set(flags, loc["flag"]) or loc["flag"] in server else " "
 
 
 def describe_spot(loc):
@@ -89,8 +87,6 @@ def render(levels, locations, flags, here, missing_only, mario=None, server=froz
     total = sum(len(v) for v in by_level.values())
     done_total = sum(state != " " for v in by_level.values() for _, state in v)
     lines = [f"Super Paper Mario tracker: {done_total}/{total} checked   (you're in {here})", pure_hearts(flags)]
-    if any(state == "s" for v in by_level.values() for _, state in v):
-        lines.append("[s] = checked on the server but not in this save (the client gives its item back)")
     if mario is not None:
         x, y, z = mario
         lines.append(f"Mario: x {x:.0f}, height {y:.0f}, depth {z:.0f}")
