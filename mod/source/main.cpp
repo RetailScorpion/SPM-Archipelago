@@ -47,7 +47,7 @@
 namespace mod {
 
 // Must match the APworld's world_version (apworld/spm/archipelago.json); shown on the title screen
-#define MOD_VERSION "0.1.4"
+#define MOD_VERSION "0.2.0"
 
 // Where relF's script section starts inside the relF.rel file
 #define RELF_SECTION5_FILE_OFFSET 0xAF300
