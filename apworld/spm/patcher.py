@@ -16,6 +16,7 @@ boots the game from sys/main.dol.
 """
 
 import hashlib
+import json
 import os
 import pkgutil
 import shutil
@@ -43,6 +44,14 @@ def bundled(name: str) -> bytes:
     if data is None:
         raise PatchError(f"bin/{name} is missing from the APworld")
     return data
+
+
+def apworld_version() -> str:
+    """The APworld's version (world_version in its archipelago.json), or "unknown" if it can't be read."""
+    try:
+        return json.loads(pkgutil.get_data(__name__, "archipelago.json"))["world_version"]
+    except (OSError, TypeError, ValueError, KeyError):
+        return "unknown"
 
 
 # ---- main.dol: building in the rel loader ----
@@ -334,4 +343,5 @@ def launch_patcher(*args):
         Utils.messagebox("Super Paper Mario Patcher", str(e), error=True)
         return
     Utils.messagebox("Super Paper Mario Patcher",
-                     f"Done! In Dolphin, open:\n{dol}\n\nThen start the Super Paper Mario Client and connect.")
+                     f"Done! You are now running version {apworld_version()}.\n\n"
+                     f"In Dolphin, open:\n{dol}\n\nThen start the Super Paper Mario Client and connect.")
