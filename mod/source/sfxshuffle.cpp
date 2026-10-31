@@ -33,20 +33,35 @@ static bool isTvVariant(const char * name)
 }
 
 /*
-    Only the player's own sounds take part for now (user's choice: shuffling everything sounds awful
-    until good and bad swaps are sorted out): the characters' (SFX_P_: steps, jumps, landings, voices)
-    and the Pixls' (SFX_F_). They swap among themselves; every other effect stays as it is.
+    Only some effects take part for now (user's choice: shuffling everything sounds awful until good
+    and bad swaps are sorted out), each kind swapping among itself; every other effect stays as it is:
+      - the player's: the characters' (SFX_P_: steps, jumps, landings, voices) and the Pixls' (SFX_F_)
+      - the interface's: menus, text boxes, saving and the HUD (SFX_SYS_), and the Save Block's
 */
-static bool playerSound(const char * name)
+enum Kind
 {
-    return msl::string::strncmp(name, "SFX_P_", 6) == 0 || msl::string::strncmp(name, "SFX_F_", 6) == 0;
+    KIND_NONE,
+    KIND_PLAYER,
+    KIND_INTERFACE,
+    KIND_COUNT
+};
+
+static Kind kindOf(const char * name)
+{
+    if (msl::string::strncmp(name, "SFX_P_", 6) == 0 || msl::string::strncmp(name, "SFX_F_", 6) == 0)
+        return KIND_PLAYER;
+    if (msl::string::strncmp(name, "SFX_SYS_", 8) == 0 || msl::string::strncmp(name, "SFX_MOBJ_SAVE_BLOCK", 19) == 0)
+        return KIND_INTERFACE;
+    return KIND_NONE;
 }
 
-// Effects that take part: a player sound from the archive, and not a TV speaker variant (those follow
-// their base effect)
-static bool shuffled(const gamesyms::SfxEntry & e)
+// Which pool an effect is shuffled in (KIND_NONE: not shuffled): a sound from the archive, and not a
+// TV speaker variant (those follow their base effect)
+static Kind poolOf(const gamesyms::SfxEntry & e)
 {
-    return e.sound != 0 && e.sound < SFX_LOOP_SOUND_COUNT && playerSound(e.name) && !isTvVariant(e.name);
+    if (e.sound == 0 || e.sound >= SFX_LOOP_SOUND_COUNT || isTvVariant(e.name))
+        return KIND_NONE;
+    return kindOf(e.name);
 }
 
 // The table is sorted by name (the game looks names up with bsearch)
@@ -84,7 +99,7 @@ static u32 nextRandom(u32 & state)
     return state;
 }
 
-// Looping effects swap with looping effects, the rest with the rest
+// Within each kind, looping effects swap with looping effects, the rest with the rest
 static void build(u32 seed)
 {
     sCount = gamesyms::spsnd_sfx_count;
@@ -96,13 +111,15 @@ static void build(u32 seed)
     u32 state = seed ? seed : 1;
     static u16 members[MAX_EFFECTS];
     static u16 order[MAX_EFFECTS];
-    for (s32 group = 0; group < 2; group++)
+    for (s32 group = 0; group < (KIND_COUNT - 1) * 2; group++)
     {
+        Kind kind = static_cast<Kind>(KIND_PLAYER + group / 2);
+        bool looping = group % 2;
         s32 count = 0;
         for (s32 i = 0; i < sCount; i++)
         {
             const gamesyms::SfxEntry & e = gamesyms::spssfxlist[i];
-            if (shuffled(e) && loops(e.sound) == (group == 1))
+            if (poolOf(e) == kind && loops(e.sound) == looping)
                 members[count++] = static_cast<u16>(i);
         }
         msl::string::memcpy(order, members, count * sizeof(u16));
