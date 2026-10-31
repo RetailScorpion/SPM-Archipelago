@@ -12,6 +12,7 @@ Connect before entering levels: placements only apply once the client has writte
 
 import asyncio
 import random
+import time
 
 import Utils
 from BaseClasses import ItemClassification
@@ -20,8 +21,8 @@ from NetUtils import ClientStatus
 
 from .data import ID_BASE, LOCATIONS
 from .game_link import (GIFT_FLAG_BASE, JOIN_ITEM_OTHER_WORLD, LOC_KIND_OTHER_WORLD, LOC_KIND_OTHER_WORLD_FILLER,
-                        LOC_KIND_TRAP, NO_SAVE, RECV_SIZE,
-                        STATE_IN_GAME, Mailbox, MailboxError)
+                        LOC_KIND_TRAP, NO_SAVE, RECV_SIZE, SERVER_CHECKS_HEARTBEAT,
+                        STATE_IN_GAME, Mailbox, MailboxError, write_server_checks)
 
 GAME = "Super Paper Mario"
 AP_ITEM = 63               # the mod's stand-in for other worlds' items (apitem.cpp)
@@ -67,6 +68,8 @@ class SPMContext(CommonContext):
         self.mailbox_addr = None   # where the mailbox was found last
         self.slot_options = {}
         self.starting_chapters = []
+        self.shared_checks = None  # (seed, slot, flags) last written for the tracker
+        self.shared_at = 0.0       # when it was written
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
@@ -212,6 +215,18 @@ class SPMContext(CommonContext):
             mb.queue_received(item.item - ID_BASE, given_here)
             self.queued_upto += 1
 
+    def share_checks(self):
+        """Keeps the server's checked locations in a file for the tracker and coords windows."""
+        flags = frozenset(LOCATIONS[location - ID_BASE][4] for location in self.checked_locations
+                          if 0 <= location - ID_BASE < len(LOCATIONS))
+        shared = (self.seed_name, self.auth, flags)
+        if shared != self.shared_checks or time.time() - self.shared_at >= SERVER_CHECKS_HEARTBEAT:
+            try:
+                write_server_checks(self.seed_name or "", self.auth or "", flags)
+            except OSError as e:
+                logger.warning(f"Couldn't share checks with the tracker: {e}")
+            self.shared_checks, self.shared_at = shared, time.time()
+
     def check_goal(self):
         if self.goal_sent:
             return
@@ -225,6 +240,8 @@ class SPMContext(CommonContext):
 async def game_watcher(ctx: SPMContext):
     while not ctx.exit_event.is_set():
         try:
+            if ctx.slot is not None:
+                ctx.share_checks()
             if ctx.mailbox is None:
                 mb = Mailbox()
                 mb.connect()

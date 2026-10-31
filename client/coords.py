@@ -13,8 +13,8 @@ import tkinter as tk
 import dolphin_memory_engine as dme
 
 import theme
-from mailbox import Mailbox
-from tracker import LOCATIONS, connect_dolphin, current_map, describe_spot, mario_position, read_flags
+from mailbox import read_server_checks
+from tracker import LOCATIONS, checked_state, connect_dolphin, current_map, describe_spot, mario_position, read_flags
 
 REFRESH_MS = 200
 
@@ -50,7 +50,8 @@ def main():
             flags = read_flags()
             position.config(text=f"x {x:.0f}   height {y:.0f}   depth {z:.0f}")
             here.config(text=f"Map: {map_name}")
-            left = [loc for loc in current_locations() if loc["map"] == map_name and not Mailbox.flag_set(flags, loc["flag"])]
+            server = read_server_checks()
+            left = [loc for loc in current_locations() if loc["map"] == map_name and checked_state(loc, flags, server) == " "]
             if left:
                 rows = []
                 for loc in left:

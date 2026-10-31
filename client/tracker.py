@@ -22,7 +22,7 @@ import tkinter as tk
 import dolphin_memory_engine as dme
 
 import theme
-from mailbox import GP_PTR, GSWF_OFFSET, Mailbox
+from mailbox import GP_PTR, GSWF_OFFSET, Mailbox, read_server_checks
 
 LOCATIONS = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "ap_locations.json")
 MAP_NAME_OFFSET = 0x44  # SpmarioGlobals mapName
@@ -55,6 +55,14 @@ def mario_position():
     return struct.unpack(">3f", dme.read_bytes(MARIO_WORK + MARIO_POSITION, 12))
 
 
+def checked_state(loc, flags, server):
+    """'x': checked in the loaded save. 's': checked on the server only (lost to a reset or a reload
+    without saving; the client re-delivers its item). ' ': not checked."""
+    if Mailbox.flag_set(flags, loc["flag"]):
+        return "x"
+    return "s" if loc["flag"] in server else " "
+
+
 def describe_spot(loc):
     if loc["kind"] == "gift":
         return loc["where"]
@@ -72,20 +80,23 @@ def pure_hearts(flags):
     return "Pure Hearts (doors open): " + " ".join(map(str, held))
 
 
-def render(levels, locations, flags, here, missing_only, mario=None):
-    """Every level, with its status; under it, its locations (only the unchecked ones with --missing)."""
+def render(levels, locations, flags, here, missing_only, mario=None, server=frozenset()):
+    """Every level, with its status; under it, its locations (only the unchecked ones with --missing).
+    server: the save flags of the locations the server has as checked (read_server_checks)."""
     by_level = {title: [] for title in levels}
     for loc in locations:
-        by_level.setdefault(loc["name"].split(" - ")[0], []).append((loc, Mailbox.flag_set(flags, loc["flag"])))
+        by_level.setdefault(loc["name"].split(" - ")[0], []).append((loc, checked_state(loc, flags, server)))
     total = sum(len(v) for v in by_level.values())
-    done_total = sum(done for v in by_level.values() for _, done in v)
+    done_total = sum(state != " " for v in by_level.values() for _, state in v)
     lines = [f"Super Paper Mario tracker: {done_total}/{total} checked   (you're in {here})", pure_hearts(flags)]
+    if any(state == "s" for v in by_level.values() for _, state in v):
+        lines.append("[s] = checked on the server but not in this save (the client gives its item back)")
     if mario is not None:
         x, y, z = mario
         lines.append(f"Mario: x {x:.0f}, height {y:.0f}, depth {z:.0f}")
     lines.append("")
     for title, entries in by_level.items():
-        done = sum(d for _, d in entries)
+        done = sum(state != " " for _, state in entries)
         if not entries:
             status = "no checks"
         elif done == len(entries):
@@ -93,12 +104,12 @@ def render(levels, locations, flags, here, missing_only, mario=None):
         else:
             status = f"{done}/{len(entries)}"
         lines.append(f"{title}  -  {status}")
-        for loc, checked in entries:
-            if missing_only and checked:
+        for loc, state in entries:
+            if missing_only and state != " ":
                 continue
             item = loc["name"].split(" - ", 1)[1].rsplit(" (", 1)[0]
             marker = "<- here" if loc["map"] == here else ""
-            lines.append(f"  [{'x' if checked else ' '}] {loc['map']:7} {item:28} {describe_spot(loc)} {marker}")
+            lines.append(f"  [{state}] {loc['map']:7} {item:28} {describe_spot(loc)} {marker}")
     return "\n".join(lines)
 
 
@@ -129,7 +140,8 @@ def main():
         try:
             connect_dolphin()
             # No Mario position here (coords.py shows it): the text only changes when a check or the map does
-            screen = render(state["levels"], state["locations"], read_flags(), current_map(), missing_only)
+            screen = render(state["levels"], state["locations"], read_flags(), current_map(), missing_only,
+                            server=read_server_checks())
         except RuntimeError as e:
             dme.un_hook()
             screen = f"Waiting for the game: {e}"

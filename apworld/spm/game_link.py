@@ -1,6 +1,8 @@
 """Client side of the mod's mailbox (mod/include/mailbox.h) and the game memory around it.
 Keep the layout in sync with the mod. Used by the Archipelago client and the dev tools in client/."""
 
+import json
+import os
 import struct
 import time
 
@@ -56,6 +58,35 @@ GSW0_OFFSET = 0x140
 
 STATE_BOOT, STATE_TITLE, STATE_IN_GAME = 0, 1, 2  # mailbox.h ModState
 STATE_NAMES = {STATE_BOOT: "boot", STATE_TITLE: "title", STATE_IN_GAME: "in game"}
+
+# The locations the server has as checked, kept by the client for the tracker and coords windows: a
+# location checked and then lost to a reset or a reload without saving is still checked there.
+# Written while the client is connected; older than SERVER_CHECKS_STALE seconds means it isn't
+SERVER_CHECKS_PATH = os.path.join(os.environ.get("LOCALAPPDATA") or os.path.expanduser("~"),
+                                  "SPM_Archipelago", "server_checks.json")
+SERVER_CHECKS_HEARTBEAT = 5
+SERVER_CHECKS_STALE = 15
+
+
+def write_server_checks(seed: str, slot: str, flags):
+    """Saves the save flags of the locations the server has as checked (client side)."""
+    os.makedirs(os.path.dirname(SERVER_CHECKS_PATH), exist_ok=True)
+    temp = SERVER_CHECKS_PATH + ".tmp"
+    with open(temp, "w") as f:
+        json.dump({"updated": time.time(), "seed": seed, "slot": slot, "flags": sorted(flags)}, f)
+    os.replace(temp, SERVER_CHECKS_PATH)
+
+
+def read_server_checks() -> set[int]:
+    """The save flags of the locations the server has as checked, or nothing if no client is connected."""
+    try:
+        with open(SERVER_CHECKS_PATH) as f:
+            data = json.load(f)
+        if time.time() - data["updated"] > SERVER_CHECKS_STALE:
+            return set()
+        return set(data["flags"])
+    except (OSError, ValueError, KeyError):
+        return set()
 
 
 class MailboxError(Exception):
