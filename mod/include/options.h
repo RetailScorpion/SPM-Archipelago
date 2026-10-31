@@ -16,6 +16,7 @@ enum Option
     OPTION_MUSIC_SHUFFLE,     // every looping song plays in place of another, seeded by the file name
     OPTION_SKIP_TEXT,         // holding 1 mashes through text
     OPTION_FANFARE_SHUFFLE,   // the same for tracks that play once (fanfares, chapter starts...)
+    OPTION_SFX_SHUFFLE,       // every sound effect plays in place of another
     OPTION_COUNT
 };
 

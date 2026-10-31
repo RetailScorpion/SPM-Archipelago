@@ -34,6 +34,7 @@
 #include "patch.h"
 #include "savedata.h"
 #include "saveblock.h"
+#include "sfxshuffle.h"
 #include "storyvalue.h"
 #include "textskip.h"
 #include "tippi.h"
@@ -340,6 +341,7 @@ void main()
     options::init();
     textskip::init();
     musicshuffle::init();
+    sfxshuffle::init();
     joins::init();
     apitem::init();
 

@@ -45,6 +45,15 @@
 // (player, volume, fadeMsec)); the item window does this to players 0 and 1 when it stops player 2's
 // jingle (itemCollectPouchItem area, 0x8007AC74)
 8023AAE8:bgm_volume_restore
+// Sound effects: every effect starts in __spsndSFXOn, which bsearches spssfxlist (SfxEntry[count],
+// 0x14 each, sorted by name: name, u16 sound archive index, ...; filled at startup from
+// sound/wiimario_snd.dat) with the count at 0x804F0A4A. The 32 effect players (0x3C each, at
+// 0x804F0060) point at their SfxEntry; these two look a name up among them (EU0 spsndSFX_chkName and
+// spsndSFX_getIdPlayingName, US = EU0 - 0x25FC)
+8056DA3C:spssfxlist
+804F0A4A:spsnd_sfx_count
+802394FC:sfx_check_name
+802395DC:sfx_id_playing_name
 // Called only by Fleep's join scene (sp2_01), right after the join (names are guesses): with 1, the
 // first sets MarioWork flag 0x00200000 and gives an object callback 0x8012CA18, mode 6; the second
 // changes that object's mode. Tippi's pointer crashes afterwards if Mario has no Fleep

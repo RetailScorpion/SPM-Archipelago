@@ -27,10 +27,12 @@ static const OptionInfo sOptions[OPTION_COUNT] = {
     {"Music shuffle", false},
     {"Hold 1 to skip text", true},
     {"Shuffle fanfares", false},
+    {"Shuffle sound effects", false},
 };
 
 // The window lists them in this order
-static const Option sOrder[OPTION_COUNT] = {OPTION_MUSIC_SHUFFLE, OPTION_FANFARE_SHUFFLE, OPTION_SKIP_TEXT};
+static const Option sOrder[OPTION_COUNT] = {OPTION_MUSIC_SHUFFLE, OPTION_FANFARE_SHUFFLE, OPTION_SFX_SHUFFLE,
+                                            OPTION_SKIP_TEXT};
 
 #define INSTR_LI_R3_1 0x38600001
 // PausewinEntry state the game gives a new button or window (pluswinOpen, pluswinMapsWinOpen)

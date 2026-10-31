@@ -60,6 +60,20 @@ extern spm::spmario_snd::BgmPlayer spsndBgmPlayers[3];
 // Brings a music player's volume back up (fade in ms) after it was turned down for a jingle
 s32 bgm_volume_restore(s32 player, s32 fadeMsec);
 
+// The sound effect table, sorted by name, and its length (filled at startup)
+struct SfxEntry
+{
+    const char * name;
+    u16 sound;          // sound archive index
+    u8 unknown_0x6[0x14 - 0x6];
+};
+extern SfxEntry * spssfxlist;
+extern u16 spsnd_sfx_count;
+
+// Is an effect with this name playing / the id of the one playing (-1 if none)
+s32 sfx_check_name(const char * name);
+s32 sfx_id_playing_name(const char * name);
+
 // Only in Fleep's join scene, after the join: evt_fleep_mode_on(1) and evt_fleep_mode_set(1) put
 // something Tippi's pointer uses into a Fleep mode (names are guesses); pointing crashes without Fleep
 EVT_DECLARE_USER_FUNC(evt_fleep_mode_on, 1)
