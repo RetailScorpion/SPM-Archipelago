@@ -30,10 +30,12 @@
 #include "keystorage.h"
 #include "options.h"
 #include "mailbox.h"
+#include "musicshuffle.h"
 #include "patch.h"
 #include "savedata.h"
 #include "saveblock.h"
 #include "storyvalue.h"
+#include "textskip.h"
 #include "tippi.h"
 
 namespace mod {
@@ -335,6 +337,8 @@ void main()
     filesel::init();
     saveblock::init();
     options::init();
+    textskip::init();
+    musicshuffle::init();
     joins::init();
     apitem::init();
 

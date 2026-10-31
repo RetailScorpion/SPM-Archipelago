@@ -8,6 +8,7 @@
 #include <common.h>
 #include <evt_cmd.h>
 #include <spm/evtmgr.h>
+#include <spm/spmario_snd.h>
 
 namespace mod::gamesyms {
 
@@ -49,6 +50,9 @@ extern u32 keyitem_name_pipe_check[];
 extern u32 pluswin_open_maps_count[];
 extern u32 pluswin_check_maps_count[];
 void pluswinMapsWinOpen();
+
+// The music track table (name, sound archive index, volume...), filled at startup, ended by a null name
+extern spm::spmario_snd::BgmEntry * spsbgmlist;
 
 // Only in Fleep's join scene, after the join: evt_fleep_mode_on(1) and evt_fleep_mode_set(1) put
 // something Tippi's pointer uses into a Fleep mode (names are guesses); pointing crashes without Fleep

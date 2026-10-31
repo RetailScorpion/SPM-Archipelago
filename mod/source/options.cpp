@@ -62,7 +62,7 @@ const char * message(const char * msgName)
 {
     // The help line shown while the cursor is on button 7
     if (msl::string::strcmp(msgName, "menu_help_007") == 0)
-        return "Change the Archipelago settings for this file.";
+        return "Change additional settings for this file.";
     return nullptr;
 }
 

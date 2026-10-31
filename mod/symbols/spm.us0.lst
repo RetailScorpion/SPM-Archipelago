@@ -35,6 +35,9 @@
 80185308:pluswin_open_maps_count
 801851C0:pluswin_check_maps_count
 801907CC:pluswinMapsWinOpen
+// spsndBGMOn_f_d(flags, name, fadeMsec): every song starts here (spsndBGMOn and the alternate entry
+// branch to it). It looks the name up in spsbgmlist (BgmEntry[150], allocated and filled at startup)
+80239EDC:spsndBGMOn_f_d
 // Called only by Fleep's join scene (sp2_01), right after the join (names are guesses): with 1, the
 // first sets MarioWork flag 0x00200000 and gives an object callback 0x8012CA18, mode 6; the second
 // changes that object's mode. Tippi's pointer crashes afterwards if Mario has no Fleep
