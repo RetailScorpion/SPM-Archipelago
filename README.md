@@ -2,7 +2,7 @@
 
 An [Archipelago](https://archipelago.gg) randomizer for **Super Paper Mario** (Wii, USA revision 0).
 
-This is a **prototype with no logic**: every location counts as reachable from the start, so items can be anywhere. It exists so the community can play it and help map out the real logic. Expect rough edges.
+This is a prototype with no logic: every location counts as reachable from the start, so items can be anywhere. It exists so the community can play it and help map out the real logic. Expect rough edges.
 
 ## What's randomized
 Depending on your YAML options:
@@ -10,12 +10,12 @@ Depending on your YAML options:
 - key items whose spots the prototype handles: the Fort Keys, the Water/Stone/Fire Tablets, Cooking Disks and the Golden Card;
 - items in chests and lying around in levels and the hubs;
 - optionally, catch cards found in chests or lying around;
-- the **Pure Hearts** of every chapter you don't start with (see Chapter doors below);
-- the **Save Block** (`save_block`), a key item that saves your game from the key item menu, anywhere. By default you start with it; it can also be shuffled or left out. It doesn't work in the Pits of 100 Trials;
-- optionally, **Peach, Luigi and Bowser** (`randomize_characters`): their join scenes become locations and can hold anything;
+- the Pure Hearts of every chapter you don't start with (see Chapter doors below);
+- the Save Block (`save_block`), a key item that saves your game from the key item menu, anywhere. By default you start with it; it can also be shuffled or left out. It doesn't work in the Pits of 100 Trials;
+- optionally, Peach, Luigi and Bowser (`randomize_characters`): their join scenes become locations and can hold anything;
 - **Cursya Traps** (`trap_percentage`, 10% of filler by default): they look like a key item you haven't found, give nothing ("You are a FOOL!") and put a random Cursya curse on Mario.
 
-Story gifts are locations too: Peach's, Luigi's and Bowser's join scenes, and Bestovius's flip lesson in 1-1. **Peach** is there from the start: unconscious in Flipside (`mac_01`). Bring her a Spicy Soup (Saffron cooks one from a Fire Burst) and talk to her to collect her check. Bowser's is his fight in 3-1, and Luigi's is in the Underwhere (7-1). The **Helmet** isn't shuffled yet: you always get it when you first enter Chapter 4.
+Story gifts are locations too: Peach's, Luigi's and Bowser's join scenes, and Bestovius's flip lesson in 1-1. Peach is there from the start: unconscious in Flipside (`mac_01`). Bring her a Spicy Soup (Saffron cooks one from a Fire Burst) and talk to her to collect her check. Bowser's is his fight in 3-1, and Luigi's is in the Underwhere (7-1). The Helmet isn't shuffled yet: you always get it when you first enter Chapter 4.
 
 **Not yet:** the story keys (Ruins Keys, Door Keys, Dimension Keys, Orbs, …), ? blocks, shops and the Pit rewards. These stay vanilla.
 
@@ -46,7 +46,7 @@ Items from other worlds show up in Super Paper Mario as the Archipelago icon (gr
 7. **Load your save, then play.** Connect the client **before entering any level**, so it can place the items.
 
 ## Known issues
-- No logic: you may need a late Pixl early. The **Return Pipe** (you start with it, or Merlon gives it with cutscenes on) gets you out of rooms you can't leave.
+- No logic: you may need a late Pixl early. The Return Pipe (you start with it, or Merlon gives it with cutscenes on) gets you out of rooms you can't leave.
 - Some story events still check the story's progress rather than whether you have the right item.
 - Gecko cheat codes can't be used with the patched game.
 - **Story events in Flipside and Flopside are simplified:** the hubs don't follow the story. Chapter 6 moves on to its destroyed world once the duels are done, and Castle Bleck's door (Chapter 8) opens in Flopside Tower once Chapters 1-7 are finished.
@@ -60,7 +60,7 @@ Items from other worlds show up in Super Paper Mario as the Archipelago icon (gr
 
 They need [Python 3](https://www.python.org) and `py -3 -m pip install dolphin-memory-engine`. Start Dolphin with the game, then run one, for example `pyw -3 client\tracker.py --missing`. Keep the zip's folders as they are. Details are in its `README.txt`.
 
-Please report what you find, especially **what each location needs to reach**. That's the logic this prototype is meant to map out. The full list of checks is in [`logic/checks.md`](logic/checks.md).
+Please report what you find, especially what each location needs to reach. That's the logic this prototype is meant to map out. The full list of checks is in [`logic/checks.md`](logic/checks.md).
 
 ## Credits
 - **RetailScorpion**: design, testing and direction.

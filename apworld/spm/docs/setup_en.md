@@ -13,5 +13,5 @@
 
 ## Known limits
 - No logic: you may need items from late chapters early. Use the Return Pipe to leave rooms you can't get out of.
-- Pure Hearts, characters, the story keys, ? blocks and shops are still vanilla.
+- The story keys, ? blocks, shops and the Pit rewards are still vanilla.
 - Gecko cheat codes can't be used with the patched game.
