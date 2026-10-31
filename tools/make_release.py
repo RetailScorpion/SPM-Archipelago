@@ -22,6 +22,7 @@ TOOLS_FILES = [
     "client/ap_tools.py",
     "client/theme.py",
     "client/mailbox.py",
+    "client/game_memory.py",
     "apworld/spm/game_link.py",
     "data/ap_locations.json",
     "data/item_names_us0.json",

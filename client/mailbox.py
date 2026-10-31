@@ -1,4 +1,5 @@
-"""The dev tools' view of the mailbox: re-exports apworld/spm/game_link.py, which the Archipelago client uses too."""
+"""Gives the tools in this folder the Archipelago client's game connection (apworld/spm/game_link.py),
+so both use the same mailbox layout. It makes that file importable from here, then re-exports it."""
 
 import os
 import sys

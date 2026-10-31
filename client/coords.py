@@ -1,7 +1,7 @@
-"""Small window: Mario's position, the map, and that map's unchecked locations.
+"""SPM Coords: a small window with Mario's position, the map, and that map's unchecked locations.
 
-For finding locations from the tracker's coordinates (the game's own: x left to right, height, depth).
-Read-only, like the tracker; works with any mod version.
+For finding a location from the tracker's coordinates (the game's own: x left to right, height,
+depth). It only reads the game, like the tracker, and works with any version of the mod.
 
 Usage: py -3 -E coords.py
 """
@@ -13,23 +13,27 @@ import tkinter as tk
 import dolphin_memory_engine as dme
 
 import theme
+from game_memory import connect_dolphin, current_map, mario_position, read_flags
 from mailbox import read_server_checks
-from tracker import LOCATIONS, checked_state, connect_dolphin, current_map, describe_spot, mario_position, read_flags
+from tracker import LOCATIONS, checked_state, describe_spot
 
-REFRESH_MS = 200
+REFRESH_MS = 200  # five times a second
 
 
-def main():
-    # Reloaded when the data is regenerated (new locations), so a running window stays current
-    loaded = {"mtime": None, "locations": []}
+def unchecked_here(locations, map_name, flags, server):
+    """The text listing a map's unchecked locations."""
+    left = [loc for loc in locations if loc["map"] == map_name and checked_state(loc, flags, server) == " "]
+    if not left:
+        return "No unchecked locations in this map"
+    rows = []
+    for loc in left:
+        item = loc["name"].split(" - ", 1)[1].rsplit(" (", 1)[0]
+        rows.append(f"[ ] {item}: {describe_spot(loc)}")
+    return "Unchecked here:\n" + "\n".join(rows)
 
-    def current_locations():
-        mtime = os.path.getmtime(LOCATIONS)
-        if mtime != loaded["mtime"]:
-            loaded["locations"] = json.load(open(LOCATIONS))["locations"]
-            loaded["mtime"] = mtime
-        return loaded["locations"]
 
+def make_window():
+    """The window: Mario's position (big), the map name, and the list. Returns them all."""
     root = tk.Tk()
     theme.apply(root)
     root.title("SPM coords")
@@ -41,6 +45,21 @@ def main():
     here.pack(fill="x", padx=8)
     nearby = tk.Label(root, font=font, anchor="w", justify="left")
     nearby.pack(fill="x", padx=8, pady=(4, 8))
+    return root, position, here, nearby
+
+
+def main():
+    # The location list, reloaded when it's regenerated, so a running window stays current
+    loaded = {"mtime": None, "locations": []}
+
+    def current_locations():
+        mtime = os.path.getmtime(LOCATIONS)
+        if mtime != loaded["mtime"]:
+            loaded["locations"] = json.load(open(LOCATIONS))["locations"]
+            loaded["mtime"] = mtime
+        return loaded["locations"]
+
+    root, position, here, nearby = make_window()
 
     def update():
         try:
@@ -50,16 +69,7 @@ def main():
             flags = read_flags()
             position.config(text=f"x {x:.0f}   height {y:.0f}   depth {z:.0f}")
             here.config(text=f"Map: {map_name}")
-            server = read_server_checks()
-            left = [loc for loc in current_locations() if loc["map"] == map_name and checked_state(loc, flags, server) == " "]
-            if left:
-                rows = []
-                for loc in left:
-                    item = loc["name"].split(" - ", 1)[1].rsplit(" (", 1)[0]
-                    rows.append(f"[ ] {item}: {describe_spot(loc)}")
-                nearby.config(text="Unchecked here:\n" + "\n".join(rows))
-            else:
-                nearby.config(text="No unchecked locations in this map")
+            nearby.config(text=unchecked_here(current_locations(), map_name, flags, read_server_checks()))
         except RuntimeError as e:
             dme.un_hook()
             position.config(text="Waiting for the game")

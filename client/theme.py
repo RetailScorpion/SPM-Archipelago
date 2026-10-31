@@ -15,11 +15,13 @@ BUTTON = "#333333"
 SELECTION = "#264f78"
 DISABLED = "#6a6a6a"
 
-DWMWA_USE_IMMERSIVE_DARK_MODE = 20  # Windows 10 20H1 and later
-SWP_FRAME_ONLY = 0x0027  # SetWindowPos: SWP_NOSIZE | SWP_NOMOVE | SWP_NOZORDER | SWP_FRAMECHANGED
+# Windows settings used for the dark title bar
+DWMWA_USE_IMMERSIVE_DARK_MODE = 20  # "dark title bar" (Windows 10 version 20H1 and later)
+SWP_FRAME_ONLY = 0x0027  # redraw only the frame: don't resize, move or reorder the window
 
 
 def apply(root):
+    """Gives a new window the dark colours (and, on Windows, a dark title bar)."""
     root.tk_setPalette(background=BACKGROUND, foreground=TEXT, activeBackground=BUTTON, activeForeground=TEXT,
                        highlightBackground=BACKGROUND, highlightColor=MUTED, insertBackground=TEXT,
                        selectBackground=SELECTION, selectForeground=TEXT, selectColor=BUTTON,
@@ -31,6 +33,7 @@ def apply(root):
 
 
 def dark_title_bar(root):
+    """Asks Windows to draw the window's title bar dark, then to redraw its frame."""
     root.update_idletasks()
     hwnd = ctypes.windll.user32.GetParent(root.winfo_id())
     on = ctypes.c_int(1)

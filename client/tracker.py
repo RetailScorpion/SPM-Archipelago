@@ -1,67 +1,47 @@
-"""Quick auto tracker: which locations you've checked, read live from the game through Dolphin.
+"""SPM Tracker: which locations you've checked, read live from the game through Dolphin.
 
-Reads each location's save flag (the same way the Archipelago client detects checks) and lists every
-location by level and map, with its vanilla item and rough spot (or how to trigger it, for the
-story gifts: character joins, the Helmet, Bestovius's lesson), plus the Pure Hearts held. Every level is listed with its
-status (Complete, checked/total, or no checks). The map you're in is marked.
-Refreshes when something changes, in its own window that keeps where you've scrolled to. Read-only:
-it never writes to the game.
+It reads each location's save flag (the same way the Archipelago client notices checks) and lists
+every location by level and map, with its vanilla item and roughly where it is (or, for the story
+gifts, how to get it), plus the Pure Hearts held. Each level shows its status: Complete,
+checked/total, or no checks. The map you're in is marked "<- here".
+
+A location also counts as checked if the Archipelago server has it, even when the loaded save doesn't
+(after a reset or a reload without saving). The client shares that list in a file while it runs.
+
+The window refreshes when something changes and keeps where you've scrolled to. It only reads: it
+never writes to the game.
 
 Positions are the game's own coordinates: x runs left to right along the level, y is height, z is
-depth. coords.py shows Mario's own position, to compare.
+depth. SPM Coords (coords.py) shows Mario's own position, to compare.
 
 Usage: pyw -3 -E tracker.py [--missing]   (--missing: hide checked locations)
 """
 
 import json
 import os
-import struct
 import sys
 import tkinter as tk
 
 import dolphin_memory_engine as dme
 
 import theme
-from mailbox import GP_PTR, GSWF_OFFSET, Mailbox, read_server_checks
+from game_memory import connect_dolphin, current_map, mario_position, read_flags  # noqa: F401 (used by coords.py)
+from mailbox import Mailbox, read_server_checks
 
+# The location list made by tools/gen_ap_data.py
 LOCATIONS = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "ap_locations.json")
-MAP_NAME_OFFSET = 0x44  # SpmarioGlobals mapName
-MARIO_WORK = 0x804CD458  # marioGetPtr() (US 1.0)
-MARIO_POSITION = 0x5C    # MarioWork position (x, y, z floats)
-POLL_MS = 1000
-HEART_FLAG_BASE = 7168 + 24  # AP_GSWF_HEART(1) (mod/include/savedata.h)
+REFRESH_MS = 1000
+HEART_FLAG_BASE = 7168 + 24  # Pure Heart 1's save flag (mod save_data.h AP_GSWF_HEART)
 HEART_COUNT = 7              # the tower's doors
 
 
-def connect_dolphin():
-    """Only the game is needed, not the mod's mailbox: the save flags work with any mod version."""
-    if not dme.is_hooked():
-        dme.hook()
-    if not dme.is_hooked():
-        raise RuntimeError("Dolphin isn't running, or no game is loaded")
-    if dme.read_bytes(0x80000000, 6) != b"R8PE01":
-        raise RuntimeError("Super Paper Mario (USA) isn't running")
-
-
-def read_flags():
-    return dme.read_bytes(dme.read_word(GP_PTR) + GSWF_OFFSET, 1024)
-
-
-def current_map():
-    return dme.read_bytes(dme.read_word(GP_PTR) + MAP_NAME_OFFSET, 32).split(b"\0")[0].decode(errors="replace")
-
-
-def mario_position():
-    return struct.unpack(">3f", dme.read_bytes(MARIO_WORK + MARIO_POSITION, 12))
-
-
 def checked_state(loc, flags, server):
-    """'x': checked, in the loaded save or on the server (lost to a reset or a reload without saving;
-    the client re-delivers its item). ' ': not checked."""
+    """'x' if a location is checked (in the loaded save, or on the server), ' ' if not."""
     return "x" if Mailbox.flag_set(flags, loc["flag"]) or loc["flag"] in server else " "
 
 
 def describe_spot(loc):
+    """Where a location is: its spot and position, or how to get it (story gifts)."""
     if loc["kind"] == "gift":
         return loc["where"]
     if loc["pos"] is None:
@@ -71,51 +51,62 @@ def describe_spot(loc):
 
 
 def pure_hearts(flags):
-    """'Pure Hearts: 1 3 5 7' from the mod's heart flags (doors.h), or a note when the save has none."""
+    """'Pure Hearts (doors open): 1 3 5 7', or a note when the save has none."""
     held = [n for n in range(1, HEART_COUNT + 1) if Mailbox.flag_set(flags, HEART_FLAG_BASE + n - 1)]
     if not held:
         return "Pure Hearts: none (every door is open without the client)"
     return "Pure Hearts (doors open): " + " ".join(map(str, held))
 
 
+def level_status(entries):
+    """A level's status: "no checks", "Complete", or "checked/total"."""
+    done = sum(state != " " for _, state in entries)
+    if not entries:
+        return "no checks"
+    if done == len(entries):
+        return "Complete"
+    return f"{done}/{len(entries)}"
+
+
+def location_line(loc, state, here):
+    """One location's line: [x] map  item  where  (<- here if Mario is in that map)."""
+    item = loc["name"].split(" - ", 1)[1].rsplit(" (", 1)[0]
+    marker = "<- here" if loc["map"] == here else ""
+    return f"  [{state}] {loc['map']:7} {item:28} {describe_spot(loc)} {marker}"
+
+
 def render(levels, locations, flags, here, missing_only, mario=None, server=frozenset()):
-    """Every level, with its status; under it, its locations (only the unchecked ones with --missing).
-    server: the save flags of the locations the server has as checked (read_server_checks)."""
+    """The tracker's whole text: a summary, then every level with its status and, under it, its
+    locations (only the unchecked ones with --missing). `server` is the set of save flags of the
+    locations the server has as checked."""
     by_level = {title: [] for title in levels}
     for loc in locations:
         by_level.setdefault(loc["name"].split(" - ")[0], []).append((loc, checked_state(loc, flags, server)))
-    total = sum(len(v) for v in by_level.values())
-    done_total = sum(state != " " for v in by_level.values() for _, state in v)
+    total = sum(len(entries) for entries in by_level.values())
+    done_total = sum(state != " " for entries in by_level.values() for _, state in entries)
+
     lines = [f"Super Paper Mario tracker: {done_total}/{total} checked   (you're in {here})", pure_hearts(flags)]
     if mario is not None:
         x, y, z = mario
         lines.append(f"Mario: x {x:.0f}, height {y:.0f}, depth {z:.0f}")
     lines.append("")
     for title, entries in by_level.items():
-        done = sum(state != " " for _, state in entries)
-        if not entries:
-            status = "no checks"
-        elif done == len(entries):
-            status = "Complete"
-        else:
-            status = f"{done}/{len(entries)}"
-        lines.append(f"{title}  -  {status}")
+        lines.append(f"{title}  -  {level_status(entries)}")
         for loc, state in entries:
             if missing_only and state != " ":
                 continue
-            item = loc["name"].split(" - ", 1)[1].rsplit(" (", 1)[0]
-            marker = "<- here" if loc["map"] == here else ""
-            lines.append(f"  [{state}] {loc['map']:7} {item:28} {describe_spot(loc)} {marker}")
+            lines.append(location_line(loc, state, here))
     return "\n".join(lines)
 
 
 def load_locations():
+    """(the level titles, every location sorted by map and name), from the location list."""
     data = json.load(open(LOCATIONS))
     return data["levels"], sorted(data["locations"], key=lambda l: (l["map"], l["name"]))
 
 
-def main():
-    missing_only = "--missing" in sys.argv
+def make_window():
+    """The tracker window: a scrolling text box. Returns (window, text box)."""
     root = tk.Tk()
     theme.apply(root)
     root.title("SPM tracker")
@@ -125,32 +116,42 @@ def main():
     text = tk.Text(root, font=("Consolas", 11), wrap="none", yscrollcommand=scroll.set)
     text.pack(side="left", fill="both", expand=True)
     scroll.config(command=text.yview)
+    return root, text
+
+
+def show(text, screen):
+    """Replaces the text, staying scrolled where it was."""
+    top = text.yview()[0]
+    text.config(state="normal")
+    text.delete("1.0", "end")
+    text.insert("1.0", screen)
+    text.config(state="disabled")
+    text.yview_moveto(top)
+
+
+def main():
+    missing_only = "--missing" in sys.argv
+    root, text = make_window()
     state = {"last": None, "mtime": None, "levels": None, "locations": None}
 
     def refresh():
-        # Reload when the data is regenerated (new locations), so a running tracker stays current
+        # Reload the list when it's regenerated (new locations), so a running tracker stays current
         mtime = os.path.getmtime(LOCATIONS)
         if mtime != state["mtime"]:
             state["levels"], state["locations"] = load_locations()
             state["mtime"] = mtime
         try:
             connect_dolphin()
-            # No Mario position here (coords.py shows it): the text only changes when a check or the map does
+            # No Mario position here (SPM Coords shows it): the text only changes with a check or the map
             screen = render(state["levels"], state["locations"], read_flags(), current_map(), missing_only,
                             server=read_server_checks())
         except RuntimeError as e:
             dme.un_hook()
             screen = f"Waiting for the game: {e}"
         if screen != state["last"]:
-            # Replace the text but stay scrolled where you were
-            top = text.yview()[0]
-            text.config(state="normal")
-            text.delete("1.0", "end")
-            text.insert("1.0", screen)
-            text.config(state="disabled")
-            text.yview_moveto(top)
+            show(text, screen)
             state["last"] = screen
-        root.after(POLL_MS, refresh)
+        root.after(REFRESH_MS, refresh)
 
     refresh()
     root.mainloop()
