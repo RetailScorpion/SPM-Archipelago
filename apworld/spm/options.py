@@ -1,3 +1,10 @@
+"""The options players set in their YAML.
+
+Each class is one option. Its text (the docstring) is what Archipelago shows on the options page and
+in the YAML template; display_name is its title there. SPMOptions at the bottom lists them all, by the
+name used in the YAML.
+"""
+
 from dataclasses import dataclass
 
 from Options import Choice, DefaultOnToggle, OptionSet, PerGameCommonOptions, Range, Toggle

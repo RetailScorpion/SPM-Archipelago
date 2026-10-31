@@ -1,5 +1,12 @@
-"""Client side of the mod's mailbox (mod/include/mailbox.h) and the game memory around it.
-Keep the layout in sync with the mod. Used by the Archipelago client and the dev tools in client/."""
+"""The client's connection to the game: the mod's mailbox, and reading the game's memory.
+
+The client reads and writes the game's memory through Dolphin, using the dolphin_memory_engine
+library. The mod keeps a "mailbox" there (mod/include/mailbox.h): a block of memory the two share.
+This file finds it and reads and writes its fields. The layout below must match the mod's exactly:
+each OFF_ number is where a field sits, in bytes from the mailbox's start.
+
+Used by the Archipelago client and by the tools in client/ (tracker, coords, SPM Archipelago Tools).
+"""
 
 import json
 import os
@@ -8,11 +15,14 @@ import time
 
 import dolphin_memory_engine as dme
 
-MAGIC = b"SPMAP_MAILBOX_v1"
-VERSION = 12
-RECV_SIZE = 16
-SENT_SIZE = 32
+# ---- The mailbox's layout (mod/include/mailbox.h) ----
 
+MAGIC = b"SPMAP_MAILBOX_v1"  # the text the client searches memory for
+VERSION = 12                 # the mod and client must agree on this
+RECV_SIZE = 16               # items waiting to be given
+SENT_SIZE = 32               # locations waiting (developer tools only)
+
+# The Wii's main memory, where the mailbox is searched for, one piece at a time
 MEM1_START = 0x80000000
 MEM1_SIZE = 0x01800000
 SCAN_CHUNK = 0x100000
@@ -41,27 +51,32 @@ OFF_PLAY_CUTSCENES = 0x130
 OFF_GIFT_ITEMS = 0x134
 OFF_STARTING_HEARTS = 0x144
 OFF_GAME_FRAMES = 0x148
-GIFT_FLAG_BASE = 7168 + 16  # AP_GSWF_GIFT_BASE (mod/include/savedata.h)
-RECV_ALREADY_GIVEN = 0x8000
-NO_SAVE = 0xFFFFFFFF
-LOC_NAME_SIZE = 0x40  # apitem::LocName: u16 flag, u16 kind, char item[36], char player[24]
-LOC_KIND_OTHER_WORLD, LOC_KIND_TRAP, LOC_KIND_OTHER_WORLD_FILLER = 0, 1, 2  # apitem.h LocKind
-GSWF_OFFSET = 0x144   # SpmarioGlobals gswf[256]: flag n is bit (n & 31) of word (n >> 5)
+GIFT_FLAG_BASE = 7168 + 16  # the first story gift's save flag (save_data.h AP_GSWF_GIFT_BASE)
+RECV_ALREADY_GIVEN = 0x8000  # marks an item the game already gave (the mod only counts it)
+NO_SAVE = 0xFFFFFFFF         # savedRecvCount when no save is loaded
+LOC_NAME_SIZE = 0x40  # one entry of the names list (archipelago_item.h LocName): 2 bytes flag,
+                      # 2 bytes kind, 36 bytes item name, 24 bytes player name
+LOC_KIND_OTHER_WORLD, LOC_KIND_TRAP, LOC_KIND_OTHER_WORLD_FILLER = 0, 1, 2  # archipelago_item.h LocKind
 DEBUG_JOINS_GIVE_NOTHING = 0x1
 DEBUG_JOINS_GIVE_PLACEHOLDER = 0x2
-STORY_SLOTS_GSW = 1792  # mod/include/savedata.h AP_GSW_STORY_SLOTS
-GSW_OFFSET = 0x544
-
-STORY_SLOT_COUNT = 9
-GP_PTR = 0x8056D198  # US 1.0: pointer to SpmarioGlobals
-GSW0_OFFSET = 0x140
 
 STATE_BOOT, STATE_TITLE, STATE_IN_GAME = 0, 1, 2  # mailbox.h ModState
 STATE_NAMES = {STATE_BOOT: "boot", STATE_TITLE: "title", STATE_IN_GAME: "in game"}
 
-# The locations the server has as checked, kept by the client for the tracker and coords windows: a
-# location checked and then lost to a reset or a reload without saving is still checked there.
-# Written while the client is connected; older than SERVER_CHECKS_STALE seconds means it isn't
+# ---- The game's own memory (US 1.0) ----
+
+GP_PTR = 0x8056D198   # where the game keeps the address of its main state (SpmarioGlobals)
+GSW0_OFFSET = 0x140   # the story value, in that state
+GSWF_OFFSET = 0x144   # the save flags: flag n is bit (n & 31) of 4-byte word (n >> 5)
+GSW_OFFSET = 0x544    # the save bytes
+STORY_SLOTS_GSW = 1792  # each chapter's own story value (save_data.h AP_GSW_STORY_SLOTS)
+STORY_SLOT_COUNT = 9
+
+# ---- The file shared with the tracker ----
+
+# The locations the server has as checked, kept by the client for the tracker and coords windows, so a
+# location checked and then lost to a reset (or a reload without saving) still shows as checked.
+# Written while the client is connected; older than SERVER_CHECKS_STALE seconds means it isn't.
 SERVER_CHECKS_PATH = os.path.join(os.environ.get("LOCALAPPDATA") or os.path.expanduser("~"),
                                   "SPM_Archipelago", "server_checks.json")
 SERVER_CHECKS_HEARTBEAT = 5
@@ -89,11 +104,15 @@ def read_server_checks() -> set[int]:
         return set()
 
 
+# ---- The mailbox ----
+
 class MailboxError(Exception):
-    pass
+    """Something is missing: Dolphin, the game, or the mod."""
 
 
 class Mailbox:
+    """The mod's mailbox in the running game. connect() first, then read and write its fields."""
+
     def __init__(self):
         self.addr = None
 
@@ -108,7 +127,7 @@ class Mailbox:
             if found_id != game_id:
                 raise MailboxError(f"Wrong game in Dolphin: {found_id!r}, expected {game_id!r}")
             candidates = self._scan()
-            # the magic string also exists in the mod's constant data; the real mailbox has a version after it
+            # The text also sits in the mod's own data; the real mailbox has a version number after it
             versions = {addr: dme.read_word(addr + OFF_VERSION) for addr in candidates}
         except RuntimeError as e:
             # Dolphin closed or stopped the game mid-read
@@ -122,9 +141,9 @@ class Mailbox:
         self.addr = matching[0]
 
     def _scan(self) -> list[int]:
-        """Every word-aligned address of MAGIC in MEM1."""
+        """Every address of MAGIC in main memory (only addresses divisible by 4 count)."""
         found = []
-        # chunks overlap by len(MAGIC) so a match can't straddle two reads
+        # The pieces overlap by len(MAGIC), so a match can't be split between two reads
         for start in range(MEM1_START, MEM1_START + MEM1_SIZE, SCAN_CHUNK):
             size = min(SCAN_CHUNK + len(MAGIC), MEM1_START + MEM1_SIZE - start)
             chunk = dme.read_bytes(start, size)
@@ -136,11 +155,13 @@ class Mailbox:
         return found
 
     def mod_state(self) -> int:
+        """STATE_BOOT, STATE_TITLE or STATE_IN_GAME."""
         return dme.read_word(self.addr + OFF_MOD_STATE)
 
-    # Archipelago
+    # ---- Used by the Archipelago client ----
 
     def relf_base(self) -> int:
+        """Where the game's map script file (relF.rel) starts in memory."""
         return dme.read_word(self.addr + OFF_RELF_BASE)
 
     def saved_recv_count(self) -> int:
@@ -148,6 +169,7 @@ class Mailbox:
         return dme.read_word(self.addr + OFF_SAVED_RECV)
 
     def recv_pending(self) -> int:
+        """How many items in the mailbox are waiting to be given."""
         return dme.read_word(self.addr + OFF_RECV_COUNT) - dme.read_word(self.addr + OFF_RECV_HANDLED)
 
     def queue_received(self, item_id: int, already_given: bool):
@@ -188,6 +210,7 @@ class Mailbox:
         dme.write_word(self.addr + OFF_STARTING_HEARTS, sum(1 << (n - 1) for n in hearts))
 
     def set_play_cutscenes(self, play: bool):
+        """Whether the mod plays the story scenes it can skip."""
         dme.write_word(self.addr + OFF_PLAY_CUTSCENES, 1 if play else 0)
 
     def read_flags(self) -> bytes:
@@ -200,11 +223,14 @@ class Mailbox:
 
     @staticmethod
     def flag_set(flags: bytes, flag: int) -> bool:
+        """Whether save flag `flag` is set, in flags read by read_flags."""
         word = struct.unpack_from(">I", flags, 4 * (flag >> 5))[0]
         return bool((word >> (flag & 31)) & 1)
 
+    # ---- Used by the tools in client/ ----
+
     def give(self, item_id: int):
-        """Queues an item for the mod to give. Waits if the queue is full."""
+        """Queues an item for the mod to give. Waits if the mailbox is full."""
         while True:
             count = dme.read_word(self.addr + OFF_RECV_COUNT)
             handled = dme.read_word(self.addr + OFF_RECV_HANDLED)
@@ -230,6 +256,7 @@ class Mailbox:
         dme.write_word(self.addr + OFF_WARP_REQUEST, 1)
 
     def set_debug_flag(self, flag: int, on: bool):
+        """Debug: switches a DEBUG_ test setting on or off."""
         flags = dme.read_word(self.addr + OFF_DEBUG_FLAGS)
         dme.write_word(self.addr + OFF_DEBUG_FLAGS, (flags | flag) if on else (flags & ~flag))
 

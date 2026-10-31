@@ -1,42 +1,25 @@
-"""Super Paper Mario client: connects the Archipelago server to the game through Dolphin.
+"""The Super Paper Mario Client: connects the Archipelago server to the game running in Dolphin.
 
-The mod (loaded by the patched game) keeps a mailbox in memory (game_link.py). This client:
-  - writes each location's item into the game: the item argument of the script instruction that spawns
-    it (relF stays loaded all game), the Pixl join table, and the names shown for other worlds' items
-  - reports a location when its save flag is set
-  - feeds items from the server into the mailbox, from the loaded save's count; items for this world
-    found here were already given by the game, so they're only counted
-  - reports the goal when Chapter 8's story value reaches GOAL_STORY_VALUE
-Connect before entering levels: placements only apply once the client has written them.
+It runs in the Archipelago Launcher. Every half second it:
+  1. finds the mod's mailbox in the game's memory (game_link.py), if it hasn't yet
+  2. writes the seed's settings into the mailbox (cutscenes, starting Pure Hearts)
+  3. when a save is loaded, writes every location's item into the game (placement.py)
+  4. reads checked locations and sends them to the server, puts items from the server into the
+     mailbox, and checks the goal (checks.py)
+
+Connect before entering a level: a level's items are only changed once the client has written them.
 """
 
 import asyncio
-import random
-import time
 
 import Utils
-from BaseClasses import ItemClassification
 from CommonClient import ClientCommandProcessor, CommonContext, get_base_parser, gui_enabled, logger, server_loop
-from NetUtils import ClientStatus
 
-from .data import ID_BASE, LOCATIONS
-from .game_link import (GIFT_FLAG_BASE, JOIN_ITEM_OTHER_WORLD, LOC_KIND_OTHER_WORLD, LOC_KIND_OTHER_WORLD_FILLER,
-                        LOC_KIND_TRAP, NO_SAVE, RECV_SIZE, SERVER_CHECKS_HEARTBEAT,
-                        STATE_IN_GAME, Mailbox, MailboxError, write_server_checks)
+from . import checks, placement
+from .game_link import STATE_IN_GAME, Mailbox, MailboxError
+from .items import GAME
 
-GAME = "Super Paper Mario"
-AP_ITEM = 63               # the mod's stand-in for other worlds' items (apitem.cpp)
-COIN = 1                  # what a spot holds once its item was already delivered to the loaded save
-SERVER_ONLY_FIRST = 1001   # SPM ids from here (Pure Hearts, traps) aren't game items: shown as the AP item
-HEARTS = range(1001, 1009) # Pure Hearts, always delivered from the server (mod doors.h PURE_HEART_ITEM_FIRST)
-TRAP = 1100                # Cursya Trap (mod apitem.h TRAP_ITEM_ID): found here, the mod plays it itself
-# What a trap here looks like: one of the key items placed in the game's own spots (Pixls have no
-# world-item sprite, characters crash the world-item pickup)
-DISGUISES = sorted({vanilla for _, _, category, vanilla, _, _ in LOCATIONS if category == "key_item"})
-GOAL_CHAPTER = 8
-GOAL_STORY_VALUE = 417     # ls4_12, the final boss arena
 POLL_SECONDS = 0.5
-STALLED_POLLS_RECONNECT = 5  # polls without the game running before looking for the mailbox again
 
 
 class SPMCommandProcessor(ClientCommandProcessor):
@@ -48,28 +31,30 @@ class SPMCommandProcessor(ClientCommandProcessor):
 
 
 class SPMContext(CommonContext):
+    """Everything the client keeps track of."""
+
     game = GAME
-    items_handling = 0b111  # every item, including this world's own (local ones are only counted)
+    items_handling = 0b111  # every item, including this world's own (found here: only counted)
     command_processor = SPMCommandProcessor
 
     def __init__(self, server_address, password):
         super().__init__(server_address, password)
         self.mailbox = None
         self.game_status = "Waiting for Dolphin"
-        self.scouted = {}          # AP location id -> NetworkItem
-        self.placed = False        # placements written for the current game session
-        self.queued_upto = None    # server item index queued into the mailbox
+        self.scouted = {}            # location id -> the item there (from the server)
+        self.placed = False          # items written into the game for the current save
+        self.queued_upto = None      # how many server items have been put in the mailbox
         self.goal_sent = False
-        self.last_frame = None     # the game's frame counter at the last poll
-        self.last_flags = None     # the save flags at the last poll
-        self.coin_locations = set()  # location indexes whose item the loaded save already got delivered
-        self.was_in_game = False   # the mod reported a loaded save at the last poll
-        self.stalled_polls = 0     # polls in a row with the mod's frame count not moving
-        self.mailbox_addr = None   # where the mailbox was found last
+        self.last_frame = None       # the mod's frame counter at the last check
+        self.last_flags = None       # the save flags at the last check
+        self.coin_locations = set()  # locations whose item the loaded save already got delivered
+        self.was_in_game = False     # whether a save was loaded at the last check
+        self.stalled_polls = 0       # checks in a row with the frame counter not moving
+        self.mailbox_addr = None     # where the mailbox was found last
         self.slot_options = {}
         self.starting_chapters = []
-        self.shared_checks = None  # (seed, slot, flags) last written for the tracker
-        self.shared_at = 0.0       # when it was written
+        self.shared_checks = None    # (seed, slot, flags) last written for the tracker
+        self.shared_at = 0.0         # when it was written
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
@@ -78,13 +63,15 @@ class SPMContext(CommonContext):
         await self.send_connect()
 
     def on_package(self, cmd: str, args: dict):
+        """Messages from the server: on connecting, ask what every location holds."""
         if cmd == "Connected":
             self.slot_options = args.get("slot_data", {}).get("options", {})
             self.starting_chapters = args.get("slot_data", {}).get("starting_chapters", [])
             self.scouted = {}
             self.placed = False
             self.goal_sent = False
-            Utils.async_start(self.send_msgs([{"cmd": "LocationScouts", "locations": list(self.missing_locations | self.checked_locations), "create_as_hint": 0}]))
+            every_location = list(self.missing_locations | self.checked_locations)
+            Utils.async_start(self.send_msgs([{"cmd": "LocationScouts", "locations": every_location, "create_as_hint": 0}]))
         elif cmd == "LocationInfo":
             for item in args["locations"]:
                 self.scouted[item.location] = item
@@ -95,206 +82,91 @@ class SPMContext(CommonContext):
         ui.base_title = "Super Paper Mario Client"
         return ui
 
-    # Game side
 
-    def item_shown(self, network_item) -> tuple[int, bool]:
-        """(SPM item id shown at a location, belongs to another world)."""
-        if network_item.player == self.slot and network_item.item - ID_BASE < SERVER_ONLY_FIRST:
-            return network_item.item - ID_BASE, False
-        return AP_ITEM, True
+# ---- The loop ----
 
-    def disguise(self, location: int) -> int:
-        """A trap's look: a key item not received yet (the same one each time for a location)."""
-        received = {item.item - ID_BASE for item in self.items_received if item.player == self.slot}
-        choices = [item for item in DISGUISES if item not in received] or DISGUISES
-        return random.Random(f"{self.seed_name}-{location}").choice(choices)
+def find_mailbox(ctx: SPMContext):
+    """Finds the mod's mailbox in the game's memory."""
+    mb = Mailbox()
+    mb.connect()
+    # Found again in the same place (the game was paused, say the Wii Remote disconnected): same mod,
+    # same items. A save reload or a reset is caught by the mod leaving the game first (was_in_game)
+    if mb.addr != ctx.mailbox_addr:
+        ctx.placed = False
+        ctx.mailbox_addr = mb.addr
+    ctx.mailbox = mb
+    status = f"Connected to the game (mailbox at {mb.addr:#010x})"
+    if status != ctx.game_status:
+        ctx.game_status = status
+        logger.info(status)
 
-    def received_here(self, flags) -> set[int]:
-        """Locations (indexes) holding this world's items that the loaded save got delivered rather than
-        found there (found after it was saved, or sent by mistake): they hold a coin instead, so
-        picking them up again doesn't give the item twice. Pure Hearts never come from their spot."""
-        found = set()
-        for item in self.items_received[:self.queued_upto or 0]:
-            index = item.location - ID_BASE
-            if (item.player == self.slot and 0 <= index < len(LOCATIONS) and item.item - ID_BASE not in HEARTS
-                    and not Mailbox.flag_set(flags, LOCATIONS[index][4])):
-                found.add(index)
-        return found
 
-    def write_placements(self):
-        mb = self.mailbox
-        names, failed = [], 0
-        for i, (name, kind, _, vanilla, flag, patches) in enumerate(LOCATIONS):
-            network_item = self.scouted.get(ID_BASE + i)
-            if network_item is None:
-                continue
-            shown, foreign = self.item_shown(network_item)
-            placed = shown
-            if i in self.coin_locations:
-                shown = COIN
-                if kind == "join":
-                    mb.set_join_item(vanilla, COIN)
-                elif kind == "gift":
-                    mb.set_gift_item(flag - GIFT_FLAG_BASE, COIN)
-                for offset, original in patches:
-                    if not mb.patch_relf(offset, original, COIN, (placed, self.disguise(ID_BASE + i))):
-                        failed += 1
-                continue
-            if network_item.player == self.slot and network_item.item - ID_BASE == TRAP:
-                # Spawned items look like a key item; joins and gifts give the AP item. The mod turns
-                # either into the trap's item-get
-                names.append((flag, "Cursya Trap", "", LOC_KIND_TRAP))
-                shown = self.disguise(ID_BASE + i)
-            elif foreign:
-                names.append((flag, self.item_names.lookup_in_slot(network_item.item, network_item.player),
-                              self.player_names.get(network_item.player, "someone"),
-                              LOC_KIND_OTHER_WORLD if network_item.flags & (ItemClassification.progression | ItemClassification.useful)
-                              else LOC_KIND_OTHER_WORLD_FILLER))
-            if kind == "join":
-                mb.set_join_item(vanilla, JOIN_ITEM_OTHER_WORLD if foreign else shown)
-            elif kind == "gift":
-                mb.set_gift_item(flag - GIFT_FLAG_BASE, JOIN_ITEM_OTHER_WORLD if foreign else shown)
-            for offset, original in patches:
-                if not mb.patch_relf(offset, original, shown, (placed, COIN)):
-                    failed += 1
-        mb.write_loc_names(names)
-        if failed:
-            logger.warning(f"{failed} item placements didn't match the game; are you on US 1.0 with the matching mod?")
-        logger.info(f"Placed items at {len(self.scouted)} locations")
+def send_seed_settings(ctx: SPMContext):
+    """Writes the seed's settings into the mailbox. Done before a save is loaded too, since a new
+    file's opening reads them right away."""
+    ctx.mailbox.set_play_cutscenes(not ctx.slot_options.get("skip_cutscenes", True))
+    ctx.mailbox.set_starting_hearts(ctx.starting_chapters)
 
-    def game_running(self) -> bool:
-        """The mod ran in a loaded save since the last poll. A Dolphin reset keeps memory: the old mod's
-        mailbox still says a save is loaded while the game reboots, with memory half old, half new.
-        Nothing is read then."""
-        frame = self.mailbox.game_frames()
-        running = self.last_frame is not None and frame != self.last_frame
-        self.stalled_polls = 0 if running else self.stalled_polls + 1
-        self.last_frame = frame
-        if self.stalled_polls >= STALLED_POLLS_RECONNECT:
-            # Paused, or reset with the new mod's mailbox elsewhere: look for it again (quietly: the
-            # status only changes, and is logged, if it's somewhere else now)
-            self.stalled_polls = 0
-            self.last_frame = None
-            self.mailbox = None
-            return False
-        return running
 
-    def check_locations(self, flags):
-        # Only flags that read the same twice in a row (one poll apart) count
-        stable, self.last_flags = self.last_flags == flags, flags
-        if not stable:
-            return
-        new = []
-        for i, (_, _, _, _, flag, _) in enumerate(LOCATIONS):
-            location = ID_BASE + i
-            if location in self.missing_locations and Mailbox.flag_set(flags, flag):
-                new.append(location)
-        if new:
-            Utils.async_start(self.send_msgs([{"cmd": "LocationChecks", "locations": new}]))
+def update_game(ctx: SPMContext):
+    """Places items, reads checks and sends items, while a save is loaded."""
+    if not ctx.placed and ctx.scouted:
+        placement.write_placements(ctx)
+        ctx.placed = True
+    if not checks.game_running(ctx) or ctx.mailbox is None:
+        return
+    flags = ctx.mailbox.read_flags()
+    checks.check_locations(ctx, flags)
+    checks.feed_items(ctx, flags)
+    # Spots whose item the loaded save already got hold a coin (from the next map load)
+    coins = placement.delivered_not_found(ctx, flags)
+    if ctx.scouted and coins != ctx.coin_locations:
+        ctx.coin_locations = coins
+        placement.write_placements(ctx)
+    checks.check_goal(ctx)
 
-    def feed_items(self, flags):
-        mb = self.mailbox
-        # Pending first: the mod updates the saved count before marking an entry handled, so with
-        # nothing pending the count read after it is current
-        pending = mb.recv_pending()
-        saved = mb.saved_recv_count()
-        if saved == NO_SAVE:
-            self.queued_upto = None
-            return
-        # A save was loaded (or reloaded): queue again from what that save has handled
-        if self.queued_upto is None or (pending == 0 and self.queued_upto != saved):
-            self.queued_upto = saved
-        while self.queued_upto < len(self.items_received) and mb.recv_pending() < RECV_SIZE:
-            item = self.items_received[self.queued_upto]
-            # Found here: the game gave it then, if the loaded save has that location (a save from before
-            # it was found, or a check sent by mistake, gets it delivered instead)
-            index = item.location - ID_BASE
-            given_here = (item.player == self.slot and 0 <= index < len(LOCATIONS)
-                          and item.item - ID_BASE not in HEARTS
-                          and Mailbox.flag_set(flags, LOCATIONS[index][4]))
-            mb.queue_received(item.item - ID_BASE, given_here)
-            self.queued_upto += 1
 
-    def share_checks(self):
-        """Keeps the server's checked locations in a file for the tracker and coords windows."""
-        flags = frozenset(LOCATIONS[location - ID_BASE][4] for location in self.checked_locations
-                          if 0 <= location - ID_BASE < len(LOCATIONS))
-        shared = (self.seed_name, self.auth, flags)
-        if shared != self.shared_checks or time.time() - self.shared_at >= SERVER_CHECKS_HEARTBEAT:
-            try:
-                write_server_checks(self.seed_name or "", self.auth or "", flags)
-            except OSError as e:
-                logger.warning(f"Couldn't share checks with the tracker: {e}")
-            self.shared_checks, self.shared_at = shared, time.time()
+def poll_game(ctx: SPMContext):
+    """One check of the game."""
+    if ctx.slot is not None:
+        checks.share_checks(ctx)
+    if ctx.mailbox is None:
+        find_mailbox(ctx)
+    if ctx.slot is not None:
+        send_seed_settings(ctx)
 
-    def check_goal(self):
-        if self.goal_sent:
-            return
-        _, slots, _ = self.mailbox.story_state()
-        if slots[GOAL_CHAPTER] >= GOAL_STORY_VALUE:
-            self.goal_sent = True
-            Utils.async_start(self.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}]))
-            logger.info("Goal complete!")
+    in_game = ctx.slot is not None and ctx.mailbox.mod_state() == STATE_IN_GAME
+    if in_game and not ctx.was_in_game:
+        # A save was (re)loaded: that reloads the map scripts with vanilla items, so place them again
+        ctx.placed = False
+        ctx.last_flags = None
+    ctx.was_in_game = in_game
+    if in_game:
+        update_game(ctx)
 
 
 async def game_watcher(ctx: SPMContext):
+    """Checks the game every half second until the client closes."""
     while not ctx.exit_event.is_set():
         try:
-            if ctx.slot is not None:
-                ctx.share_checks()
-            if ctx.mailbox is None:
-                mb = Mailbox()
-                mb.connect()
-                # Found again where it was (the game paused: e.g. the Wii Remote disconnected): same mod,
-                # same items. A reload or reset is caught by the mod leaving the game first (was_in_game)
-                if mb.addr != ctx.mailbox_addr:
-                    ctx.placed = False
-                    ctx.mailbox_addr = mb.addr
-                ctx.mailbox = mb
-                status = f"Connected to the game (mailbox at {mb.addr:#010x})"
-                if status != ctx.game_status:
-                    ctx.game_status = status
-                    logger.info(status)
-            if ctx.slot is not None:
-                # Before a save is loaded too: a new file's opening checks it right away
-                ctx.mailbox.set_play_cutscenes(not ctx.slot_options.get("skip_cutscenes", True))
-                ctx.mailbox.set_starting_hearts(ctx.starting_chapters)
-            in_game = ctx.slot is not None and ctx.mailbox.mod_state() == STATE_IN_GAME
-            if in_game and not ctx.was_in_game:
-                # A save was (re)loaded: that reloads relF with vanilla items, so place them again
-                ctx.placed = False
-                ctx.last_flags = None
-            ctx.was_in_game = in_game
-            if in_game:
-                if not ctx.placed and ctx.scouted:
-                    ctx.write_placements()
-                    ctx.placed = True
-                if ctx.game_running() and ctx.mailbox is not None:
-                    flags = ctx.mailbox.read_flags()
-                    ctx.check_locations(flags)
-                    ctx.feed_items(flags)
-                    # Spots whose item the loaded save already got hold a coin (from the next map load)
-                    coins = ctx.received_here(flags)
-                    if ctx.scouted and coins != ctx.coin_locations:
-                        ctx.coin_locations = coins
-                        ctx.write_placements()
-                    ctx.check_goal()
+            poll_game(ctx)
         except MailboxError as e:
             if ctx.game_status != str(e):
                 ctx.game_status = str(e)
                 logger.info(f"Game: {e}")
             ctx.mailbox = None
         except RuntimeError as e:
-            # Dolphin closed or the game stopped mid-read
+            # Dolphin closed, or the game stopped in the middle of a read
             logger.info(f"Lost Dolphin ({e}); reconnecting")
             ctx.mailbox = None
         await asyncio.sleep(POLL_SECONDS)
 
 
 def main(*args):
+    """Starts the client (the Launcher calls this)."""
     Utils.init_logging("SPMClient", exception_logger="Client")
 
-    async def _main(connect, password):
+    async def run(connect, password):
         ctx = SPMContext(connect, password)
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
         if gui_enabled:
@@ -310,5 +182,5 @@ def main(*args):
     parsed = parser.parse_args(args)
     import colorama
     colorama.just_fix_windows_console()
-    asyncio.run(_main(parsed.connect, parsed.password))
+    asyncio.run(run(parsed.connect, parsed.password))
     colorama.deinit()
