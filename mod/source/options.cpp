@@ -29,6 +29,8 @@ static const OptionInfo sOptions[OPTION_COUNT] = {
 };
 
 #define INSTR_LI_R3_1 0x38600001
+// PausewinEntry state the game gives a new button or window (pluswinOpen, pluswinMapsWinOpen)
+#define ENTRY_STATE_APPEAR 10
 
 // The window, to the right of the buttons (pause menu coordinates: y up, 0 = screen centre)
 #define WIN_X -110.0f
@@ -136,6 +138,10 @@ static void windowOpen()
     sCursor = 0;
     s32 id = spm::pausewin::pausewinEntry(WIN_X, WIN_Y, WIN_WIDTH, WIN_HEIGHT, true, 0, 100, nullptr,
                                           windowMain, windowDisp, nullptr, nullptr);
+    // A new entry does nothing until it's set appearing, as the game's own menus do after creating theirs
+    spm::pausewin::PausewinEntry * entry = spm::pausewin::pausewinGetEntry(id);
+    entry->state = ENTRY_STATE_APPEAR;
+    entry->stateProgress = 0;
     for (s8 & sub : wp->submenuEntryIds)
         sub = -1;
     wp->submenuEntryIds[0] = static_cast<s8>(id);
