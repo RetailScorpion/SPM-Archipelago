@@ -149,7 +149,6 @@ def main():
     root = tk.Tk()
     theme.apply(root)
     root.title("SPM Archipelago Tools")
-    root.attributes("-topmost", True)
     font = ("Consolas", 12)
     status = tk.Label(root, font=font, anchor="w", justify="left", fg=theme.MUTED, wraplength=360)
     status.pack(fill="x", padx=8, pady=(8, 4))

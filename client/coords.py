@@ -1,4 +1,4 @@
-"""Small always-on-top window: Mario's position, the map, and that map's unchecked locations.
+"""Small window: Mario's position, the map, and that map's unchecked locations.
 
 For finding locations from the tracker's coordinates (the game's own: x left to right, height, depth).
 Read-only, like the tracker; works with any mod version.
@@ -33,7 +33,6 @@ def main():
     root = tk.Tk()
     theme.apply(root)
     root.title("SPM coords")
-    root.attributes("-topmost", True)
     root.resizable(True, True)
     font = ("Consolas", 12)
     position = tk.Label(root, font=("Consolas", 16, "bold"), anchor="w", justify="left")

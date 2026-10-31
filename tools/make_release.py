@@ -37,7 +37,7 @@ Super Paper Mario Archipelago randomizer.
   SPM Tracker            client/tracker.py    Every location by level and map, checked or not.
                                               Add --missing to hide the checked ones.
   SPM Coords             client/coords.py     Mario's position, the map, and that map's
-                                              unchecked locations (always on top).
+                                              unchecked locations.
   SPM Archipelago Tools  client/ap_tools.py   Add or remove characters, Pixls and the Save
                                               Block, set coins, and swap key items between
                                               your 32 slots and the overflow storage.
