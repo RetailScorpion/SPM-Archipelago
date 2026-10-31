@@ -58,13 +58,13 @@ Items from other worlds show up in Super Paper Mario as the Archipelago icon (gr
 - **SPM Coords** (`client/coords.py`): Mario's position, the map, and that map's unchecked locations.
 - **SPM Archipelago Tools** (`client/ap_tools.py`): add or remove characters, Pixls and the Save Block, set coins, and swap key items between your slots and storage. This one writes to the game, so use it with care.
 
-They need [Python 3](https://www.python.org) and `py -3 -m pip install dolphin-memory-engine`. Start Dolphin with the game, then run one, for example `pyw -3 client	racker.py --missing`. Keep the zip's folders as they are. Details are in its `README.txt`.
+They need [Python 3](https://www.python.org) and `py -3 -m pip install dolphin-memory-engine`. Start Dolphin with the game, then run one, for example `pyw -3 client\tracker.py --missing`. Keep the zip's folders as they are. Details are in its `README.txt`.
 
 Please report what you find, especially **what each location needs to reach**. That's the logic this prototype is meant to map out. The full list of checks is in [`logic/checks.md`](logic/checks.md).
 
 ## Credits
 - **RetailScorpion**: design, testing and direction.
-- **Claude** (Anthropic): code.
+- **Claude** (Anthropic): code. See the [AI usage disclosure](AI_DISCLOSURE.md).
 - **[SeekyCt](https://github.com/SeekyCt)**, whose tools and research this is built on:
   - [spm-rel-loader](https://github.com/SeekyCt/spm-rel-loader) (GPLv3): loads the mod into the game. Its loader code is built into the patched `main.dol`.
   - [spm-headers](https://github.com/SeekyCt/spm-headers) (MIT, and GPLv3 for its `mod/` part): the game's functions, structures and symbols the mod is written against.
