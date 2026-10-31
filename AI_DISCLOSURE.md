@@ -1,6 +1,6 @@
 # AI usage disclosure
 
-This statement covers the whole Super Paper Mario Archipelago project (this repository: the game mod, the APworld, the client, the patcher, the helper tools and the documentation). I, RetailScorpion, am the project's only developer, and I'm making this statement for all of it.
+This statement covers the whole Super Paper Mario Archipelago project (this repository: the game mod, the APworld, the client, the patcher, the helper tools and the documentation). I, RetailScorpion, am the project's only developer until further notice, and I'm making this statement for all of it.
 
 *Last updated: 2026-10-31*
 
@@ -16,8 +16,8 @@ This project was made with heavy use of AI. **Claude** (Anthropic's AI model), u
 
 - The design: what gets randomized, the options, how the game's story and progression are reworked, and every decision recorded in DESIGN.md.
 - Directing the work, reviewing it, and deciding what goes in.
-- Testing everything in the game and reporting what was broken.
-- Mapping requirements while playing (which locations need which abilities).
+- Testing everything in the game and reporting what was needed to be changed or fixed.
+- Mapping logic while playing (which locations need which abilities).
 
 ## Art
 
@@ -27,7 +27,7 @@ This project was made with heavy use of AI. **Claude** (Anthropic's AI model), u
 - **The Save Block icon** (`assets/icons/save_block.png`) was put together by a script Claude wrote, from the game's own save block textures.
 - `assets/icons/ap_blank.png` is an empty, fully transparent icon (shown when a trap gives nothing), so it contains no art.
 
-From now on, art in this project will be made by people: when a feature needs an image, I'll supply it (or commission it), and Claude will only convert it to the game's format.
+From now on, all art in this project will be made by real people. When a feature needs an image, I'll either supply it or commission it, and Claude will only convert it to the game's format.
 
 ## In the game
 
