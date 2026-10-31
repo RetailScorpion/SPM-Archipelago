@@ -172,10 +172,18 @@ static const char * replacement(const char * name)
     return i < 0 ? name : gamesyms::spssfxlist[sShuffled[i]].name;
 }
 
-// Starting an effect plays its replacement
+// The beeping the HUD repeats while health is low (Low health beeping setting)
+static bool isLowHealthSound(const char * name)
+{
+    return msl::string::strncmp(name, "SFX_SYS_PINCH1", 14) == 0 || msl::string::strncmp(name, "SFX_SYS_DANGER1", 15) == 0;
+}
+
+// Starting an effect plays its replacement (or nothing: muted low health beeping, whatever replaces it)
 static s32 (*__spsndSFXOnReal)(const char * name, u8 volume, u8 pan, s32 delay, wii::mtx::Vec3 * position, u32 param6);
 static s32 __spsndSFXOnHook(const char * name, u8 volume, u8 pan, s32 delay, wii::mtx::Vec3 * position, u32 param6)
 {
+    if (name != nullptr && !options::get(options::OPTION_LOW_HEALTH_SOUND) && isLowHealthSound(name))
+        return -1;  // what __spsndSFXOn returns when it plays nothing
     return __spsndSFXOnReal(replacement(name), volume, pan, delay, position, param6);
 }
 

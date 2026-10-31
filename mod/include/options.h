@@ -17,6 +17,7 @@ enum Option
     OPTION_SKIP_TEXT,         // holding 1 mashes through text
     OPTION_FANFARE_SHUFFLE,   // the same for tracks that play once (fanfares, chapter starts...)
     OPTION_SFX_SHUFFLE,       // every sound effect plays in place of another
+    OPTION_LOW_HEALTH_SOUND,  // off: no beeping while health is low
     OPTION_COUNT
 };
 

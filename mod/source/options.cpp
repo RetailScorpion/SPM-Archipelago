@@ -28,11 +28,12 @@ static const OptionInfo sOptions[OPTION_COUNT] = {
     {"Hold 1 to skip text", true},
     {"Shuffle fanfares", false},
     {"Shuffle sound effects", false},
+    {"Low health beeping", true},
 };
 
 // The window lists them in this order
 static const Option sOrder[OPTION_COUNT] = {OPTION_MUSIC_SHUFFLE, OPTION_FANFARE_SHUFFLE, OPTION_SFX_SHUFFLE,
-                                            OPTION_SKIP_TEXT};
+                                            OPTION_LOW_HEALTH_SOUND, OPTION_SKIP_TEXT};
 
 #define INSTR_LI_R3_1 0x38600001
 // PausewinEntry state the game gives a new button or window (pluswinOpen, pluswinMapsWinOpen)
@@ -42,12 +43,13 @@ static const Option sOrder[OPTION_COUNT] = {OPTION_MUSIC_SHUFFLE, OPTION_FANFARE
 #define WIN_X -110.0f
 #define WIN_Y 185.0f
 #define WIN_WIDTH 390.0f
-#define WIN_HEIGHT 245.0f
 #define PAD 18.0f
 #define TITLE_SCALE 0.9f
 #define ROW_SCALE 0.75f
 #define ROWS_TOP 62.0f
-#define ROW_HEIGHT 34.0f
+#define ROW_HEIGHT 32.0f
+// Tall enough for every row and the footer; it has to stay above the help box (y -120)
+#define WIN_HEIGHT (ROWS_TOP + OPTION_COUNT * ROW_HEIGHT + 48.0f)
 #define VALUE_WIDTH 60.0f
 
 static s32 sCursor;
