@@ -38,6 +38,13 @@
 // spsndBGMOn_f_d(flags, name, fadeMsec): every song starts here (spsndBGMOn and the alternate entry
 // branch to it). It looks the name up in spsbgmlist (BgmEntry[150], allocated and filled at startup)
 80239EDC:spsndBGMOn_f_d
+// The 3 music players (BgmPlayer, 0x28 each): bgmEntry, then the nw4r sound handle (null once the
+// sound has ended)
+804EFFD8:spsndBgmPlayers
+// (player, fadeMsec): brings a music player's volume back up after it was turned down (0x8023A9F4,
+// (player, volume, fadeMsec)); the item window does this to players 0 and 1 when it stops player 2's
+// jingle (itemCollectPouchItem area, 0x8007AC74)
+8023AAE8:bgm_volume_restore
 // Called only by Fleep's join scene (sp2_01), right after the join (names are guesses): with 1, the
 // first sets MarioWork flag 0x00200000 and gives an object callback 0x8012CA18, mode 6; the second
 // changes that object's mode. Tippi's pointer crashes afterwards if Mario has no Fleep

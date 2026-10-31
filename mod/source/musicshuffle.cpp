@@ -117,17 +117,141 @@ static const char * replacement(const char * name)
     return name;
 }
 
+/*
+    A shuffled jingle plays all the way through. The game times what follows a jingle by the original
+    one (the item window stops music player 2 and brings the others back up after 1-3 seconds), so
+    while a replacement jingle is still playing, what the game asks of its player (stop it, or start
+    another track on it) waits until it ends, and so does bringing the other players' volume back up.
+*/
+#define BGM_PLAYERS 3
+#define BGM_FLAGS_PLAYER 0xF
+// Longest wait for a jingle (the credits are a play-once track too, minutes long)
+#define HOLD_MAX_FRAMES (60 * 20)
+
+struct Hold
+{
+    bool active;        // a replacement jingle was started on this player
+    s32 frames;
+    bool pendingStop;
+    s32 stopFade;
+    bool pendingOn;     // a track the game started meanwhile (the original name)
+    u32 onFlags;
+    const char * onName;
+    s32 onFade;
+};
+static Hold sHolds[BGM_PLAYERS];
+static bool sRestorePending[BGM_PLAYERS];
+static s32 sRestoreFade[BGM_PLAYERS];
+
+static bool stillPlaying(s32 player)
+{
+    spm::spmario_snd::BgmPlayer & p = gamesyms::spsndBgmPlayers[player];
+    return p.bgmEntry != nullptr && p.soundHandle.mSound != nullptr;
+}
+
+static bool holding(s32 player)
+{
+    return player >= 0 && player < BGM_PLAYERS && sHolds[player].active && stillPlaying(player);
+}
+
+static bool anyHolding()
+{
+    for (s32 i = 0; i < BGM_PLAYERS; i++)
+    {
+        if (holding(i))
+            return true;
+    }
+    return false;
+}
+
 static s32 (*spsndBGMOn_f_dReal)(u32 flags, const char * name, s32 fadeMsec);
+static s32 startTrack(u32 flags, const char * name, s32 fadeMsec)
+{
+    s32 player = flags & BGM_FLAGS_PLAYER;
+    const char * played = name != nullptr && gamesyms::spsbgmlist != nullptr ? replacement(name) : name;
+    s32 result = spsndBGMOn_f_dReal(flags, played, fadeMsec);
+    if (player < BGM_PLAYERS)
+        sHolds[player] = Hold{played != name && isPlayOnce(name), 0, false, 0, false, 0, nullptr, 0};
+    return result;
+}
+
 static s32 spsndBGMOn_f_dHook(u32 flags, const char * name, s32 fadeMsec)
 {
-    if (name != nullptr && gamesyms::spsbgmlist != nullptr)
-        name = replacement(name);
-    return spsndBGMOn_f_dReal(flags, name, fadeMsec);
+    s32 player = flags & BGM_FLAGS_PLAYER;
+    if (holding(player))
+    {
+        Hold & h = sHolds[player];
+        h.pendingStop = false;
+        h.pendingOn = true;
+        h.onFlags = flags;
+        h.onName = name;
+        h.onFade = fadeMsec;
+        return 1;
+    }
+    return startTrack(flags, name, fadeMsec);
+}
+
+static bool (*spsndBGMOff_f_dReal)(s32 player, u32 fadeoutTime);
+static bool spsndBGMOff_f_dHook(s32 player, u32 fadeoutTime)
+{
+    if (holding(player))
+    {
+        Hold & h = sHolds[player];
+        h.pendingOn = false;
+        h.pendingStop = true;
+        h.stopFade = fadeoutTime;
+        return true;
+    }
+    return spsndBGMOff_f_dReal(player, fadeoutTime);
+}
+
+static s32 (*bgmVolumeRestoreReal)(s32 player, s32 fadeMsec);
+static s32 bgmVolumeRestoreHook(s32 player, s32 fadeMsec)
+{
+    if (player >= 0 && player < BGM_PLAYERS && anyHolding())
+    {
+        sRestorePending[player] = true;
+        sRestoreFade[player] = fadeMsec;
+        return 1;
+    }
+    return bgmVolumeRestoreReal(player, fadeMsec);
+}
+
+void tick()
+{
+    for (s32 i = 0; i < BGM_PLAYERS; i++)
+    {
+        Hold & h = sHolds[i];
+        if (!h.active)
+            continue;
+        if (stillPlaying(i) && ++h.frames < HOLD_MAX_FRAMES)
+            continue;
+        // The jingle is over (or ran too long): do what the game asked meanwhile
+        Hold done = h;
+        h.active = false;
+        if (done.pendingStop)
+            spsndBGMOff_f_dReal(i, done.stopFade);
+        else if (done.pendingOn)
+            startTrack(done.onFlags, done.onName, done.onFade);
+    }
+    if (!anyHolding())
+    {
+        for (s32 i = 0; i < BGM_PLAYERS; i++)
+        {
+            if (sRestorePending[i])
+            {
+                sRestorePending[i] = false;
+                bgmVolumeRestoreReal(i, sRestoreFade[i]);
+            }
+        }
+    }
 }
 
 void init()
 {
     spsndBGMOn_f_dReal = patch::hookFunction(spm::spmario_snd::spsndBGMOn_f_d, spsndBGMOn_f_dHook);
+    spsndBGMOff_f_dReal = patch::hookFunction(spm::spmario_snd::spsndBGMOff_f_d, spsndBGMOff_f_dHook);
+    bgmVolumeRestoreReal = patch::hookFunction(gamesyms::bgm_volume_restore, bgmVolumeRestoreHook);
     wii::os::OSReport("[spmap] musicshuffle: ready\n");
 }
 

@@ -54,6 +54,12 @@ void pluswinMapsWinOpen();
 // The music track table (name, sound archive index, volume...), filled at startup, ended by a null name
 extern spm::spmario_snd::BgmEntry * spsbgmlist;
 
+// The music players (spm/spmario_snd.h declares them, but spm-headers' us0 lst has no address)
+extern spm::spmario_snd::BgmPlayer spsndBgmPlayers[3];
+
+// Brings a music player's volume back up (fade in ms) after it was turned down for a jingle
+s32 bgm_volume_restore(s32 player, s32 fadeMsec);
+
 // Only in Fleep's join scene, after the join: evt_fleep_mode_on(1) and evt_fleep_mode_set(1) put
 // something Tippi's pointer uses into a Fleep mode (names are guesses); pointing crashes without Fleep
 EVT_DECLARE_USER_FUNC(evt_fleep_mode_on, 1)

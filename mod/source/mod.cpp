@@ -296,6 +296,7 @@ static void seq_gameMainHook(spm::seqdrv::SeqWork * wp)
     joins::tick();
     apitem::tick();
     keystorage::tick();
+    musicshuffle::tick();
     spawnNextReceived();
 }
 

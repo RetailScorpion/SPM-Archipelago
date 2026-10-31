@@ -13,4 +13,7 @@ namespace mod::musicshuffle {
 
 void init();
 
+// Call every frame in game: lets the game carry on once a shuffled jingle has finished
+void tick();
+
 }
