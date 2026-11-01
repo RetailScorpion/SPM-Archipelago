@@ -22,3 +22,6 @@ __pycache__/
 mod/out/
 __pycache__/
 apworld/spm/bin/
+
+# Personal notes, kept local
+CHEATSHEET.md
