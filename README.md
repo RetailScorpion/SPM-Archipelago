@@ -2,7 +2,7 @@
 
 An [Archipelago](https://archipelago.gg) randomizer for **Super Paper Mario** (Wii, USA revision 0).
 
-This is a prototype with no logic: every location counts as reachable from the start, so items can be anywhere. It exists so the community can play it and help map out the real logic. Expect rough edges.
+This is a prototype without in-level logic: the only rules are the chapter doors (a chapter's locations need its Pure Heart, unless its door starts open), so inside a chapter items can be anywhere. It exists so the community can play it and help map out the real logic. Expect rough edges.
 
 ## What's randomized
 Depending on your YAML options:
@@ -10,22 +10,26 @@ Depending on your YAML options:
 - key items whose spots the prototype handles: the Fort Keys, the Water/Stone/Fire Tablets, Cooking Disks and the Golden Card;
 - items in chests and lying around in levels and the hubs;
 - optionally, catch cards found in chests or lying around;
-- the Pure Hearts of every chapter you don't start with (see Chapter doors below);
+- the Pure Hearts (`shuffle_pure_hearts`, on by default): each of Chapters 1-7 ends with a Pure Heart location. On, the hearts of the chapters you don't start with can be anywhere; off, each chapter's ending gives its vanilla heart and Chapter 1 always starts open (see Chapter doors below);
 - the Save Block (`save_block`), a key item that saves your game from the key item menu, anywhere. By default you start with it; it can also be shuffled or left out. It doesn't work in the Pits of 100 Trials;
 - optionally, Peach, Luigi and Bowser (`randomize_characters`): their join scenes become locations and can hold anything;
 - **Cursya Traps** (`trap_percentage`, 10% of filler by default): they look like a key item you haven't found, give nothing ("You are a FOOL!") and put a random Cursya curse on Mario.
 
-Story gifts are locations too: Peach's, Luigi's and Bowser's join scenes, and Bestovius's flip lesson in 1-1. Peach is there from the start: unconscious in Flipside (`mac_01`). Bring her a Spicy Soup (Saffron cooks one from a Fire Burst) and talk to her to collect her check. Bowser's is his fight in 3-1, and Luigi's is in the Underwhere (7-1). The Helmet isn't shuffled yet: you always get it when you first enter Chapter 4.
+Story gifts are locations too: Peach's, Luigi's and Bowser's join scenes, and Bestovius's flip lesson in 1-1. Peach is there from the start: unconscious in Flipside (`mac_01`). Bring her a Spicy Soup (Saffron cooks one from a Fire Burst) and talk to her to collect her check. Bowser's is his fight in 3-1, and Luigi's is in the Underwhere (7-1). Beating Brobot L-type at the end of Chapter 6 is a location too. The Helmet isn't shuffled yet: you always get it when you first enter Chapter 4.
+
+**Sammer's Kingdom (Chapter 6):** door 6 leads to Sammer's Kingdom until its duels are done, then to the World of Nothing, then (once Chapter 6 is finished) to the post-game's 100 duels. `sammer_duels` (1-25, default 25) sets how many duels play in each part; the seed picks which, always keeping the first and last of the story and the last of each group of 25. King Sammer's seven Catch Card rewards after the 100th duel are locations; `sammer_gauntlet` (off by default) decides whether they can hold anything important.
 
 **Not yet:** the story keys (Ruins Keys, Door Keys, Dimension Keys, Orbs, …), ? blocks, shops and the Pit rewards. These stay vanilla.
 
 **Chapter doors:** some chapters' doors in Flipside Tower are open from the start, picked by `starting_chapter_mode`: the ones you list (`starting_chapters`, default Chapter 1), a set number at random, or a random number at random (up to `starting_chapter_max`). Every other chapter's door opens when you receive its Pure Heart. Chapter 8's door opens once Chapters 1-7 are finished, as in vanilla.
 
-**Cutscenes:** by default (`skip_cutscenes`), a new file skips the opening and Merlon's scenes and starts in Flipside Tower with the Return Pipe. The Count Bleck scenes between chapters are skipped, along with the Peach and Luigi intermissions. Turn the option off to watch the story.
+**Cutscenes:** by default (`skip_cutscenes`), a new file skips the opening and Merlon's scenes and starts in Flipside Tower with the Return Pipe. The Count Bleck scenes between chapters are skipped, along with the Peach and Luigi intermissions, Tippi's tutorial in 1-1, King Sammer's scenes around the first duel and Dimentio and Mr. L's scene after Brobot L-type. Turn the option off to watch the story.
 
 **Goal:** finish Chapter 8.
 
-Items from other worlds show up in Super Paper Mario as the Archipelago icon (grey for filler). Items you receive from other worlds pop up on Mario with the normal item-get.
+Items from other worlds show up in Super Paper Mario as the Archipelago icon (grey for filler); your own Pure Hearts show as the hearts themselves. Items you receive from other worlds pop up on Mario with the normal item-get.
+
+**Pause menu:** the bottom left shows whether the client is connected to the server. The Options page (below Recipes) has music, fanfare and sound effect shuffles, low health beeping, Hold 1 to skip text, and Fast climbing (ladders and vines twice as fast, on by default).
 
 **Key item storage:** Mario can carry 32 key items. One received while all 32 slots are full goes into storage instead of being lost, with a red notice on screen. Use SPM Archipelago Tools (below) to swap it with one you carry.
 

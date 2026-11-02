@@ -93,6 +93,24 @@ Super Paper Mario:
     shuffle: 0
     start_with: 50
     off: 0
+  shuffle_pure_hearts:
+    # The Pure Heart each of Chapters 1-7 ends with is a location.
+    # true: the hearts for the chapters that start closed are anywhere; those locations hold anything.
+    # false: each chapter's ending gives its vanilla heart, and Chapter 1 is always open at the start.
+    'true': 50
+    'false': 0
+  sammer_gauntlet:
+    # Once Chapter 6 is finished, Sammer's Kingdom has its 100 duels, and King Sammer's seven Catch
+    # Card rewards after the 100th are locations (shuffled with shuffle_catch_cards).
+    # false: they only ever hold filler. true: they can hold anything, progression included.
+    'true': 0
+    'false': 50
+  sammer_duels:
+    # How many Sammer Guys you duel in each part of Sammer's Kingdom (1 to 25; 25: all); the seed
+    # picks which. The story (20 duels): the first and the last (Rolling Thwomp) always, then
+    # straight to King Sammer's Pure Heart scene. The post-game (four groups of 25): each group's last
+    # one always (the first group also its first one).
+    25
   # Archipelago's common options
 
   progression_balancing:
