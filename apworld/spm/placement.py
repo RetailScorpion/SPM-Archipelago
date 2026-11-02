@@ -3,13 +3,15 @@
 The game decides what a location gives from its own map scripts: for an item lying in a level or in a
 chest, the item number is written right in the script command that creates it. The map scripts (relF)
 stay loaded the whole game, so the client overwrites those numbers in memory with the seed's items.
-Pixl joins and story gifts work differently: the mod asks the mailbox what they give.
+Pixl joins, story gifts and the chapters' Pure Hearts work differently: the mod asks the mailbox what
+they give.
 
 What a location shows:
   - one of this world's items: that item
   - another world's item: the Archipelago item (63), and its item and player names go in the mailbox
   - this world's Cursya Trap: a disguise (a key item not received yet)
-  - an item this save already got delivered: a coin, so collecting it again doesn't give it twice
+  - an item this save already got delivered: a coin (a Mistake in a spot), so collecting it again
+    doesn't give it twice
 
 Loading a save reloads the map scripts with their vanilla items, so the client writes everything again
 whenever a save is loaded.
@@ -21,12 +23,16 @@ from BaseClasses import ItemClassification
 from CommonClient import logger
 
 from .data import ID_BASE
-from .game_link import (GIFT_FLAG_BASE, JOIN_ITEM_OTHER_WORLD, LOC_KIND_OTHER_WORLD, LOC_KIND_OTHER_WORLD_FILLER,
-                        LOC_KIND_TRAP, Mailbox)
+from .game_link import (GIFT_FLAG_BASE, HEART_LOC_FLAG_BASE, JOIN_ITEM_OTHER_WORLD, LOC_KIND_OTHER_WORLD, LOC_KIND_OTHER_WORLD_FILLER,
+                        LOC_KIND_PURE_HEART, LOC_KIND_TRAP, Mailbox)
 from .locations import LOCATION_LIST, is_location_index, location_id, location_index
 
 AP_ITEM = 63               # the mod's stand-in for other worlds' items (archipelago_item.h AP_ITEM_ID)
-COIN = 1                   # what a spot holds once the save already got its item delivered
+COIN = 1                   # what a join, gift or heart gives once the save already got its item delivered
+# What a spot (an item lying around, a chest) holds instead. Not a coin: collecting a coin uses the spot's
+# arguments as a coin number, and a spot with a pickup script then reads memory far out of range (user,
+# 2026-11-02: a warning in Dolphin, a crash on a Wii). A Mistake is an ordinary item
+DELIVERED_SPOT = 175
 SERVER_ONLY_FIRST = 1001   # item numbers from here (Pure Hearts, traps) aren't game items
 HEARTS = range(1001, 1009) # the Pure Hearts (pure_hearts.h PURE_HEART_ITEM_FIRST), always delivered
 TRAP = 1100                # the Cursya Trap (archipelago_item.h TRAP_ITEM_ID)
@@ -79,6 +85,8 @@ def write_location(mb, location, shown: int, foreign: bool, previous: tuple) -> 
         mb.set_join_item(location.vanilla_item, JOIN_ITEM_OTHER_WORLD if foreign else shown)
     elif location.kind == "gift":
         mb.set_gift_item(location.flag - GIFT_FLAG_BASE, JOIN_ITEM_OTHER_WORLD if foreign else shown)
+    elif location.kind == "heart":
+        mb.set_heart_item(location.flag - HEART_LOC_FLAG_BASE, JOIN_ITEM_OTHER_WORLD if foreign else shown)
     failed = 0
     for offset, original in location.patches:
         if not mb.patch_relf(offset, original, shown, previous):
@@ -98,13 +106,15 @@ def write_placements(ctx):
         placed = shown
 
         if i in ctx.coin_locations:
-            # A coin. A join or gift gives the coin itself; a spot may still hold the item or a disguise
+            # A coin, or a Mistake in a spot (which may still hold the item, a disguise or an old coin)
             if location.kind == "join":
                 mb.set_join_item(location.vanilla_item, COIN)
             elif location.kind == "gift":
                 mb.set_gift_item(location.flag - GIFT_FLAG_BASE, COIN)
+            elif location.kind == "heart":
+                mb.set_heart_item(location.flag - HEART_LOC_FLAG_BASE, COIN)
             for offset, original in location.patches:
-                if not mb.patch_relf(offset, original, COIN, (placed, disguise(ctx, location_id(i)))):
+                if not mb.patch_relf(offset, original, DELIVERED_SPOT, (placed, disguise(ctx, location_id(i)), COIN)):
                     failed += 1
             continue
 
@@ -113,9 +123,13 @@ def write_placements(ctx):
             # turns it into the trap's item-get
             names.append((location.flag, "Cursya Trap", "", LOC_KIND_TRAP))
             shown = disguise(ctx, location_id(i))
+        elif network_item.player == ctx.slot and network_item.item - ID_BASE in HEARTS:
+            # One of this world's Pure Hearts: the Archipelago item, shown with the heart's own icon
+            heart = network_item.item - ID_BASE - HEARTS.start + 1
+            names.append((location.flag, f"Pure Heart {heart}", "", LOC_KIND_PURE_HEART + heart))
         elif foreign:
             names.append(other_world_names(ctx, network_item, location.flag))
-        failed += write_location(mb, location, shown, foreign, (placed, COIN))
+        failed += write_location(mb, location, shown, foreign, (placed, COIN, DELIVERED_SPOT))
 
     mb.write_loc_names(names)
     if failed:

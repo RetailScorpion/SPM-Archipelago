@@ -23,7 +23,7 @@
 namespace mod::mailbox {
 
 #define MAILBOX_MAGIC "SPMAP_MAILBOX_v1"
-#define MAILBOX_VERSION 12
+#define MAILBOX_VERSION 16
 
 #define MAILBOX_RECV_SIZE 16  // items from the server waiting to be given
 #define MAILBOX_SENT_SIZE 32  // locations waiting to be read by the client
@@ -92,8 +92,24 @@ struct Mailbox
     // Counts up every frame while a save is loaded. The client only reads checks while it moves:
     // Dolphin's "reset" keeps memory, so the old mailbox still says "in game" while the game reboots
 /* 0x148 */ u32 gameFrames;
+
+    // The Sammer Guy gates that play (the sammer_duels option), written by the client: one bitmask per
+    // group (the story's 20, then the post-game's four groups of 25), bit 0 = the group's first gate.
+    // 0 (no client) = every gate
+/* 0x14C */ u32 sammerGates[5];
+
+    // The client's connection, written by the client on every check (twice a second): 1 while it's
+    // connected to the Archipelago server, and the gameFrames it last read. If the client closes,
+    // that stops moving, so the mod knows it's gone too (connection_status)
+/* 0x160 */ u32 serverConnected;
+/* 0x164 */ u32 clientFrame;
+
+    // What each chapter's Pure Heart location holds (index = chapter - 1, chapters 1-7), written by
+    // the client: 0 = its vanilla heart, JOIN_ITEM_OTHER_WORLD = an Archipelago item (another world's,
+    // or one of this world's Pure Hearts), else a game item
+/* 0x168 */ u16 heartLocItems[8];
 };
-static_assert(sizeof(Mailbox) == 0x14C);
+static_assert(sizeof(Mailbox) == 0x178);
 
 #define STARTING_HEARTS_NO_CLIENT 0xFFFFFFFF
 

@@ -108,6 +108,35 @@ class SaveBlock(Choice):
     default = 1
 
 
+class ShufflePureHearts(DefaultOnToggle):
+    """The Pure Heart each of Chapters 1-7 ends with is a location.
+    On: the hearts for the chapters that start closed are anywhere in the multiworld, and those
+    locations can hold anything.
+    Off: each chapter's ending gives its vanilla heart (Chapter 1 gives Pure Heart 2, and so on), and
+    Chapter 1 is always open at the start, so every chapter can be reached in order."""
+    display_name = "Shuffle Pure Hearts"
+
+
+class SammerGauntlet(Toggle):
+    """Once Chapter 6 is finished, Sammer's Kingdom has its 100 duels, and King Sammer's seven Catch Card
+    rewards after the 100th are locations (shuffled with Shuffle Catch Cards).
+    Off: those locations only ever hold filler, so you never need to beat all 100 duels.
+    On: they can hold anything, progression included."""
+    display_name = "Sammer Gauntlet"
+
+
+class SammerDuels(Range):
+    """How many Sammer Guys you duel in each part of Sammer's Kingdom; the seed picks which ones.
+    The story (20 duels): the first and the last (Rolling Thwomp) always, the rest at random; after
+    Rolling Thwomp you go straight to King Sammer's Pure Heart scene.
+    The post-game (100 duels, in four groups of 25): each group's last one always, the rest at random;
+    the first group also always starts with its first one."""
+    display_name = "Sammer Duels"
+    range_start = 1
+    range_end = 25
+    default = 25
+
+
 @dataclass
 class SPMOptions(PerGameCommonOptions):
     shuffle_pixls: ShufflePixls
@@ -123,3 +152,6 @@ class SPMOptions(PerGameCommonOptions):
     starting_chapter_max: StartingChapterMax
     trap_percentage: TrapPercentage
     save_block: SaveBlock
+    shuffle_pure_hearts: ShufflePureHearts
+    sammer_gauntlet: SammerGauntlet
+    sammer_duels: SammerDuels

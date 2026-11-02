@@ -22,6 +22,8 @@ namespace mod::archipelago_item {
 #define AP_ICON_PROGRESSION 402  // colour
 #define AP_ICON_FILLER 404       // grey
 #define AP_ICON_BLANK 405        // a trap's item-get: Mario holds up nothing
+#define ICON_PURE_HEART_FIRST 0x31  // the game's Pure Heart icons, red (heart 1) to white (heart 8)
+#define PURE_HEART_COUNT 8
 
 // Message names the item uses, which game_messages answers with the text below
 #define NAME_KEY "ap_item_name"
@@ -79,6 +81,25 @@ static bool flagFromScriptValue(s32 value, s32 * flag)
 static bool isFiller(const LocName * loc)
 {
     return loc != nullptr && loc->kind == LOC_KIND_OTHER_WORLD_FILLER;
+}
+
+// Which of this world's Pure Hearts a location holds (1-8), or 0 if it's not one.
+static s32 pureHeart(const LocName * loc)
+{
+    if (loc == nullptr || loc->kind <= LOC_KIND_PURE_HEART || loc->kind > LOC_KIND_PURE_HEART + PURE_HEART_COUNT)
+        return 0;
+    return loc->kind - LOC_KIND_PURE_HEART;
+}
+
+// The icon the Archipelago item shows for a location: grey for filler, a Pure Heart's own, or the
+// colour one.
+static s16 iconFor(const LocName * loc)
+{
+    if (isFiller(loc))
+        return AP_ICON_FILLER;
+    if (s32 heart = pureHeart(loc))
+        return ICON_PURE_HEART_FIRST + heart - 1;
+    return AP_ICON_PROGRESSION;
 }
 
 /*
@@ -208,8 +229,7 @@ static spm::itemdrv::ItemEntry * itemEntryHook(const char * name, s32 type, s32 
 
     spm::item_data::ItemData & data = spm::item_data::itemDataTable[AP_ITEM_ID];
     s16 icon = data.iconId;
-    if (isFiller(loc))
-        data.iconId = AP_ICON_FILLER;
+    data.iconId = iconFor(loc);
     spm::itemdrv::ItemEntry * entry = itemEntryReal(name, type, behaviour, x, y, z, pickupScript, switchNumber);
     data.iconId = icon;
     return entry;
@@ -254,10 +274,10 @@ static void startItemGet(spm::itemdrv::ItemEntry * item)
         spm::item_data::itemDataTable[AP_ITEM_ID].iconId = AP_ICON_BLANK;
         sTrapActive = true;
     }
-    else if (item->type == AP_ITEM_ID && isFiller(sCurrent))
+    else if (item->type == AP_ITEM_ID)
     {
-        // Filler: Mario holds up the grey icon (tick puts the colour one back afterwards)
-        spm::item_data::itemDataTable[AP_ITEM_ID].iconId = AP_ICON_FILLER;
+        // Filler or a Pure Heart: Mario holds up its icon (tick puts the colour one back afterwards)
+        spm::item_data::itemDataTable[AP_ITEM_ID].iconId = iconFor(sCurrent);
     }
 }
 
@@ -294,9 +314,18 @@ const char * message(const char * msgName)
     if (msl::string::strcmp(msgName, NAME_KEY) == 0)
         return sCurrent->item;
     if (msl::string::strcmp(msgName, DESC_KEY) == 0)
-        return sTrapActive ? "That means this is a trap." : "An item for another world.";
+    {
+        if (sTrapActive)
+            return "That means this is a trap.";
+        return pureHeart(sCurrent) ? "One of the eight Pure Hearts." : "An item for another world.";
+    }
     if (sTrapActive && msl::string::strcmp(msgName, ITEM_GET_KEY) == 0)
         return "You are a <col c00000ff>FOOL</col>!";
+    if (sActiveFrames > 0 && msl::string::strcmp(msgName, ITEM_GET_KEY) == 0 && pureHeart(sCurrent))
+    {
+        msl::stdio::sprintf(sItemGetText, "You got <col c00000ff>%s</col>!", sCurrent->item);
+        return sItemGetText;
+    }
     if (sActiveFrames > 0 && msl::string::strcmp(msgName, ITEM_GET_KEY) == 0)
     {
         msl::stdio::sprintf(sItemGetText, "Sent <col c00000ff>%s</col>\nto %s!", sCurrent->item, sCurrent->player);

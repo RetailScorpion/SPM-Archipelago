@@ -41,8 +41,8 @@ def checked_state(loc, flags, server):
 
 
 def describe_spot(loc):
-    """Where a location is: its spot and position, or how to get it (story gifts)."""
-    if loc["kind"] == "gift":
+    """Where a location is: its spot and position, or how to get it (story gifts, spots the mod flags)."""
+    if loc["kind"] in ("gift", "spot", "heart"):
         return loc["where"]
     if loc["pos"] is None:
         return f"{loc['where']}, position set by the script"

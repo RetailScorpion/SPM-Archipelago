@@ -15,6 +15,7 @@
 #include <common.h>
 #include <evt_cmd.h>
 #include <spm/evtmgr.h>
+#include <spm/seq_title.h>
 #include <spm/spmario_snd.h>
 
 namespace mod::game_addresses {
@@ -87,6 +88,26 @@ s32 sfx_id_playing_name(const char * name);
 // into a Fleep mode (the names are guesses); pointing crashes afterwards if Mario has no Fleep
 EVT_DECLARE_USER_FUNC(evt_fleep_mode_on, 1)
 EVT_DECLARE_USER_FUNC(evt_fleep_mode_set, 1)
+
+// The title screen's work, while the title screen is up: its animation (animNum 0 = the opening,
+// 1 = the loop) and the frame it's at
+extern spm::seq_title::SeqTitleWork * seq_title_wp;
+// In the title's drawing: the instruction that animates its layout (a call through the layout's
+// list of functions, with r3 = the layout and r4 = 0), just before the panes' positions are worked out
+extern u32 title_layout_animate_call[];
+
+// A Pixl's work by its id, or nullptr if there's none
+void * fairy_work_by_id(s32 id);
+// In Mario's flip: the call that looks up his Pixl, whose result is used without checking for none
+extern u32 flip_pixl_lookup_call[];
+// In Tippi's pointer code: the story value compare that stops pointing below 12
+extern u32 tippi_pointer_story_check[];
+// In Mario's climbing: the adds of the stick's direction to his climbing move (2D and 3D)
+extern u32 climb_2d_vertical_add_1[];
+extern u32 climb_2d_vertical_add_2[];
+extern u32 climb_2d_sideways_add[];
+extern u32 climb_3d_vertical_add_1[];
+extern u32 climb_3d_vertical_add_2[];
 
 // ---- relF (the file of map scripts, loaded once and kept) ----
 

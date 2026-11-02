@@ -27,7 +27,7 @@ using namespace spm::evt_msg;
 using namespace mod::game_addresses;
 
 #define TOWER_DOOR_COUNT 7  // Chapters 1-7; Chapter 8's door is in Flopside
-#define SAMMER_DOOR 5       // Chapter 6's door (door numbers start at 0): only its first entry, as in vanilla
+#define SAMMER_DOOR 5       // Chapter 6's door (door numbers start at 0): never a section menu (below)
 
 // ---- Section menus ----
 
@@ -44,9 +44,13 @@ static const char * sSelectKeys[TOWER_DOOR_COUNT] = {
 };
 static char sSelectText[TOWER_DOOR_COUNT][128];
 
-// How many sections door `door`'s chapter has reached (door numbers start at 0).
+// How many sections door `door`'s chapter has reached (door numbers start at 0). Chapter 6 always
+// counts as one: its door leads to one place at a time (Sammer's Kingdom, the World of Nothing, then
+// the post-game gauntlet; hub_story_fixes), so it never gets the menu (user, 2026-11-02).
 static s32 sectionCount(s32 door)
 {
+    if (door == SAMMER_DOOR)
+        return 1;
     return story_progress::sectionsReached(door + 1);
 }
 
@@ -112,7 +116,7 @@ static EVT_DEFINE_USER_FUNC(ap_door_valid_choice)
     const char * key = reinterpret_cast<const char *>(spm::evtmgr_cmd::evtGetValue(evt, args[0]));
     s32 choice = spm::evtmgr_cmd::evtGetValue(evt, args[1]);
     s32 door = doorFromSelectKey(key);
-    s32 sections = door == SAMMER_DOOR ? 1 : sectionCount(door);
+    s32 sections = sectionCount(door);
     spm::evtmgr_cmd::evtSetValue(evt, args[2], choice >= 0 && choice < sections);
     return 2;
 }

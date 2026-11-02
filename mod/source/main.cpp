@@ -21,6 +21,8 @@
 
 #include "archipelago_item.h"
 #include "character_joins.h"
+#include "climb_speed.h"
+#include "connection_status.h"
 #include "cutscene_skips.h"
 #include "debug_warp.h"
 #include "file_select_hearts.h"
@@ -36,12 +38,15 @@
 #include "pixl_joins.h"
 #include "pure_hearts.h"
 #include "received_items.h"
+#include "sammer_duels.h"
 #include "save_block.h"
 #include "sound_effect_shuffle.h"
+#include "spot_flags.h"
 #include "story_gifts.h"
 #include "story_progress.h"
 #include "text_skip.h"
 #include "tippi_always_on.h"
+#include "title_banner.h"
 #include "tower_doors.h"
 
 namespace mod {
@@ -53,6 +58,10 @@ namespace mod {
 #define RELF_SECTION5_FILE_OFFSET 0xAF300
 
 // ---- Title screen ----
+
+// The title screen's text. Room is left after it so tools/make_dev_disc.py can write "SPM
+// Archipelago Dev Build" over it in the dev disc's copy of the mod
+static const char sTitleText[48] = "SPM Archipelago " MOD_VERSION;
 
 // Draws text centred across the screen at height y (0 = middle, y going up).
 static void drawCentredText(const char * text, f32 y, wii::gx::GXColor colour)
@@ -85,7 +94,8 @@ static void titleScreen(spm::seqdrv::SeqWork * wp)
 {
     noSaveLoaded();
     titleScreenReal(wp);
-    drawCentredText("SPM Archipelago " MOD_VERSION, 200.0f, {255, 255, 255, 255});
+    title_banner::tick();
+    drawCentredText(sTitleText, 200.0f, {255, 255, 255, 255});
 }
 
 static spm::seqdef::SeqFunc * gameOverScreenReal;
@@ -117,6 +127,9 @@ static void gameFrame(spm::seqdrv::SeqWork * wp)
     npc_story_fixes::tick();
     archipelago_item::tick();
     key_item_storage::tick();
+    save_block::tick();
+    climb_speed::tick();
+    connection_status::tick();
     music_shuffle::tick();
     received_items::tick();
 }
@@ -126,7 +139,8 @@ static void gameFrame(spm::seqdrv::SeqWork * wp)
 static spm::seqdef::SeqFunc * mapChangeReal;
 static void mapChange(spm::seqdrv::SeqWork * wp)
 {
-    cutscene_skips::onMapChange(wp);  // first: may change which map is loaded
+    cutscene_skips::onMapChange(wp);  // first: these may change which map is loaded
+    sammer_duels::onMapChange(wp);
     received_items::onMapChange();
 
     story_progress::onMapChange(wp->p0);  // then the story value; the rest use the new one
@@ -174,6 +188,12 @@ void main()
     pixl_joins::init();
     character_joins::init();
     npc_story_fixes::init();
+    hub_story_fixes::init();
+    cutscene_skips::init();
+    spot_flags::init();
+    title_banner::init();
+    tippi_always_on::init();
+    climb_speed::init();
     archipelago_item::init();
 
     using spm::seqdef::seq_data;

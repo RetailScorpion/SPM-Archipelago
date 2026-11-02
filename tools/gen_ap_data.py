@@ -8,8 +8,11 @@ A location is detected by a save flag the client polls, and placed by rewriting 
 script instruction that spawns it (relF scripts stay loaded all game). Kinds:
   flagged    a pickup or chest with its own vanilla GSWF flag (one location per flag)
   join       a Pixl join (placement through the mod's join table, flag AP_GSWF_JOIN)
-  key_spot   an unflagged key item spot, reviewed by hand (KEY_SPOTS); the mod gives it the flag
-             AP_GSWF_LOC(n) and replaces its story gates (mod/source/locations.cpp)
+  spot       an item spot with no flag of its own (UNFLAGGED_SPOTS); the mod gives it the flag
+             AP_GSWF_LOC_BASE + n (mod/source/spot_flags.cpp, same order)
+  gift       a story gift (GIFTS): given by the mod, placed through the mailbox
+  heart      the Pure Heart at the end of Chapters 1-7 (CHAPTER_HEARTS): given by the mod, placed through
+             the mailbox (heartLocItems); its vanilla item is a Pure Heart, which isn't a game item
 
 Every patched word is checked against the clean relF.rel before it's written out.
 
@@ -49,6 +52,13 @@ AP_GSWF_BASE = 7168
 AP_GSWF_JOIN_BASE = AP_GSWF_BASE + 1          # + Pixl item id - 221 (Thoreau .. Dashell: 11 flags)
 AP_GSWF_LOC_BASE = AP_GSWF_BASE + 32          # unflagged key spots, in KEY_SPOTS order
 AP_GSWF_GIFT_BASE = AP_GSWF_BASE + 16         # story gifts, in GIFTS order (mod/source/story_gifts.cpp sGifts)
+AP_GSWF_CHAPTER_HEART_BASE = AP_GSWF_BASE + 1008  # + chapter - 1 (mod save_data.h AP_GSWF_CHAPTER_HEART)
+
+# The Pure Heart each of Chapters 1-7 ends with (Chapter N: heart N + 1), and the map of its scene
+# (where the chapter's finished value is set). Pure Hearts are items 1001-1008 (mod pure_hearts.h),
+# not game items.
+HEART_ITEM_FIRST = 1001
+CHAPTER_HEARTS = {1: "he4_11", 2: "mi4_14", 3: "ta4_13", 4: "sp4_14", 5: "gn4_16", 6: "wa1_27", 7: "an4_10"}
 
 # Story gift locations (story_gifts.cpp sGifts), in the mod's order: (vanilla item, map, label, how to get
 # it, for the tracker). New ones
@@ -59,7 +69,8 @@ GIFTS = [(217, "mac_01", "Peach joins", "talk to Peach in mac_01 holding a Spicy
          (219, "an1_07", "Luigi joins", "his scene: step onto the ledge on the right"),
          (24, "sp1_01", "Helmet (entering Chapter 4)", "given on entering any Chapter 4 map"),
          (218, "ta1_04", "Bowser joins", "after the fight with Bowser"),
-         (80, "he1_06", "Bestovius's lesson", "talk to Bestovius in his house")]
+         (80, "he1_06", "Bestovius's lesson", "talk to Bestovius in his house"),
+         (82, "wa1_27", "Brobot L-type beaten", "beat Brobot L-type at the end of the World of Nothing (given on the next map change)")]
 ALWAYS_VANILLA_GIFTS = {24}
 
 PIXLS = {221: ("Thoreau", "he2_07"), 222: ("Boomer", "mi1_07"), 223: ("Slim", "mi3_01"),
@@ -68,10 +79,15 @@ PIXLS = {221: ("Thoreau", "he2_07"), 222: ("Boomer", "mi1_07"), 223: ("Slim", "m
          230: ("Barry", "ta1_01"), 231: ("Dashell", "dan_30")}
 OPTIONAL_PIXLS = {229, 230, 231}
 
-# Unflagged key item spots that have been reviewed: (relF offset of the evt_item_entry, gates). Each gate is
-# the relF offset of an IF_SMALL(GSW(0), N) around the spawn that the mod turns into "not collected".
-# Filled in chapter by chapter as each spot is checked in game.
-KEY_SPOTS = []
+# Item spots with no save flag of their own: (relF file offset of their evt_item_entry, how to get it, for
+# the tracker). The mod gives the nth one the flag AP_GSWF_LOC_BASE + n (spot_flags.cpp sSpots, same
+# order). New ones go at the end.
+SAMMER_REWARD = "King Sammer hands it over after the 100th duel of post-game Sammer's Kingdom"
+UNFLAGGED_SPOTS = [
+    # King Sammer's TTYD partner Catch Cards (wa4_26), handed over one after another
+    (0x192e78, SAMMER_REWARD), (0x192ec8, SAMMER_REWARD), (0x192f18, SAMMER_REWARD), (0x192f68, SAMMER_REWARD),
+    (0x192fb8, SAMMER_REWARD), (0x193008, SAMMER_REWARD), (0x193058, SAMMER_REWARD),
+]
 
 
 def word(data, offset):
@@ -122,6 +138,8 @@ def display_name(item, names):
 
 def category(item):
     """Which option shuffles an item (pixl, key_item, overworld_item...)."""
+    if item >= HEART_ITEM_FIRST:
+        return "pure_heart"
     if 216 <= item < 220:
         return "character"
     if 220 <= item < 232:
@@ -181,21 +199,28 @@ def main():
         entry["patches"].append({"offset": item_offset, "original": loc["item"]})
     locations += sorted(by_flag.values(), key=lambda e: (e["map"], e["flag"]))
 
-    # Reviewed unflagged key spots
-    for n, (at, gates) in enumerate(KEY_SPOTS):
+    # Story gifts, after the scanned spots so those keep their ids (given by the mod when their trigger
+    # first holds; placed through the mailbox)
+    for i, (item, map_name, label, how) in enumerate(GIFTS):
+        locations.append({"kind": "gift", "map": map_name, "item": item, "flag": AP_GSWF_GIFT_BASE + i,
+                          "label": label, "patches": [], "where": how, "pos": None})
+
+    # Spots the mod gives flags to, last so every earlier location keeps its id
+    for n, (at, how) in enumerate(UNFLAGGED_SPOTS):
         assert word(rel, at) & 0xFFFF == OP_USER_FUNC
         item = word(rel, at + 4 * (2 + ARGS["item"]["item"]))
         assert word(rel, at + 4 * (2 + ARGS["item"]["flag"])) == 0, hex(at)
         loc = next(x for x in scan if x.get("at") == hex(at))
-        locations.append({"kind": "key_spot", "map": loc["maps"][0], "item": item, "flag": AP_GSWF_LOC_BASE + n,
-                          "label": None, "spot": n, "spawn": at, "gates": gates,
-                          "where": "lying around", "pos": position(rel, at, "item"),
+        locations.append({"kind": "spot", "map": loc["maps"][0], "item": item, "flag": AP_GSWF_LOC_BASE + n,
+                          "label": None, "where": how, "pos": None,
                           "patches": [{"offset": at + 4 * (2 + ARGS["item"]["item"]), "original": item}]})
 
-    # Story gifts, last so earlier locations keep their ids (given by the mod when their trigger first holds; placed through the mailbox)
-    for i, (item, map_name, label, how) in enumerate(GIFTS):
-        locations.append({"kind": "gift", "map": map_name, "item": item, "flag": AP_GSWF_GIFT_BASE + i,
-                          "label": label, "patches": [], "where": how, "pos": None})
+    # Each chapter's Pure Heart, last so every earlier location keeps its id
+    for chapter, map_name in CHAPTER_HEARTS.items():
+        heart = chapter + 1
+        locations.append({"kind": "heart", "map": map_name, "item": HEART_ITEM_FIRST + heart - 1,
+                          "flag": AP_GSWF_CHAPTER_HEART_BASE + chapter - 1, "label": f"Pure Heart {heart}", "patches": [],
+                          "where": f"the end of Chapter {chapter} (given on the next map change)", "pos": None})
 
     # Names: "<level> - <vanilla item> (<map>)", numbered when one map has several of the same item
     seen = {}
@@ -212,7 +237,7 @@ def main():
         loc["id"] = ID_BASE + i
         loc["category"] = "fixed" if loc["kind"] == "gift" and loc["item"] in ALWAYS_VANILLA_GIFTS else category(loc["item"])
 
-    item_ids = sorted({loc["item"] for loc in locations})
+    item_ids = sorted({loc["item"] for loc in locations if loc["item"] < HEART_ITEM_FIRST})
     item_table = unique_item_names(names, item_ids)
 
     # Every level's title in play order (for trackers), whether or not it has locations yet

@@ -12,8 +12,9 @@ from .data import ID_BASE, LOCATIONS as LOCATION_ROWS
 
 class Location(NamedTuple):
     name: str          # e.g. "1-2 Mount Lineland - Thoreau joins (he2_07)"
-    kind: str          # how it gives its item: "item" (lying in a level), "chest", "join" (a Pixl
-                       # joining) or "gift" (a story gift)
+    kind: str          # how it gives its item: "flagged" (lying in a level or in a chest), "spot"
+                       # (the same, with a flag the mod adds), "join" (a Pixl joining), "gift" (a
+                       # story gift) or "heart" (the Pure Heart a chapter ends with)
     category: str      # which option shuffles it: "pixl", "key_item", "overworld_item", ...
     vanilla_item: int  # the game's item id of what it holds in the unrandomized game
     flag: int          # the save flag (GSWF) the game sets when it's collected

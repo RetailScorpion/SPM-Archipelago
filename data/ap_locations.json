@@ -2452,6 +2452,236 @@
    "name": "1-1 Lineland Road - Bestovius's lesson (he1_06)",
    "id": 1397771635,
    "category": "overworld_item"
+  },
+  {
+   "kind": "gift",
+   "map": "wa1_27",
+   "item": 82,
+   "flag": 7189,
+   "label": "Brobot L-type beaten",
+   "patches": [],
+   "where": "beat Brobot L-type at the end of the World of Nothing (given on the next map change)",
+   "pos": null,
+   "name": "6-1 Sammer's Kingdom - Brobot L-type beaten (wa1_27)",
+   "id": 1397771636,
+   "category": "overworld_item"
+  },
+  {
+   "kind": "spot",
+   "map": "wa4_26",
+   "item": 496,
+   "flag": 7200,
+   "label": null,
+   "where": "King Sammer hands it over after the 100th duel of post-game Sammer's Kingdom",
+   "pos": null,
+   "patches": [
+    {
+     "offset": 1650308,
+     "original": 496
+    }
+   ],
+   "name": "6-4 Sammer's Endgame - Goombella Card (wa4_26)",
+   "id": 1397771637,
+   "category": "catch_card"
+  },
+  {
+   "kind": "spot",
+   "map": "wa4_26",
+   "item": 497,
+   "flag": 7201,
+   "label": null,
+   "where": "King Sammer hands it over after the 100th duel of post-game Sammer's Kingdom",
+   "pos": null,
+   "patches": [
+    {
+     "offset": 1650388,
+     "original": 497
+    }
+   ],
+   "name": "6-4 Sammer's Endgame - Koops Card (wa4_26)",
+   "id": 1397771638,
+   "category": "catch_card"
+  },
+  {
+   "kind": "spot",
+   "map": "wa4_26",
+   "item": 498,
+   "flag": 7202,
+   "label": null,
+   "where": "King Sammer hands it over after the 100th duel of post-game Sammer's Kingdom",
+   "pos": null,
+   "patches": [
+    {
+     "offset": 1650468,
+     "original": 498
+    }
+   ],
+   "name": "6-4 Sammer's Endgame - Madame Flurrie Card (wa4_26)",
+   "id": 1397771639,
+   "category": "catch_card"
+  },
+  {
+   "kind": "spot",
+   "map": "wa4_26",
+   "item": 499,
+   "flag": 7203,
+   "label": null,
+   "where": "King Sammer hands it over after the 100th duel of post-game Sammer's Kingdom",
+   "pos": null,
+   "patches": [
+    {
+     "offset": 1650548,
+     "original": 499
+    }
+   ],
+   "name": "6-4 Sammer's Endgame - Yoshi Card (wa4_26)",
+   "id": 1397771640,
+   "category": "catch_card"
+  },
+  {
+   "kind": "spot",
+   "map": "wa4_26",
+   "item": 500,
+   "flag": 7204,
+   "label": null,
+   "where": "King Sammer hands it over after the 100th duel of post-game Sammer's Kingdom",
+   "pos": null,
+   "patches": [
+    {
+     "offset": 1650628,
+     "original": 500
+    }
+   ],
+   "name": "6-4 Sammer's Endgame - Vivian Card (wa4_26)",
+   "id": 1397771641,
+   "category": "catch_card"
+  },
+  {
+   "kind": "spot",
+   "map": "wa4_26",
+   "item": 501,
+   "flag": 7205,
+   "label": null,
+   "where": "King Sammer hands it over after the 100th duel of post-game Sammer's Kingdom",
+   "pos": null,
+   "patches": [
+    {
+     "offset": 1650708,
+     "original": 501
+    }
+   ],
+   "name": "6-4 Sammer's Endgame - Admiral Bobbery Card (wa4_26)",
+   "id": 1397771642,
+   "category": "catch_card"
+  },
+  {
+   "kind": "spot",
+   "map": "wa4_26",
+   "item": 502,
+   "flag": 7206,
+   "label": null,
+   "where": "King Sammer hands it over after the 100th duel of post-game Sammer's Kingdom",
+   "pos": null,
+   "patches": [
+    {
+     "offset": 1650788,
+     "original": 502
+    }
+   ],
+   "name": "6-4 Sammer's Endgame - Ms. Mowz Card (wa4_26)",
+   "id": 1397771643,
+   "category": "catch_card"
+  },
+  {
+   "kind": "heart",
+   "map": "he4_11",
+   "item": 1002,
+   "flag": 8176,
+   "label": "Pure Heart 2",
+   "patches": [],
+   "where": "the end of Chapter 1 (given on the next map change)",
+   "pos": null,
+   "name": "1-4 Yold Ruins - Pure Heart 2 (he4_11)",
+   "id": 1397771644,
+   "category": "pure_heart"
+  },
+  {
+   "kind": "heart",
+   "map": "mi4_14",
+   "item": 1003,
+   "flag": 8177,
+   "label": "Pure Heart 3",
+   "patches": [],
+   "where": "the end of Chapter 2 (given on the next map change)",
+   "pos": null,
+   "name": "2-4 Merlee's Basement - Pure Heart 3 (mi4_14)",
+   "id": 1397771645,
+   "category": "pure_heart"
+  },
+  {
+   "kind": "heart",
+   "map": "ta4_13",
+   "item": 1004,
+   "flag": 8178,
+   "label": "Pure Heart 4",
+   "patches": [],
+   "where": "the end of Chapter 3 (given on the next map change)",
+   "pos": null,
+   "name": "3-4 Fort Francis - Pure Heart 4 (ta4_13)",
+   "id": 1397771646,
+   "category": "pure_heart"
+  },
+  {
+   "kind": "heart",
+   "map": "sp4_14",
+   "item": 1005,
+   "flag": 8179,
+   "label": "Pure Heart 5",
+   "patches": [],
+   "where": "the end of Chapter 4 (given on the next map change)",
+   "pos": null,
+   "name": "4-4 The Whoa Zone - Pure Heart 5 (sp4_14)",
+   "id": 1397771647,
+   "category": "pure_heart"
+  },
+  {
+   "kind": "heart",
+   "map": "gn4_16",
+   "item": 1006,
+   "flag": 8180,
+   "label": "Pure Heart 6",
+   "patches": [],
+   "where": "the end of Chapter 5 (given on the next map change)",
+   "pos": null,
+   "name": "5-4 Floro Caverns - Pure Heart 6 (gn4_16)",
+   "id": 1397771648,
+   "category": "pure_heart"
+  },
+  {
+   "kind": "heart",
+   "map": "wa1_27",
+   "item": 1007,
+   "flag": 8181,
+   "label": "Pure Heart 7",
+   "patches": [],
+   "where": "the end of Chapter 6 (given on the next map change)",
+   "pos": null,
+   "name": "6-1 Sammer's Kingdom - Pure Heart 7 (wa1_27)",
+   "id": 1397771649,
+   "category": "pure_heart"
+  },
+  {
+   "kind": "heart",
+   "map": "an4_10",
+   "item": 1008,
+   "flag": 8182,
+   "label": "Pure Heart 8",
+   "patches": [],
+   "where": "the end of Chapter 7 (given on the next map change)",
+   "pos": null,
+   "name": "7-4 The Overthere - Pure Heart 8 (an4_10)",
+   "id": 1397771650,
+   "category": "pure_heart"
   }
  ],
  "items": [
@@ -2897,6 +3127,48 @@
    "id": 1397772006,
    "spm": 486,
    "name": "Barry Card",
+   "category": "catch_card"
+  },
+  {
+   "id": 1397772016,
+   "spm": 496,
+   "name": "Goombella Card",
+   "category": "catch_card"
+  },
+  {
+   "id": 1397772017,
+   "spm": 497,
+   "name": "Koops Card",
+   "category": "catch_card"
+  },
+  {
+   "id": 1397772018,
+   "spm": 498,
+   "name": "Madame Flurrie Card",
+   "category": "catch_card"
+  },
+  {
+   "id": 1397772019,
+   "spm": 499,
+   "name": "Yoshi Card",
+   "category": "catch_card"
+  },
+  {
+   "id": 1397772020,
+   "spm": 500,
+   "name": "Vivian Card",
+   "category": "catch_card"
+  },
+  {
+   "id": 1397772021,
+   "spm": 501,
+   "name": "Admiral Bobbery Card",
+   "category": "catch_card"
+  },
+  {
+   "id": 1397772022,
+   "spm": 502,
+   "name": "Ms. Mowz Card",
    "category": "catch_card"
   },
   {

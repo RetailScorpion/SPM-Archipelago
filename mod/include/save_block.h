@@ -15,6 +15,10 @@
     In the Pits of 100 Trials (maps starting with dan_) it's greyed out in the menu, the way the
     Return Pipe is where it can't be used, and using it only says it can't be used here.
 
+    A save made inside a room (a house entered by a door, which is part of its map) records Mario
+    in front of that room's door instead, since a loaded save starts with every room shut. This
+    applies to every save, the game's own save blocks included.
+
     The key item menu's code is changed by small "stubs": short lists of instructions the mod writes
     itself, which the game's code jumps to, and which jump back into it.
 */
@@ -28,6 +32,9 @@ void init();
 
 // Greys the Save Block out in the Pits. Call on every map change.
 void onMapChange(const char * nextMap);
+
+// Keeps track of where Mario last stood outside a room. Call every frame while playing.
+void tick();
 
 // The mod's text for a game message name, or nullptr to use the game's own.
 const char * message(const char * msgName);

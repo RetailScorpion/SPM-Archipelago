@@ -35,9 +35,11 @@ namespace mod::story_progress {
 
 #define STORY_CHAPTER_COUNT 8
 
-// The hubs' fixed value: after Peach's revival and the Pure Heart placed in Flipside's pillar, so
-// the Lineland and Gloam Valley doors are open and no hub cutscene is waiting to play
-#define STORY_HUB_VALUE 65
+// The hubs' fixed value: the end of the prologue (the Pure Heart in Flipside's pillar, the Lineland
+// door open). It's the lowest value whose hub has no scene waiting to play (below it, door 1 still
+// leads to the prologue). Anything the low value closes is patched open (hub_story_fixes), and the
+// hub's checks follow their own flags, not this value
+#define STORY_HUB_VALUE 11
 
 // The story value when the prologue reaches the Lineland door; below it the mod leaves it alone
 #define STORY_PROLOGUE_END 11

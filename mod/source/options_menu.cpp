@@ -28,11 +28,12 @@ static const struct
     {"Shuffle fanfares", false},
     {"Shuffle sound effects", false},
     {"Low health beeping", true},
+    {"Fast climbing", true},
 };
 
 // The order the window lists them in
 static const Option sOrder[OPTION_COUNT] = {OPTION_MUSIC_SHUFFLE, OPTION_FANFARE_SHUFFLE, OPTION_SFX_SHUFFLE,
-                                            OPTION_LOW_HEALTH_SOUND, OPTION_SKIP_TEXT};
+                                            OPTION_LOW_HEALTH_SOUND, OPTION_SKIP_TEXT, OPTION_FAST_CLIMB};
 
 // ---- Layout (pause menu coordinates: 0 = screen centre, y going up) ----
 #define WIN_X -110.0f        // to the right of the buttons

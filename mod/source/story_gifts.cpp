@@ -17,6 +17,7 @@ enum Trigger
 {
     BY_ITS_SCENE,       // collected by its own scene (character_joins, npc_story_fixes), never here
     ENTERED_CHAPTER_4,  // collected on first entering a Chapter 4 map
+    FINISHED_CHAPTER_6, // collected on the first map change once Chapter 6 is finished
 };
 
 static const struct
@@ -31,6 +32,8 @@ static const struct
     {218, BY_ITS_SCENE, "Bowser joins"},         // 3-1, after his fight
     {80, BY_ITS_SCENE, "Bestovius's lesson"},    // 1-1, he1_06; a Shroom Shake stands in for the
                                                  // flip, which isn't an item
+    {82, FINISHED_CHAPTER_6, "beating Brobot L-type"},  // wa1_27; an Ultra Shroom Shake stands
+                                                        // in, since vanilla gives nothing
 };
 
 // Peach, Bowser and Luigi as items
@@ -81,13 +84,13 @@ s32 collectGift(Gift gift)
 
 void onMapChange()
 {
-    if (story_progress::gStory.context == 4)
+    bool chapter4 = story_progress::gStory.context == 4;
+    bool chapter6Finished = story_progress::isChapterFinished(6);
+    for (u32 i = 0; i < sizeof(sGifts) / sizeof(sGifts[0]); i++)
     {
-        for (u32 i = 0; i < sizeof(sGifts) / sizeof(sGifts[0]); i++)
-        {
-            if (sGifts[i].trigger == ENTERED_CHAPTER_4)
-                collectGift(static_cast<Gift>(i));
-        }
+        if ((sGifts[i].trigger == ENTERED_CHAPTER_4 && chapter4) ||
+            (sGifts[i].trigger == FINISHED_CHAPTER_6 && chapter6Finished))
+            collectGift(static_cast<Gift>(i));
     }
 
     if (spm::swdrv::swGet(AP_GSWF_GIFT(GIFT_HELMET)) || spm::mario_pouch::pouchCheckHaveItem(HELMET_ITEM))

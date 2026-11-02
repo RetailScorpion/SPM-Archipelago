@@ -41,6 +41,7 @@ enum LocKind : u16
     LOC_KIND_OTHER_WORLD = 0,         // another world's progression or useful item: colour icon
     LOC_KIND_TRAP = 1,                // this world's trap
     LOC_KIND_OTHER_WORLD_FILLER = 2,  // another world's filler (or trap): grey icon
+    LOC_KIND_PURE_HEART = 16,         // + N (1-8): this world's Pure Heart N, shown with its own icon
 };
 
 // One location holding another world's item, as the client writes it (mailbox locNames)

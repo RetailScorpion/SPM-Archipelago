@@ -20,6 +20,9 @@ VICTORY_ITEM = "Victory"
 HEART_ITEM_FIRST = 1001
 TOWER_CHAPTERS = range(1, 8)
 HEARTS = {f"Pure Heart {n}": HEART_ITEM_FIRST + n - 1 for n in TOWER_CHAPTERS}
+# Pure Heart 8: Chapter 7's vanilla reward. It doesn't open anything yet (door 8 waits for Chapters 1-7)
+HEART_8 = "Pure Heart 8"
+HEART_8_ID = HEART_ITEM_FIRST + 7
 
 # The Save Block: game item 45, which the mod turns into it (mod/include/save_block.h)
 SAVE_BLOCK_ITEM = "Save Block"
@@ -38,6 +41,7 @@ PROGRESSION_CATEGORIES = ("pixl", "optional_pixl", "key_item", "character")
 # Every item name and its Archipelago id
 ITEM_NAME_TO_ID = {**{name: ID_BASE + game_id for game_id, (name, _) in ITEMS.items()},
                    **{name: ID_BASE + game_id for name, game_id in HEARTS.items()},
+                   HEART_8: ID_BASE + HEART_8_ID,
                    TRAP_ITEM: ID_BASE + TRAP_GAME_ID,
                    SAVE_BLOCK_ITEM: ID_BASE + SAVE_BLOCK_GAME_ID}
 
@@ -53,6 +57,8 @@ def create_item(name: str, player: int) -> SPMItem:
         return SPMItem(name, ItemClassification.progression, None, player)
     if name in HEARTS:
         return SPMItem(name, ItemClassification.progression, ID_BASE + HEARTS[name], player)
+    if name == HEART_8:
+        return SPMItem(name, ItemClassification.useful, ID_BASE + HEART_8_ID, player)
     if name == SAVE_BLOCK_ITEM:
         return SPMItem(name, ItemClassification.useful, ID_BASE + SAVE_BLOCK_GAME_ID, player)
     if name == TRAP_ITEM:
@@ -68,5 +74,7 @@ def create_item(name: str, player: int) -> SPMItem:
 
 
 def vanilla_item_name(game_id: int) -> str:
-    """The item name of a game item id."""
+    """The item name of a game item id (or of a Pure Heart, 1001-1008)."""
+    if game_id >= HEART_ITEM_FIRST:
+        return f"Pure Heart {game_id - HEART_ITEM_FIRST + 1}"
     return ITEMS[game_id][0]

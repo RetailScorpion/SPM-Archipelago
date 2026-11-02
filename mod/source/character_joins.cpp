@@ -70,7 +70,7 @@ static const Patch sPatches[] = {
     {PEACH, 0x02908, 61, EVT_CMD(2, OP_SET), "Peach: mac_01 unconscious scene end"},
     {PEACH_TALK, 0x03168, 0x00230, 0, "Peach: talk with the Spicy Soup"},
     // (Giving the soup at 61, before Saffron, walks a townsperson over who never arrives: that check
-    // keeps reading the hub value, so it takes the "after Saffron" branch)
+    // always takes the "after Saffron" branch, patched in hub_story_fixes)
 
     // Peach's join scene in Flipside Tower (mac_02), entered from Merlon's house
     {PEACH, 0x19c78, 61, EVT_CMD(2, OP_IF_LARGE_EQUAL), "Peach: mac_02 scene actors (from)"},

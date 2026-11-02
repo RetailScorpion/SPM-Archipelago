@@ -1,7 +1,7 @@
 """SPM Archipelago Tools: change your inventory in the running game, for testing.
 
   - add or remove characters, Pixls and the Save Block
-  - set coins to 999
+  - set coins, attack or HP (and max HP) to 999
   - key item storage: move key items between your 32 slots and the mod's storage, or swap them
 
 It writes the inventory directly through Dolphin, the same way the game's own "add item" fills it.
@@ -30,8 +30,12 @@ from mailbox import GP_PTR
 # ---- Where things are in the game's memory (US 1.0) ----
 
 POUCH = 0x804CEA28                   # the inventory (MarioPouchWork)
-COINS = POUCH + 0x1C                 # 4-byte number
+ATTACK = POUCH + 0x8                 # 4-byte numbers: attack, HP, max HP
+HP = POUCH + 0xC
+MAX_HP = POUCH + 0x10
+COINS = POUCH + 0x1C
 MAX_COINS = 999
+MAX_STAT = 999
 KEY_ITEMS = POUCH + 0x20             # 32 key item slots, 2 bytes each, 0 = empty
 KEY_ITEM_SLOTS = 32
 CHARACTERS = POUCH + 0xB4            # 4 character slots of 4 bytes: can-select, selected, item id
@@ -140,11 +144,30 @@ def toggle_key_item(item, want):
     return f"{KEY_ITEM_NAMES[item]} {'added' if want else 'removed'}"
 
 
+def set_number(addr, value):
+    """Writes one of the inventory's 4-byte numbers. Returns what it was."""
+    before = struct.unpack(">i", dme.read_bytes(addr, 4))[0]
+    dme.write_bytes(addr, struct.pack(">i", value))
+    return before
+
+
 def set_coins(value):
     """Sets Mario's coins. Returns a message for the window."""
-    before = struct.unpack(">i", dme.read_bytes(COINS, 4))[0]
-    dme.write_bytes(COINS, struct.pack(">i", value))
+    before = set_number(COINS, value)
     return f"Coins: {before} -> {value} (the counter may show the old amount until it redraws)"
+
+
+def set_attack(value):
+    """Sets Mario's attack. Returns a message for the window."""
+    before = set_number(ATTACK, value)
+    return f"Attack: {before} -> {value}"
+
+
+def set_hp(value):
+    """Sets Mario's HP and max HP. Returns a message for the window."""
+    before_max = set_number(MAX_HP, value)
+    before = set_number(HP, value)
+    return f"HP: {before}/{before_max} -> {value}/{value} (the counter may show the old amount until it redraws)"
 
 
 def key_storage_addr():
@@ -216,8 +239,15 @@ class ToolsWindow:
         self.add_checkboxes("Characters", CHARACTER_NAMES, toggle_character)
         self.add_checkboxes("Pixls", PIXL_NAMES, toggle_pixl)
         self.add_checkboxes("Key items", KEY_ITEM_NAMES, toggle_key_item)
-        self.coins = tk.Button(self.root, text=f"{MAX_COINS} coins", font=self.font, command=self.coins_clicked)
-        self.coins.pack(anchor="w", padx=8, pady=(4, 8))
+        stats = tk.Frame(self.root)
+        stats.pack(anchor="w", padx=8, pady=(4, 8))
+        self.stat_buttons = []
+        for text, setter, value in ((f"{MAX_COINS} coins", set_coins, MAX_COINS), (f"{MAX_STAT} attack", set_attack, MAX_STAT),
+                                    (f"{MAX_STAT} HP", set_hp, MAX_STAT)):
+            button = tk.Button(stats, text=text, font=self.font,
+                               command=lambda setter=setter, value=value: self.stat_clicked(setter, value))
+            button.pack(side="left", padx=(0, 6))
+            self.stat_buttons.append(button)
         self.add_storage()
 
     def add_checkboxes(self, title, names, toggle):
@@ -239,10 +269,10 @@ class ToolsWindow:
             self.status.config(text=str(e))
         self.refresh(schedule=False)
 
-    def coins_clicked(self):
+    def stat_clicked(self, setter, value):
         try:
             connect_dolphin()
-            self.status.config(text=set_coins(MAX_COINS))
+            self.status.config(text=setter(value))
         except RuntimeError as e:
             self.status.config(text=str(e))
 
@@ -309,7 +339,8 @@ class ToolsWindow:
         state = "normal" if enabled else "disabled"
         for _, box in self.boxes.values():
             box.config(state=state)
-        self.coins.config(state=state)
+        for button in self.stat_buttons:
+            button.config(state=state)
         for widget in self.storage_widgets:
             widget.config(state=state)
 

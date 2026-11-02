@@ -38,6 +38,12 @@ namespace mod::save_data {
 #define AP_GSW_PEACH_CHAIN (AP_GSW_BASE + 24)
 // The pause menu's settings: one bit per setting, set = changed from its default (options_menu)
 #define AP_GSW_OPTIONS (AP_GSW_BASE + 25)
+// Where Chapter 6's door leads, which Flipside Tower's patched door tests read (hub_story_fixes):
+// 0 Sammer's Kingdom (the story's duels), 1 the World of Nothing, 2 post-game Sammer's Kingdom
+#define AP_GSW_DOOR_6 (AP_GSW_BASE + 26)
+// What the first Sammer duel room's patched "scripted scenes" case compares with (cutscene_skips):
+// 228 plays King Sammer's scenes as in vanilla, 0 never does
+#define AP_GSW_SAMMER_SCENES (AP_GSW_BASE + 27)
 // Key items in storage: 32 slots x 2 bytes, 0 = empty slot (key_item_storage)
 #define AP_GSW_KEY_STORAGE (AP_GSW_BASE + 32)
 
@@ -58,13 +64,17 @@ namespace mod::save_data {
 #define AP_GSWF_JOIN_BASE (AP_GSWF_BASE + 1)
 #define AP_GSWF_JOIN(pixlItemId) (AP_GSWF_JOIN_BASE + (pixlItemId) - 221)
 // Story gift locations collected, one flag each, in story_gifts' order (Peach, Luigi, Helmet,
-// Bowser, Bestovius)
+// Bowser, Bestovius, Brobot L-type)
 #define AP_GSWF_GIFT_BASE (AP_GSWF_BASE + 16)
 #define AP_GSWF_GIFT(index) (AP_GSWF_GIFT_BASE + (index))
 // Pure Hearts held, one flag per heart 1-8; heart N opens tower door N (pure_hearts)
 #define AP_GSWF_HEART_BASE (AP_GSWF_BASE + 24)
 #define AP_GSWF_HEART(n) (AP_GSWF_HEART_BASE + (n) - 1)
-// Key item spots that have no save flag of their own get one from here (reserved for later)
+// Chapter Pure Heart locations collected: one flag per chapter 1-7 (pure_hearts), near the end of the
+// reserved range so the item spots below can keep growing
+#define AP_GSWF_CHAPTER_HEART_BASE (AP_GSWF_BASE + 1008)
+#define AP_GSWF_CHAPTER_HEART(chapter) (AP_GSWF_CHAPTER_HEART_BASE + (chapter) - 1)
+// Item spots that have no save flag of their own get one from here, in spot_flags' order
 #define AP_GSWF_LOC_BASE (AP_GSWF_BASE + 32)
 
 // ---- Vanilla flags the mod relies on ----

@@ -24,6 +24,7 @@ enum Option
     OPTION_FANFARE_SHUFFLE,   // tracks that play once trade places too (music_shuffle)
     OPTION_SFX_SHUFFLE,       // some sound effects play in place of each other (sound_effect_shuffle)
     OPTION_LOW_HEALTH_SOUND,  // off: no beeping while health is low (sound_effect_shuffle)
+    OPTION_FAST_CLIMB,        // ladders and vines climbed twice as fast (climb_speed)
     OPTION_COUNT
 };
 

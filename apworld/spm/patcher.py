@@ -7,8 +7,8 @@ APworld, say) applies the new version cleanly. It changes:
   - sys/main.dol: the game's main program. SeekyCt's rel loader (spm-rel-loader, GPLv3) is built
     into it, which loads the mod when the game boots
   - files/mod/mod.rel: the Archipelago mod itself (added)
-  - files/wicon.tpl, files/wicon.bin: the item pictures, with the Archipelago icons and the Save
-    Block's added
+  - files/wicon.tpl, files/wicon.bin: the item pictures, with the Archipelago icons, the Save
+    Block's and the title banner added
   - files/win/us/pause.tpl: the pause menu pictures, where the unused Maps button becomes Options
 
 It uses only Python's standard library, so it runs inside the Archipelago Launcher. Dolphin then

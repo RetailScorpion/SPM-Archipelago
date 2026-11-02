@@ -1,9 +1,12 @@
 #include <common.h>
 #include <evt_cmd.h>
 #include <msl/string.h>
+#include <spm/evt_door.h>
 #include <spm/evt_msg.h>
 #include <spm/evt_nand.h>
 #include <spm/item_data.h>
+#include <spm/mario.h>
+#include <spm/nandmgr.h>
 #include <wii/os.h>
 
 #include "code_patching.h"
@@ -152,6 +155,41 @@ static void patchGreyOut(GreyOutPatch & p)
     code_patching::writeBranch(p.at, s);
 }
 
+// ---- Saving inside a room ----
+
+/*
+    Houses and other rooms entered by a door are part of their map, but a loaded save always starts
+    with every room shut, so a save made inside one would put Mario where the room was, behind its
+    closed walls (found in Saffron's house). So a save made in a room records the last spot Mario
+    stood outside one, in front of the door he went in by, and loading puts him there.
+*/
+static wii::mtx::Vec3 sOutside;
+static bool sHaveOutside;
+
+// Whether Mario is in a room, or going through a room's door.
+static bool inRoom()
+{
+    return spm::evt_door::evtDoorGetActiveDoorDesc() != nullptr ||
+           (spm::evt_door::evt_door_wp->flags & EVT_DOOR_FLAG_DOOR_OPEN) != 0;
+}
+
+// Saves the game (every save goes through here); saved inside a room, with Mario outside it.
+static void (*nandUpdateSaveReal)(s32 saveId);
+static void nandUpdateSaveHook(s32 saveId)
+{
+    spm::mario::MarioWork * mario = spm::mario::marioGetPtr();
+    if (!inRoom() || !sHaveOutside)
+    {
+        nandUpdateSaveReal(saveId);
+        return;
+    }
+    wii::mtx::Vec3 inside = mario->position;
+    mario->position = sOutside;  // only for the save: nothing runs before he's put back
+    nandUpdateSaveReal(saveId);
+    mario->position = inside;
+    wii::os::OSReport("[spmap] saveblock: saved in a room, at the spot outside it\n");
+}
+
 // ---- Setup ----
 
 // Moves the 7-3 Peach prop from item 45 to item 11, with item 45's old picture.
@@ -180,6 +218,7 @@ void init()
     patchKeyItemMenu();
     for (auto & p : sGreyOutPatches)
         patchGreyOut(p);
+    nandUpdateSaveReal = code_patching::hookFunction(spm::nandmgr::nandUpdateSave, nandUpdateSaveHook);
     wii::os::OSReport("[spmap] saveblock: item %d is the Save Block\n", SAVE_BLOCK_ITEM_ID);
 }
 
@@ -187,6 +226,15 @@ void onMapChange(const char * nextMap)
 {
     sDisabled = nextMap != nullptr && msl::string::strncmp(nextMap, PIT_MAP_PREFIX, sizeof(PIT_MAP_PREFIX) - 1) == 0;
     sUseScript = sDisabled ? ap_save_block_cant_use_evt : ap_save_block_evt;
+    sHaveOutside = false;
+}
+
+void tick()
+{
+    if (inRoom())
+        return;
+    sOutside = spm::mario::marioGetPtr()->position;
+    sHaveOutside = true;
 }
 
 const char * message(const char * msgName)

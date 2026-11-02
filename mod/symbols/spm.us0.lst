@@ -62,6 +62,37 @@
 800F2838:evt_fleep_mode_on
 800F2878:evt_fleep_mode_set
 
+// The title screen's work (SeqTitleWork in spm-headers' seq_title.h, allocated by seq_titleInit):
+// seq_titleMain (0x8017A5B8) reads the pointer with lwz -0x7E50(r13), r13 = 0x80574F20. animNum 0 is
+// the opening animation (title_Start, 121 frames: the logo drops in and settles by frame 40), 1 the
+// loop (title_Loop, 860 frames: the logo sways at frames 230-380 and 630-780). seq_titleMain enters
+// the title's drawing on CAM_ID_2D, render mode 4, z 1000 (in mode 4, smaller z is drawn later)
+8056D0D0:seq_title_wp
+// The title's display callback (0x8017AC14) animates the layout, then works out where each pane goes
+// (CalculateMtx) and draws it, all in one call. The animate call: lwz r12, 0x2c(vtable); bctrl, with
+// r3 = the layout, r4 = 0. Layout: root pane at +0x10. Panes: FindPaneByName at vtable +0x3C (as
+// seqTitleInitLayout uses it), translation (x, y, z) at +0x2C
+8017AD10:title_layout_animate_call
+
+// A Pixl's work (0xD0 bytes) by its id, or 0 if there's none (only searches while the Pixl list is on)
+8011DEB0:fairy_work_by_id
+// In Mario's flip: if he has a Pixl id (mario+0x1484), it looks up that Pixl (bl fairy_work_by_id) and
+// sets bit 2 of its first halfword, without checking that the Pixl is there
+80147934:flip_pixl_lookup_call
+
+// In Tippi's pointer code: "cmpwi r3, 12; blt off" on the story value: no pointing while it's 1-11
+// (vanilla: before her pointing tutorial at the start of 1-1)
+802421E4:tippi_pointer_story_check
+
+// Mario's climbing (motion 13) reads the stick each frame and adds its direction (1 unit at full tilt)
+// to his climbing move: vertical at mario+0x138, sideways at mario+0x134, which the movement code then
+// applies. These are those adds: in 2D, up and down twice and sideways once; in 3D, up and down twice
+8011A6F4:climb_2d_vertical_add_1
+8011A704:climb_2d_vertical_add_2
+8011A71C:climb_2d_sideways_add
+8011AB44:climb_3d_vertical_add_1
+8011AB54:climb_3d_vertical_add_2
+
 // relF: Flipside Tower dimension doors
 1,1,cb4:evt_mac_set_door_dest
 1,1,d4c:evt_mac_door_section_dest

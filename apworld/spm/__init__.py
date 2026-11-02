@@ -10,7 +10,7 @@ This is the "world": what Archipelago calls to make a seed for Super Paper Mario
 The goal is finishing Chapter 8.
 """
 
-from BaseClasses import ItemClassification, Location, Region, Tutorial
+from BaseClasses import ItemClassification, Location, LocationProgressType, Region, Tutorial
 from Options import OptionError
 from worlds.AutoWorld import WebWorld, World
 from worlds.LauncherComponents import Component, Type, components, launch_subprocess
@@ -30,10 +30,31 @@ CATEGORY_OPTIONS = {
     "overworld_item": "shuffle_overworld_items",
     "catch_card": "shuffle_catch_cards",
     "character": "randomize_characters",
+    "pure_heart": "shuffle_pure_hearts",
 }
 # Categories that are never shuffled. Only the Helmet's location for now: Outer Space can't be played
 # without the Helmet, and nothing in the logic keeps you out of Chapter 4 without it yet
 FIXED_CATEGORIES = {"fixed"}
+# Maps whose locations are post-game Sammer's Kingdom's rewards (the sammer_gauntlet option)
+SAMMER_GAUNTLET_MAPS = ("(wa4_26)",)
+
+# Sammer's Kingdom's groups of duels, for sammer_duels: (how many gates, whether its first gate always
+# plays). The story's duels are gates 1-20 (21-30 are rooms whose Sammer Guys give up); the post-game
+# has four groups of 25. Each group's last gate always plays.
+SAMMER_GROUPS = [(20, True), (25, True), (25, False), (25, False), (25, False)]
+
+
+def sammer_gates(random, duels: int) -> list[int]:
+    """The Sammer Guy gates that play in each group (story, then post-game groups 1-4), as bitmasks of
+    the group's gates (bit 0 = its first gate): the last gate, the first one where it always plays, and
+    random ones up to `duels` in all."""
+    masks = []
+    for count, first_fixed in SAMMER_GROUPS:
+        fixed = {count - 1} | ({0} if first_fixed else set())
+        others = [gate for gate in range(count) if gate not in fixed]
+        chosen = fixed | set(random.sample(others, max(0, min(duels, count) - len(fixed))))
+        masks.append(sum(1 << gate for gate in chosen))
+    return masks
 
 
 # ---- Launcher entries ----
@@ -98,13 +119,25 @@ class SPMWorld(World):
             else:
                 count = self.random.randint(1, self.options.starting_chapter_max.value)
             chapters = set(self.random.sample(list(TOWER_CHAPTERS), count))
+        # With the hearts at their vanilla spots, each chapter's ending opens the next, so the chain
+        # has to start at Chapter 1 (with only later doors open, the earlier chapters could never open).
+        # A random pick keeps its size: Chapter 1 takes the place of one of the others
+        if not self.options.shuffle_pure_hearts and 1 not in chapters:
+            if mode != mode.option_chosen:
+                chapters.remove(self.random.choice(sorted(chapters)))
+            chapters.add(1)
         self.starting_chapters = sorted(chapters)
+        self.sammer_gates = sammer_gates(self.random, self.options.sammer_duels.value)
 
     def create_regions(self) -> None:
         """One region holds every location (there's no map logic yet), plus the goal."""
         menu = Region("Menu", self.player, self.multiworld)
         for i, location in enumerate(LOCATION_LIST):
-            menu.locations.append(SPMLocation(self.player, location.name, location_id(i), menu))
+            spm_location = SPMLocation(self.player, location.name, location_id(i), menu)
+            # Without sammer_gauntlet, the 100 duels' rewards only hold filler
+            if location.name.endswith(SAMMER_GAUNTLET_MAPS) and not self.options.sammer_gauntlet:
+                spm_location.progress_type = LocationProgressType.EXCLUDED
+            menu.locations.append(spm_location)
         victory = SPMLocation(self.player, rules.VICTORY_LOCATION, None, menu)
         victory.place_locked_item(self.create_item(VICTORY_ITEM))
         menu.locations.append(victory)
@@ -112,18 +145,22 @@ class SPMWorld(World):
 
     def create_items(self) -> None:
         """Builds the item pool."""
-        # Each location's vanilla item: into the pool if its category is shuffled, else kept in place
+        # Each location's vanilla item: into the pool if its category is shuffled, else kept in place.
+        # A chapter's Pure Heart location adds filler instead: which hearts are needed depends on the
+        # starting chapters, so those are added below
         pool, kept = [], []
         for location in LOCATION_LIST:
             item = self.create_item(vanilla_item_name(location.vanilla_item))
             if self.shuffled(location.category):
-                pool.append(item)
+                pool.append(self.create_item(FILLER_ITEM) if location.category == "pure_heart" else item)
             else:
                 kept.append((location.name, location.category, item))
 
-        # Items added to the pool: the Pure Hearts of the chapters that start closed, and the Save Block
-        # if it's shuffled
-        added = [self.create_item(f"Pure Heart {n}") for n in TOWER_CHAPTERS if n not in self.starting_chapters]
+        # Items added to the pool: the Pure Hearts of the chapters that start closed (unless they stay at
+        # their chapters' endings), and the Save Block if it's shuffled
+        added = []
+        if self.options.shuffle_pure_hearts:
+            added += [self.create_item(f"Pure Heart {n}") for n in TOWER_CHAPTERS if n not in self.starting_chapters]
         save_block = self.options.save_block
         if save_block == save_block.option_shuffle:
             added.append(self.create_item(SAVE_BLOCK_ITEM))
@@ -165,4 +202,5 @@ class SPMWorld(World):
     def fill_slot_data(self) -> dict:
         """What the client gets when it connects: some options, and the starting chapters."""
         return {"options": self.options.as_dict(*CATEGORY_OPTIONS.values(), "skip_cutscenes"), "id_base": ID_BASE,
+                "sammer_gates": self.sammer_gates,
                 "starting_chapters": self.starting_chapters}

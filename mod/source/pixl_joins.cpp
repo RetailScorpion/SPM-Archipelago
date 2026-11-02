@@ -8,6 +8,7 @@
 #include <wii/os.h>
 
 #include "archipelago_item.h"
+#include "code_patching.h"
 #include "game_addresses.h"
 #include "mailbox.h"
 #include "pixl_joins.h"
@@ -313,10 +314,28 @@ static void applyPatch(const Patch & p)
     }
 }
 
+// ---- Flipping without a Pixl ----
+
+/*
+    When Mario flips, the game looks up his current Pixl (by the id it keeps in Mario's work) and sets
+    a flag in it, without checking the lookup found one. With no Pixl in the party (possible once
+    Pixls are shuffled), that's a write to address 0: harmless on Dolphin without MMU, but it stops
+    the game with a warning (user, 2026-11-02). The lookup goes through here instead, which gives a
+    spare spot for the flag when there's no Pixl.
+*/
+static u32 sNoPixl;
+
+static void * flipPixlLookup(s32 id)
+{
+    void * pixl = game_addresses::fairy_work_by_id(id);
+    return pixl != nullptr ? pixl : &sNoPixl;
+}
+
 void init()
 {
     for (auto & p : sPatches)
         applyPatch(p);
+    code_patching::writeBranch(game_addresses::flip_pixl_lookup_call, reinterpret_cast<void *>(flipPixlLookup), true);
     wii::os::OSReport("[spmap] joins: Pixl joins patched\n");
 }
 

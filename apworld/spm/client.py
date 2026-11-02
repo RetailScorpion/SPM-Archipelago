@@ -53,6 +53,7 @@ class SPMContext(CommonContext):
         self.mailbox_addr = None     # where the mailbox was found last
         self.slot_options = {}
         self.starting_chapters = []
+        self.sammer_gates = [0] * 5  # 0: every gate plays (a seed from before sammer_duels)
         self.shared_checks = None    # (seed, slot, flags) last written for the tracker
         self.shared_at = 0.0         # when it was written
 
@@ -67,6 +68,7 @@ class SPMContext(CommonContext):
         if cmd == "Connected":
             self.slot_options = args.get("slot_data", {}).get("options", {})
             self.starting_chapters = args.get("slot_data", {}).get("starting_chapters", [])
+            self.sammer_gates = args.get("slot_data", {}).get("sammer_gates", [0] * 5)
             self.scouted = {}
             self.placed = False
             self.goal_sent = False
@@ -105,6 +107,7 @@ def send_seed_settings(ctx: SPMContext):
     """Writes the seed's settings into the mailbox. Done before a save is loaded too, since a new
     file's opening reads them right away."""
     ctx.mailbox.set_play_cutscenes(not ctx.slot_options.get("skip_cutscenes", True))
+    ctx.mailbox.set_sammer_gates(ctx.sammer_gates)
     ctx.mailbox.set_starting_hearts(ctx.starting_chapters)
 
 
@@ -126,12 +129,22 @@ def update_game(ctx: SPMContext):
     checks.check_goal(ctx)
 
 
+def server_connected(ctx: SPMContext) -> bool:
+    """Whether the client is connected to the Archipelago server, in a slot."""
+    socket = getattr(ctx.server, "socket", None) if ctx.server else None
+    if socket is None or ctx.slot is None:
+        return False
+    closed = getattr(socket, "closed", None)
+    return not closed if closed is not None else True
+
+
 def poll_game(ctx: SPMContext):
     """One check of the game."""
     if ctx.slot is not None:
         checks.share_checks(ctx)
     if ctx.mailbox is None:
         find_mailbox(ctx)
+    ctx.mailbox.report_connection(server_connected(ctx))
     if ctx.slot is not None:
         send_seed_settings(ctx)
 

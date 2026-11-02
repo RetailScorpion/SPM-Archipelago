@@ -1,4 +1,5 @@
-"""Encodes the Archipelago icons for SPM's item icon files, and adds them to a folder's wicon files.
+"""Encodes the Archipelago icons and the title screen pictures for SPM's icon files, and adds
+them to a folder's wicon files.
 
 The patching itself lives in apworld/spm/patcher.py (so the Launcher's patcher needs no Pillow); this
 tool encodes the PNGs to RGB5A3 for it:
@@ -23,7 +24,12 @@ import tpl  # noqa: E402
 AP_ICONS = [os.path.join(ROOT, "assets", "icons", "ap_progression.png"),
             os.path.join(ROOT, "assets", "icons", "ap_filler.png"),
             os.path.join(ROOT, "assets", "icons", "ap_blank.png"),  # traps: Mario holds up nothing
-            os.path.join(ROOT, "assets", "icons", "save_block.png")]  # from the save block's textures
+            os.path.join(ROOT, "assets", "icons", "save_block.png"),  # from the save block's textures
+            os.path.join(ROOT, "assets", "title", "archipelago_banner.png"),  # the title screen's banner
+            os.path.join(ROOT, "assets", "title", "archipelago_flower.png")]  # and the flower behind the title
+# Pictures drawn at another size than their PNG: each is cropped to what it shows, then shrunk to
+# this width, the size it's drawn at (the title logo is 380 wide)
+ICON_WIDTHS = {"archipelago_banner.png": 320, "archipelago_flower.png": 360}
 OUT_ICONS = os.path.join(ROOT, "apworld", "spm", "bin", "ap_icons.bin")
 
 
@@ -32,6 +38,10 @@ def encode_icons(pngs=AP_ICONS) -> bytes:
     out = bytearray()
     for p in pngs:
         im = Image.open(p).convert("RGBA")
+        width = ICON_WIDTHS.get(os.path.basename(p))
+        if width:
+            im = im.crop(im.getchannel("A").getbbox())
+            im = im.resize((width, round(im.height * width / im.width)), Image.LANCZOS)
         out += struct.pack(">HH", *im.size) + tpl.encode_rgb5a3(im)
     return bytes(out)
 

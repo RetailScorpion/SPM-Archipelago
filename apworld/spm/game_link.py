@@ -18,7 +18,7 @@ import dolphin_memory_engine as dme
 # ---- The mailbox's layout (mod/include/mailbox.h) ----
 
 MAGIC = b"SPMAP_MAILBOX_v1"  # the text the client searches memory for
-VERSION = 12                 # the mod and client must agree on this
+VERSION = 16                 # the mod and client must agree on this
 RECV_SIZE = 16               # items waiting to be given
 SENT_SIZE = 32               # locations waiting (developer tools only)
 
@@ -51,12 +51,18 @@ OFF_PLAY_CUTSCENES = 0x130
 OFF_GIFT_ITEMS = 0x134
 OFF_STARTING_HEARTS = 0x144
 OFF_GAME_FRAMES = 0x148
+OFF_SAMMER_GATES = 0x14C  # 5 words
+OFF_SERVER_CONNECTED = 0x160
+OFF_CLIENT_FRAME = 0x164
+OFF_HEART_LOC_ITEMS = 0x168  # 8 halfwords
 GIFT_FLAG_BASE = 7168 + 16  # the first story gift's save flag (save_data.h AP_GSWF_GIFT_BASE)
+HEART_LOC_FLAG_BASE = 7168 + 1008  # Chapter 1's Pure Heart location's flag (save_data.h AP_GSWF_CHAPTER_HEART_BASE)
 RECV_ALREADY_GIVEN = 0x8000  # marks an item the game already gave (the mod only counts it)
 NO_SAVE = 0xFFFFFFFF         # savedRecvCount when no save is loaded
 LOC_NAME_SIZE = 0x40  # one entry of the names list (archipelago_item.h LocName): 2 bytes flag,
                       # 2 bytes kind, 36 bytes item name, 24 bytes player name
 LOC_KIND_OTHER_WORLD, LOC_KIND_TRAP, LOC_KIND_OTHER_WORLD_FILLER = 0, 1, 2  # archipelago_item.h LocKind
+LOC_KIND_PURE_HEART = 16  # + N: this world's Pure Heart N, shown with its own icon
 DEBUG_JOINS_GIVE_NOTHING = 0x1
 DEBUG_JOINS_GIVE_PLACEHOLDER = 0x2
 
@@ -205,6 +211,11 @@ class Mailbox:
         """What a story gift location gives (0 = vanilla, JOIN_ITEM_OTHER_WORLD = another world's item)."""
         dme.write_bytes(self.addr + OFF_GIFT_ITEMS + 2 * index, struct.pack(">H", item_id))
 
+    def set_heart_item(self, index: int, item_id: int):
+        """What a chapter's Pure Heart location gives (index = chapter - 1; 0 = vanilla,
+        JOIN_ITEM_OTHER_WORLD = an Archipelago item)."""
+        dme.write_bytes(self.addr + OFF_HEART_LOC_ITEMS + 2 * index, struct.pack(">H", item_id))
+
     def set_starting_hearts(self, hearts):
         """The Pure Hearts the seed starts with (numbers 1-8)."""
         dme.write_word(self.addr + OFF_STARTING_HEARTS, sum(1 << (n - 1) for n in hearts))
@@ -212,6 +223,17 @@ class Mailbox:
     def set_play_cutscenes(self, play: bool):
         """Whether the mod plays the story scenes it can skip."""
         dme.write_word(self.addr + OFF_PLAY_CUTSCENES, 1 if play else 0)
+
+    def report_connection(self, connected: bool):
+        """Tells the mod whether the client is connected to the server, and that the client is alive (by
+        echoing the game's frame counter)."""
+        dme.write_word(self.addr + OFF_SERVER_CONNECTED, 1 if connected else 0)
+        dme.write_word(self.addr + OFF_CLIENT_FRAME, self.game_frames())
+
+    def set_sammer_gates(self, masks: list[int]):
+        """Which Sammer Guy gates play in each group (story, post-game 1-4): bitmasks, bit 0 = the
+        group's first gate."""
+        dme.write_bytes(self.addr + OFF_SAMMER_GATES, struct.pack(">5I", *masks))
 
     def read_flags(self) -> bytes:
         """All 8192 GSWF save flags as 1024 bytes (the raw words)."""
