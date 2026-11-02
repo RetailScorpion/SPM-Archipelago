@@ -1,6 +1,6 @@
 # Super Paper Mario Archipelago: Design
 
-Status: a playable no-logic build is out (0.2.0). This doc covers both what's built and what's still planned.
+Status: a playable no-logic build is out (0.2.1). This doc covers both what's built and what's still planned.
 Target: US release (1.0 for development, 1.1 and 1.2 later).
 
 Items marked (verify) come from the Super Mario Wiki and still need to be confirmed against the game's own scripts.
@@ -172,7 +172,7 @@ v1 has a single "intended" logic: no tricks, no damage boosts. A `logic_difficul
 
 ## 5. Options (draft)
 
-Rows marked **Built** are YAML options in 0.2.0, under the names in `apworld/spm/options.py`. Rows marked **in-game Options** are pause menu settings. Everything else is planned.
+Rows marked **Built** are YAML options in 0.2.1, under the names in `apworld/spm/options.py`. Rows marked **in-game Options** are pause menu settings. Everything else is planned.
 
 | Option | Values | Default | Notes |
 |---|---|---|---|
@@ -264,7 +264,7 @@ Filler (when the pool has more locations than progression items): coins, consuma
 
 ## 6. Technical approach (summary)
 
-1. **Story value virtualization.** Our code hooks every read and write of the story progress value (GSW 0). Each chapter keeps its own saved value in unused save-file space, and that's the one the game sees while you're in that chapter's maps. The hubs see one fixed "hub value": 11, the end of the prologue, so no hub cutscene is waiting to play. The hub tests that low value would close (the elevators, a Flopside house door, the Old Key gate, the recipe terminals) are patched open (`hub_story_fixes.cpp`), and hub events we still want (Peach's revival, side quests) are rewritten to use our own flags. Until 0.2.0 the hub value was 65.
+1. **Story value virtualization.** Our code hooks every read and write of the story progress value (GSW 0). Each chapter keeps its own saved value in unused save-file space, and that's the one the game sees while you're in that chapter's maps. The hubs see one fixed "hub value": 11, the end of the prologue, so no hub cutscene is waiting to play. The hub tests that low value would close (the elevators, a Flopside house door, the Old Key gate, the recipe terminals) are patched open (`hub_story_fixes.cpp`), and hub events we still want (Peach's revival, side quests) are rewritten to use our own flags. Up to 0.2.0 the hub value was 65.
 2. **Location hooks.** Every vanilla event that gives an item, Pixl, character or heart is replaced: it sets `CHECKED[loc_id]` instead and does nothing else. The item arrives from the client.
    **Rule: no missable locations.** Vanilla gates many of these events on a story-value window that's impossible to skip past in normal play. The randomizer can skip it (an item from another world can let you skip ahead), so each location must stay collectable until its own flag is set, whatever the chapter's story value. Patch the scripts to check "location not collected" instead of "story value below X".
    Example: Bestovius only teaches flipping while Chapter 1 is below 15; at 16+ he has other lines. If you can already flip (`flip: start_with`) and hit 1-1's Star Block first, his check would be lost. His higher-value dialogue needs a branch that gives the check if it hasn't been collected.
