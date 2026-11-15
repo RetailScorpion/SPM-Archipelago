@@ -12,7 +12,7 @@ import zipfile
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SRC = os.path.join(ROOT, "apworld", "spm")
 OUT = os.path.join(ROOT, "build", "spm.apworld")
-CUSTOM_WORLDS = r"D:\Tools\Archipelago\custom_worlds"
+CUSTOM_WORLDS = r"F:\Tools\Archipelago\custom_worlds"
 
 
 MOD_REL = os.path.join(ROOT, "mod", "out", "us0.rel")
@@ -35,6 +35,11 @@ def main():
     from tpl import encode_rgb5a3
     from PIL import Image
     open(os.path.join(BIN, "options_button.bin"), "wb").write(encode_rgb5a3(Image.open(OPTIONS_BUTTON)))
+    # The file select's Options button: only its lettering; the patcher builds the button from the disc
+    subprocess.run([sys.executable, "-E", os.path.join(ROOT, "tools", "fileselect_lettering.py")], check=True)
+    old = os.path.join(BIN, "fileselect_options_button.bin")
+    if os.path.exists(old):
+        os.remove(old)
     with zipfile.ZipFile(OUT, "w", zipfile.ZIP_DEFLATED) as z:
         for folder, dirs, files in os.walk(SRC):
             dirs[:] = [d for d in dirs if d != "__pycache__"]

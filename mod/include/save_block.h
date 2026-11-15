@@ -33,8 +33,12 @@ void init();
 // Greys the Save Block out in the Pits. Call on every map change.
 void onMapChange(const char * nextMap);
 
-// Keeps track of where Mario last stood outside a room. Call every frame while playing.
+// Keeps track of where Mario last stood outside a room, and puts a loaded save's gravity back. Call
+// every frame while playing.
 void tick();
+
+// A save is about to be loaded (no save is loaded now). Call from the title, file select and game over.
+void onNoSaveLoaded();
 
 // The mod's text for a game message name, or nullptr to use the game's own.
 const char * message(const char * msgName);

@@ -7,10 +7,12 @@
 #include <spm/swdrv.h>
 #include <wii/os.h>
 
+#include "game_mode.h"
 #include "archipelago_item.h"
 #include "code_patching.h"
 #include "game_addresses.h"
 #include "mailbox.h"
+#include "offline_checks.h"
 #include "pixl_joins.h"
 #include "received_items.h"
 #include "save_data.h"
@@ -183,7 +185,13 @@ static EVT_DEFINE_USER_FUNC(ap_join_gift)
 
     mailbox::Mailbox & mb = mailbox::gMailbox;
     u16 given = mb.joinItems[pixl - ITEM_ID_FAIRY_START];
-    if (given == JOIN_ITEM_OTHER_WORLD)
+    if (offline_checks::active() && !(mb.debugFlags & (DEBUG_JOINS_GIVE_NOTHING | DEBUG_JOINS_GIVE_PLACEHOLDER)))
+    {
+        // The seed's items aren't in the game yet: logged, its item comes once the client connects
+        received_items::giveLocal(archipelago_item::AP_ITEM_ID);
+        wii::os::OSReport("[spmap] joins: Pixl %d's location collected offline\n", pixl);
+    }
+    else if (given == JOIN_ITEM_OTHER_WORLD)
     {
         received_items::giveLocal(archipelago_item::AP_ITEM_ID);
         wii::os::OSReport("[spmap] joins: Pixl %d's location holds another world's item\n", pixl);
@@ -247,9 +255,9 @@ static void applyPatch(const Patch & p)
             const s32 expected[] = {EVT_CMD(2, OP_IF_SMALL), GSW_VAR(0), p.a};
             if (matches(at, expected, 3, p.what))
             {
-                at[0] = EVT_CMD(2, OP_IF_EQUAL);
-                at[1] = GSWF_VAR(AP_GSWF_JOIN(p.b));
-                at[2] = 0;
+                game_mode::set<s32>(&at[0], EVT_CMD(2, OP_IF_EQUAL));
+                game_mode::set<s32>(&at[1], GSWF_VAR(AP_GSWF_JOIN(p.b)));
+                game_mode::set<s32>(&at[2], 0);
             }
             break;
         }
@@ -257,7 +265,7 @@ static void applyPatch(const Patch & p)
         {
             const s32 expected[] = {EVT_CMD(2, OP_IF_SMALL), GSW_VAR(0), p.a};
             if (matches(at, expected, 3, p.what))
-                at[2] = 0;
+                game_mode::set<s32>(&at[2], 0);
             break;
         }
         case GIFT:
@@ -268,8 +276,8 @@ static void applyPatch(const Patch & p)
             };
             if (matches(at, expected, 6, p.what))
             {
-                at[1] = reinterpret_cast<s32>(ap_join_gift);
-                at[4] = reinterpret_cast<s32>(ap_join_select);
+                game_mode::set<s32>(&at[1], reinterpret_cast<s32>(ap_join_gift));
+                game_mode::set<s32>(&at[4], reinterpret_cast<s32>(ap_join_select));
             }
             break;
         }
@@ -277,28 +285,28 @@ static void applyPatch(const Patch & p)
         {
             const s32 expected[] = {EVT_CMD(2, OP_IF_EQUAL), LW_VAR(0), 0};
             if (matches(at, expected, 3, p.what))
-                at[2] = -1;
+                game_mode::set<s32>(&at[2], -1);
             break;
         }
         case STAGE:
         {
             const s32 expected[] = {EVT_CMD(1, OP_SWITCH), GSW_VAR(0)};
             if (matches(at, expected, 2, p.what))
-                at[1] = GSW_VAR(AP_GSW_JOIN_STAGES + p.a);
+                game_mode::set<s32>(&at[1], GSW_VAR(AP_GSW_JOIN_STAGES + p.a));
             break;
         }
         case CASE_NEVER:
         {
             const s32 expected[] = {EVT_CMD(1, OP_CASE_SMALL), p.a};
             if (matches(at, expected, 2, p.what))
-                at[1] = p.b;
+                game_mode::set<s32>(&at[1], p.b);
             break;
         }
         case HAVE_NEVER:
         {
             const s32 expected[] = {EVT_CMD(2, OP_IF_NOT_EQUAL), LW_VAR(0), 0};
             if (matches(at, expected, 3, p.what))
-                at[2] = LW_VAR(0);
+                game_mode::set<s32>(&at[2], LW_VAR(0));
             break;
         }
         case SKIP:
@@ -308,7 +316,7 @@ static void applyPatch(const Patch & p)
         {
             const s32 expected[] = {EVT_CMD(2, OP_USER_FUNC), reinterpret_cast<s32>(sFleepOnly[p.b].game), 1};
             if (matches(at, expected, 3, p.what))
-                at[1] = reinterpret_cast<s32>(sFleepOnly[p.b].fleepOnly);
+                game_mode::set<s32>(&at[1], reinterpret_cast<s32>(sFleepOnly[p.b].fleepOnly));
             break;
         }
     }
@@ -335,7 +343,7 @@ void init()
 {
     for (auto & p : sPatches)
         applyPatch(p);
-    code_patching::writeBranch(game_addresses::flip_pixl_lookup_call, reinterpret_cast<void *>(flipPixlLookup), true);
+    game_mode::writeBranch(game_addresses::flip_pixl_lookup_call, reinterpret_cast<void *>(flipPixlLookup), true);
     wii::os::OSReport("[spmap] joins: Pixl joins patched\n");
 }
 

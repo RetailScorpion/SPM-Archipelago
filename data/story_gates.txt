@@ -1,0 +1,354 @@
+# Checks whose script only runs in a story-value range
+
+7-2 Underwhere Road - Door Key (an2_03): GSW(0) 314..314  [an2_03]  script 0x1a1680 at 0x1a19bc
+7-2 Underwhere Road - Door Key (an2_07): GSW(0) ..321  [an2_07]  script 0x1a6438 at 0x1a6cec
+7-4 The Overthere - Door Key (an4_03): GSW(0) ..347  [an4_03]  script 0x1bbed8 at 0x1bc3a8
+7-4 The Overthere - Door Key (an4_04): GSW(0) ..343  [an4_04]  script 0x1bd490 at 0x1bd6e0
+1-4 Yold Ruins - Ruins Key (he4_05): GSW(0) ..42  [he4_05]  script 0xfa118 at 0xfa3a0
+1-4 Yold Ruins - Ruins Key (he4_07): GSW(0) ..45  [he4_07]  script 0xfab8c at 0xfac58
+2-2 Merlee's Mansion - House Key (mi2_06): GSW(0) ..78  [mi2_06]  script 0x10aa48 at 0x10aa6c
+4-2 Planet Blobule - Door Key (sp2_01): GSW(0) ..145  [sp2_01]  script 0x14b6d0 at 0x14b798
+5-3 Floro Caverns - Cave Key (gn3_01): GSW(0) ..199  [gn3_01]  script 0x16d040 at 0x16d460
+5-4 Floro Caverns - Card Key (gn4_10): GSW(0) ..210  [gn4_10]  script 0x177038 at 0x177130
+8-2 Castle Bleck Foyer - Castle Bleck Key (ls2_02): GSW(0) 360..374  [ls2_02]  script 0x1d6040 at 0x1d6064
+8-2 Castle Bleck Foyer - Castle Bleck Key (ls2_12): GSW(0) ..376  [ls2_12]  script 0x1dbca0 at 0x1dbce0
+
+# Locks whose open script sets the story value
+
+lock key 47 (Old Key) at 0xc83d0 [mac_02] appears in GSW(0) ..63: sets [(64, '0xb378c')]
+lock key 16 (Ruins Key) at 0xf9b88 [he4_03] appears in GSW(0) ..40: sets [(41, '0xf98c0')]
+lock key 16 (Ruins Key) at 0xfa3f8 [he4_05] appears in GSW(0) ..43: sets [(44, '0xf9f00')]
+lock key 16 (Ruins Key) at 0xfac98 [he4_07] appears in GSW(0) ..46: sets [(46, '0xfab78'), (47, '0xfab40')]
+lock key 17 (Door Key) at 0x10161c [mi1_01] appears in GSW(0) ..68: sets [(69, '0x101070')]
+lock key 18 (House Key) at 0x1085b0 [mi2_03] appears in GSW(0) ..79: sets [(80, '0x10810c')]
+lock key 19 (Fort Key) at 0x137b54 [ta4_01] appears in GSW(0) ..121: sets [(122, '0x1374b0')]
+lock key 33 (Cave Key) at 0x16fe1c [gn3_03] appears in GSW(0) ..200: sets [(201, '0x16f570')]
+lock key 34 (Cave Key) at 0x1750c8 [gn4_02] appears in GSW(0) ..207: sets [(208, '0x174580')]
+lock key 26 (Door Key) at 0x14cd34 [sp2_01] appears in GSW(0) ..146: sets [(147, '0x14a4c8')]
+lock key 27 (Dimension Key) at 0x1561ac [sp4_03] appears in GSW(0) ..163: sets [(164, '0x156078')]
+lock key 28 (Dimension Key) at 0x156b60 [sp4_07] appears in GSW(0) ..165: sets [(165, '0x156904'), (166, '0x156980')]
+lock key 29 (Dimension Key) at 0x15766c [sp4_11] appears in GSW(0) ..168: sets [(169, '0x157510')]
+lock key 49 (Door Key) at 0x196bf8 [an1_03] appears in GSW(0) ..295: sets [(296, '0x1967d8')]
+lock key 37 (Door Key) at 0x1a2048 [an2_03] appears in GSW(0) ..315: sets [(316, '0x1a0be0')]
+lock key 38 (Door Key) at 0x1a61e8 [an2_06] appears in GSW(0) ..322: sets [(323, '0x1a5d90')]
+lock key 38 (Door Key) at 0x1a61e8 [an2_06] appears in GSW(0) ..322: sets [(323, '0x1a5d90')]
+lock key 40 (Door Key) at 0x1b9720 [an4_01] appears in GSW(0) ..344: sets [(341, '0x1b9368'), (345, '0x1b9410')]
+lock key 40 (Door Key) at 0x1bb060 [an4_02] appears in GSW(0) ..348: sets [(349, '0x1b9ea8')]
+lock key 46 (Castle Bleck Key) at 0x1ccb9c [ls1_05] appears in GSW(0) ..361: sets [(362, '0x1cbd0c')]
+lock key 46 (Castle Bleck Key) at 0x1d6c2c [ls2_02] appears in GSW(0) 360..375: sets [(376, '0x1d6144')]
+lock key 46 (Castle Bleck Key) at 0x1dadc8 [ls2_09] appears in GSW(0) ..377: sets [(378, '0x1da6e4')]
+lock key 46 (Castle Bleck Key) at 0x1e1ea0 [ls3_03] appears in GSW(0) ..389: sets [(390, '0x1e16f0')]
+lock key 46 (Castle Bleck Key) at 0x1e2298 [ls3_04] appears in GSW(0) ..395: sets [(396, '0x1e2138')]
+lock key 46 (Castle Bleck Key) at 0x1e3be4 [ls3_11] appears in GSW(0) ..398: sets [(398, '0x1e38d8'), (399, '0x1e3958')]
+lock key 46 (Castle Bleck Key) at 0x1e8438 [ls4_04] appears in GSW(0) ..408: sets [(409, '0x1e7fb0')]
+# Story sets that can run inside a check's window and jump past it
+
+7-2 Underwhere Road - Door Key (an2_03) (window 314..314):
+    -> 315 in an2_03 at 0x1a1aa0, runs in 314..314
+    -> 316 in an2_03 at 0x1a0be0, runs in ..315
+    -> 318 in an2_05 at 0x1a50d4, runs in ..317
+    -> 319 in an2_05 at 0x1a45d8, runs in ..317
+    -> 319 in an2_05 at 0x1a45d8, runs in ..318
+    -> 320 in an2_07 at 0x1a6710, runs in ..319
+    -> 321 in an2_01 at 0x19ed64, runs in ..320
+    -> 322 in an2_07 at 0x1a6da0, runs in ..321
+    -> 323 in an2_06 at 0x1a5d90, runs in ..322
+    -> 324 in an2_08 at 0x1ac8d8, runs in ..324
+    -> 325 in an2_08 at 0x1ac960, runs in ..324
+    -> 326 in an2_08 at 0x1ac1d8, runs in ..324
+    -> 326 in an2_08 at 0x1ac1d8, runs in ..325
+    -> 328 in an2_09 at 0x1ad894, runs in ..327
+    -> 329 in an3_01 at 0x1ae250, runs in ..328
+    -> 330 in an3_06 at 0x1b3c64, runs in ..329
+    -> 331 in an3_06 at 0x1b29e8, runs in ..
+    -> 332 in an3_15 at 0x1b795c, runs in ..
+    -> 333 in an3_15 at 0x1b7fc8, runs in ..
+    -> 340 in an3_04 at 0x1b063c, runs in ..339
+    -> 341 in an4_01 at 0x1b9368, runs in ..340
+    -> 341 in an4_01 at 0x1b9368, runs in ..344
+    -> 342 in an4_04 at 0x1bddb8, runs in ..341
+    -> 343 in an4_04 at 0x1bd954, runs in ..341
+    -> 343 in an4_04 at 0x1bd954, runs in ..342
+    -> 344 in an4_04 at 0x1bd7e4, runs in ..341
+    -> 344 in an4_04 at 0x1bd7e4, runs in ..342
+    -> 344 in an4_04 at 0x1bd7e4, runs in ..343
+    -> 345 in an4_01 at 0x1b9410, runs in ..344
+    -> 346 in an4_02 at 0x1baa34, runs in ..346
+    -> 347 in an4_02 at 0x1ba874, runs in ..
+    -> 347 in an4_02 at 0x1ba874, runs in ..346
+    -> 348 in an4_03 at 0x1bc3f8, runs in ..347
+    -> 349 in an4_02 at 0x1b9ea8, runs in ..348
+    -> 350 in an4_03 at 0x1bcc84, runs in ..349
+    -> 351 in an4_09 at 0x1c3be0, runs in ..350
+    -> 352 in an4_10 at 0x1c7648, runs in ..351
+    -> 353 in an4_10 at 0x1c6670, runs in ..351
+7-2 Underwhere Road - Door Key (an2_07) (window ..321):
+    -> 322 in an2_07 at 0x1a6da0, runs in ..321
+    -> 323 in an2_06 at 0x1a5d90, runs in ..322
+    -> 324 in an2_08 at 0x1ac8d8, runs in ..324
+    -> 325 in an2_08 at 0x1ac960, runs in ..324
+    -> 326 in an2_08 at 0x1ac1d8, runs in ..324
+    -> 326 in an2_08 at 0x1ac1d8, runs in ..325
+    -> 328 in an2_09 at 0x1ad894, runs in ..327
+    -> 329 in an3_01 at 0x1ae250, runs in ..328
+    -> 330 in an3_06 at 0x1b3c64, runs in ..329
+    -> 331 in an3_06 at 0x1b29e8, runs in ..
+    -> 332 in an3_15 at 0x1b795c, runs in ..
+    -> 333 in an3_15 at 0x1b7fc8, runs in ..
+    -> 340 in an3_04 at 0x1b063c, runs in ..339
+    -> 341 in an4_01 at 0x1b9368, runs in ..340
+    -> 341 in an4_01 at 0x1b9368, runs in ..344
+    -> 342 in an4_04 at 0x1bddb8, runs in ..341
+    -> 343 in an4_04 at 0x1bd954, runs in ..341
+    -> 343 in an4_04 at 0x1bd954, runs in ..342
+    -> 344 in an4_04 at 0x1bd7e4, runs in ..341
+    -> 344 in an4_04 at 0x1bd7e4, runs in ..342
+    -> 344 in an4_04 at 0x1bd7e4, runs in ..343
+    -> 345 in an4_01 at 0x1b9410, runs in ..344
+    -> 346 in an4_02 at 0x1baa34, runs in ..346
+    -> 347 in an4_02 at 0x1ba874, runs in ..
+    -> 347 in an4_02 at 0x1ba874, runs in ..346
+    -> 348 in an4_03 at 0x1bc3f8, runs in ..347
+    -> 349 in an4_02 at 0x1b9ea8, runs in ..348
+    -> 350 in an4_03 at 0x1bcc84, runs in ..349
+    -> 351 in an4_09 at 0x1c3be0, runs in ..350
+    -> 352 in an4_10 at 0x1c7648, runs in ..351
+    -> 353 in an4_10 at 0x1c6670, runs in ..351
+7-4 The Overthere - Door Key (an4_03) (window ..347):
+    -> 348 in an4_03 at 0x1bc3f8, runs in ..347
+    -> 349 in an4_02 at 0x1b9ea8, runs in ..348
+    -> 350 in an4_03 at 0x1bcc84, runs in ..349
+    -> 351 in an4_09 at 0x1c3be0, runs in ..350
+    -> 352 in an4_10 at 0x1c7648, runs in ..351
+    -> 353 in an4_10 at 0x1c6670, runs in ..351
+7-4 The Overthere - Door Key (an4_04) (window ..343):
+    -> 344 in an4_04 at 0x1bd7e4, runs in ..341
+    -> 344 in an4_04 at 0x1bd7e4, runs in ..342
+    -> 344 in an4_04 at 0x1bd7e4, runs in ..343
+    -> 345 in an4_01 at 0x1b9410, runs in ..344
+    -> 346 in an4_02 at 0x1baa34, runs in ..346
+    -> 347 in an4_02 at 0x1ba874, runs in ..
+    -> 347 in an4_02 at 0x1ba874, runs in ..346
+    -> 348 in an4_03 at 0x1bc3f8, runs in ..347
+    -> 349 in an4_02 at 0x1b9ea8, runs in ..348
+    -> 350 in an4_03 at 0x1bcc84, runs in ..349
+    -> 351 in an4_09 at 0x1c3be0, runs in ..350
+    -> 352 in an4_10 at 0x1c7648, runs in ..351
+    -> 353 in an4_10 at 0x1c6670, runs in ..351
+1-4 Yold Ruins - Ruins Key (he4_05) (window ..42):
+    -> 43 in he4_05 at 0xf9f38, runs in ..42
+    -> 44 in he4_05 at 0xf9f00, runs in ..43
+    -> 45 in he4_12 at 0x2190fc, runs in ..
+    -> 45 in he4_12 at 0x2190fc, runs in ..44
+    -> 46 in he4_07 at 0xfab78, runs in ..
+    -> 46 in he4_07 at 0xfab78, runs in ..45
+    -> 46 in he4_07 at 0xfab78, runs in ..46
+    -> 47 in he4_07 at 0xfab40, runs in ..
+    -> 47 in he4_07 at 0xfab40, runs in ..46
+    -> 48 in he4_08 at 0xfb27c, runs in ..47
+    -> 49 in he4_08 at 0xfb7c8, runs in ..48
+    -> 50 in he4_09 at 0xfc92c, runs in ..49
+    -> 51 in he4_10 at 0xfe910, runs in ..51
+    -> 53 in he4_11 at 0xffa90, runs in ..52
+1-4 Yold Ruins - Ruins Key (he4_07) (window ..45):
+    -> 46 in he4_07 at 0xfab78, runs in ..
+    -> 46 in he4_07 at 0xfab78, runs in ..45
+    -> 46 in he4_07 at 0xfab78, runs in ..46
+    -> 47 in he4_07 at 0xfab40, runs in ..
+    -> 47 in he4_07 at 0xfab40, runs in ..46
+    -> 48 in he4_08 at 0xfb27c, runs in ..47
+    -> 49 in he4_08 at 0xfb7c8, runs in ..48
+    -> 50 in he4_09 at 0xfc92c, runs in ..49
+    -> 51 in he4_10 at 0xfe910, runs in ..51
+    -> 53 in he4_11 at 0xffa90, runs in ..52
+2-2 Merlee's Mansion - House Key (mi2_06) (window ..78):
+    -> 79 in mi2_06 at 0x10aa30, runs in ..78
+    -> 80 in mi2_03 at 0x10810c, runs in ..79
+    -> 83 in mi2_08 at 0x10b7f4, runs in ..82
+    -> 84 in mi3_01 at 0x10eaa0, runs in ..83
+    -> 85 in mi3_01 at 0x10d5ec, runs in ..84
+    -> 87 in mi3_06 at 0x114a4c, runs in ..
+    -> 87 in mi3_06 at 0x114a4c, runs in ..86
+    -> 89 in mi3_06 at 0x1143ac, runs in ..88
+    -> 90 in mi4_01 at 0x11598c, runs in ..89
+    -> 91 in mi4_06 at 0x117a00, runs in ..90
+    -> 92 in mi4_15 at 0x21673c, runs in ..
+    -> 92 in mi4_15 at 0x21673c, runs in ..91
+    -> 93 in mi4_14 at 0x11a5b0, runs in ..
+    -> 93 in mi4_14 at 0x11a5b0, runs in ..93
+    -> 94 in mi4_14 at 0x11a5c8, runs in ..
+    -> 94 in mi4_14 at 0x11a5c8, runs in ..93
+    -> 95 in mi4_14 at 0x11b3b4, runs in ..
+4-2 Planet Blobule - Door Key (sp2_01) (window ..145):
+    -> 146 in sp2_01 at 0x14b6b8, runs in ..145
+    -> 147 in sp2_01 at 0x14a4c8, runs in ..146
+    -> 150 in sp2_02 at 0x14ce54, runs in ..149
+    -> 151 in sp3_01 at 0x14fed0, runs in ..150
+    -> 152 in sp3_01 at 0x14f71c, runs in ..151
+    -> 153 in sp3_01 at 0x14fafc, runs in ..152
+    -> 154 in sp3_02 at 0x1523f4, runs in ..153
+    -> 155 in sp3_02 at 0x150fd4, runs in ..154
+    -> 155 in sp3_02 at 0x15136c, runs in ..154
+    -> 157 in sp3_02 at 0x152278, runs in ..
+    -> 161 in sp3_03 at 0x15290c, runs in ..160
+    -> 162 in sp4_01 at 0x155aa8, runs in ..161
+    -> 163 in sp4_04 at 0x156498, runs in ..
+    -> 163 in sp4_05 at 0x156498, runs in ..
+    -> 163 in sp4_05 at 0x156498, runs in ..162
+    -> 164 in sp4_02 at 0x156078, runs in ..
+    -> 164 in sp4_03 at 0x156078, runs in ..
+    -> 164 in sp4_03 at 0x156078, runs in ..163
+    -> 165 in sp4_07 at 0x156904, runs in ..
+    -> 165 in sp4_07 at 0x156904, runs in ..165
+    -> 166 in sp4_07 at 0x156980, runs in ..
+    -> 166 in sp4_07 at 0x156980, runs in ..165
+    -> 167 in sp4_16 at 0x218624, runs in ..
+    -> 167 in sp4_16 at 0x218624, runs in ..166
+    -> 168 in sp4_12 at 0x1577f8, runs in ..
+    -> 168 in sp4_12 at 0x1577f8, runs in ..167
+    -> 169 in sp4_10 at 0x157510, runs in ..
+    -> 169 in sp4_11 at 0x157510, runs in ..
+    -> 169 in sp4_11 at 0x157510, runs in ..168
+    -> 170 in sp4_13 at 0x15888c, runs in ..169
+    -> 171 in sp4_17 at 0x218d00, runs in ..
+    -> 172 in sp4_13 at 0x159c84, runs in ..171
+    -> 173 in sp4_14 at 0x15a5ac, runs in ..172
+5-3 Floro Caverns - Cave Key (gn3_01) (window ..199):
+    -> 200 in gn3_01 at 0x16e1ac, runs in ..199
+    -> 201 in gn3_03 at 0x16f570, runs in ..200
+    -> 203 in gn3_09 at 0x171144, runs in ..202
+    -> 204 in gn4_01 at 0x173c54, runs in ..203
+    -> 205 in gn4_02 at 0x1744e0, runs in ..204
+    -> 206 in gn4_02 at 0x174998, runs in ..205
+    -> 207 in gn4_05 at 0x176920, runs in ..
+    -> 207 in gn4_06 at 0x176920, runs in ..
+    -> 207 in gn4_07 at 0x176920, runs in ..
+    -> 207 in gn4_07 at 0x176920, runs in ..206
+    -> 208 in gn4_02 at 0x174580, runs in ..207
+    -> 209 in gn4_03 at 0x176270, runs in ..208
+    -> 210 in gn4_03 at 0x17627c, runs in ..208
+    -> 211 in gn4_10 at 0x176e5c, runs in ..
+    -> 211 in gn4_10 at 0x176e5c, runs in ..210
+    -> 211 in gn4_10 at 0x176e5c, runs in ..211
+    -> 212 in gn4_10 at 0x176fbc, runs in ..211
+    -> 213 in gn4_12 at 0x177754, runs in ..212
+    -> 214 in gn4_13 at 0x177f64, runs in ..214
+    -> 217 in gn4_14 at 0x179560, runs in ..216
+    -> 218 in gn4_15 at 0x179e74, runs in ..217
+    -> 219 in gn4_16 at 0x17bc30, runs in ..219
+    -> 220 in gn4_16 at 0x17d344, runs in ..219
+5-4 Floro Caverns - Card Key (gn4_10) (window ..210):
+    -> 211 in gn4_10 at 0x176e5c, runs in ..
+    -> 211 in gn4_10 at 0x176e5c, runs in ..210
+    -> 211 in gn4_10 at 0x176e5c, runs in ..211
+    -> 212 in gn4_10 at 0x176fbc, runs in ..211
+    -> 213 in gn4_12 at 0x177754, runs in ..212
+    -> 214 in gn4_13 at 0x177f64, runs in ..214
+    -> 217 in gn4_14 at 0x179560, runs in ..216
+    -> 218 in gn4_15 at 0x179e74, runs in ..217
+    -> 219 in gn4_16 at 0x17bc30, runs in ..219
+    -> 220 in gn4_16 at 0x17d344, runs in ..219
+8-2 Castle Bleck Foyer - Castle Bleck Key (ls2_02) (window 360..374):
+    -> 375 in ls2_02 at 0x1d60c8, runs in 360..374
+    -> 376 in ls2_02 at 0x1d6144, runs in 360..375
+    -> 377 in ls2_12 at 0x1dbc80, runs in ..376
+    -> 378 in ls2_09 at 0x1da6e4, runs in ..377
+    -> 379 in ls2_13 at 0x1dc61c, runs in ..378
+    -> 380 in ls2_16 at 0x1dd58c, runs in ..
+    -> 381 in ls2_17 at 0x1de88c, runs in ..381
+    -> 383 in ls2_18 at 0x1e0578, runs in ..382
+    -> 384 in ls2_17 at 0x1df744, runs in ..383
+    -> 385 in ls2_18 at 0x1e0b68, runs in ..384
+    -> 387 in ls2_18 at 0x1e0bb4, runs in ..386
+    -> 388 in ls3_01 at 0x1e10fc, runs in ..
+    -> 388 in ls3_01 at 0x1e10fc, runs in ..387
+    -> 389 in ls3_03 at 0x1e1674, runs in ..
+    -> 389 in ls3_03 at 0x1e1674, runs in ..388
+    -> 390 in ls3_03 at 0x1e16f0, runs in ..
+    -> 390 in ls3_03 at 0x1e16f0, runs in ..389
+    -> 391 in ls3_05 at 0x1e235c, runs in ..390
+    -> 392 in ls3_06 at 0x1e25ac, runs in ..391
+    -> 393 in ls3_07 at 0x1e280c, runs in ..392
+    -> 394 in ls3_09 at 0x1e320c, runs in ..393
+    -> 395 in ls3_09 at 0x1e2ef8, runs in ..
+    -> 395 in ls3_09 at 0x1e2ef8, runs in ..393
+    -> 396 in ls3_04 at 0x1e2138, runs in ..
+    -> 396 in ls3_04 at 0x1e2138, runs in ..395
+    -> 398 in ls3_11 at 0x1e38d8, runs in ..
+    -> 398 in ls3_11 at 0x1e38d8, runs in ..397
+    -> 398 in ls3_11 at 0x1e38d8, runs in ..398
+    -> 399 in ls3_11 at 0x1e3958, runs in ..
+    -> 399 in ls3_11 at 0x1e3958, runs in ..398
+    -> 400 in ls3_12 at 0x1e64e0, runs in ..399
+    -> 401 in ls3_12 at 0x1e600c, runs in ..401
+    -> 403 in ls3_13 at 0x1e7184, runs in ..
+    -> 405 in ls3_13 at 0x1e6dd8, runs in ..404
+    -> 406 in ls4_01 at 0x1e7620, runs in ..405
+    -> 407 in ls4_13 at 0x2192f4, runs in ..
+    -> 407 in ls4_13 at 0x2192f4, runs in ..406
+    -> 408 in ls4_05 at 0x1e86b4, runs in ..
+    -> 408 in ls4_05 at 0x1e86b4, runs in ..407
+    -> 409 in ls4_04 at 0x1e7fb0, runs in ..408
+    -> 410 in ls4_11 at 0x1f5030, runs in ..409
+    -> 411 in ls4_11 at 0x1f42c4, runs in ..409
+    -> 411 in ls4_11 at 0x1f42c4, runs in ..410
+    -> 411 in ls4_11 at 0x1f42c4, runs in ..411
+    -> 411 in ls4_11 at 0x1f42c4, runs in ..412
+    -> 412 in ls4_11 at 0x1f42d0, runs in ..409
+    -> 412 in ls4_11 at 0x1f42d0, runs in ..410
+    -> 412 in ls4_11 at 0x1f42d0, runs in ..411
+    -> 412 in ls4_11 at 0x1f42d0, runs in ..412
+8-2 Castle Bleck Foyer - Castle Bleck Key (ls2_12) (window ..376):
+    -> 377 in ls2_12 at 0x1dbc80, runs in ..376
+    -> 378 in ls2_09 at 0x1da6e4, runs in ..377
+    -> 379 in ls2_13 at 0x1dc61c, runs in ..378
+    -> 380 in ls2_16 at 0x1dd58c, runs in ..
+    -> 381 in ls2_17 at 0x1de88c, runs in ..381
+    -> 383 in ls2_18 at 0x1e0578, runs in ..382
+    -> 384 in ls2_17 at 0x1df744, runs in ..383
+    -> 385 in ls2_18 at 0x1e0b68, runs in ..384
+    -> 387 in ls2_18 at 0x1e0bb4, runs in ..386
+    -> 388 in ls3_01 at 0x1e10fc, runs in ..
+    -> 388 in ls3_01 at 0x1e10fc, runs in ..387
+    -> 389 in ls3_03 at 0x1e1674, runs in ..
+    -> 389 in ls3_03 at 0x1e1674, runs in ..388
+    -> 390 in ls3_03 at 0x1e16f0, runs in ..
+    -> 390 in ls3_03 at 0x1e16f0, runs in ..389
+    -> 391 in ls3_05 at 0x1e235c, runs in ..390
+    -> 392 in ls3_06 at 0x1e25ac, runs in ..391
+    -> 393 in ls3_07 at 0x1e280c, runs in ..392
+    -> 394 in ls3_09 at 0x1e320c, runs in ..393
+    -> 395 in ls3_09 at 0x1e2ef8, runs in ..
+    -> 395 in ls3_09 at 0x1e2ef8, runs in ..393
+    -> 396 in ls3_04 at 0x1e2138, runs in ..
+    -> 396 in ls3_04 at 0x1e2138, runs in ..395
+    -> 398 in ls3_11 at 0x1e38d8, runs in ..
+    -> 398 in ls3_11 at 0x1e38d8, runs in ..397
+    -> 398 in ls3_11 at 0x1e38d8, runs in ..398
+    -> 399 in ls3_11 at 0x1e3958, runs in ..
+    -> 399 in ls3_11 at 0x1e3958, runs in ..398
+    -> 400 in ls3_12 at 0x1e64e0, runs in ..399
+    -> 401 in ls3_12 at 0x1e600c, runs in ..401
+    -> 403 in ls3_13 at 0x1e7184, runs in ..
+    -> 405 in ls3_13 at 0x1e6dd8, runs in ..404
+    -> 406 in ls4_01 at 0x1e7620, runs in ..405
+    -> 407 in ls4_13 at 0x2192f4, runs in ..
+    -> 407 in ls4_13 at 0x2192f4, runs in ..406
+    -> 408 in ls4_05 at 0x1e86b4, runs in ..
+    -> 408 in ls4_05 at 0x1e86b4, runs in ..407
+    -> 409 in ls4_04 at 0x1e7fb0, runs in ..408
+    -> 410 in ls4_11 at 0x1f5030, runs in ..409
+    -> 411 in ls4_11 at 0x1f42c4, runs in ..409
+    -> 411 in ls4_11 at 0x1f42c4, runs in ..410
+    -> 411 in ls4_11 at 0x1f42c4, runs in ..411
+    -> 411 in ls4_11 at 0x1f42c4, runs in ..412
+    -> 412 in ls4_11 at 0x1f42d0, runs in ..409
+    -> 412 in ls4_11 at 0x1f42d0, runs in ..410
+    -> 412 in ls4_11 at 0x1f42d0, runs in ..411
+    -> 412 in ls4_11 at 0x1f42d0, runs in ..412
+    -> 415 in ls4_11 at 0x1f7be4, runs in ..414
+# Story gifts
+
+Bowser rejoins (an2_04): script 0x1a2a40: GSW(0) ..313  conds []
+Peach rejoins (an3_06): script 0x1b1178: GSW(0) ..  conds ['LW(0) == 95']
+Bowser joins (ta1_04): script 0x1220a0: GSW(0) ..103  conds []

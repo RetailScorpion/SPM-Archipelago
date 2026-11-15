@@ -1,23 +1,32 @@
 #include <common.h>
+#include <msl/stdio.h>
 #include <spm/item_data_ids.h>
 #include <spm/itemdrv.h>
 #include <spm/mario.h>
 #include <spm/mario_pouch.h>
 #include <wii/os.h>
 
+#include "game_mode.h"
 #include "archipelago_item.h"
 #include "code_patching.h"
+#include "key_groups.h"
 #include "key_item_storage.h"
 #include "mailbox.h"
 #include "pixl_joins.h"
 #include "pure_hearts.h"
+#include "starting_character.h"
 #include "received_items.h"
 #include "save_data.h"
+#include "wallet.h"
 
 namespace mod::received_items {
 
-// The name given to the world item that appears on Mario
-#define DELIVERY_ITEM_NAME "ap_recv"
+// The names given to the world items that appear on Mario: "ap_r000" to "ap_r999", a new one each
+// time. With one fixed name, an item thrown away from the full-bag menu stays in the room under that
+// name, and the next delivery with the same name hangs the game (user, 2026-11-05)
+#define DELIVERY_ITEM_NAME_FORMAT "ap_r%03d"
+#define DELIVERY_NAME_COUNT 1000
+static s32 sDeliveryNameIndex;
 
 // Frames to wait after a delivery before the next one, so the previous item-get has started
 #define DELIVERY_COOLDOWN_FRAMES 30
@@ -32,6 +41,10 @@ namespace mod::received_items {
 static s32 sDeliveringItem = NO_ITEM;
 // Whether that item came from giveLocal (true) or the server (false)
 static bool sDeliveringLocal;
+// Whether that item is a Progressive Wallet (spawned as the Archipelago item with the wallet's picture)
+static bool sDeliveringWallet;
+// The Pure Heart that item is (1-8; spawned as the Archipelago item with the heart's icon), or 0
+static s32 sDeliveringHeart;
 // Frames left before the next delivery
 static s32 sCooldown;
 
@@ -78,6 +91,12 @@ static void deliveryDone()
 {
     sDeliveringItem = NO_ITEM;
     sCooldown = DELIVERY_COOLDOWN_FRAMES;
+    if (sDeliveringWallet)
+        wallet::giveWallet();
+    sDeliveringWallet = false;
+    if (sDeliveringHeart != 0)
+        pure_hearts::giveHeart(sDeliveringHeart);
+    sDeliveringHeart = 0;
     if (sDeliveringLocal)
         dropOldestLocal();
     else
@@ -88,7 +107,10 @@ static void deliveryDone()
 static void spawnOnMario(s32 itemId)
 {
     wii::mtx::Vec3 & at = spm::mario::marioGetPtr()->position;
-    spm::itemdrv::itemEntry(DELIVERY_ITEM_NAME, itemId, 0, at.x, at.y, at.z, nullptr, 0);
+    char name[16];
+    msl::stdio::sprintf(name, DELIVERY_ITEM_NAME_FORMAT, sDeliveryNameIndex);
+    sDeliveryNameIndex = (sDeliveryNameIndex + 1) % DELIVERY_NAME_COUNT;
+    spm::itemdrv::itemEntry(name, itemId, 0, at.x, at.y, at.z, nullptr, 0);
     sDeliveringItem = itemId;
 }
 
@@ -126,9 +148,17 @@ void tick()
         return;
     sDeliveringLocal = local;
 
-    // One of this world's items found here: the game already gave it, so it's only counted
+    // One of this world's items found here: the game already gave it, so it's only counted. A wallet
+    // found here was the Archipelago item's item-get, so its size goes up now (no second pickup)
     if (!local && (itemId & RECV_ALREADY_GIVEN))
     {
+        s32 found = itemId & ~RECV_ALREADY_GIVEN;
+        if (found == WALLET_ITEM_ID)
+            wallet::giveWallet();
+        // A Pure Heart found here was the Archipelago item's item-get ("You got Pure Heart N!"): its
+        // door opens now
+        if (pure_hearts::isHeartItem(found))
+            pure_hearts::giveHeart(found - PURE_HEART_ITEM_FIRST + 1);
         serverItemHandled();
         return;
     }
@@ -142,16 +172,37 @@ void tick()
         return;
     }
 
-    // A Pure Heart isn't a game item: it's a save flag, which opens its door
+    // A Pure Heart isn't a game item: it's a save flag, which opens its door. It plays as the
+    // Archipelago item's item-get with the heart's icon, and the door opens once it's picked up
     if (!local && pure_hearts::isHeartItem(itemId))
     {
-        pure_hearts::giveHeart(itemId - PURE_HEART_ITEM_FIRST + 1);
-        serverItemHandled();
+        sDeliveringHeart = itemId - PURE_HEART_ITEM_FIRST + 1;
+        archipelago_item::armHeart(sDeliveringHeart);
+        spawnOnMario(archipelago_item::AP_ITEM_ID);
+        wii::os::OSReport("[spmap] spawned received Pure Heart %d\n", sDeliveringHeart);
+        return;
+    }
+
+    // A Progressive Wallet isn't a game item: it plays as the Archipelago item's item-get with the
+    // wallet's picture, and its size goes up once it's picked up (deliveryDone)
+    if (!local && itemId == WALLET_ITEM_ID)
+    {
+        archipelago_item::armWallet();
+        sDeliveringWallet = true;
+        spawnOnMario(archipelago_item::AP_ITEM_ID);
+        wii::os::OSReport("[spmap] spawned received wallet\n");
         return;
     }
 
     // Characters crash the world-item pickup (they're never world items in vanilla), so they're
     // added straight to the party; the inventory hook below finishes the delivery
+    if (itemId == ITEM_ID_CHAR_START)
+    {
+        // Mario (starting_character): he's out of the party until his item, which puts him back
+        starting_character::giveMario();
+        deliveryDone();
+        return;
+    }
     if (itemId >= ITEM_ID_CHAR_START && itemId < ITEM_ID_CHAR_MAX)
     {
         sDeliveringItem = itemId;
@@ -185,6 +236,8 @@ void onMapChange()
     {
         wii::os::OSReport("[spmap] received item %d not collected before map change, will respawn\n", sDeliveringItem);
         sDeliveringItem = NO_ITEM;
+        sDeliveringWallet = false;
+        sDeliveringHeart = 0;
     }
 }
 
@@ -221,6 +274,7 @@ static bool isPixl(s32 itemId)
     Runs instead of the game's pouchAddItem, which every collected item goes through:
       - finishes a delivery when the delivered item arrives
       - the Archipelago item never goes into the inventory
+      - a grouped key goes in as its chapter's key (key_groups)
       - a key item with all 32 slots full goes to storage instead
       - a first Pixl gets selected (the game's function doesn't select it)
 */
@@ -240,6 +294,7 @@ static bool pouchAddItemHook(s32 itemId)
 
     if (itemId == archipelago_item::AP_ITEM_ID)
         return true;
+    itemId = key_groups::canonical(itemId);  // a grouped key becomes its chapter's key
     if (isKeyItem(itemId) && key_item_storage::keyItemsFull() && key_item_storage::store(itemId))
         return true;
 
@@ -251,7 +306,7 @@ static bool pouchAddItemHook(s32 itemId)
 
 void init()
 {
-    pouchAddItemReal = code_patching::hookFunction(spm::mario_pouch::pouchAddItem, pouchAddItemHook);
+    pouchAddItemReal = game_mode::hook(spm::mario_pouch::pouchAddItem, pouchAddItemHook);
 }
 
 }

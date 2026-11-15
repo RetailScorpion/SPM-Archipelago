@@ -1,4 +1,4 @@
-# Super Paper Mario (no-logic prototype) player options.
+# Super Paper Mario player options.
 #
 # Each option can be a single value, or weights to pick one at random, for example:
 #   shuffle_catch_cards:
@@ -12,7 +12,7 @@ name: Player{number}
 #     {number} will be replaced with the counter value of the name.
 #     {NUMBER} will be replaced with the counter value of the name, if the counter value is greater than 1.
 
-description: Super Paper Mario prototype
+description: Super Paper Mario
 
 game: Super Paper Mario
 
@@ -20,23 +20,38 @@ requires:
   version: 0.6.7
 
 Super Paper Mario:
-  # This is a no-logic prototype: every location counts as reachable from the start, so any item can be
-  # anywhere. Use the Return Pipe to leave rooms you can't get out of yet.
+  logic:
+    # Which logic places the items.
+    # no_logic: only the rules the game itself enforces: a chapter needs its Pure Heart (unless its
+    # door starts open), Flopside needs Boomer, Fleep and Mario, and Chapter 8 needs its door's
+    # requirement and Peach, Luigi and Bowser. Inside a chapter, items can be anywhere; the Return Pipe
+    # gets you out of rooms you can't leave.
+    # wip_logic: the logic mapped out so far by playing. It's incomplete: a seed will probably
+    # need something it doesn't say.
+    no_logic: 0
+    wip_logic: 50
 
   shuffle_pixls:
-    # Shuffle the eight story Pixls (Thoreau to Dottie). Off: each joins at its vanilla spot.
-    'true': 50
-    'false': 0
+    # Shuffle the eight story Pixls (Thoreau to Dottie).
+    # vanilla: each joins at its vanilla spot. anywhere: they can be anywhere.
+    # among_pixls: only Pixl join spots hold them, and those hold only Pixls (with
+    # shuffle_optional_pixls also among_pixls, the optional Pixls join in).
+    vanilla: 0
+    anywhere: 50
+    among_pixls: 0
 
   shuffle_optional_pixls:
-    # Shuffle Barry, Dashell and Piccolo. Off: each joins at its vanilla spot.
-    'true': 0
-    'false': 50
+    # Shuffle Barry, Dashell and Piccolo.
+    # vanilla: each joins at its vanilla spot. anywhere: they can be anywhere.
+    # among_pixls: only Pixl join spots hold them (see shuffle_pixls).
+    vanilla: 50
+    anywhere: 0
+    among_pixls: 0
 
   shuffle_key_items:
-    # Shuffle the key items whose spots the prototype handles (Fort Keys, the Water/Stone/Fire Tablets,
-    # Cooking Disks, the Golden Card). Off: they stay at their vanilla spots.
-    # The story keys (Ruins Keys, Door Keys, Dimension Keys, ...) are always vanilla in this prototype.
+    # Shuffle the key items: every chapter's keys (Ruins, Door, House, Fort, Dimension, Cave, Card and
+    # Castle Bleck Keys), the Water/Stone/Fire Tablets, Cooking Disks, the Golden Card and 7-4's three
+    # orbs. Off: they stay at their vanilla spots. Not yet: the Pit Keys, the Old Key, the Random House Key.
     'true': 50
     'false': 0
 
@@ -53,15 +68,66 @@ Super Paper Mario:
   randomize_characters:
     # Shuffle Peach, Luigi and Bowser. Their join scenes are locations either way: Peach in Flipside
     # (unconscious from the start: talk to her holding a Spicy Soup), Luigi in the Underwhere (7-1),
-    # Bowser after his fight in 3-1. Off: each scene gives its own character.
-    'true': 0
+    # Bowser after his fight in 3-1.
+    # vanilla: each scene gives its own character. anywhere: they can be anywhere.
+    # among_characters: only the three join scenes hold them (and Mario, with another starting
+    # character), and those hold only characters.
+    vanilla: 50
+    anywhere: 0
+    among_characters: 0
+
+  tattle_checks:
+    # Adds Tatl, a Pixl to find, and a location for every kind of enemy (up to 114). With Tatl as your
+    # Pixl, press 1, move her over an enemy with the arrow buttons and press 1 again to read its tattle
+    # and send that kind's check.
     'false': 50
-  skip_cutscenes:
-    # Skip the opening and the Count Bleck scenes between chapters (plus the Peach and Luigi
-    # intermissions after Chapters 1 and 2). A new file skips Merlon's scenes too: it starts in
-    # Flipside Tower with the Return Pipe. Off: watch the story as in vanilla.
-    'true': 50
-    'false': 0
+    'true': 0
+
+  pit_tattles:
+    # With tattle_checks: whether the logic expects tattles from the Pits of 100 Trials. Most enemies
+    # are in the Flipside Pit, so on, nearly every tattle can be expected from there. Off: only the
+    # chapters and towns count (you can still tattle in a Pit), and the Dark Dayzee (Flopside Pit only)
+    # has no check.
+    'false': 50
+    'true': 0
+
+  afk_tattles:
+    # With tattle_checks: whether the Megabite and Gigabite get tattle checks. They only show up after
+    # you stand still for a while.
+    'false': 50
+    'true': 0
+
+  brobot_with_fleep:
+    # Brobot L-type (Chapter 6's last fight) is in the logic with Fleep as well as Boomer. Off: the
+    # logic expects Boomer.
+    'false': 50
+    'true': 0
+
+  bowser_with_items:
+    # Bowser's fight in 7-2 is in the logic with nothing but items (Thunder Rage, Fire Burst and the
+    # like). Off: the logic expects Carrie, Boomer or Cudge.
+    'false': 50
+    'true': 0
+
+  progressive_wallet:
+    # Coins need a bigger wallet: you start able to carry 99, and each Progressive Wallet raises the
+    # limit: 200, 500, then 999 (the game's own).
+    # off: 999 from the start, as in vanilla. on: three wallets in the pool.
+    # with_infinite: a fourth one with no limit. Nothing in the logic needs more than 99 coins.
+    'off': 50
+    'on': 0
+    with_infinite: 0
+
+  starting_character:
+    # Who you start as. Anyone but Mario makes Mario an item to find, in their place.
+    # The spots that need Mario's flip to 3D aren't all mapped yet, so a seed may need him somewhere
+    # it doesn't say.
+    mario: 50
+    peach: 0
+    bowser: 0
+    luigi: 0
+    random: 0
+
   starting_chapter_mode:
     # How the chapters whose doors are open at the start are picked. Every other chapter's door opens
     # when you receive its Pure Heart, which is shuffled into the item pool.
@@ -73,7 +139,7 @@ Super Paper Mario:
     random_amount: 0
   starting_chapters:
     # The chapters open at the start, for starting_chapter_mode: chosen (Chapter 1 to Chapter 7;
-    # Chapter 8's door opens after Chapters 1-7, as in vanilla).
+    # Chapter 8's door follows castle_requirement).
     ['Chapter 1']
   starting_chapter_count:
     # How many chapters are open at the start, for starting_chapter_mode: random_chapters (1 to 7).
@@ -99,6 +165,34 @@ Super Paper Mario:
     # false: each chapter's ending gives its vanilla heart, and Chapter 1 is always open at the start.
     'true': 50
     'false': 0
+  castle_requirement:
+    # What opens Chapter 8's door in Flopside Tower. vanilla: Pure Heart 8. chapters: castle_chapters
+    # of Chapters 1-7 finished. pure_hearts: castle_hearts Pure Hearts. With either requirement on
+    # pure_hearts and shuffle_pure_hearts on, the starting chapters' hearts are items to find too
+    # (their doors still start open) and only found hearts count; otherwise the starting ones count.
+    # always_open: open from the start.
+    vanilla: 0
+    chapters: 50
+    pure_hearts: 0
+    always_open: 0
+  castle_chapters:
+    # 1 to 7.
+    7
+  castle_hearts:
+    # 1 to 8.
+    8
+  final_requirement:
+    # What the final battle needs (Count Bleck's throne room door in 8-4 is padlocked; you get the
+    # Throne Room Key once you meet this). Same choices as castle_requirement, except always_open.
+    vanilla: 0
+    chapters: 0
+    pure_hearts: 50
+  final_chapters:
+    # 1 to 7.
+    7
+  final_hearts:
+    # 1 to 8.
+    8
   sammer_gauntlet:
     # Once Chapter 6 is finished, Sammer's Kingdom has its 100 duels, and King Sammer's seven Catch
     # Card rewards after the 100th are locations (shuffled with shuffle_catch_cards).
@@ -111,6 +205,12 @@ Super Paper Mario:
     # straight to King Sammer's Pure Heart scene. The post-game (four groups of 25): each group's last
     # one always (the first group also its first one).
     25
+  big_cloud_requires_peach_reunion:
+    # 7-3's big bouncy cloud (an3_15) only appears once you've reunited with Peach (giving her a Black
+    # Apple, an3_06) and then given the cloud a Red Apple, as in vanilla. Off: the big cloud is there
+    # from the start.
+    'true': 50
+    'false': 0
   # Archipelago's common options
 
   progression_balancing:
@@ -125,7 +225,7 @@ Super Paper Mario:
 
   accessibility:
     # full: all locations can be reached. minimal: only what's needed to finish is guaranteed.
-    # (With no logic yet, everything counts as reachable either way.)
+    # (With no_logic, everything inside a chapter counts as reachable either way.)
     full: 50
     minimal: 0
 

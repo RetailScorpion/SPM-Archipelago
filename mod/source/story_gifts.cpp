@@ -5,6 +5,7 @@
 
 #include "archipelago_item.h"
 #include "mailbox.h"
+#include "offline_checks.h"
 #include "received_items.h"
 #include "save_data.h"
 #include "story_gifts.h"
@@ -34,6 +35,9 @@ static const struct
                                                  // flip, which isn't an item
     {82, FINISHED_CHAPTER_6, "beating Brobot L-type"},  // wa1_27; an Ultra Shroom Shake stands
                                                         // in, since vanilla gives nothing
+    {82, BY_ITS_SCENE, "Bowser rejoins"},        // 7-2, an2_04, after his fight; an Ultra Shroom Shake
+    {82, BY_ITS_SCENE, "Peach rejoins"},         // 7-3, an3_06, talking to her; stands in (vanilla:
+                                                 // the character back, already held here)
 };
 
 // Peach, Bowser and Luigi as items
@@ -47,9 +51,13 @@ static const struct
 // and the value from which the Outer Space maps let Mario swim
 #define CHAPTER_4_WITH_HELMET 135
 
-// The item a gift location gives: what the client placed there, or the vanilla item.
+// The item a gift location gives: what the client placed there, or the vanilla item. Offline (the
+// seed's items aren't in the game yet), the Archipelago item: the location is logged, and its item
+// comes once the client connects (offline_checks).
 static s32 placedItem(Gift gift)
 {
+    if (offline_checks::active())
+        return archipelago_item::AP_ITEM_ID;
     u16 placed = mailbox::gMailbox.giftItems[gift];
     if (placed == 0)
         return sGifts[gift].vanillaItem;

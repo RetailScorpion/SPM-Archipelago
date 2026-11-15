@@ -7,6 +7,19 @@
 800E0E74:evt_door_select_entry
 800E1078:evt_door_select_set
 803D8468:door_enter_evt
+// (anim name, speed): a map animation's playback speed; the town elevators' scripts use it (relF 0xe56d8)
+800EDCAC:evt_map_set_anim_speed
+// (): called by every vanilla elevator ride right after moving Mario (relF 0xe6298, 0x13ca40, 0xb60e0); a camera reset
+800E0AFC:evt_cam_reset_to_mario
+// The Wii Remote work's pointer (wpadGetButtonsPressed: lwz r3, -0x7d68(r13), r13 = 0x80574F20)
+8056D1B8:wpadmgr_wp
+// The file select (seq_load_sub's render, 0x8017dbd4): its bottom row's pictures, 3 x {picture, x, y}
+// (read with r29 + 160 at 0x8017f4a4), and its buttons' cursor table (SeqLoadButtonDef[7], then
+// copy mode's), both writable data
+80333708:fileselect_bottom_buttons
+803E8EC0:fileselect_button_defs
+// (picture, Mtx34 *, GXColor *): draws a picture of the current TPL (the file select's buttons)
+801A2CBC:fileselDrawPicture
 // In the "can the current character use their ability" check (0x80147A08): the
 // bl evtGetValue(GSW(0)) whose result blocks Mario's flip when 0 < value < 16
 80147AB4:mario_flip_story_check
@@ -106,3 +119,26 @@
 // relF: start of section 5 (map scripts and data); patch tables give offsets from here
 // (file offset in the decompressed relF.rel - 0xaf300)
 1,5,0:relF_section5
+
+// Tattle checks (2026-11-07). The Pixl ability table: (Pixl id, function) pairs read by the "use Pixl"
+// code at 0x801307f4-0x801309f4 (marioFairyUse; EU 0x801311bc); 220's entry is an assert
+803E7150:pixl_ability_table
+// searchGetNpcMsg: EU 0x8024602c (ghidra map export), US -0x2750 like the rest of the search module;
+// reads npc+0x49c (tribe) and the card's descMsg with maxHp/attackStrength
+802438DC:searchGetNpcMsg
+// Tatl's pointer (2026-11-07): Fleep's ability (sets mario+0xe7c, starts motion 0x26), the two
+// "li r3, 0xe2" (Fleep's Pixl id) before fairy_work_by_id in his motion and its end, and the Pixl
+// animation change (fairy, name), which stores the name for the Pixl's display
+80164690:fleep_ability
+80164C24:fleep_motion_pixl_id_load
+801659B0:fleep_end_pixl_id_load
+8011DF58:fairy_change_anim
+// Tatl's pointer (2026-11-07): Fleep's ability (sets mario+0xe7c, starts motion 0x26), the two
+// "li r3, 0xe2" (Fleep's Pixl id) before fairy_work_by_id in his motion and its end, and the Pixl
+// animation change (fairy, name), which stores the name for the Pixl's display
+80164690:fleep_ability
+80164C24:fleep_motion_pixl_id_load
+801659B0:fleep_end_pixl_id_load
+8011DF58:fairy_change_anim
+// evtStopOther: after evtStopAll (0x800DA024) and evtStartAll (0x800DA0A4); loops over the entries, skipping the one in r3
+800DA124:evtStopOther

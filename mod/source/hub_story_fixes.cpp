@@ -2,14 +2,15 @@
 #include <evt_cmd.h>
 #include <msl/string.h>
 #include <spm/spmario.h>
-#include <spm/swdrv.h>
 #include <wii/os.h>
 
+#include "game_mode.h"
+#include "endgame_requirements.h"
 #include "hub_story_fixes.h"
-#include "pixl_joins.h"
 #include "save_data.h"
 #include "script_patching.h"
 #include "story_progress.h"
+#include "tower_doors.h"
 
 namespace mod::hub_story_fixes {
 
@@ -28,11 +29,6 @@ using namespace mod::script_patching;
 #define DOOR_6_SAMMER 0
 #define DOOR_6_WORLD_OF_NOTHING 1
 #define DOOR_6_POST_GAME 2
-
-// The blue pipe between Flipside Tower (mac_02 aodokan_2) and Flopside Tower (mac_12 aodokan_1): both
-// towers hide and switch it off while this flag is clear (relF 0xe94a0 / 0xe95d8)
-#define GSWF_TOWER_PIPE 534
-#define PIXL_FLEEP 226
 
 #define CASTLE_BLECK_DOOR_MAP "mac_12"  // Flopside Tower
 #define CASTLE_BLECK_DOOR_VALUE 357     // its door leads to Chapter 8 for story values 356-358
@@ -87,8 +83,8 @@ static void patchDoor6Test(u32 offset, s32 opcode, s32 value, s32 replacement, c
     const s32 expected[] = {EVT_CMD(2, opcode), GSW_VAR(0), value};
     if (!matches(at, expected, 3, what))
         return;
-    at[1] = GSW_VAR(AP_GSW_DOOR_6);
-    at[2] = replacement;
+    game_mode::set<s32>(&at[1], GSW_VAR(AP_GSW_DOOR_6));
+    game_mode::set<s32>(&at[2], replacement);
 }
 
 void init()
@@ -102,30 +98,19 @@ void init()
         {
             const s32 expected[] = {EVT_CMD(2, test.opcode), GSW_VAR(0), test.value};
             if (matches(at, expected, 3, test.what))
-                at[2] = test.replacement;
+                game_mode::set<s32>(&at[2], test.replacement);
         }
         else
         {
             const s32 expected[] = {EVT_CMD(1, OP_CASE_SMALL), test.value};
             if (matches(at, expected, 2, test.what))
-                at[1] = test.replacement;
+                game_mode::set<s32>(&at[1], test.replacement);
         }
     }
     wii::os::OSReport("[spmap] hubstory: hub tests patched\n");
 }
 
 // ---- Every map change ----
-
-// Whether Chapters 1 to `last` are all finished.
-static bool chaptersFinished(s32 last)
-{
-    for (s32 chapter = 1; chapter <= last; chapter++)
-    {
-        if (!story_progress::isChapterFinished(chapter))
-            return false;
-    }
-    return true;
-}
 
 // Whether Mario is entering Flopside Tower.
 static bool enteringFlopsideTower(const char * nextMap)
@@ -154,17 +139,11 @@ void onMapChange(const char * nextMap)
         door6 = DOOR_6_WORLD_OF_NOTHING;
     save_data::setGswByte(AP_GSW_DOOR_6, door6);
 
-    // The blue pipe between the towers works once Mario has Fleep (user, 2026-11-02)
-    if (pixl_joins::havePixl(PIXL_FLEEP) && !spm::swdrv::swGet(GSWF_TOWER_PIPE))
-    {
-        spm::swdrv::swSet(GSWF_TOWER_PIPE);
-        wii::os::OSReport("[spmap] hubstory: Fleep found, the blue pipe between the towers works\n");
-    }
-
-    if (enteringFlopsideTower(nextMap) && chaptersFinished(7))
+    if (enteringFlopsideTower(nextMap) && endgame_requirements::castleOpen())
     {
         spm::spmario::gp->gsw0 = CASTLE_BLECK_DOOR_VALUE;
-        wii::os::OSReport("[spmap] hubstory: Chapters 1-7 finished, Castle Bleck door open in %s\n", nextMap);
+        tower_doors::onFlopsideTower();
+        wii::os::OSReport("[spmap] hubstory: Castle Bleck door open in %s\n", nextMap);
     }
 }
 

@@ -3,7 +3,7 @@
 #include <common.h>
 
 /*
-    Story gift locations: six things the story gives you that the randomizer turns into locations.
+    Story gift locations: eight things the story gives you that the randomizer turns into locations.
       - Peach joining (Flipside, after her revival: see character_joins)
       - Luigi joining (the Underwhere, 7-1: see character_joins)
       - the Helmet (vanilla: Merlon's Goldfish Bowl quest in the hub; here: given on first entering a
@@ -13,6 +13,9 @@
       - beating Brobot L-type at the end of the World of Nothing (Chapter 6's end, story value 286;
         vanilla gives nothing). Collected on the next map change, so its item-get doesn't land in
         the middle of Dimentio's scene that follows the fight
+      - Bowser rejoining in 7-2 (an2_04, after his fight) and Peach rejoining in 7-3 (an3_06, talking
+        to her): vanilla gives the character back, which characters as items made pointless
+        (user, 2026-11-05). See character_joins
 
     Each is collected once. Like the Pixl joins, each has its own save flag (AP_GSWF_GIFT) that says
     whether it has been collected, so it doesn't depend on story values. Collecting it gives whatever
@@ -34,6 +37,8 @@ enum Gift
     GIFT_BOWSER,
     GIFT_BESTOVIUS,
     GIFT_BROBOT,
+    GIFT_BOWSER_REUNION,
+    GIFT_PEACH_REUNION,
 };
 
 // Collects a gift location if it isn't collected yet: sets its flag and gives what was placed

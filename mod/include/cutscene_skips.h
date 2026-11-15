@@ -3,7 +3,8 @@
 #include <spm/seqdrv.h>
 
 /*
-    The skip_cutscenes option: story scenes the randomizer skips unless the player wants to watch.
+    The "Skip cutscenes" setting (options menu, on by default; a YAML option, skip_cutscenes, until
+    2026-11-05): story scenes the randomizer skips unless the player wants to watch.
       - a new file's opening (Count Bleck and Peach, Mario's house, meeting Tippi) and Merlon's scenes
         after it: the file starts in Flipside Tower, with the Return Pipe
       - the Count Bleck scene after the prologue and after each of Chapters 1-7 (Castle Bleck's
@@ -14,10 +15,15 @@
       - Tippi's welcome and pointing tutorial at the start of 1-1 (he1_01): the title card stays
     Each skip sends Mario where the skipped scenes would have, the way the scenes themselves do it:
     by changing which map is being loaded (and, for the prologue, the story value).
-    The client passes on the option (mailbox playCutscenes); without a client, scenes are skipped.
+    A new file has no settings of its own yet when its opening starts: it takes the last played file's
+    (options_menu::carryOverToNewFile), so turning skipping off on any file lets the next new file play
+    its opening.
 */
 
 namespace mod::cutscene_skips {
+
+// Whether the skippable scenes play (the setting is off).
+bool playCutscenes();
 
 // Patches the first Sammer duel room so its scenes can be skipped. Call once at startup.
 void init();

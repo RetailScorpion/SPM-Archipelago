@@ -2682,9 +2682,2919 @@
    "name": "7-4 The Overthere - Pure Heart 8 (an4_10)",
    "id": 1397771650,
    "category": "pure_heart"
+  },
+  {
+   "kind": "gift",
+   "map": "an2_04",
+   "item": 82,
+   "flag": 7190,
+   "label": "Bowser rejoins",
+   "patches": [],
+   "where": "after the fight with Bowser in 7-2",
+   "pos": null,
+   "name": "7-2 Underwhere Road - Bowser rejoins (an2_04)",
+   "id": 1397771651,
+   "category": "overworld_item"
+  },
+  {
+   "kind": "gift",
+   "map": "an3_06",
+   "item": 82,
+   "flag": 7191,
+   "label": "Peach rejoins",
+   "patches": [],
+   "where": "talk to Peach in 7-3",
+   "pos": null,
+   "name": "7-3 Overthere Stair - Peach rejoins (an3_06)",
+   "id": 1397771652,
+   "category": "overworld_item"
+  },
+  {
+   "kind": "spot",
+   "map": "an1_04",
+   "item": 49,
+   "flag": 7207,
+   "label": null,
+   "where": "7-1: an1_04 (opens an1_03's lock, the way to Luigi)",
+   "pos": null,
+   "patches": [
+    {
+     "offset": 1677932,
+     "original": 49
+    }
+   ],
+   "name": "7-1 The Underwhere - Door Key (an1_04)",
+   "id": 1397771653,
+   "category": "key_item"
+  },
+  {
+   "kind": "spot",
+   "map": "an2_03",
+   "item": 37,
+   "flag": 7208,
+   "label": null,
+   "where": "7-2: the D-Men give it after Bowser's fight (opens an2_03's lock to an2_05)",
+   "pos": null,
+   "patches": [
+    {
+     "offset": 1710536,
+     "original": 37
+    }
+   ],
+   "name": "7-2 Underwhere Road - Door Key (an2_03)",
+   "id": 1397771654,
+   "category": "key_item"
+  },
+  {
+   "kind": "spot",
+   "map": "an2_07",
+   "item": 38,
+   "flag": 7209,
+   "label": null,
+   "where": "7-2: the sisters give it for the Diet Book (opens an2_06's lock to an2_08)",
+   "pos": null,
+   "patches": [
+    {
+     "offset": 1731832,
+     "original": 38
+    }
+   ],
+   "name": "7-2 Underwhere Road - Door Key (an2_07)",
+   "id": 1397771655,
+   "category": "key_item"
+  },
+  {
+   "kind": "spot",
+   "map": "an4_03",
+   "item": 40,
+   "flag": 7210,
+   "label": null,
+   "where": "7-4: an4_03 (opens one of the Overthere's two locks)",
+   "pos": null,
+   "patches": [
+    {
+     "offset": 1819572,
+     "original": 40
+    }
+   ],
+   "name": "7-4 The Overthere - Door Key (an4_03)",
+   "id": 1397771656,
+   "category": "key_item"
+  },
+  {
+   "kind": "spot",
+   "map": "an4_04",
+   "item": 40,
+   "flag": 7211,
+   "label": null,
+   "where": "7-4: an4_04 (opens one of the Overthere's two locks)",
+   "pos": null,
+   "patches": [
+    {
+     "offset": 1824492,
+     "original": 40
+    }
+   ],
+   "name": "7-4 The Overthere - Door Key (an4_04)",
+   "id": 1397771657,
+   "category": "key_item"
+  },
+  {
+   "kind": "spot",
+   "map": "an4_04",
+   "item": 41,
+   "flag": 7212,
+   "label": null,
+   "where": "7-4: the Blue Orb, an4_04 (one of the three for an4_03's rainbow)",
+   "pos": null,
+   "patches": [
+    {
+     "offset": 1827224,
+     "original": 41
+    }
+   ],
+   "name": "7-4 The Overthere - Blue Orb (an4_04)",
+   "id": 1397771658,
+   "category": "key_item"
+  },
+  {
+   "kind": "spot",
+   "map": "an4_06",
+   "item": 42,
+   "flag": 7213,
+   "label": null,
+   "where": "7-4: the Yellow Orb, an4_06 (one of the three for an4_03's rainbow)",
+   "pos": null,
+   "patches": [
+    {
+     "offset": 1836260,
+     "original": 42
+    }
+   ],
+   "name": "7-4 The Overthere - Yellow Orb (an4_06)",
+   "id": 1397771659,
+   "category": "key_item"
+  },
+  {
+   "kind": "spot",
+   "map": "an4_07",
+   "item": 43,
+   "flag": 7214,
+   "label": null,
+   "where": "7-4: the Red Orb, an4_07 (one of the three for an4_03's rainbow)",
+   "pos": null,
+   "patches": [
+    {
+     "offset": 1839860,
+     "original": 43
+    }
+   ],
+   "name": "7-4 The Overthere - Red Orb (an4_07)",
+   "id": 1397771660,
+   "category": "key_item"
+  },
+  {
+   "kind": "spot",
+   "map": "he4_04",
+   "item": 16,
+   "flag": 7215,
+   "label": null,
+   "where": "1-4: he4_04's box (the first of three Ruins Keys; he4_03's lock)",
+   "pos": null,
+   "patches": [
+    {
+     "offset": 1023056,
+     "original": 16
+    }
+   ],
+   "name": "1-4 Yold Ruins - Ruins Key (he4_04)",
+   "id": 1397771661,
+   "category": "key_item"
+  },
+  {
+   "kind": "spot",
+   "map": "he4_05",
+   "item": 16,
+   "flag": 7216,
+   "label": null,
+   "where": "1-4: he4_05 (the second Ruins Key; he4_05's lock)",
+   "pos": null,
+   "patches": [
+    {
+     "offset": 1024940,
+     "original": 16
+    }
+   ],
+   "name": "1-4 Yold Ruins - Ruins Key (he4_05)",
+   "id": 1397771662,
+   "category": "key_item"
+  },
+  {
+   "kind": "spot",
+   "map": "he4_07",
+   "item": 16,
+   "flag": 7217,
+   "label": null,
+   "where": "1-4: he4_07 (the third Ruins Key; he4_07's lock)",
+   "pos": null,
+   "patches": [
+    {
+     "offset": 1027172,
+     "original": 16
+    }
+   ],
+   "name": "1-4 Yold Ruins - Ruins Key (he4_07)",
+   "id": 1397771663,
+   "category": "key_item"
+  },
+  {
+   "kind": "spot",
+   "map": "mi1_05",
+   "item": 17,
+   "flag": 7218,
+   "label": null,
+   "where": "2-1: mi1_05 (opens mi1_01's lock)",
+   "pos": null,
+   "patches": [
+    {
+     "offset": 1057960,
+     "original": 17
+    }
+   ],
+   "name": "2-1 Gloam Valley - Door Key (mi1_05)",
+   "id": 1397771664,
+   "category": "key_item"
+  },
+  {
+   "kind": "spot",
+   "map": "mi2_06",
+   "item": 18,
+   "flag": 7219,
+   "label": null,
+   "where": "2-2: mi2_06's box (opens mi2_03's lock to mi2_08)",
+   "pos": null,
+   "patches": [
+    {
+     "offset": 1092216,
+     "original": 18
+    }
+   ],
+   "name": "2-2 Merlee's Mansion - House Key (mi2_06)",
+   "id": 1397771665,
+   "category": "key_item"
+  },
+  {
+   "kind": "spot",
+   "map": "ta4_02",
+   "item": 19,
+   "flag": 7220,
+   "label": null,
+   "where": "3-4: ta4_02's box (opens ta4_01's lock)",
+   "pos": null,
+   "patches": [
+    {
+     "offset": 1276904,
+     "original": 19
+    }
+   ],
+   "name": "3-4 Fort Francis - Fort Key (ta4_02)",
+   "id": 1397771666,
+   "category": "key_item"
+  },
+  {
+   "kind": "spot",
+   "map": "sp2_01",
+   "item": 26,
+   "flag": 7221,
+   "label": null,
+   "where": "4-2: sp2_01, after the flip (opens sp2_01's lock to sp2_02)",
+   "pos": null,
+   "patches": [
+    {
+     "offset": 1357732,
+     "original": 26
+    }
+   ],
+   "name": "4-2 Planet Blobule - Door Key (sp2_01)",
+   "id": 1397771667,
+   "category": "key_item"
+  },
+  {
+   "kind": "spot",
+   "map": "sp4_04",
+   "item": 27,
+   "flag": 7222,
+   "label": null,
+   "where": "4-4: the box in sp4_04/05 (opens sp4_03's lock)",
+   "pos": null,
+   "patches": [
+    {
+     "offset": 1401920,
+     "original": 27
+    }
+   ],
+   "name": "4-4 The Whoa Zone - Dimension Key (sp4_04)",
+   "id": 1397771668,
+   "category": "key_item"
+  },
+  {
+   "kind": "spot",
+   "map": "sp4_07",
+   "item": 28,
+   "flag": 7223,
+   "label": null,
+   "where": "4-4: sp4_07's box (opens sp4_07's lock to sp4_16)",
+   "pos": null,
+   "patches": [
+    {
+     "offset": 1403032,
+     "original": 28
+    }
+   ],
+   "name": "4-4 The Whoa Zone - Dimension Key (sp4_07)",
+   "id": 1397771669,
+   "category": "key_item"
+  },
+  {
+   "kind": "spot",
+   "map": "sp4_12",
+   "item": 29,
+   "flag": 7224,
+   "label": null,
+   "where": "4-4: sp4_12's box (opens sp4_11's lock to sp4_13)",
+   "pos": null,
+   "patches": [
+    {
+     "offset": 1406880,
+     "original": 29
+    }
+   ],
+   "name": "4-4 The Whoa Zone - Dimension Key (sp4_12)",
+   "id": 1397771670,
+   "category": "key_item"
+  },
+  {
+   "kind": "spot",
+   "map": "gn3_01",
+   "item": 33,
+   "flag": 7225,
+   "label": null,
+   "where": "5-3: from the NPC in gn3_01 (opens gn3_03's lock)",
+   "pos": null,
+   "patches": [
+    {
+     "offset": 1496172,
+     "original": 33
+    }
+   ],
+   "name": "5-3 Floro Caverns - Cave Key (gn3_01)",
+   "id": 1397771671,
+   "category": "key_item"
+  },
+  {
+   "kind": "spot",
+   "map": "gn4_06",
+   "item": 34,
+   "flag": 7226,
+   "label": null,
+   "where": "5-4: gn4_06/07, behind the drawing (opens gn4_02's lock)",
+   "pos": null,
+   "patches": [
+    {
+     "offset": 1534424,
+     "original": 34
+    }
+   ],
+   "name": "5-4 Floro Caverns - Cave Key (gn4_06)",
+   "id": 1397771672,
+   "category": "key_item"
+  },
+  {
+   "kind": "spot",
+   "map": "gn4_10",
+   "item": 35,
+   "flag": 7227,
+   "label": null,
+   "where": "5-4: gn4_10 (opens gn4_10's card door to gn4_11)",
+   "pos": null,
+   "patches": [
+    {
+     "offset": 1536316,
+     "original": 35
+    }
+   ],
+   "name": "5-4 Floro Caverns - Card Key (gn4_10)",
+   "id": 1397771673,
+   "category": "key_item"
+  },
+  {
+   "kind": "spot",
+   "map": "ls1_07",
+   "item": 46,
+   "flag": 7228,
+   "label": null,
+   "where": "8-1: ls1_07's box (ls1_05's lock)",
+   "pos": null,
+   "patches": [
+    {
+     "offset": 1893120,
+     "original": 46
+    }
+   ],
+   "name": "8-1 Castle Bleck Entry - Castle Bleck Key (ls1_07)",
+   "id": 1397771674,
+   "category": "key_item"
+  },
+  {
+   "kind": "spot",
+   "map": "ls2_02",
+   "item": 46,
+   "flag": 7229,
+   "label": null,
+   "where": "8-2: ls2_02's box (ls2_02's lock)",
+   "pos": null,
+   "patches": [
+    {
+     "offset": 1925232,
+     "original": 46
+    }
+   ],
+   "name": "8-2 Castle Bleck Foyer - Castle Bleck Key (ls2_02)",
+   "id": 1397771675,
+   "category": "key_item"
+  },
+  {
+   "kind": "spot",
+   "map": "ls2_12",
+   "item": 46,
+   "flag": 7230,
+   "label": null,
+   "where": "8-2: ls2_12 (ls2_09's lock)",
+   "pos": null,
+   "patches": [
+    {
+     "offset": 1948908,
+     "original": 46
+    }
+   ],
+   "name": "8-2 Castle Bleck Foyer - Castle Bleck Key (ls2_12)",
+   "id": 1397771676,
+   "category": "key_item"
+  },
+  {
+   "kind": "spot",
+   "map": "ls3_03",
+   "item": 46,
+   "flag": 7231,
+   "label": null,
+   "where": "8-3: ls3_03's block (ls3_03's lock)",
+   "pos": null,
+   "patches": [
+    {
+     "offset": 1971600,
+     "original": 46
+    }
+   ],
+   "name": "8-3 Castle Bleck Interior - Castle Bleck Key (ls3_03)",
+   "id": 1397771677,
+   "category": "key_item"
+  },
+  {
+   "kind": "spot",
+   "map": "ls3_09",
+   "item": 46,
+   "flag": 7232,
+   "label": null,
+   "where": "8-3: ls3_09's box (ls3_04's lock)",
+   "pos": null,
+   "patches": [
+    {
+     "offset": 1978016,
+     "original": 46
+    }
+   ],
+   "name": "8-3 Castle Bleck Interior - Castle Bleck Key (ls3_09)",
+   "id": 1397771678,
+   "category": "key_item"
+  },
+  {
+   "kind": "spot",
+   "map": "ls3_11",
+   "item": 46,
+   "flag": 7233,
+   "label": null,
+   "where": "8-3: ls3_11's box (ls3_11's lock)",
+   "pos": null,
+   "patches": [
+    {
+     "offset": 1980544,
+     "original": 46
+    }
+   ],
+   "name": "8-3 Castle Bleck Interior - Castle Bleck Key (ls3_11)",
+   "id": 1397771679,
+   "category": "key_item"
+  },
+  {
+   "kind": "spot",
+   "map": "ls4_05",
+   "item": 46,
+   "flag": 7234,
+   "label": null,
+   "where": "8-4: ls4_05's box (ls4_04's lock)",
+   "pos": null,
+   "patches": [
+    {
+     "offset": 2000476,
+     "original": 46
+    }
+   ],
+   "name": "8-4 Castle Bleck Inner Sanctum - Castle Bleck Key (ls4_05)",
+   "id": 1397771680,
+   "category": "key_item"
+  },
+  {
+   "kind": "tattle",
+   "map": "dan_01",
+   "maps": [
+    "dan_01",
+    "gn1_02",
+    "gn1_03",
+    "gn1_04",
+    "gn2_01",
+    "gn2_02",
+    "gn2_03",
+    "gn2_04",
+    "gn3_01",
+    "gn3_03",
+    "gn3_04",
+    "gn3_06",
+    "gn3_08",
+    "gn4_01",
+    "gn4_02",
+    "gn4_06",
+    "gn4_08",
+    "gn4_09",
+    "gn4_11",
+    "gn4_15",
+    "he1_01",
+    "he1_02",
+    "he1_05",
+    "he2_06",
+    "he3_02",
+    "he3_06",
+    "ls1_03",
+    "ls1_04",
+    "ls4_07",
+    "mi1_01",
+    "mi1_03",
+    "mi1_05",
+    "mi1_06",
+    "mi1_07",
+    "mi1_08",
+    "mi1_10",
+    "mi1_11",
+    "mi2_01",
+    "mi2_09",
+    "mi2_10",
+    "mi2_11",
+    "mi4_04",
+    "mi4_08",
+    "mi4_09",
+    "mi4_11",
+    "sp1_02",
+    "sp1_03",
+    "sp1_04",
+    "sp1_05",
+    "sp1_06",
+    "sp4_02",
+    "sp4_04",
+    "sp4_05",
+    "sp4_06",
+    "sp4_08",
+    "ta1_01",
+    "ta1_02",
+    "ta1_03",
+    "ta1_04",
+    "ta1_05",
+    "ta2_01",
+    "ta2_02",
+    "ta2_04",
+    "ta2_05",
+    "ta3_01",
+    "ta3_02",
+    "ta3_03",
+    "ta3_07",
+    "ta3_08"
+   ],
+   "item": 80,
+   "flag": 7680,
+   "label": "Goomba",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Goomba with Tatl (in dan_01, gn1_02, gn1_03, gn1_04, gn2_01, gn2_02, gn2_03, gn2_04, gn3_01, gn3_03, gn3_04, gn3_06, gn3_08, gn4_01, gn4_02, gn4_06, gn4_08, gn4_09, gn4_11, gn4_15, he1_01, he1_02, he1_05, he2_06, he3_02, he3_06, ls1_03, ls1_04, ls4_07, mi1_01, mi1_03, mi1_05, mi1_06, mi1_07, mi1_08, mi1_10, mi1_11, mi2_01, mi2_09, mi2_10, mi2_11, mi4_04, mi4_08, mi4_09, mi4_11, sp1_02, sp1_03, sp1_04, sp1_05, sp1_06, sp4_02, sp4_04, sp4_05, sp4_06, sp4_08, ta1_01, ta1_02, ta1_03, ta1_04, ta1_05, ta2_01, ta2_02, ta2_04, ta2_05, ta3_01, ta3_02, ta3_03, ta3_07, ta3_08)",
+   "card": 282,
+   "name": "Tattle - Goomba",
+   "id": 1397771681,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "dan_01",
+   "maps": [
+    "dan_01",
+    "he3_03",
+    "mi1_01",
+    "mi1_02",
+    "ta1_02",
+    "ta2_03"
+   ],
+   "item": 80,
+   "flag": 7681,
+   "label": "Spiked Goomba",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Spiked Goomba with Tatl (in dan_01, he3_03, mi1_01, mi1_02, ta1_02, ta2_03)",
+   "card": 283,
+   "name": "Tattle - Spiked Goomba",
+   "id": 1397771682,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "dan_01",
+   "maps": [
+    "dan_01",
+    "he1_05",
+    "mi1_08",
+    "mi1_11",
+    "ta1_02"
+   ],
+   "item": 80,
+   "flag": 7682,
+   "label": "Paragoomba",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Paragoomba with Tatl (in dan_01, he1_05, mi1_08, mi1_11, ta1_02)",
+   "card": 285,
+   "name": "Tattle - Paragoomba",
+   "id": 1397771683,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "dan_01",
+   "maps": [
+    "dan_01",
+    "ls2_07",
+    "ta1_03"
+   ],
+   "item": 80,
+   "flag": 7683,
+   "label": "Gloomba",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Gloomba with Tatl (in dan_01, ls2_07, ta1_03)",
+   "card": 287,
+   "name": "Tattle - Gloomba",
+   "id": 1397771684,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "dan_01",
+   "maps": [
+    "dan_01",
+    "he1_02",
+    "he1_04",
+    "he2_01",
+    "he2_02",
+    "ls1_03",
+    "ls1_04",
+    "ls2_07",
+    "ls4_07",
+    "mi1_01",
+    "mi1_08",
+    "mi1_11",
+    "ta1_01",
+    "ta1_02",
+    "ta1_03",
+    "ta1_04",
+    "ta1_09",
+    "ta3_01"
+   ],
+   "item": 80,
+   "flag": 7684,
+   "label": "Koopa Troopa",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Koopa Troopa with Tatl (in dan_01, he1_02, he1_04, he2_01, he2_02, ls1_03, ls1_04, ls2_07, ls4_07, mi1_01, mi1_08, mi1_11, ta1_01, ta1_02, ta1_03, ta1_04, ta1_09, ta3_01)",
+   "card": 291,
+   "name": "Tattle - Koopa Troopa",
+   "id": 1397771685,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "dan_01",
+   "maps": [
+    "dan_01",
+    "ls1_02",
+    "ls1_04",
+    "ls1_09",
+    "ls3_04",
+    "ls4_07",
+    "ls4_08"
+   ],
+   "item": 80,
+   "flag": 7685,
+   "label": "Koopatrol",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Koopatrol with Tatl (in dan_01, ls1_02, ls1_04, ls1_09, ls3_04, ls4_07, ls4_08)",
+   "card": 292,
+   "name": "Tattle - Koopatrol",
+   "id": 1397771686,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "dan_01",
+   "maps": [
+    "dan_01",
+    "he2_01",
+    "he2_02",
+    "ls1_04",
+    "mi1_01",
+    "mi1_08",
+    "mi1_11",
+    "ta1_02",
+    "ta3_01"
+   ],
+   "item": 80,
+   "flag": 7686,
+   "label": "Paratroopa",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Paratroopa with Tatl (in dan_01, he2_01, he2_02, ls1_04, mi1_01, mi1_08, mi1_11, ta1_02, ta3_01)",
+   "card": 296,
+   "name": "Tattle - Paratroopa",
+   "id": 1397771687,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "dan_01",
+   "maps": [
+    "dan_01",
+    "gn3_03",
+    "gn3_15",
+    "he4_02",
+    "he4_05",
+    "he4_07"
+   ],
+   "item": 80,
+   "flag": 7687,
+   "label": "Buzzy Beetle",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Buzzy Beetle with Tatl (in dan_01, gn3_03, gn3_15, he4_02, he4_05, he4_07)",
+   "card": 298,
+   "name": "Tattle - Buzzy Beetle",
+   "id": 1397771688,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "dan_01",
+   "maps": [
+    "dan_01",
+    "gn3_03",
+    "gn3_15",
+    "gn4_06"
+   ],
+   "item": 80,
+   "flag": 7688,
+   "label": "Spike Top",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Spike Top with Tatl (in dan_01, gn3_03, gn3_15, gn4_06)",
+   "card": 299,
+   "name": "Tattle - Spike Top",
+   "id": 1397771689,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "an3_01",
+   "maps": [
+    "an3_01",
+    "an3_12",
+    "ls4_03",
+    "ls4_04"
+   ],
+   "item": 80,
+   "flag": 7689,
+   "label": "Parabuzzy",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Parabuzzy with Tatl (in an3_01, an3_12, ls4_03, ls4_04)",
+   "card": 301,
+   "name": "Tattle - Parabuzzy",
+   "id": 1397771690,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "an3_01",
+   "maps": [
+    "an3_01",
+    "an3_12",
+    "ls2_05",
+    "ls4_03",
+    "ls4_04"
+   ],
+   "item": 80,
+   "flag": 7690,
+   "label": "Spiky Parabuzzy",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Spiky Parabuzzy with Tatl (in an3_01, an3_12, ls2_05, ls4_03, ls4_04)",
+   "card": 302,
+   "name": "Tattle - Spiky Parabuzzy",
+   "id": 1397771691,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "dan_01",
+   "maps": [
+    "dan_01",
+    "gn1_02",
+    "gn2_03",
+    "gn2_04"
+   ],
+   "item": 80,
+   "flag": 7691,
+   "label": "Stone Buzzy",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Stone Buzzy with Tatl (in dan_01, gn1_02, gn2_03, gn2_04)",
+   "card": 303,
+   "name": "Tattle - Stone Buzzy",
+   "id": 1397771692,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "an3_02",
+   "maps": [
+    "an3_02",
+    "dan_01",
+    "ta3_03"
+   ],
+   "item": 80,
+   "flag": 7692,
+   "label": "Spiny",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Spiny with Tatl (in an3_02, dan_01, ta3_03)",
+   "card": 305,
+   "name": "Tattle - Spiny",
+   "id": 1397771693,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "an3_02",
+   "maps": [
+    "an3_02",
+    "ta3_03"
+   ],
+   "item": 80,
+   "flag": 7693,
+   "label": "Lakitu",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Lakitu with Tatl (in an3_02, ta3_03)",
+   "card": 307,
+   "name": "Tattle - Lakitu",
+   "id": 1397771694,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "an2_08",
+   "maps": [
+    "an2_08",
+    "dan_01",
+    "ls1_08"
+   ],
+   "item": 80,
+   "flag": 7694,
+   "label": "Dull Bones",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Dull Bones with Tatl (in an2_08, dan_01, ls1_08)",
+   "card": 308,
+   "name": "Tattle - Dull Bones",
+   "id": 1397771695,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "an1_02",
+   "maps": [
+    "an1_02",
+    "an2_05",
+    "dan_01"
+   ],
+   "item": 80,
+   "flag": 7695,
+   "label": "Dry Bones",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Dry Bones with Tatl (in an1_02, an2_05, dan_01)",
+   "card": 310,
+   "name": "Tattle - Dry Bones",
+   "id": 1397771696,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "dan_01",
+   "maps": [
+    "dan_01",
+    "ls2_07",
+    "ta1_02",
+    "ta1_04"
+   ],
+   "item": 80,
+   "flag": 7696,
+   "label": "Hammer Bro",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Hammer Bro with Tatl (in dan_01, ls2_07, ta1_02, ta1_04)",
+   "card": 311,
+   "name": "Tattle - Hammer Bro",
+   "id": 1397771697,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "an4_08",
+   "maps": [
+    "an4_08",
+    "dan_01",
+    "ls1_03",
+    "ls3_04"
+   ],
+   "item": 80,
+   "flag": 7697,
+   "label": "Boomerang Bro",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Boomerang Bro with Tatl (in an4_08, dan_01, ls1_03, ls3_04)",
+   "card": 312,
+   "name": "Tattle - Boomerang Bro",
+   "id": 1397771698,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "dan_01",
+   "maps": [
+    "dan_01",
+    "ls1_09",
+    "ls2_07"
+   ],
+   "item": 80,
+   "flag": 7698,
+   "label": "Fire Bro",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Fire Bro with Tatl (in dan_01, ls1_09, ls2_07)",
+   "card": 313,
+   "name": "Tattle - Fire Bro",
+   "id": 1397771699,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "dan_01",
+   "maps": [
+    "dan_01",
+    "ls1_08",
+    "ta1_01"
+   ],
+   "item": 80,
+   "flag": 7699,
+   "label": "Magikoopa",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Magikoopa with Tatl (in dan_01, ls1_08, ta1_01)",
+   "card": 317,
+   "name": "Tattle - Magikoopa",
+   "id": 1397771700,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "dan_01",
+   "maps": [
+    "dan_01",
+    "ta1_04"
+   ],
+   "item": 80,
+   "flag": 7700,
+   "label": "Koopa Striker",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Koopa Striker with Tatl (in dan_01, ta1_04)",
+   "card": 319,
+   "name": "Tattle - Koopa Striker",
+   "id": 1397771701,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "ta1_04",
+   "maps": [
+    "ta1_04"
+   ],
+   "item": 80,
+   "flag": 7701,
+   "label": "Toopa Striker",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Toopa Striker with Tatl (in ta1_04)",
+   "card": 320,
+   "name": "Tattle - Toopa Striker",
+   "id": 1397771702,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "dan_01",
+   "maps": [
+    "dan_01",
+    "ls1_07",
+    "ls3_04",
+    "ls4_07"
+   ],
+   "item": 80,
+   "flag": 7702,
+   "label": "Soopa Striker",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Soopa Striker with Tatl (in dan_01, ls1_07, ls3_04, ls4_07)",
+   "card": 321,
+   "name": "Tattle - Soopa Striker",
+   "id": 1397771703,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "dan_01",
+   "maps": [
+    "dan_01",
+    "gn2_02"
+   ],
+   "item": 80,
+   "flag": 7703,
+   "label": "Clubba",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Clubba with Tatl (in dan_01, gn2_02)",
+   "card": 323,
+   "name": "Tattle - Clubba",
+   "id": 1397771704,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "gn3_15",
+   "maps": [
+    "gn3_15",
+    "he1_05",
+    "mi1_08",
+    "ta1_01",
+    "ta1_02",
+    "ta1_03"
+   ],
+   "item": 80,
+   "flag": 7704,
+   "label": "Piranha Plant",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Piranha Plant with Tatl (in gn3_15, he1_05, mi1_08, ta1_01, ta1_02, ta1_03)",
+   "card": 325,
+   "name": "Tattle - Piranha Plant",
+   "id": 1397771705,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "gn1_02",
+   "maps": [
+    "gn1_02",
+    "gn2_01",
+    "gn2_02",
+    "gn3_15",
+    "gn4_01"
+   ],
+   "item": 80,
+   "flag": 7705,
+   "label": "Putrid Piranha",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Putrid Piranha with Tatl (in gn1_02, gn2_01, gn2_02, gn3_15, gn4_01)",
+   "card": 326,
+   "name": "Tattle - Putrid Piranha",
+   "id": 1397771706,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "an1_02",
+   "maps": [
+    "an1_02",
+    "an1_08"
+   ],
+   "item": 80,
+   "flag": 7706,
+   "label": "Frost Piranha",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Frost Piranha with Tatl (in an1_02, an1_08)",
+   "card": 327,
+   "name": "Tattle - Frost Piranha",
+   "id": 1397771707,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "dan_01",
+   "maps": [
+    "dan_01",
+    "ta3_02"
+   ],
+   "item": 80,
+   "flag": 7707,
+   "label": "Crazee Dayzee",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Crazee Dayzee with Tatl (in dan_01, ta3_02)",
+   "card": 328,
+   "name": "Tattle - Crazee Dayzee",
+   "id": 1397771708,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "dan_01",
+   "maps": [
+    "dan_01",
+    "gn2_03"
+   ],
+   "item": 80,
+   "flag": 7708,
+   "label": "Amazy Dayzee",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Amazy Dayzee with Tatl (in dan_01, gn2_03)",
+   "card": 329,
+   "name": "Tattle - Amazy Dayzee",
+   "id": 1397771709,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "dan_41",
+   "maps": [
+    "dan_41"
+   ],
+   "item": 80,
+   "flag": 7709,
+   "label": "Dark Dayzee",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Dark Dayzee with Tatl (in dan_41)",
+   "card": 330,
+   "name": "Tattle - Dark Dayzee",
+   "id": 1397771710,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "dan_01",
+   "maps": [
+    "dan_01",
+    "sp2_02",
+    "sp2_10"
+   ],
+   "item": 80,
+   "flag": 7710,
+   "label": "Fuzzy",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Fuzzy with Tatl (in dan_01, sp2_02, sp2_10)",
+   "card": 331,
+   "name": "Tattle - Fuzzy",
+   "id": 1397771711,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "dan_01",
+   "maps": [
+    "dan_01",
+    "ls4_08",
+    "ls4_09"
+   ],
+   "item": 80,
+   "flag": 7711,
+   "label": "Pink Fuzzy",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Pink Fuzzy with Tatl (in dan_01, ls4_08, ls4_09)",
+   "card": 332,
+   "name": "Tattle - Pink Fuzzy",
+   "id": 1397771712,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "dan_01",
+   "maps": [
+    "dan_01",
+    "gn2_01",
+    "gn2_04"
+   ],
+   "item": 80,
+   "flag": 7712,
+   "label": "Pokey",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Pokey with Tatl (in dan_01, gn2_01, gn2_04)",
+   "card": 334,
+   "name": "Tattle - Pokey",
+   "id": 1397771713,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "dan_01",
+   "maps": [
+    "dan_01",
+    "ls4_01",
+    "ls4_08"
+   ],
+   "item": 80,
+   "flag": 7713,
+   "label": "Poison Pokey",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Poison Pokey with Tatl (in dan_01, ls4_01, ls4_08)",
+   "card": 335,
+   "name": "Tattle - Poison Pokey",
+   "id": 1397771714,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "mi1_04",
+   "maps": [
+    "mi1_04",
+    "mi2_10",
+    "mi4_09"
+   ],
+   "item": 80,
+   "flag": 7714,
+   "label": "Swooper",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Swooper with Tatl (in mi1_04, mi2_10, mi4_09)",
+   "card": 337,
+   "name": "Tattle - Swooper",
+   "id": 1397771715,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "gn2_01",
+   "maps": [
+    "gn2_01",
+    "mi1_01",
+    "mi1_10",
+    "ta2_01",
+    "ta2_04"
+   ],
+   "item": 80,
+   "flag": 7715,
+   "label": "Cheep Cheep",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Cheep Cheep with Tatl (in gn2_01, mi1_01, mi1_10, ta2_01, ta2_04)",
+   "card": 338,
+   "name": "Tattle - Cheep Cheep",
+   "id": 1397771716,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "ta2_01",
+   "maps": [
+    "ta2_01",
+    "ta2_02",
+    "ta2_03",
+    "ta2_04"
+   ],
+   "item": 80,
+   "flag": 7716,
+   "label": "Blooper",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Blooper with Tatl (in ta2_01, ta2_02, ta2_03, ta2_04)",
+   "card": 339,
+   "name": "Tattle - Blooper",
+   "id": 1397771717,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "ta2_05",
+   "maps": [
+    "ta2_05"
+   ],
+   "item": 80,
+   "flag": 7717,
+   "label": "Bittacuda",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Bittacuda with Tatl (in ta2_05)",
+   "card": 340,
+   "name": "Tattle - Bittacuda",
+   "id": 1397771718,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "an3_03",
+   "maps": [
+    "an3_03",
+    "an3_12",
+    "an3_13",
+    "dan_01"
+   ],
+   "item": 80,
+   "flag": 7718,
+   "label": "Ruff Puff",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Ruff Puff with Tatl (in an3_03, an3_12, an3_13, dan_01)",
+   "card": 341,
+   "name": "Tattle - Ruff Puff",
+   "id": 1397771719,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "dan_01",
+   "maps": [
+    "dan_01",
+    "gn3_14",
+    "gn3_15",
+    "gn4_07",
+    "ls4_09"
+   ],
+   "item": 80,
+   "flag": 7719,
+   "label": "Spania",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Spania with Tatl (in dan_01, gn3_14, gn3_15, gn4_07, ls4_09)",
+   "card": 343,
+   "name": "Tattle - Spania",
+   "id": 1397771720,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "an3_14",
+   "maps": [
+    "an3_14",
+    "an4_04",
+    "dan_01",
+    "gn4_12",
+    "ls2_01",
+    "ls2_08",
+    "ls3_01",
+    "ls4_07",
+    "mi4_07"
+   ],
+   "item": 80,
+   "flag": 7720,
+   "label": "Cursya",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Cursya with Tatl (in an3_14, an4_04, dan_01, gn4_12, ls2_01, ls2_08, ls3_01, ls4_07, mi4_07)",
+   "card": 345,
+   "name": "Tattle - Cursya",
+   "id": 1397771721,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "gn1_02",
+   "maps": [
+    "gn1_02",
+    "ta1_01"
+   ],
+   "item": 80,
+   "flag": 7721,
+   "label": "Back Cursya",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Back Cursya with Tatl (in gn1_02, ta1_01)",
+   "card": 346,
+   "name": "Tattle - Back Cursya",
+   "id": 1397771722,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "dan_01",
+   "maps": [
+    "dan_01",
+    "gn2_04",
+    "ls1_08",
+    "ls4_08"
+   ],
+   "item": 80,
+   "flag": 7722,
+   "label": "Tech Cursya",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Tech Cursya with Tatl (in dan_01, gn2_04, ls1_08, ls4_08)",
+   "card": 347,
+   "name": "Tattle - Tech Cursya",
+   "id": 1397771723,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "dan_01",
+   "maps": [
+    "dan_01",
+    "gn4_08",
+    "ls1_08",
+    "ls2_08",
+    "ls3_01",
+    "ls4_08"
+   ],
+   "item": 80,
+   "flag": 7723,
+   "label": "Heavy Cursya",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Heavy Cursya with Tatl (in dan_01, gn4_08, ls1_08, ls2_08, ls3_01, ls4_08)",
+   "card": 348,
+   "name": "Tattle - Heavy Cursya",
+   "id": 1397771724,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "an3_14",
+   "maps": [
+    "an3_14",
+    "dan_01",
+    "gn4_05",
+    "ls2_08",
+    "ls4_01",
+    "ls4_07"
+   ],
+   "item": 80,
+   "flag": 7724,
+   "label": "Reversya Cursya",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Reversya Cursya with Tatl (in an3_14, dan_01, gn4_05, ls2_08, ls4_01, ls4_07)",
+   "card": 349,
+   "name": "Tattle - Reversya Cursya",
+   "id": 1397771725,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "dan_01",
+   "maps": [
+    "dan_01",
+    "mi2_11",
+    "mi4_02",
+    "mi4_08"
+   ],
+   "item": 80,
+   "flag": 7725,
+   "label": "Boo",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Boo with Tatl (in dan_01, mi2_11, mi4_02, mi4_08)",
+   "card": 354,
+   "name": "Tattle - Boo",
+   "id": 1397771726,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "an2_02",
+   "maps": [
+    "an2_02",
+    "an2_05",
+    "dan_01"
+   ],
+   "item": 80,
+   "flag": 7726,
+   "label": "Dark Boo",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Dark Boo with Tatl (in an2_02, an2_05, dan_01)",
+   "card": 355,
+   "name": "Tattle - Dark Boo",
+   "id": 1397771727,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "an1_02",
+   "maps": [
+    "an1_02"
+   ],
+   "item": 80,
+   "flag": 7727,
+   "label": "Lava Bubble",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Lava Bubble with Tatl (in an1_02)",
+   "card": 357,
+   "name": "Tattle - Lava Bubble",
+   "id": 1397771728,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "dan_01",
+   "maps": [
+    "dan_01",
+    "ta3_07",
+    "ta4_15"
+   ],
+   "item": 80,
+   "flag": 7728,
+   "label": "Chain Chomp",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Chain Chomp with Tatl (in dan_01, ta3_07, ta4_15)",
+   "card": 358,
+   "name": "Tattle - Chain Chomp",
+   "id": 1397771729,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "dan_01",
+   "maps": [
+    "dan_01",
+    "ls3_08"
+   ],
+   "item": 80,
+   "flag": 7729,
+   "label": "Red Chomp",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Red Chomp with Tatl (in dan_01, ls3_08)",
+   "card": 360,
+   "name": "Tattle - Red Chomp",
+   "id": 1397771730,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "dan_01",
+   "maps": [
+    "dan_01",
+    "he3_01",
+    "he3_02"
+   ],
+   "item": 80,
+   "flag": 7730,
+   "label": "Bald Cleft",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Bald Cleft with Tatl (in dan_01, he3_01, he3_02)",
+   "card": 362,
+   "name": "Tattle - Bald Cleft",
+   "id": 1397771731,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "dan_01",
+   "maps": [
+    "dan_01",
+    "gn1_02"
+   ],
+   "item": 80,
+   "flag": 7731,
+   "label": "Moon Cleft",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Moon Cleft with Tatl (in dan_01, gn1_02)",
+   "card": 363,
+   "name": "Tattle - Moon Cleft",
+   "id": 1397771732,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "dan_01",
+   "maps": [
+    "dan_01",
+    "mi1_03",
+    "mi2_09",
+    "mi4_11"
+   ],
+   "item": 80,
+   "flag": 7732,
+   "label": "Shlurp",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Shlurp with Tatl (in dan_01, mi1_03, mi2_09, mi4_11)",
+   "card": 365,
+   "name": "Tattle - Shlurp",
+   "id": 1397771733,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "dan_01",
+   "maps": [
+    "dan_01",
+    "gn1_04",
+    "ls2_10",
+    "ls4_09"
+   ],
+   "item": 80,
+   "flag": 7733,
+   "label": "Shlorp",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Shlorp with Tatl (in dan_01, gn1_04, ls2_10, ls4_09)",
+   "card": 366,
+   "name": "Tattle - Shlorp",
+   "id": 1397771734,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "he2_06",
+   "maps": [
+    "he2_06"
+   ],
+   "item": 80,
+   "flag": 7734,
+   "label": "Thwomp",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Thwomp with Tatl (in he2_06)",
+   "card": 368,
+   "name": "Tattle - Thwomp",
+   "id": 1397771735,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "he4_04",
+   "maps": [
+    "he4_04",
+    "he4_05"
+   ],
+   "item": 80,
+   "flag": 7735,
+   "label": "Spiky Tromp",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Spiky Tromp with Tatl (in he4_04, he4_05)",
+   "card": 370,
+   "name": "Tattle - Spiky Tromp",
+   "id": 1397771736,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "ta1_04",
+   "maps": [
+    "ta1_04"
+   ],
+   "item": 80,
+   "flag": 7736,
+   "label": "Bill Blaster",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Bill Blaster with Tatl (in ta1_04)",
+   "card": 372,
+   "name": "Tattle - Bill Blaster",
+   "id": 1397771737,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "dan_01",
+   "maps": [
+    "dan_01",
+    "he1_01",
+    "he1_02",
+    "he1_04",
+    "he1_05",
+    "he3_01",
+    "he3_03",
+    "he4_01",
+    "he4_02",
+    "he4_03",
+    "he4_05",
+    "mac_05",
+    "mac_06",
+    "mi1_01",
+    "mi1_05",
+    "mi1_10",
+    "mi1_11"
+   ],
+   "item": 80,
+   "flag": 7737,
+   "label": "Squiglet",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Squiglet with Tatl (in dan_01, he1_01, he1_02, he1_04, he1_05, he3_01, he3_03, he4_01, he4_02, he4_03, he4_05, mac_05, mac_06, mi1_01, mi1_05, mi1_10, mi1_11)",
+   "card": 373,
+   "name": "Tattle - Squiglet",
+   "id": 1397771738,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "an3_02",
+   "maps": [
+    "an3_02",
+    "dan_01",
+    "he1_02",
+    "he1_04",
+    "he1_05",
+    "he3_01",
+    "he3_03",
+    "he4_02",
+    "he4_05",
+    "mac_05",
+    "mac_06",
+    "mac_15",
+    "mac_16",
+    "mi1_01",
+    "mi1_05",
+    "mi1_10"
+   ],
+   "item": 80,
+   "flag": 7738,
+   "label": "Squig",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Squig with Tatl (in an3_02, dan_01, he1_02, he1_04, he1_05, he3_01, he3_03, he4_02, he4_05, mac_05, mac_06, mac_15, mac_16, mi1_01, mi1_05, mi1_10)",
+   "card": 374,
+   "name": "Tattle - Squig",
+   "id": 1397771739,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "an3_02",
+   "maps": [
+    "an3_02",
+    "an3_03",
+    "dan_01",
+    "gn2_01",
+    "mac_15",
+    "mac_16"
+   ],
+   "item": 80,
+   "flag": 7739,
+   "label": "Squog",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Squog with Tatl (in an3_02, an3_03, dan_01, gn2_01, mac_15, mac_16)",
+   "card": 375,
+   "name": "Tattle - Squog",
+   "id": 1397771740,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "dan_01",
+   "maps": [
+    "dan_01",
+    "he1_04",
+    "mac_07",
+    "ta1_02"
+   ],
+   "item": 80,
+   "flag": 7740,
+   "label": "Sproing-Oing",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Sproing-Oing with Tatl (in dan_01, he1_04, mac_07, ta1_02)",
+   "card": 378,
+   "name": "Tattle - Sproing-Oing",
+   "id": 1397771741,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "dan_01",
+   "maps": [
+    "dan_01",
+    "sp2_03"
+   ],
+   "item": 80,
+   "flag": 7741,
+   "label": "Boing-Oing",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Boing-Oing with Tatl (in dan_01, sp2_03)",
+   "card": 379,
+   "name": "Tattle - Boing-Oing",
+   "id": 1397771742,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "dan_01",
+   "maps": [
+    "dan_01",
+    "ls2_01",
+    "ls4_08"
+   ],
+   "item": 80,
+   "flag": 7742,
+   "label": "Zoing-Oing",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Zoing-Oing with Tatl (in dan_01, ls2_01, ls4_08)",
+   "card": 380,
+   "name": "Tattle - Zoing-Oing",
+   "id": 1397771743,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "dan_01",
+   "maps": [
+    "dan_01",
+    "he3_01",
+    "he3_02"
+   ],
+   "item": 80,
+   "flag": 7743,
+   "label": "Boomboxer",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Boomboxer with Tatl (in dan_01, he3_01, he3_02)",
+   "card": 382,
+   "name": "Tattle - Boomboxer",
+   "id": 1397771744,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "an3_12",
+   "maps": [
+    "an3_12",
+    "an3_13",
+    "dan_01",
+    "sp2_05",
+    "sp2_10"
+   ],
+   "item": 80,
+   "flag": 7744,
+   "label": "Beepboxer",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Beepboxer with Tatl (in an3_12, an3_13, dan_01, sp2_05, sp2_10)",
+   "card": 383,
+   "name": "Tattle - Beepboxer",
+   "id": 1397771745,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "dan_01",
+   "maps": [
+    "dan_01",
+    "ls2_01"
+   ],
+   "item": 80,
+   "flag": 7745,
+   "label": "Blastboxer",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Blastboxer with Tatl (in dan_01, ls2_01)",
+   "card": 385,
+   "name": "Tattle - Blastboxer",
+   "id": 1397771746,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "dan_01",
+   "maps": [
+    "dan_01",
+    "he3_01",
+    "mi1_10"
+   ],
+   "item": 80,
+   "flag": 7746,
+   "label": "Jawbus",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Jawbus with Tatl (in dan_01, he3_01, mi1_10)",
+   "card": 386,
+   "name": "Tattle - Jawbus",
+   "id": 1397771747,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "an3_12",
+   "maps": [
+    "an3_12",
+    "dan_01",
+    "gn2_04"
+   ],
+   "item": 80,
+   "flag": 7747,
+   "label": "Rawbus",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Rawbus with Tatl (in an3_12, dan_01, gn2_04)",
+   "card": 387,
+   "name": "Tattle - Rawbus",
+   "id": 1397771748,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "dan_01",
+   "maps": [
+    "dan_01",
+    "ls1_08",
+    "ls4_09"
+   ],
+   "item": 80,
+   "flag": 7748,
+   "label": "Gawbus",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Gawbus with Tatl (in dan_01, ls1_08, ls4_09)",
+   "card": 389,
+   "name": "Tattle - Gawbus",
+   "id": 1397771749,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "mi2_02",
+   "maps": [
+    "mi2_02"
+   ],
+   "item": 80,
+   "flag": 7749,
+   "label": "Howl",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Howl with Tatl (in mi2_02)",
+   "card": 390,
+   "name": "Tattle - Howl",
+   "id": 1397771750,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "mi2_03",
+   "maps": [
+    "mi2_03"
+   ],
+   "item": 80,
+   "flag": 7750,
+   "label": "Growl",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Growl with Tatl (in mi2_03)",
+   "card": 391,
+   "name": "Tattle - Growl",
+   "id": 1397771751,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "ls1_05",
+   "maps": [
+    "ls1_05",
+    "mi4_05"
+   ],
+   "item": 80,
+   "flag": 7751,
+   "label": "Mister I",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Mister I with Tatl (in ls1_05, mi4_05)",
+   "card": 392,
+   "name": "Tattle - Mister I",
+   "id": 1397771752,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "ls1_05",
+   "maps": [
+    "ls1_05",
+    "ls2_01",
+    "ls4_08"
+   ],
+   "item": 80,
+   "flag": 7752,
+   "label": "Red I",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Red I with Tatl (in ls1_05, ls2_01, ls4_08)",
+   "card": 393,
+   "name": "Tattle - Red I",
+   "id": 1397771753,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "dan_01",
+   "maps": [
+    "dan_01",
+    "mi1_07",
+    "mi4_04"
+   ],
+   "item": 80,
+   "flag": 7753,
+   "label": "Growmeba",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Growmeba with Tatl (in dan_01, mi1_07, mi4_04)",
+   "card": 394,
+   "name": "Tattle - Growmeba",
+   "id": 1397771754,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "dan_01",
+   "maps": [
+    "dan_01",
+    "gn4_09",
+    "ta1_05"
+   ],
+   "item": 80,
+   "flag": 7754,
+   "label": "Blomeba",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Blomeba with Tatl (in dan_01, gn4_09, ta1_05)",
+   "card": 395,
+   "name": "Tattle - Blomeba",
+   "id": 1397771755,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "dan_01",
+   "maps": [
+    "dan_01",
+    "ls2_12"
+   ],
+   "item": 80,
+   "flag": 7755,
+   "label": "Chromeba",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Chromeba with Tatl (in dan_01, ls2_12)",
+   "card": 396,
+   "name": "Tattle - Chromeba",
+   "id": 1397771756,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "dan_01",
+   "maps": [
+    "dan_01",
+    "ta3_01",
+    "ta3_02",
+    "ta3_08"
+   ],
+   "item": 80,
+   "flag": 7756,
+   "label": "Tileoid G",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Tileoid G with Tatl (in dan_01, ta3_01, ta3_02, ta3_08)",
+   "card": 398,
+   "name": "Tattle - Tileoid G",
+   "id": 1397771757,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "dan_01",
+   "maps": [
+    "dan_01",
+    "ta3_01",
+    "ta3_02",
+    "ta3_08"
+   ],
+   "item": 80,
+   "flag": 7757,
+   "label": "Tileoid B",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Tileoid B with Tatl (in dan_01, ta3_01, ta3_02, ta3_08)",
+   "card": 399,
+   "name": "Tattle - Tileoid B",
+   "id": 1397771758,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "dan_01",
+   "maps": [
+    "dan_01",
+    "sp4_02",
+    "sp4_04",
+    "sp4_06",
+    "sp4_08"
+   ],
+   "item": 80,
+   "flag": 7758,
+   "label": "Tileoid R",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Tileoid R with Tatl (in dan_01, sp4_02, sp4_04, sp4_06, sp4_08)",
+   "card": 400,
+   "name": "Tattle - Tileoid R",
+   "id": 1397771759,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "dan_01",
+   "maps": [
+    "dan_01",
+    "sp4_02",
+    "sp4_08"
+   ],
+   "item": 80,
+   "flag": 7759,
+   "label": "Tileoid Y",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Tileoid Y with Tatl (in dan_01, sp4_02, sp4_08)",
+   "card": 401,
+   "name": "Tattle - Tileoid Y",
+   "id": 1397771760,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "ta4_06",
+   "maps": [
+    "ta4_06",
+    "ta4_12"
+   ],
+   "item": 80,
+   "flag": 7760,
+   "label": "PatrolMeow",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a PatrolMeow with Tatl (in ta4_06, ta4_12)",
+   "card": 404,
+   "name": "Tattle - PatrolMeow",
+   "id": 1397771761,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "ta4_08",
+   "maps": [
+    "ta4_08"
+   ],
+   "item": 80,
+   "flag": 7761,
+   "label": "AirMeow",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a AirMeow with Tatl (in ta4_08)",
+   "card": 405,
+   "name": "Tattle - AirMeow",
+   "id": 1397771762,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "ta4_05",
+   "maps": [
+    "ta4_05",
+    "ta4_07"
+   ],
+   "item": 80,
+   "flag": 7762,
+   "label": "SurpriseMeow",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a SurpriseMeow with Tatl (in ta4_05, ta4_07)",
+   "card": 406,
+   "name": "Tattle - SurpriseMeow",
+   "id": 1397771763,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "sp1_02",
+   "maps": [
+    "sp1_02",
+    "sp1_04",
+    "sp1_06",
+    "sp3_01"
+   ],
+   "item": 80,
+   "flag": 7763,
+   "label": "Jellien",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Jellien with Tatl (in sp1_02, sp1_04, sp1_06, sp3_01)",
+   "card": 408,
+   "name": "Tattle - Jellien",
+   "id": 1397771764,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "sp1_03",
+   "maps": [
+    "sp1_03",
+    "sp1_04",
+    "sp1_06",
+    "sp3_06"
+   ],
+   "item": 80,
+   "flag": 7764,
+   "label": "Foton",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Foton with Tatl (in sp1_03, sp1_04, sp1_06, sp3_06)",
+   "card": 409,
+   "name": "Tattle - Foton",
+   "id": 1397771765,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "sp1_05",
+   "maps": [
+    "sp1_05",
+    "sp3_03"
+   ],
+   "item": 80,
+   "flag": 7765,
+   "label": "Warpid",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Warpid with Tatl (in sp1_05, sp3_03)",
+   "card": 410,
+   "name": "Tattle - Warpid",
+   "id": 1397771766,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "sp3_04",
+   "maps": [
+    "sp3_04"
+   ],
+   "item": 80,
+   "flag": 7766,
+   "label": "Eeligon",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Eeligon with Tatl (in sp3_04)",
+   "card": 411,
+   "name": "Tattle - Eeligon",
+   "id": 1397771767,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "dan_01",
+   "maps": [
+    "dan_01",
+    "ls4_08",
+    "sp2_04",
+    "sp4_10"
+   ],
+   "item": 80,
+   "flag": 7767,
+   "label": "Hooligon",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Hooligon with Tatl (in dan_01, ls4_08, sp2_04, sp4_10)",
+   "card": 412,
+   "name": "Tattle - Hooligon",
+   "id": 1397771768,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "dan_01",
+   "maps": [
+    "dan_01",
+    "sp2_01"
+   ],
+   "item": 80,
+   "flag": 7768,
+   "label": "Longator",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Longator with Tatl (in dan_01, sp2_01)",
+   "card": 414,
+   "name": "Tattle - Longator",
+   "id": 1397771769,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "dan_01",
+   "maps": [
+    "dan_01",
+    "ls3_03",
+    "ls3_11"
+   ],
+   "item": 80,
+   "flag": 7769,
+   "label": "Longadile",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Longadile with Tatl (in dan_01, ls3_03, ls3_11)",
+   "card": 415,
+   "name": "Tattle - Longadile",
+   "id": 1397771770,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "sp4_05",
+   "maps": [
+    "sp4_05"
+   ],
+   "item": 80,
+   "flag": 7770,
+   "label": "Barribad",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Barribad with Tatl (in sp4_05)",
+   "card": 417,
+   "name": "Tattle - Barribad",
+   "id": 1397771771,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "ls3_02",
+   "maps": [
+    "ls3_02"
+   ],
+   "item": 80,
+   "flag": 7771,
+   "label": "Sobarribad",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Sobarribad with Tatl (in ls3_02)",
+   "card": 418,
+   "name": "Tattle - Sobarribad",
+   "id": 1397771772,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "dan_01",
+   "maps": [
+    "dan_01",
+    "sp4_03",
+    "sp4_04"
+   ],
+   "item": 80,
+   "flag": 7772,
+   "label": "Pigarithm",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Pigarithm with Tatl (in dan_01, sp4_03, sp4_04)",
+   "card": 420,
+   "name": "Tattle - Pigarithm",
+   "id": 1397771773,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "dan_01",
+   "maps": [
+    "dan_01",
+    "ls3_02",
+    "ls4_07",
+    "ls4_08"
+   ],
+   "item": 80,
+   "flag": 7773,
+   "label": "Hogarithm",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Hogarithm with Tatl (in dan_01, ls3_02, ls4_07, ls4_08)",
+   "card": 421,
+   "name": "Tattle - Hogarithm",
+   "id": 1397771774,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "dan_01",
+   "maps": [
+    "dan_01",
+    "sp2_03"
+   ],
+   "item": 80,
+   "flag": 7774,
+   "label": "Choppa",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Choppa with Tatl (in dan_01, sp2_03)",
+   "card": 423,
+   "name": "Tattle - Choppa",
+   "id": 1397771775,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "dan_01",
+   "maps": [
+    "dan_01",
+    "ls4_01",
+    "ls4_07"
+   ],
+   "item": 80,
+   "flag": 7775,
+   "label": "Copta",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Copta with Tatl (in dan_01, ls4_01, ls4_07)",
+   "card": 424,
+   "name": "Tattle - Copta",
+   "id": 1397771776,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "gn1_03",
+   "maps": [
+    "gn1_03"
+   ],
+   "item": 80,
+   "flag": 7776,
+   "label": "Muth",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Muth with Tatl (in gn1_03)",
+   "card": 426,
+   "name": "Tattle - Muth",
+   "id": 1397771777,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "ls4_06",
+   "maps": [
+    "ls4_06"
+   ],
+   "item": 80,
+   "flag": 7777,
+   "label": "Mega Muth",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Mega Muth with Tatl (in ls4_06)",
+   "card": 428,
+   "name": "Tattle - Mega Muth",
+   "id": 1397771778,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "gn3_06",
+   "maps": [
+    "gn3_06",
+    "gn3_08",
+    "gn3_14",
+    "gn3_15",
+    "gn4_01",
+    "gn4_02",
+    "gn4_15"
+   ],
+   "item": 80,
+   "flag": 7778,
+   "label": "Floro Sapien",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Floro Sapien with Tatl (in gn3_06, gn3_08, gn3_14, gn3_15, gn4_01, gn4_02, gn4_15)",
+   "card": 429,
+   "name": "Tattle - Floro Sapien",
+   "id": 1397771779,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "gn3_03",
+   "maps": [
+    "gn3_03",
+    "gn3_06",
+    "gn3_07",
+    "gn3_08",
+    "gn3_14",
+    "gn4_02",
+    "gn4_11",
+    "gn4_12",
+    "gn4_15"
+   ],
+   "item": 80,
+   "flag": 7779,
+   "label": "Floro Cragnien",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Floro Cragnien with Tatl (in gn3_03, gn3_06, gn3_07, gn3_08, gn3_14, gn4_02, gn4_11, gn4_12, gn4_15)",
+   "card": 430,
+   "name": "Tattle - Floro Cragnien",
+   "id": 1397771780,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "an1_03",
+   "maps": [
+    "an1_03",
+    "an1_06",
+    "an2_02",
+    "an2_05"
+   ],
+   "item": 80,
+   "flag": 7780,
+   "label": "Underhand",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Underhand with Tatl (in an1_03, an1_06, an2_02, an2_05)",
+   "card": 435,
+   "name": "Tattle - Underhand",
+   "id": 1397771781,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "an3_11",
+   "maps": [
+    "an3_11",
+    "an3_14",
+    "an3_15",
+    "an4_01",
+    "an4_02",
+    "an4_04",
+    "an4_05",
+    "an4_06",
+    "an4_09",
+    "dan_01",
+    "ls3_01",
+    "ls3_10",
+    "ls4_09"
+   ],
+   "item": 80,
+   "flag": 7781,
+   "label": "Skellobit",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Skellobit with Tatl (in an3_11, an3_14, an3_15, an4_01, an4_02, an4_04, an4_05, an4_06, an4_09, dan_01, ls3_01, ls3_10, ls4_09)",
+   "card": 436,
+   "name": "Tattle - Skellobit",
+   "id": 1397771782,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "an3_11",
+   "maps": [
+    "an3_11",
+    "an3_15",
+    "an4_01",
+    "an4_04",
+    "an4_05",
+    "an4_06",
+    "an4_09",
+    "dan_01",
+    "ls3_01",
+    "ls3_10",
+    "ls4_09"
+   ],
+   "item": 80,
+   "flag": 7782,
+   "label": "Spiky Skellobit",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Spiky Skellobit with Tatl (in an3_11, an3_15, an4_01, an4_04, an4_05, an4_06, an4_09, dan_01, ls3_01, ls3_10, ls4_09)",
+   "card": 437,
+   "name": "Tattle - Spiky Skellobit",
+   "id": 1397771783,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "an3_11",
+   "maps": [
+    "an3_11",
+    "an3_15",
+    "an4_01",
+    "an4_04",
+    "an4_05",
+    "ls3_01",
+    "ls3_10",
+    "ls4_09"
+   ],
+   "item": 80,
+   "flag": 7783,
+   "label": "Skellobomber",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Skellobomber with Tatl (in an3_11, an3_15, an4_01, an4_04, an4_05, ls3_01, ls3_10, ls4_09)",
+   "card": 440,
+   "name": "Tattle - Skellobomber",
+   "id": 1397771784,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "an4_01",
+   "maps": [
+    "an4_01",
+    "gn1_02",
+    "gn2_01",
+    "gn2_04",
+    "he3_01",
+    "he3_02",
+    "he4_02",
+    "mi1_04",
+    "mi2_01",
+    "sp2_01",
+    "sp2_03",
+    "sp2_04",
+    "sp2_05",
+    "ta1_01",
+    "ta4_01",
+    "ta4_06"
+   ],
+   "item": 80,
+   "flag": 7784,
+   "label": "Megabite",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Megabite with Tatl (in an4_01, gn1_02, gn2_01, gn2_04, he3_01, he3_02, he4_02, mi1_04, mi2_01, sp2_01, sp2_03, sp2_04, sp2_05, ta1_01, ta4_01, ta4_06)",
+   "card": 443,
+   "name": "Tattle - Megabite",
+   "id": 1397771785,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "an1_11",
+   "maps": [
+    "an1_11",
+    "an4_11"
+   ],
+   "item": 80,
+   "flag": 7785,
+   "label": "Gigabite",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Gigabite with Tatl (in an1_11, an4_11)",
+   "card": 444,
+   "name": "Tattle - Gigabite",
+   "id": 1397771786,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "dan_01",
+   "maps": [
+    "dan_01",
+    "ls2_04",
+    "ls3_06",
+    "ls3_09",
+    "ls4_09"
+   ],
+   "item": 80,
+   "flag": 7786,
+   "label": "Red Magiblot",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Red Magiblot with Tatl (in dan_01, ls2_04, ls3_06, ls3_09, ls4_09)",
+   "card": 446,
+   "name": "Tattle - Red Magiblot",
+   "id": 1397771787,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "dan_01",
+   "maps": [
+    "dan_01",
+    "ls1_02",
+    "ls1_07",
+    "ls1_09",
+    "ls3_05",
+    "ls3_09",
+    "ls4_09"
+   ],
+   "item": 80,
+   "flag": 7787,
+   "label": "Blue Magiblot",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Blue Magiblot with Tatl (in dan_01, ls1_02, ls1_07, ls1_09, ls3_05, ls3_09, ls4_09)",
+   "card": 447,
+   "name": "Tattle - Blue Magiblot",
+   "id": 1397771788,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "dan_01",
+   "maps": [
+    "dan_01",
+    "ls3_07",
+    "ls3_09",
+    "ls4_09",
+    "ls4_13"
+   ],
+   "item": 80,
+   "flag": 7788,
+   "label": "Yellow Magiblot",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Yellow Magiblot with Tatl (in dan_01, ls3_07, ls3_09, ls4_09, ls4_13)",
+   "card": 448,
+   "name": "Tattle - Yellow Magiblot",
+   "id": 1397771789,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "mi4_14",
+   "maps": [
+    "mi4_14"
+   ],
+   "item": 80,
+   "flag": 7789,
+   "label": "Mimi",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Mimi with Tatl (in mi4_14)",
+   "card": 455,
+   "name": "Tattle - Mimi",
+   "id": 1397771790,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "mi4_15",
+   "maps": [
+    "mi4_15"
+   ],
+   "item": 80,
+   "flag": 7790,
+   "label": "Atomic Boo",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Atomic Boo with Tatl (in mi4_15)",
+   "card": 525,
+   "name": "Tattle - Atomic Boo",
+   "id": 1397771791,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "dan_01",
+   "maps": [
+    "dan_01",
+    "gn2_02",
+    "he3_02",
+    "ls2_11",
+    "ls4_06",
+    "ls4_08",
+    "mi1_04"
+   ],
+   "item": 80,
+   "flag": 7791,
+   "label": "Cherbil",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Cherbil with Tatl (in dan_01, gn2_02, he3_02, ls2_11, ls4_06, ls4_08, mi1_04)",
+   "card": 528,
+   "name": "Tattle - Cherbil",
+   "id": 1397771792,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "an3_01",
+   "maps": [
+    "an3_01",
+    "an3_12",
+    "an3_13",
+    "dan_01",
+    "he3_06",
+    "ls2_11",
+    "ls4_08",
+    "mi4_10",
+    "sp2_05"
+   ],
+   "item": 80,
+   "flag": 7792,
+   "label": "Ice Cherbil",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Ice Cherbil with Tatl (in an3_01, an3_12, an3_13, dan_01, he3_06, ls2_11, ls4_08, mi4_10, sp2_05)",
+   "card": 529,
+   "name": "Tattle - Ice Cherbil",
+   "id": 1397771793,
+   "category": "tattle"
+  },
+  {
+   "kind": "tattle",
+   "map": "an1_02",
+   "maps": [
+    "an1_02",
+    "dan_01",
+    "ls2_11",
+    "ls4_08",
+    "ta3_01"
+   ],
+   "item": 80,
+   "flag": 7793,
+   "label": "Poison Cherbil",
+   "patches": [],
+   "pos": null,
+   "where": "tattle a Poison Cherbil with Tatl (in an1_02, dan_01, ls2_11, ls4_08, ta3_01)",
+   "card": 530,
+   "name": "Tattle - Poison Cherbil",
+   "id": 1397771794,
+   "category": "tattle"
   }
  ],
  "items": [
+  {
+   "id": 1397771536,
+   "spm": 16,
+   "name": "Ruins Key",
+   "category": "key_item"
+  },
+  {
+   "id": 1397771537,
+   "spm": 17,
+   "name": "Door Key (17)",
+   "category": "key_item"
+  },
+  {
+   "id": 1397771538,
+   "spm": 18,
+   "name": "House Key",
+   "category": "key_item"
+  },
+  {
+   "id": 1397771539,
+   "spm": 19,
+   "name": "Fort Key (19)",
+   "category": "key_item"
+  },
   {
    "id": 1397771540,
    "spm": 20,
@@ -2704,6 +5614,30 @@
    "category": "key_item"
   },
   {
+   "id": 1397771546,
+   "spm": 26,
+   "name": "Door Key (26)",
+   "category": "key_item"
+  },
+  {
+   "id": 1397771547,
+   "spm": 27,
+   "name": "Dimension Key (27)",
+   "category": "key_item"
+  },
+  {
+   "id": 1397771548,
+   "spm": 28,
+   "name": "Dimension Key (28)",
+   "category": "key_item"
+  },
+  {
+   "id": 1397771549,
+   "spm": 29,
+   "name": "Dimension Key (29)",
+   "category": "key_item"
+  },
+  {
    "id": 1397771550,
    "spm": 30,
    "name": "Water Tablet",
@@ -2719,6 +5653,72 @@
    "id": 1397771552,
    "spm": 32,
    "name": "Fire Tablet",
+   "category": "key_item"
+  },
+  {
+   "id": 1397771553,
+   "spm": 33,
+   "name": "Cave Key (33)",
+   "category": "key_item"
+  },
+  {
+   "id": 1397771554,
+   "spm": 34,
+   "name": "Cave Key (34)",
+   "category": "key_item"
+  },
+  {
+   "id": 1397771555,
+   "spm": 35,
+   "name": "Card Key",
+   "category": "key_item"
+  },
+  {
+   "id": 1397771557,
+   "spm": 37,
+   "name": "Door Key (37)",
+   "category": "key_item"
+  },
+  {
+   "id": 1397771558,
+   "spm": 38,
+   "name": "Door Key (38)",
+   "category": "key_item"
+  },
+  {
+   "id": 1397771560,
+   "spm": 40,
+   "name": "Door Key (40)",
+   "category": "key_item"
+  },
+  {
+   "id": 1397771561,
+   "spm": 41,
+   "name": "Blue Orb",
+   "category": "key_item"
+  },
+  {
+   "id": 1397771562,
+   "spm": 42,
+   "name": "Yellow Orb",
+   "category": "key_item"
+  },
+  {
+   "id": 1397771563,
+   "spm": 43,
+   "name": "Red Orb",
+   "category": "key_item"
+  },
+  {
+   "id": 1397771566,
+   "spm": 46,
+   "name": "Castle Bleck Key",
+   "category": "key_item"
+  },
+  {
+   "id": 1397771569,
+   "spm": 49,
+   "name": "Door Key (49)",
    "category": "key_item"
   },
   {
@@ -2800,6 +5800,12 @@
    "category": "overworld_item"
   },
   {
+   "id": 1397771592,
+   "spm": 72,
+   "name": "Gold Bar x3",
+   "category": "overworld_item"
+  },
+  {
    "id": 1397771594,
    "spm": 74,
    "name": "Courage Shell",
@@ -2809,6 +5815,12 @@
    "id": 1397771595,
    "spm": 75,
    "name": "Mighty Tonic",
+   "category": "overworld_item"
+  },
+  {
+   "id": 1397771596,
+   "spm": 76,
+   "name": "Volt Shroom",
    "category": "overworld_item"
   },
   {
@@ -2854,9 +5866,51 @@
    "category": "overworld_item"
   },
   {
+   "id": 1397771607,
+   "spm": 87,
+   "name": "Catch Card",
+   "category": "overworld_item"
+  },
+  {
    "id": 1397771608,
    "spm": 88,
    "name": "Catch Card SP",
+   "category": "overworld_item"
+  },
+  {
+   "id": 1397771609,
+   "spm": 89,
+   "name": "HP Plus",
+   "category": "overworld_item"
+  },
+  {
+   "id": 1397771610,
+   "spm": 90,
+   "name": "Power Plus",
+   "category": "overworld_item"
+  },
+  {
+   "id": 1397771616,
+   "spm": 96,
+   "name": "Star Medal",
+   "category": "overworld_item"
+  },
+  {
+   "id": 1397771617,
+   "spm": 97,
+   "name": "Gold Medal",
+   "category": "overworld_item"
+  },
+  {
+   "id": 1397771620,
+   "spm": 100,
+   "name": "Peachy Peach",
+   "category": "overworld_item"
+  },
+  {
+   "id": 1397771621,
+   "spm": 101,
+   "name": "Keel Mango",
    "category": "overworld_item"
   },
   {
@@ -2866,9 +5920,51 @@
    "category": "overworld_item"
   },
   {
+   "id": 1397771624,
+   "spm": 104,
+   "name": "Turtley Leaf",
+   "category": "overworld_item"
+  },
+  {
+   "id": 1397771625,
+   "spm": 105,
+   "name": "Cake Mix",
+   "category": "overworld_item"
+  },
+  {
+   "id": 1397771626,
+   "spm": 106,
+   "name": "Whacka Bump",
+   "category": "overworld_item"
+  },
+  {
+   "id": 1397771627,
+   "spm": 107,
+   "name": "Horsetail",
+   "category": "overworld_item"
+  },
+  {
+   "id": 1397771629,
+   "spm": 109,
+   "name": "Hot Sauce",
+   "category": "overworld_item"
+  },
+  {
+   "id": 1397771638,
+   "spm": 118,
+   "name": "Big Egg",
+   "category": "overworld_item"
+  },
+  {
    "id": 1397771691,
    "spm": 171,
    "name": "Space Food",
+   "category": "overworld_item"
+  },
+  {
+   "id": 1397771694,
+   "spm": 174,
+   "name": "Trial Stew",
    "category": "overworld_item"
   },
   {

@@ -13,13 +13,17 @@
       - a door gets the section menu once its chapter has reached its second section, and the menu
         lists only the sections that chapter has reached, so leaving in the middle of a chapter
         (with the Return Pipe from 1-3, say) doesn't mean starting again from 1-1
-    Chapter 8's door is in Flopside and isn't affected.
+    Chapter 8's door is in Flopside: it gets the same kind of menu once 8-1 is done (onFlopsideTower).
 */
 
 namespace mod::tower_doors {
 
 // Points the tower at the mod's door script. Call once at startup (relF is already loaded then).
 void init();
+
+// Sets up Chapter 8's door for Flopside Tower: its section menu once 8-1 is done. Call on the map
+// change into Flopside Tower while the castle is open.
+void onFlopsideTower();
 
 // The mod's text for a game message name (the section menus), or nullptr to use the game's own.
 const char * message(const char * msgName);

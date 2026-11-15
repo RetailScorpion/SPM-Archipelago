@@ -1,16 +1,15 @@
 # Super Paper Mario
 
 ## What is randomized?
-This is a **no-logic prototype**: every location counts as reachable from the start, so items can land anywhere. It exists so players can help work out the real logic.
+Depending on your options: the story Pixls, the optional Pixls (Barry, Dashell, Piccolo), key items (every chapter's keys, 7-4's orbs, the tablets, Cooking Disks and the Golden Card), items in chests and lying around, catch cards, the Pure Hearts, the Save Block, and Peach, Luigi and Bowser. You can start as someone other than Mario, add a check for tattling every kind of enemy, make coins need Progressive Wallets, and replace some filler with Cursya Traps.
 
-Depending on your options: the story Pixls, the optional Pixls (Barry, Dashell, Piccolo), key items, items in chests and lying around, catch cards, the Pure Hearts, the Save Block, and Peach, Luigi and Bowser. Cursya Traps can replace some filler.
+Some chapters' doors are open from the start (`starting_chapter_mode`). The others open when you receive their Pure Heart. The Pit Keys, the Old Key, the Random House Key, ? blocks, shops and the Pit rewards are still vanilla.
 
-Some chapters' doors are open from the start (`starting_chapter_mode`). The others open when you receive their Pure Heart. The story keys, ? blocks, shops and the Pit rewards are still vanilla.
-
-With `skip_cutscenes` (on by default), a new file skips the opening and starts in Flipside Tower with the Return Pipe, and the Count Bleck scenes between chapters are skipped.
+## Is there logic?
+It's a work in progress. With `logic: wip_logic` (the default), items are placed using the logic mapped out so far, which isn't complete yet, so a seed will probably need something it doesn't say. With `logic: no_logic`, only the rules the game itself enforces are used (chapter doors, Flopside, Chapter 8's party), so items inside a chapter can be anywhere. Either way, the Return Pipe gets you out of rooms you can't leave.
 
 ## What is the goal?
-Finish Chapter 8.
+Finish Chapter 8. What opens Chapter 8's door and what the final battle needs are set by `castle_requirement` and `final_requirement`.
 
 ## What does another world's item look like?
 The Archipelago icon (grey for filler). Picking it up shows "Sent <item> to <player>!".

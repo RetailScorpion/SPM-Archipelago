@@ -10,10 +10,13 @@
 #include <spm/system.h>
 #include <wii/os.h>
 
+#include "game_mode.h"
 #include "archipelago_item.h"
 #include "code_patching.h"
 #include "game_addresses.h"
 #include "mailbox.h"
+#include "offline_checks.h"
+#include "wallet.h"
 
 namespace mod::archipelago_item {
 
@@ -22,6 +25,7 @@ namespace mod::archipelago_item {
 #define AP_ICON_PROGRESSION 402  // colour
 #define AP_ICON_FILLER 404       // grey
 #define AP_ICON_BLANK 405        // a trap's item-get: Mario holds up nothing
+#define WALLET_ICON 410          // the Progressive Wallet's picture, added by the patcher (tools/wicon.py)
 #define ICON_PURE_HEART_FIRST 0x31  // the game's Pure Heart icons, red (heart 1) to white (heart 8)
 #define PURE_HEART_COUNT 8
 
@@ -42,6 +46,12 @@ static LocName sLocNames[LOC_NAMES_MAX];
 static const LocName sPlaceholder = {0, LOC_KIND_OTHER_WORLD, "Placeholder Item", "Placeholder Player"};
 // A trap received from the server
 static const LocName sReceivedTrap = {0, LOC_KIND_TRAP, "Cursya Trap", ""};
+// A Progressive Wallet from the server, picked up like any delivery
+static const LocName sReceivedWallet = {0, LOC_KIND_OWN_SERVER_ITEM, "Progressive Wallet", ""};
+// A Pure Heart from the server (a tattle check's, another world's...), picked up like any delivery
+static LocName sReceivedHeart = {0, LOC_KIND_PURE_HEART + 1, "Pure Heart 1", ""};
+// A location collected offline (offline_checks): its item comes once the client connects
+static const LocName sOffline = {0, LOC_KIND_OTHER_WORLD, "Archipelago Item", ""};
 
 // The names for the Archipelago item being collected now (or about to be)
 static const LocName * sCurrent = &sPlaceholder;
@@ -83,6 +93,12 @@ static bool isFiller(const LocName * loc)
     return loc != nullptr && loc->kind == LOC_KIND_OTHER_WORLD_FILLER;
 }
 
+// Whether a location holds one of this world's own items that the server delivers ("You got X!").
+static bool ownServerItem(const LocName * loc)
+{
+    return loc != nullptr && loc->kind == LOC_KIND_OWN_SERVER_ITEM;
+}
+
 // Which of this world's Pure Hearts a location holds (1-8), or 0 if it's not one.
 static s32 pureHeart(const LocName * loc)
 {
@@ -91,14 +107,16 @@ static s32 pureHeart(const LocName * loc)
     return loc->kind - LOC_KIND_PURE_HEART;
 }
 
-// The icon the Archipelago item shows for a location: grey for filler, a Pure Heart's own, or the
-// colour one.
+// The icon the Archipelago item shows for a location: grey for filler, a Pure Heart's own, the
+// wallet's, or the colour one.
 static s16 iconFor(const LocName * loc)
 {
     if (isFiller(loc))
         return AP_ICON_FILLER;
     if (s32 heart = pureHeart(loc))
         return ICON_PURE_HEART_FIRST + heart - 1;
+    if (ownServerItem(loc))
+        return WALLET_ICON;  // the only one so far
     return AP_ICON_PROGRESSION;
 }
 
@@ -110,6 +128,7 @@ static s16 iconFor(const LocName * loc)
 struct Chest
 {
     s32 flag;
+    s32 item;  // what it gives, as it was created
     f32 x, y, z;
 };
 #define CHESTS_MAX 16
@@ -127,7 +146,7 @@ static s32 evtMobjThakoHook(spm::evtmgr::EvtEntry * evt, bool isFirstCall)
     s32 flag;
     if (isFirstCall && flagFromScriptValue(args[8], &flag) && sChestCount < CHESTS_MAX)
     {
-        sChests[sChestCount++] = {flag, spm::evtmgr_cmd::evtGetFloat(evt, args[2]),
+        sChests[sChestCount++] = {flag, spm::evtmgr_cmd::evtGetValue(evt, args[7]), spm::evtmgr_cmd::evtGetFloat(evt, args[2]),
                                   spm::evtmgr_cmd::evtGetFloat(evt, args[3]), spm::evtmgr_cmd::evtGetFloat(evt, args[4])};
     }
     return evtMobjThakoReal(evt, isFirstCall);
@@ -155,9 +174,71 @@ static const LocName * nearestChest(const wii::mtx::Vec3 & at)
     return best;
 }
 
+// The flag of the nearest unopened chest within range that gives this item and is a location, or -1.
+// (A chest's item is created with no flag of its own.)
+static s32 locationChestFor(const wii::mtx::Vec3 & at, s32 item)
+{
+    s32 best = -1;
+    f32 bestDistance = CHEST_ITEM_RANGE * CHEST_ITEM_RANGE;
+    for (s32 i = 0; i < sChestCount; i++)
+    {
+        const Chest & chest = sChests[i];
+        if (chest.item != item || spm::swdrv::swGet(chest.flag) || !offline_checks::isLocation(chest.flag))
+            continue;
+        f32 dx = chest.x - at.x, dy = chest.y - at.y, dz = chest.z - at.z;
+        f32 distance = dx * dx + dy * dy + dz * dz;
+        if (distance < bestDistance)
+        {
+            bestDistance = distance;
+            best = chest.flag;
+        }
+    }
+    return best;
+}
+
+/*
+    Offline checks: the locations whose item was swapped for the Archipelago item in this map, because
+    the seed's items weren't in the game when it was created. Their flags are logged when the game sets
+    them, even if the client has placed the seed's items by then (the item was already created).
+*/
+#define OFFLINE_MAX 32
+static s32 sOfflineFlags[OFFLINE_MAX];
+static s32 sOfflineCount;
+
+static bool isOffline(s32 flag)
+{
+    for (s32 i = 0; i < sOfflineCount; i++)
+    {
+        if (sOfflineFlags[i] == flag)
+            return true;
+    }
+    return false;
+}
+
+static void markOffline(s32 flag)
+{
+    if (!isOffline(flag) && sOfflineCount < OFFLINE_MAX)
+        sOfflineFlags[sOfflineCount++] = flag;
+}
+
+// Whether a chest's item (no flag of its own) came from a chest swapped offline.
+static bool offlineChestNear(const wii::mtx::Vec3 & at)
+{
+    for (s32 i = 0; i < sChestCount; i++)
+    {
+        const Chest & chest = sChests[i];
+        f32 dx = chest.x - at.x, dy = chest.y - at.y, dz = chest.z - at.z;
+        if (isOffline(chest.flag) && !spm::swdrv::swGet(chest.flag)
+            && dx * dx + dy * dy + dz * dz < CHEST_ITEM_RANGE * CHEST_ITEM_RANGE)
+            return true;
+    }
+    return false;
+}
+
 void onMapChange()
 {
     sChestCount = 0;
+    sOfflineCount = 0;
 }
 
 // ---- Traps ----
@@ -205,6 +286,18 @@ void armTrap()
     sCurrent = &sReceivedTrap;
 }
 
+void armWallet()
+{
+    sCurrent = &sReceivedWallet;
+}
+
+void armHeart(s32 heart)
+{
+    sReceivedHeart.kind = static_cast<u16>(LOC_KIND_PURE_HEART + heart);
+    msl::stdio::sprintf(sReceivedHeart.item, "Pure Heart %d", heart);
+    sCurrent = &sReceivedHeart;
+}
+
 // ---- The item-get ----
 
 /*
@@ -218,12 +311,30 @@ static spm::itemdrv::ItemEntry * (*itemEntryReal)(const char * name, s32 type, s
 static spm::itemdrv::ItemEntry * itemEntryHook(const char * name, s32 type, s32 behaviour, f32 x, f32 y, f32 z,
                                               spm::evtmgr::EvtScriptCode * pickupScript, s32 switchNumber)
 {
+    s32 flag;
+    bool ownFlag = flagFromScriptValue(switchNumber, &flag);
+    const wii::mtx::Vec3 at = {x, y, z};
+
+    // Offline (the seed's items aren't in the game yet): a location's item becomes the Archipelago item
+    if (offline_checks::active() && type != AP_ITEM_ID)
+    {
+        s32 location = ownFlag ? (offline_checks::isLocation(flag) ? flag : -1) : locationChestFor(at, type);
+        if (location >= 0)
+        {
+            markOffline(location);
+            wii::os::OSReport("[spmap] offline: item %d at location flag %d becomes the Archipelago item\n", type, location);
+            type = AP_ITEM_ID;
+        }
+    }
+
     if (type != AP_ITEM_ID)
         return itemEntryReal(name, type, behaviour, x, y, z, pickupScript, switchNumber);
 
-    s32 flag;
-    const wii::mtx::Vec3 at = {x, y, z};
-    const LocName * loc = flagFromScriptValue(switchNumber, &flag) ? findLocation(flag) : nearestChest(at);
+    const LocName * loc;
+    if (ownFlag ? isOffline(flag) : offlineChestNear(at))
+        loc = &sOffline;
+    else
+        loc = ownFlag ? findLocation(flag) : nearestChest(at);
     if (loc == nullptr)
         loc = sCurrent;
 
@@ -238,10 +349,23 @@ static spm::itemdrv::ItemEntry * itemEntryHook(const char * name, s32 type, s32 
 // Runs whenever a save flag is set: if it's a listed location's, remembers its names for the coming
 // item-get. Chests and Pixl joins set their flag before the item appears; pickups only after their
 // item-get, so those are handled in itemCollectPouchItemHook instead.
+// Offline, a location's flag is logged (offline_checks): a pickup or chest swapped in this map (its
+// item-get already has its names), or a join, gift or Pure Heart, which set their flag first and then
+// give the Archipelago item.
 static void (*swSetReal)(s32 id);
 static void swSetHook(s32 id)
 {
     swSetReal(id);
+    if (isOffline(id))
+    {
+        offline_checks::log(id);
+        return;
+    }
+    if (offline_checks::active() && offline_checks::log(id))
+    {
+        sCurrent = &sOffline;
+        return;
+    }
     if (const LocName * loc = findLocation(id))
         sCurrent = loc;
 }
@@ -258,9 +382,19 @@ static void startItemGet(spm::itemdrv::ItemEntry * item)
     s32 flag;
     if (flagFromScriptValue(item->switchNumber, &flag))
     {
-        if (const LocName * loc = findLocation(flag))
+        if (isOffline(flag))
+            sCurrent = &sOffline;
+        else if (const LocName * loc = findLocation(flag))
             sCurrent = loc;
+        // A location counts as collected once its item-get starts: with the bag full, the item can be
+        // thrown away from the "throw something away" menu, and the game then never sets the flag (and
+        // would spawn the item again). Collecting junk to clear the tracker must still count (user,
+        // 2026-11-05). Vanilla pickups that aren't locations are left alone
+        if (offline_checks::isLocation(flag) && !spm::swdrv::swGet(flag))
+            spm::swdrv::swSet(flag);
     }
+    else if (item->type == AP_ITEM_ID && offlineChestNear(item->position))
+        sCurrent = &sOffline;
     else if (sCurrent == &sPlaceholder)
     {
         if (const LocName * loc = nearestChest(item->position))
@@ -317,13 +451,22 @@ const char * message(const char * msgName)
     {
         if (sTrapActive)
             return "That means this is a trap.";
+        if (sCurrent == &sOffline)
+            return "Connect to Archipelago to get its item.";
+        if (ownServerItem(sCurrent))
+            return "An item for this world.";
         return pureHeart(sCurrent) ? "One of the eight Pure Hearts." : "An item for another world.";
     }
     if (sTrapActive && msl::string::strcmp(msgName, ITEM_GET_KEY) == 0)
         return "You are a <col c00000ff>FOOL</col>!";
-    if (sActiveFrames > 0 && msl::string::strcmp(msgName, ITEM_GET_KEY) == 0 && pureHeart(sCurrent))
+    if (sActiveFrames > 0 && msl::string::strcmp(msgName, ITEM_GET_KEY) == 0 && sCurrent == &sOffline)
+        return "Location found!";
+    if (sActiveFrames > 0 && msl::string::strcmp(msgName, ITEM_GET_KEY) == 0 && (pureHeart(sCurrent) || ownServerItem(sCurrent)))
     {
         msl::stdio::sprintf(sItemGetText, "You got <col c00000ff>%s</col>!", sCurrent->item);
+        // A wallet adds its new size on a second line (wallet.cpp)
+        if (msl::string::strcmp(sCurrent->item, sReceivedWallet.item) == 0)
+            wallet::appendItemGetLine(sItemGetText + msl::string::strlen(sItemGetText));
         return sItemGetText;
     }
     if (sActiveFrames > 0 && msl::string::strcmp(msgName, ITEM_GET_KEY) == 0)
@@ -337,15 +480,15 @@ const char * message(const char * msgName)
 void init()
 {
     spm::item_data::ItemData & item = spm::item_data::itemDataTable[AP_ITEM_ID];
-    item.iconId = AP_ICON_PROGRESSION;
-    item.nameMsg = NAME_KEY;
-    item.descMsg = DESC_KEY;
+    game_mode::writeHalf(&item.iconId, AP_ICON_PROGRESSION);
+    game_mode::set(&item.nameMsg, static_cast<const char *>(NAME_KEY));
+    game_mode::set(&item.descMsg, static_cast<const char *>(DESC_KEY));
     mailbox::gMailbox.locNames = sLocNames;
     mailbox::gMailbox.locNamesMax = LOC_NAMES_MAX;
-    swSetReal = code_patching::hookFunction(spm::swdrv::swSet, swSetHook);
-    itemCollectPouchItemReal = code_patching::hookFunction(spm::itemdrv::itemCollectPouchItem, itemCollectPouchItemHook);
-    evtMobjThakoReal = code_patching::hookFunction(spm::evt_mobj::evt_mobj_thako, evtMobjThakoHook);
-    itemEntryReal = code_patching::hookFunction(spm::itemdrv::itemEntry, itemEntryHook);
+    swSetReal = game_mode::hook(spm::swdrv::swSet, swSetHook);
+    itemCollectPouchItemReal = game_mode::hook(spm::itemdrv::itemCollectPouchItem, itemCollectPouchItemHook);
+    evtMobjThakoReal = game_mode::hook(spm::evt_mobj::evt_mobj_thako, evtMobjThakoHook);
+    itemEntryReal = game_mode::hook(spm::itemdrv::itemEntry, itemEntryHook);
     wii::os::OSReport("[spmap] apitem: item %d is the Archipelago item\n", AP_ITEM_ID);
 }
 

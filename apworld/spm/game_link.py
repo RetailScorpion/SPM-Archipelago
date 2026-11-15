@@ -18,7 +18,7 @@ import dolphin_memory_engine as dme
 # ---- The mailbox's layout (mod/include/mailbox.h) ----
 
 MAGIC = b"SPMAP_MAILBOX_v1"  # the text the client searches memory for
-VERSION = 16                 # the mod and client must agree on this
+VERSION = 21                 # the mod and client must agree on this
 RECV_SIZE = 16               # items waiting to be given
 SENT_SIZE = 32               # locations waiting (developer tools only)
 
@@ -55,6 +55,15 @@ OFF_SAMMER_GATES = 0x14C  # 5 words
 OFF_SERVER_CONNECTED = 0x160
 OFF_CLIENT_FRAME = 0x164
 OFF_HEART_LOC_ITEMS = 0x168  # 8 halfwords
+OFF_CASTLE_REQUIREMENT = 0x178  # kind, count
+OFF_FINAL_REQUIREMENT = 0x180
+OFF_STARTING_HEARTS_IN_POOL = 0x188
+OFF_SEED_PLACED = 0x18C
+OFF_SEED_FLAGS = 0x190
+SEED_FLAG_BIG_CLOUD_EARLY = 0x1  # mailbox.h SEED_FLAG_BIG_CLOUD_EARLY
+SEED_FLAG_TATTLE_CHECKS = 0x2  # mailbox.h SEED_FLAG_TATTLE_CHECKS
+SEED_WALLET_SHIFT = 12  # mailbox.h SEED_WALLET_SHIFT: progressive_wallet's value (0-2)
+SEED_START_CHARACTER_SHIFT = 8  # mailbox.h: the starting character, bits 8-9
 GIFT_FLAG_BASE = 7168 + 16  # the first story gift's save flag (save_data.h AP_GSWF_GIFT_BASE)
 HEART_LOC_FLAG_BASE = 7168 + 1008  # Chapter 1's Pure Heart location's flag (save_data.h AP_GSWF_CHAPTER_HEART_BASE)
 RECV_ALREADY_GIVEN = 0x8000  # marks an item the game already gave (the mod only counts it)
@@ -63,11 +72,13 @@ LOC_NAME_SIZE = 0x40  # one entry of the names list (archipelago_item.h LocName)
                       # 2 bytes kind, 36 bytes item name, 24 bytes player name
 LOC_KIND_OTHER_WORLD, LOC_KIND_TRAP, LOC_KIND_OTHER_WORLD_FILLER = 0, 1, 2  # archipelago_item.h LocKind
 LOC_KIND_PURE_HEART = 16  # + N: this world's Pure Heart N, shown with its own icon
+LOC_KIND_OWN_SERVER_ITEM = 3  # this world's item the server delivers (a Progressive Wallet): "You got X!"
 DEBUG_JOINS_GIVE_NOTHING = 0x1
 DEBUG_JOINS_GIVE_PLACEHOLDER = 0x2
 
-STATE_BOOT, STATE_TITLE, STATE_IN_GAME = 0, 1, 2  # mailbox.h ModState
-STATE_NAMES = {STATE_BOOT: "boot", STATE_TITLE: "title", STATE_IN_GAME: "in game"}
+STATE_BOOT, STATE_TITLE, STATE_IN_GAME, STATE_IN_GAME_VANILLA = 0, 1, 2, 3  # mailbox.h ModState
+STATE_NAMES = {STATE_BOOT: "boot", STATE_TITLE: "title", STATE_IN_GAME: "in game",
+               STATE_IN_GAME_VANILLA: "playing a vanilla file"}
 
 # ---- The game's own memory (US 1.0) ----
 
@@ -77,6 +88,8 @@ GSWF_OFFSET = 0x144   # the save flags: flag n is bit (n & 31) of 4-byte word (n
 GSW_OFFSET = 0x544    # the save bytes
 STORY_SLOTS_GSW = 1792  # each chapter's own story value (save_data.h AP_GSW_STORY_SLOTS)
 STORY_SLOT_COUNT = 9
+OFFLINE_CHECKS_GSW = 1792 + 96  # locations collected offline, a bit per location (save_data.h AP_GSW_OFFLINE_CHECKS)
+OFFLINE_CHECKS_BYTES = 32
 
 # ---- The file shared with the tracker ----
 
@@ -89,13 +102,26 @@ SERVER_CHECKS_HEARTBEAT = 5
 SERVER_CHECKS_STALE = 15
 
 
+REPLACE_TRIES = 5      # write_server_checks: tries at swapping the file in ...
+REPLACE_WAIT = 0.02    # ... seconds apart
+
+
 def write_server_checks(seed: str, slot: str, flags):
     """Saves the save flags of the locations the server has as checked (client side)."""
     os.makedirs(os.path.dirname(SERVER_CHECKS_PATH), exist_ok=True)
     temp = SERVER_CHECKS_PATH + ".tmp"
     with open(temp, "w") as f:
         json.dump({"updated": time.time(), "seed": seed, "slot": slot, "flags": sorted(flags)}, f)
-    os.replace(temp, SERVER_CHECKS_PATH)
+    # Windows refuses the swap while the tracker has the file open for a read (it reads twice a
+    # second; user, 2026-11-08: "Access is denied"), so try again a few times before giving up
+    for attempt in range(REPLACE_TRIES):
+        try:
+            os.replace(temp, SERVER_CHECKS_PATH)
+            return
+        except PermissionError:
+            if attempt == REPLACE_TRIES - 1:
+                raise
+            time.sleep(REPLACE_WAIT)
 
 
 def read_server_checks() -> set[int]:
@@ -195,6 +221,21 @@ class Mailbox:
         dme.write_bytes(addr, struct.pack(">i", value))
         return True
 
+    def set_seed_placed(self):
+        """Tells the mod the seed's items are in the game for this save (it clears it when the save is
+        left): until then, locations give nothing and are logged as collected offline."""
+        dme.write_word(self.addr + OFF_SEED_PLACED, 1)
+
+    def seed_placed(self) -> bool:
+        """Whether the seed's items are in the game (see set_seed_placed)."""
+        return dme.read_word(self.addr + OFF_SEED_PLACED) != 0
+
+    def offline_checks(self) -> set[int]:
+        """Positions in LOCATION_LIST that the loaded save collected while the seed's items weren't in the
+        game: they gave nothing, so their items are delivered."""
+        raw = dme.read_bytes(dme.read_word(GP_PTR) + GSW_OFFSET + OFFLINE_CHECKS_GSW, OFFLINE_CHECKS_BYTES)
+        return {i for i in range(8 * OFFLINE_CHECKS_BYTES) if raw[i >> 3] >> (i & 7) & 1}
+
     def write_loc_names(self, entries):
         """entries: [(flag, item name, player name, kind)] for locations holding other worlds' items
         (kind 0, or LOC_KIND_OTHER_WORLD_FILLER for filler: the grey icon) or this world's traps (kind 1,
@@ -215,6 +256,19 @@ class Mailbox:
         """What a chapter's Pure Heart location gives (index = chapter - 1; 0 = vanilla,
         JOIN_ITEM_OTHER_WORLD = an Archipelago item)."""
         dme.write_bytes(self.addr + OFF_HEART_LOC_ITEMS + 2 * index, struct.pack(">H", item_id))
+
+    def set_endgame_requirements(self, castle: list[int], final: list[int]):
+        """What opens Chapter 8's door and what the final battle needs: [kind, count] each (0 = default)."""
+        dme.write_bytes(self.addr + OFF_CASTLE_REQUIREMENT, struct.pack(">2I", *castle))
+        dme.write_bytes(self.addr + OFF_FINAL_REQUIREMENT, struct.pack(">2I", *final))
+
+    def set_starting_hearts_in_pool(self, in_pool: bool):
+        """Whether the starting doors' Pure Hearts are items to find (their doors open anyway)."""
+        dme.write_word(self.addr + OFF_STARTING_HEARTS_IN_POOL, 1 if in_pool else 0)
+
+    def set_seed_flags(self, flags: int):
+        """The seed's yes/no settings the mod reads (SEED_FLAG_* bits, mailbox.h seedFlags)."""
+        dme.write_word(self.addr + OFF_SEED_FLAGS, flags)
 
     def set_starting_hearts(self, hearts):
         """The Pure Hearts the seed starts with (numbers 1-8)."""

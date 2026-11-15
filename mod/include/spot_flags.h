@@ -13,6 +13,11 @@
     post-game Sammer's Kingdom). He hands them over one after another, each spawned on Mario and
     collected before the next. His scene only plays once (it ends by setting GSWF 1102), so a
     flagged card that has already been collected can't block it.
+    Chapter 7's five Door Keys (an1_04, an2_03, an2_07, an4_03, an4_04): each scene spawns its key, waits
+    for it and moves the story on, so it plays once too. So do 7-4's three orbs (an4_04, an4_06,
+    an4_07), whose scenes end by setting their own flags. So do the other chapters' keys (2026-11-07):
+    each comes from a box, a block or a one-time scene, or from the room's setup until its pickup
+    script moves the story on.
 */
 
 namespace mod::spot_flags {

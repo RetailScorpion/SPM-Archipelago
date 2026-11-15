@@ -5,6 +5,7 @@
     files/mod/mod.rel   the mod (mod/out/us0.rel)
     files/wicon.tpl, files/wicon.bin   item icons plus the Archipelago icons (tools/wicon.py)
     files/win/us/pause.tpl   the Options button (assets/pause/options_button.png)
+    files/win/us/filesel.tpl   the file select's Options button (the disc's Back button, with tools/fileselect_lettering.py's lettering)
     files/mod/mod.rel   the mod, with its title screen text changed to DEV_TITLE
 
 Usage: py -3 -E tools/make_dev_disc.py            (from the SPM_AP folder)
@@ -66,6 +67,12 @@ def main():
     button = encode_rgb5a3(Image.open(os.path.join(ROOT, "assets", "pause", "options_button.png")))
     open(os.path.join(DEV, pause), "wb").write(patcher.patch_pause(open(os.path.join(CLEAN, pause), "rb").read(), button))
     print("Options button added")
+    filesel = os.path.join("files", "win", "us", "filesel.tpl")
+    import fileselect_lettering
+    filesel_clean = open(os.path.join(CLEAN, filesel), "rb").read()
+    fbutton = patcher.build_filesel_button(filesel_clean, fileselect_lettering.build().tobytes())
+    open(os.path.join(DEV, filesel), "wb").write(patcher.patch_filesel(filesel_clean, fbutton))
+    print("File select Options button added (picture 32)")
 
     if not os.path.exists(REL):
         sys.exit(f"Mod not built yet: {REL} is missing (run configure.py and ninja in mod/)")

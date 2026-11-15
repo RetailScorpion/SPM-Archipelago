@@ -41,6 +41,7 @@ enum LocKind : u16
     LOC_KIND_OTHER_WORLD = 0,         // another world's progression or useful item: colour icon
     LOC_KIND_TRAP = 1,                // this world's trap
     LOC_KIND_OTHER_WORLD_FILLER = 2,  // another world's filler (or trap): grey icon
+    LOC_KIND_OWN_SERVER_ITEM = 3,     // this world's item that comes from the server (a Progressive Wallet)
     LOC_KIND_PURE_HEART = 16,         // + N (1-8): this world's Pure Heart N, shown with its own icon
 };
 
@@ -65,6 +66,14 @@ void onMapChange();
 
 // Makes the next Archipelago item-get a trap (one received from the server).
 void armTrap();
+
+// Makes the next Archipelago item-get a Progressive Wallet (one received from the server): its picture
+// and "You got Progressive Wallet!".
+void armWallet();
+
+// Makes the next Archipelago item-get Pure Heart `heart` (1-8) from the server: its own icon and "You got
+// Pure Heart N!" (user, 2026-11-08: a tattle check's heart arrived without a word).
+void armHeart(s32 heart);
 
 // The mod's text for a game message name, or nullptr to use the game's own.
 const char * message(const char * msgName);

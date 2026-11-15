@@ -3,6 +3,7 @@
 Writes:
   data/ap_locations.json       every location: id, name, category, vanilla item, detection flag, patches
   apworld/spm/data.py          the same as Python tables for the APworld and its client
+  mod/include/location_flags.h every location's save flag, in the same order, for the mod
 
 A location is detected by a save flag the client polls, and placed by rewriting the item argument of the
 script instruction that spawns it (relF scripts stay loaded all game). Kinds:
@@ -26,7 +27,7 @@ import struct
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-import checks_list  # noqa: E402
+import game_names  # noqa: E402
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 LOCATIONS = os.path.join(ROOT, "data", "locations_us0.json")
@@ -34,6 +35,7 @@ ITEM_NAMES = os.path.join(ROOT, "data", "item_names_us0.json")
 RELF = os.path.join(ROOT, "build", "relF.rel")
 OUT_JSON = os.path.join(ROOT, "data", "ap_locations.json")
 OUT_PY = os.path.join(ROOT, "apworld", "spm", "data.py")
+OUT_H = os.path.join(ROOT, "mod", "include", "location_flags.h")
 
 # Archipelago ids: base + SPM item id for items, base + location index for locations
 ID_BASE = 0x53504D00  # "SPM\0"
@@ -72,6 +74,49 @@ GIFTS = [(217, "mac_01", "Peach joins", "talk to Peach in mac_01 holding a Spicy
          (80, "he1_06", "Bestovius's lesson", "talk to Bestovius in his house"),
          (82, "wa1_27", "Brobot L-type beaten", "beat Brobot L-type at the end of the World of Nothing (given on the next map change)")]
 ALWAYS_VANILLA_GIFTS = {24}
+# Item spots with no flag of their own added later, continuing UNFLAGGED_SPOTS' flags and the mod's order
+# (spot_flags.cpp sSpots): Chapter 7's Door Keys (user, 2026-11-05). Each scene spawns its key, waits for
+# it to be collected and moves the story on, so it doesn't play again. Listed after every other location
+LATE_SPOTS = [
+    (0x199a60, "7-1: an1_04 (opens an1_03's lock, the way to Luigi)"),
+    (0x1a19bc, "7-2: the D-Men give it after Bowser's fight (opens an2_03's lock to an2_05)"),
+    (0x1a6cec, "7-2: the sisters give it for the Diet Book (opens an2_06's lock to an2_08)"),
+    (0x1bc3a8, "7-4: an4_03 (opens one of the Overthere's two locks)"),
+    (0x1bd6e0, "7-4: an4_04 (opens one of the Overthere's two locks)"),
+    # 7-4's orbs (user, 2026-11-05): each scene sets its own flag at the end (GSWF 1235-1237)
+    (0x1be18c, "7-4: the Blue Orb, an4_04 (one of the three for an4_03's rainbow)"),
+    (0x1c04d8, "7-4: the Yellow Orb, an4_06 (one of the three for an4_03's rainbow)"),
+    (0x1c12e8, "7-4: the Red Orb, an4_07 (one of the three for an4_03's rainbow)"),
+    # Every other key (user, 2026-11-07: all keys are checks; not the Pit Keys, the Old Key or the Random
+    # House Key yet). Each spawns from a box, a block or a one-time scene that moves the story on once it's
+    # collected (or, for he4_05, he4_07, sp2_01, gn4_06, gn4_10 and ls2_12, from the room's own setup until
+    # its pickup script moves the story on), so a collected spot doesn't need to spawn again
+    (0xf9c44, "1-4: he4_04's box (the first of three Ruins Keys; he4_03's lock)"),
+    (0xfa3a0, "1-4: he4_05 (the second Ruins Key; he4_05's lock)"),
+    (0xfac58, "1-4: he4_07 (the third Ruins Key; he4_07's lock)"),
+    (0x10249c, "2-1: mi1_05 (opens mi1_01's lock)"),
+    (0x10aa6c, "2-2: mi2_06's box (opens mi2_03's lock to mi2_08)"),
+    (0x137bdc, "3-4: ta4_02's box (opens ta4_01's lock)"),
+    (0x14b798, "4-2: sp2_01, after the flip (opens sp2_01's lock to sp2_02)"),
+    (0x156434, "4-4: the box in sp4_04/05 (opens sp4_03's lock)"),
+    (0x15688c, "4-4: sp4_07's box (opens sp4_07's lock to sp4_16)"),
+    (0x157794, "4-4: sp4_12's box (opens sp4_11's lock to sp4_13)"),
+    (0x16d460, "5-3: from the NPC in gn3_01 (opens gn3_03's lock)"),
+    (0x1769cc, "5-4: gn4_06/07, behind the drawing (opens gn4_02's lock)"),
+    (0x177130, "5-4: gn4_10 (opens gn4_10's card door to gn4_11)"),
+    (0x1ce2f4, "8-1: ls1_07's box (ls1_05's lock)"),
+    (0x1d6064, "8-2: ls2_02's box (ls2_02's lock)"),
+    (0x1dbce0, "8-2: ls2_12 (ls2_09's lock)"),
+    (0x1e1584, "8-3: ls3_03's block (ls3_03's lock)"),
+    (0x1e2e94, "8-3: ls3_09's box (ls3_04's lock)"),
+    (0x1e3874, "8-3: ls3_11's box (ls3_11's lock)"),
+    (0x1e8650, "8-4: ls4_05's box (ls4_04's lock)"),
+]
+
+# Story gifts added later, continuing GIFTS' flags and the mod's order (story_gifts.h GIFT_BOWSER_REUNION
+# on): listed after every other location so earlier location ids don't change (user, 2026-11-05)
+LATE_GIFTS = [(82, "an2_04", "Bowser rejoins", "after the fight with Bowser in 7-2"),
+              (82, "an3_06", "Peach rejoins", "talk to Peach in 7-3")]
 
 PIXLS = {221: ("Thoreau", "he2_07"), 222: ("Boomer", "mi1_07"), 223: ("Slim", "mi3_01"),
          224: ("Thudley", "ta2_04"), 225: ("Carrie", "ta4_12"), 226: ("Fleep", "sp2_01"),
@@ -89,6 +134,12 @@ UNFLAGGED_SPOTS = [
     (0x192fb8, SAMMER_REWARD), (0x193008, SAMMER_REWARD), (0x193058, SAMMER_REWARD),
 ]
 
+
+
+# Items no location holds in vanilla but the apworld's filler mix uses (items.py FILLER_WEIGHTS; user,
+# 2026-11-12): Gold Bar x3, Volt Shroom, Catch Card, HP Plus, Power Plus, Star Medal, Gold Medal,
+# Peachy Peach, Keel Mango, Turtley Leaf, Cake Mix, Whacka Bump, Horsetail, Hot Sauce, Big Egg, Trial Stew
+FILLER_ONLY_ITEMS = {72, 76, 87, 89, 90, 96, 97, 100, 101, 104, 105, 106, 107, 109, 118, 174}
 
 def word(data, offset):
     """The signed 4-byte number at a position in the data."""
@@ -119,7 +170,7 @@ def item_names():
     """Every item's name by id, using the names world items show in the game."""
     names = {int(k): v for k, v in json.load(open(ITEM_NAMES, encoding="utf-8")).items()}
     for k, v in names.items():
-        names[k] = checks_list.WORLD_ITEM_NAMES.get(v, v)
+        names[k] = game_names.WORLD_ITEM_NAMES.get(v, v)
     return names
 
 
@@ -153,10 +204,107 @@ def category(item):
 
 def level_title(map_name, levels):
     """A map's level title, like "1-2 Mount Lineland"."""
-    chapter, level = checks_list.place({"maps": [map_name]})
+    chapter, level = game_names.place({"maps": [map_name]})
     if isinstance(chapter, int):
         return f"{chapter}-{level} {levels.get((chapter, level), '')}".strip()
     return {"hub": "Flipside/Flopside", "pit": "Pit of 100 Trials"}.get(chapter, "Other")
+
+
+# ---- Tattle checks (user, 2026-11-07): one location per kind of enemy, collected by tattling it with Tatl ----
+
+SETUP_DIR = os.path.join(ROOT, "disc", "DATA", "files", "setup")
+ENEMY_TEMPLATES = 0x80409BE8   # npcEnemyTemplates (US 1.0): 0x68 bytes each, the tribe at +0x14
+ENEMY_TEMPLATE_SIZE = 0x68
+NPC_TRIBES = 0x803FC290        # npcTribes: 0x68 bytes each, the catch card item at +0x08
+NPC_TRIBE_SIZE = 0x68
+# Setup file entry sizes by version (setup_data.h; Skawo's editor): each starts with x, y, z, template.
+# Versions 1-3 are only used by test and unused maps
+SETUP_ENTRY_SIZE = {4: 0x68, 5: 0x6C, 6: 0x70}
+SETUP_ENEMIES = 100
+FIRST_CARD = 282
+AP_GSWF_TATTLE_BASE = AP_GSWF_BASE + 512      # + kind number (mod save_data.h AP_GSWF_TATTLE_BASE)
+TATTLE_VANILLA_ITEM = 80                     # what a tattle location "holds" vanilla: a Shroom Shake (filler)
+
+
+# Setup files for rooms the game never reaches (user, 2026-11-12: hei_02 was counted as a free room for its
+# tattles): hei_01 and hei_02 (no door leads there; not even in the map list) and gn3_02 (marked unused)
+UNREACHED_SETUP_MAPS = {"hei_01", "hei_02", "gn3_02"}
+# The Pit of 100 Trials' enemies aren't in setup files: each floor's list is in pitText, LZ-compressed text
+# in main.dol (US 1.0), <Dungeon> entries numbered 0-199 (Flipside's 100 floors, then Flopside's), each
+# <enemy> giving <name> = the tribe + 1. Tattles there count as rooms dan_01 (Flipside) and dan_41 (Flopside)
+PIT_TEXT = 0x80367EF0
+PIT_TEXT_SIZE = 0x3B48
+PIT_FLOORS = 100
+
+
+def pit_tribes(dol):
+    """[(dungeon number, tribe)] for every enemy the Pit's floors can spawn."""
+    import lz
+    text = lz.decompress_lz10(dol.read(PIT_TEXT, PIT_TEXT_SIZE + 16)).decode("ascii", "replace")
+    out = []
+    for block in text.split("<Dungeon>")[1:]:
+        number = int(re.search(r"<no>\s*(-?\d+)", block).group(1))
+        for enemy in block.split("<enemy>")[1:]:
+            name = int(re.search(r"<name>\s*(-?\d+)", enemy).group(1))
+            num = int(re.search(r"<num>\s*(-?\d+)", enemy).group(1))
+            if name > 0 and num > 0:
+                out.append((number, name - 1))
+    return out
+
+
+def tattle_kinds(names):
+    """[(card item, name, [maps])]: every kind of enemy the maps' setup files spawn, by its catch card
+    (variants of one enemy share a card, so they're one kind), sorted by card. Every spawned enemy has a
+    card; Tippi's own text covers the ones that don't (the game's tattle does that already)."""
+    from dolasm import Dol
+    dol = Dol()
+    maps_of = {}
+    for f in sorted(os.listdir(SETUP_DIR)):
+        data = open(os.path.join(SETUP_DIR, f), "rb").read()
+        size = SETUP_ENTRY_SIZE.get(struct.unpack(">H", data[:2])[0])
+        if not size:
+            continue
+        for i in range(SETUP_ENEMIES):
+            entry = data[4 + size * i:4 + size * (i + 1)]
+            if not any(entry):
+                continue
+            template = struct.unpack(">i", entry[0xC:0x10])[0]
+            tribe = struct.unpack(">i", dol.read(ENEMY_TEMPLATES + ENEMY_TEMPLATE_SIZE * template + 0x14, 4))[0]
+            card = struct.unpack(">i", dol.read(NPC_TRIBES + NPC_TRIBE_SIZE * tribe + 0x8, 4))[0]
+            if card >= FIRST_CARD:
+                # the kinds stay the ones every setup file has (their order is each tattle's save flag,
+                # so it can't change under a seed); unreached rooms just aren't places to find them
+                maps_of.setdefault(card, set())
+                if f[:-4] not in UNREACHED_SETUP_MAPS:
+                    maps_of[card].add(f[:-4])
+    # The Pit's floors, for those kinds (enemies only the Pit has would be new tattle checks: not added)
+    for number, tribe in pit_tribes(dol):
+        card = struct.unpack(">i", dol.read(NPC_TRIBES + NPC_TRIBE_SIZE * tribe + 0x8, 4))[0]
+        if card in maps_of:
+            maps_of[card].add("dan_01" if number < PIT_FLOORS else "dan_41")
+    return [(card, names[card].removesuffix(" Card"), sorted(maps_of[card])) for card in sorted(maps_of)]
+
+
+def write_mod_flags(flags, path=OUT_H, tattle_cards=()):
+    """Writes the mod's list of location save flags, in location order (offline_checks)."""
+    body = ", ".join(str(x) for x in flags)
+    lines = ["#pragma once", "",
+             "// Generated by tools/gen_ap_data.py; don't edit by hand. Every location's save flag (GSWF), in",
+             "// location order (a location's position here is its Archipelago id minus ID_BASE).", "",
+             "#include <common.h>", "",
+             "namespace mod::location_flags {", "",
+             f"constexpr s32 LOCATION_COUNT = {len(flags)};", "",
+             "// The locations before the tattle checks: the only ones that can be collected offline (a tattle",
+             "// check needs the client's settings), so the only ones offline_checks keeps a bit for",
+             f"constexpr s32 OFFLINE_LOCATION_COUNT = {len(flags) - len(tattle_cards)};", "",
+             f"constexpr u16 FLAGS[LOCATION_COUNT] = {{{body}}};", "",
+             "// Tattle checks: each kind's catch card item, in kind order (its flag is AP_GSWF_TATTLE_BASE + kind)",
+             f"constexpr s32 TATTLE_KIND_COUNT = {len(tattle_cards)};", "",
+             f"constexpr u16 TATTLE_CARDS[TATTLE_KIND_COUNT] = {{{', '.join(str(c) for c in tattle_cards)}}};", "",
+             "}", ""]
+    text = "\n".join(lines)
+    with open(path, "w", encoding="utf-8", newline="") as f:
+        f.write(text)
 
 
 def main():
@@ -164,7 +312,7 @@ def main():
     rel = open(RELF, "rb").read()
     names = item_names()
     names = {i: display_name(i, names) for i in names}
-    levels = checks_list.level_names()
+    levels = game_names.level_names()
     scan = json.load(open(LOCATIONS))
 
     locations = []
@@ -222,10 +370,36 @@ def main():
                           "flag": AP_GSWF_CHAPTER_HEART_BASE + chapter - 1, "label": f"Pure Heart {heart}", "patches": [],
                           "where": f"the end of Chapter {chapter} (given on the next map change)", "pos": None})
 
+    # Story gifts added later, last so every earlier location keeps its id
+    for j, (item, map_name, label, how) in enumerate(LATE_GIFTS):
+        locations.append({"kind": "gift", "map": map_name, "item": item, "flag": AP_GSWF_GIFT_BASE + len(GIFTS) + j,
+                          "label": label, "patches": [], "where": how, "pos": None})
+
+    # Spots given flags later (after the gifts above, so their ids don't change either)
+    for k, (at, how) in enumerate(LATE_SPOTS):
+        n = len(UNFLAGGED_SPOTS) + k
+        assert word(rel, at) & 0xFFFF == OP_USER_FUNC
+        item = word(rel, at + 4 * (2 + ARGS["item"]["item"]))
+        assert word(rel, at + 4 * (2 + ARGS["item"]["flag"])) == 0, hex(at)
+        loc = next(x for x in scan if x.get("at") == hex(at))
+        locations.append({"kind": "spot", "map": loc["maps"][0], "item": item, "flag": AP_GSWF_LOC_BASE + n,
+                          "label": None, "where": how, "pos": None,
+                          "patches": [{"offset": at + 4 * (2 + ARGS["item"]["item"]), "original": item}]})
+
+    # Tattle checks, last so every earlier location keeps its id: one per kind of enemy
+    kinds = tattle_kinds(names)
+    for k, (card, enemy, maps) in enumerate(kinds):
+        locations.append({"kind": "tattle", "map": maps[0], "maps": maps, "item": TATTLE_VANILLA_ITEM,
+                          "flag": AP_GSWF_TATTLE_BASE + k, "label": enemy, "patches": [], "pos": None,
+                          "where": f"tattle a {enemy} with Tatl (in {', '.join(maps)})", "card": card})
+
     # Names: "<level> - <vanilla item> (<map>)", numbered when one map has several of the same item
     seen = {}
     for loc in locations:
-        base = f"{level_title(loc['map'], levels)} - {loc['label'] or names[loc['item']]} ({loc['map']})"
+        if loc["kind"] == "tattle":
+            base = f"Tattle - {loc['label']}"
+        else:
+            base = f"{level_title(loc['map'], levels)} - {loc['label'] or names[loc['item']]} ({loc['map']})"
         seen[base] = seen.get(base, 0) + 1
         loc["name"] = base
     repeats = {}
@@ -236,8 +410,10 @@ def main():
     for i, loc in enumerate(locations):
         loc["id"] = ID_BASE + i
         loc["category"] = "fixed" if loc["kind"] == "gift" and loc["item"] in ALWAYS_VANILLA_GIFTS else category(loc["item"])
+        if loc["kind"] == "tattle":
+            loc["category"] = "tattle"
 
-    item_ids = sorted({loc["item"] for loc in locations if loc["item"] < HEART_ITEM_FIRST})
+    item_ids = sorted({loc["item"] for loc in locations if loc["item"] < HEART_ITEM_FIRST} | FILLER_ONLY_ITEMS)
     item_table = unique_item_names(names, item_ids)
 
     # Every level's title in play order (for trackers), whether or not it has locations yet
@@ -263,6 +439,17 @@ def main():
             patches = [(p["offset"], p["original"]) for p in loc["patches"]]
             f.write(f"    ({loc['name']!r}, {loc['kind']!r}, {loc['category']!r}, {loc['item']}, {loc['flag']}, {patches}),\n")
         f.write("]\n")
+
+    with open(OUT_PY, "a", encoding="utf-8") as f:
+        f.write("\n# Tattle locations: the maps whose enemies include that kind (for the logic)\n")
+        f.write("TATTLE_MAPS = {\n")
+        for loc in locations:
+            if loc["kind"] == "tattle":
+                f.write(f"    {loc['name']!r}: {loc['maps']!r},\n")
+        f.write("}\n")
+
+    write_mod_flags([loc["flag"] for loc in locations],
+                    tattle_cards=[loc["card"] for loc in locations if loc["kind"] == "tattle"])
 
     counts = {}
     for loc in locations:

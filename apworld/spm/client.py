@@ -16,7 +16,7 @@ import Utils
 from CommonClient import ClientCommandProcessor, CommonContext, get_base_parser, gui_enabled, logger, server_loop
 
 from . import checks, placement
-from .game_link import STATE_IN_GAME, Mailbox, MailboxError
+from .game_link import SEED_FLAG_BIG_CLOUD_EARLY, SEED_FLAG_TATTLE_CHECKS, SEED_START_CHARACTER_SHIFT, SEED_WALLET_SHIFT, STATE_IN_GAME, STATE_IN_GAME_VANILLA, Mailbox, MailboxError
 from .items import GAME
 
 POLL_SECONDS = 0.5
@@ -48,12 +48,23 @@ class SPMContext(CommonContext):
         self.last_frame = None       # the mod's frame counter at the last check
         self.last_flags = None       # the save flags at the last check
         self.coin_locations = set()  # locations whose item the loaded save already got delivered
+        # Locations (positions in LOCATION_LIST) the loaded save collected offline, before the seed's
+        # items were in the game: they gave nothing, so their items are delivered (Mailbox.offline_checks)
+        self.offline_checks = set()
         self.was_in_game = False     # whether a save was loaded at the last check
         self.stalled_polls = 0       # checks in a row with the frame counter not moving
         self.mailbox_addr = None     # where the mailbox was found last
         self.slot_options = {}
         self.starting_chapters = []
         self.sammer_gates = [0] * 5  # 0: every gate plays (a seed from before sammer_duels)
+        self.castle_requirement = [0, 0]  # 0: the mod's defaults (a seed from before these options)
+        self.final_requirement = [0, 0]
+        self.starting_hearts_in_pool = False
+        self.tattle_checks = False  # tattle_checks: Tatl and one location per kind of enemy
+        self.starting_character = 0  # starting_character: 0 Mario, 1 Peach, 2 Bowser, 3 Luigi
+        self.progressive_wallet = 0  # progressive_wallet: 0 off, 1 on, 2 with_infinite
+        self.playing_vanilla = False  # a vanilla file is loaded (the mod's STATE_IN_GAME_VANILLA)
+        self.big_cloud_early = False  # 7-3's big cloud there from the start (seeds from before the option: vanilla)
         self.shared_checks = None    # (seed, slot, flags) last written for the tracker
         self.shared_at = 0.0         # when it was written
 
@@ -69,6 +80,13 @@ class SPMContext(CommonContext):
             self.slot_options = args.get("slot_data", {}).get("options", {})
             self.starting_chapters = args.get("slot_data", {}).get("starting_chapters", [])
             self.sammer_gates = args.get("slot_data", {}).get("sammer_gates", [0] * 5)
+            self.castle_requirement = args.get("slot_data", {}).get("castle_requirement", [0, 0])
+            self.final_requirement = args.get("slot_data", {}).get("final_requirement", [0, 0])
+            self.starting_hearts_in_pool = args.get("slot_data", {}).get("starting_hearts_in_pool", False)
+            self.big_cloud_early = not args.get("slot_data", {}).get("big_cloud_requires_peach_reunion", True)
+            self.starting_character = args.get("slot_data", {}).get("starting_character", 0)
+            self.tattle_checks = args.get("slot_data", {}).get("tattle_checks", False)
+            self.progressive_wallet = args.get("slot_data", {}).get("progressive_wallet", 0)
             self.scouted = {}
             self.placed = False
             self.goal_sent = False
@@ -105,17 +123,32 @@ def find_mailbox(ctx: SPMContext):
 
 def send_seed_settings(ctx: SPMContext):
     """Writes the seed's settings into the mailbox. Done before a save is loaded too, since a new
-    file's opening reads them right away."""
-    ctx.mailbox.set_play_cutscenes(not ctx.slot_options.get("skip_cutscenes", True))
+    file's opening reads them right away. (Skipping cutscenes is an in-game setting now, in the
+    options menu, not a seed setting.)"""
     ctx.mailbox.set_sammer_gates(ctx.sammer_gates)
+    ctx.mailbox.set_endgame_requirements(ctx.castle_requirement, ctx.final_requirement)
+    ctx.mailbox.set_starting_hearts_in_pool(ctx.starting_hearts_in_pool)
     ctx.mailbox.set_starting_hearts(ctx.starting_chapters)
+    ctx.mailbox.set_seed_flags((SEED_FLAG_BIG_CLOUD_EARLY if ctx.big_cloud_early else 0)
+                               | (SEED_FLAG_TATTLE_CHECKS if ctx.tattle_checks else 0)
+                               | ctx.starting_character << SEED_START_CHARACTER_SHIFT
+                               | ctx.progressive_wallet << SEED_WALLET_SHIFT)
 
 
 def update_game(ctx: SPMContext):
     """Places items, reads checks and sends items, while a save is loaded."""
+    # The mod forgets the placements when the save is left (loading one reloads the vanilla items): if
+    # that happened between two checks, place them again
+    if ctx.placed and not ctx.mailbox.seed_placed():
+        ctx.placed = False
     if not ctx.placed and ctx.scouted:
         placement.write_placements(ctx)
         ctx.placed = True
+    offline = ctx.mailbox.offline_checks()
+    if offline - ctx.offline_checks:
+        logger.info(f"{len(offline - ctx.offline_checks)} location(s) were collected offline (they gave nothing): "
+                    "their items will be delivered")
+    ctx.offline_checks = offline
     if not checks.game_running(ctx) or ctx.mailbox is None:
         return
     flags = ctx.mailbox.read_flags()
@@ -148,7 +181,14 @@ def poll_game(ctx: SPMContext):
     if ctx.slot is not None:
         send_seed_settings(ctx)
 
-    in_game = ctx.slot is not None and ctx.mailbox.mod_state() == STATE_IN_GAME
+    state = ctx.mailbox.mod_state()
+    in_game = ctx.slot is not None and state == STATE_IN_GAME
+    # A vanilla file (chosen on the file select) isn't part of the seed: nothing is placed, sent or given
+    vanilla = state == STATE_IN_GAME_VANILLA
+    if vanilla != ctx.playing_vanilla:
+        ctx.playing_vanilla = vanilla
+        if vanilla:
+            logger.info("This is a vanilla file: the client leaves it alone. Load an Archipelago file to play the seed.")
     if in_game and not ctx.was_in_game:
         # A save was (re)loaded: that reloads the map scripts with vanilla items, so place them again
         ctx.placed = False

@@ -9,9 +9,11 @@
 #include <spm/nandmgr.h>
 #include <wii/os.h>
 
+#include "game_mode.h"
 #include "code_patching.h"
 #include "game_addresses.h"
 #include "save_block.h"
+#include "save_data.h"
 
 namespace mod::save_block {
 
@@ -104,7 +106,7 @@ static void patchKeyItemMenu()
     sUseStub[10] = LI_R6_0;
     code_patching::writeBranch(&sUseStub[11], at + MENU_RUN_EVT / 4);  // run it
     code_patching::refreshCode(sUseStub, sizeof(sUseStub));
-    code_patching::writeBranch(&at[1], sUseStub);
+    game_mode::writeBranch(&at[1], sUseStub);
 }
 
 // ---- Greying it out in the key item menu ----
@@ -152,7 +154,7 @@ static void patchGreyOut(GreyOutPatch & p)
     code_patching::writeBranch(&s[10], p.at + p.normal / 4);  //     no: normal
     code_patching::writeBranch(&s[11], p.at + p.greyed / 4);  //     yes: greyed out
     code_patching::refreshCode(s, sizeof(p.stub));
-    code_patching::writeBranch(p.at, s);
+    game_mode::writeBranch(p.at, s);
 }
 
 // ---- Saving inside a room ----
@@ -178,6 +180,8 @@ static void (*nandUpdateSaveReal)(s32 saveId);
 static void nandUpdateSaveHook(s32 saveId)
 {
     spm::mario::MarioWork * mario = spm::mario::marioGetPtr();
+    // His gravity, which the game doesn't save (put back once the save loads, see tick)
+    save_data::setGswByte(AP_GSW_GRAVITY, static_cast<u8>(mario->gravityType));
     if (!inRoom() || !sHaveOutside)
     {
         nandUpdateSaveReal(saveId);
@@ -203,22 +207,22 @@ static void movePeachProp()
             wii::os::OSReport("[spmap] saveblock: 7-3 prop at %x isn't item 45, not patched\n", offset);
             continue;
         }
-        *arg = PEACH_PROP_ITEM;
+        game_mode::set<s32>(arg, PEACH_PROP_ITEM);
     }
-    spm::item_data::itemDataTable[PEACH_PROP_ITEM].iconId = PEACH_PROP_ICON;
+    game_mode::writeHalf(&spm::item_data::itemDataTable[PEACH_PROP_ITEM].iconId, PEACH_PROP_ICON);
 }
 
 void init()
 {
     spm::item_data::ItemData & item = spm::item_data::itemDataTable[SAVE_BLOCK_ITEM_ID];
-    item.iconId = SAVE_BLOCK_ICON;
-    item.nameMsg = NAME_KEY;
-    item.descMsg = DESC_KEY;
+    game_mode::writeHalf(&item.iconId, SAVE_BLOCK_ICON);
+    game_mode::set(&item.nameMsg, static_cast<const char *>(NAME_KEY));
+    game_mode::set(&item.descMsg, static_cast<const char *>(DESC_KEY));
     movePeachProp();
     patchKeyItemMenu();
     for (auto & p : sGreyOutPatches)
         patchGreyOut(p);
-    nandUpdateSaveReal = code_patching::hookFunction(spm::nandmgr::nandUpdateSave, nandUpdateSaveHook);
+    nandUpdateSaveReal = game_mode::hook(spm::nandmgr::nandUpdateSave, nandUpdateSaveHook);
     wii::os::OSReport("[spmap] saveblock: item %d is the Save Block\n", SAVE_BLOCK_ITEM_ID);
 }
 
@@ -229,8 +233,32 @@ void onMapChange(const char * nextMap)
     sHaveOutside = false;
 }
 
+/*
+    Gravity: a save made on a Whoa Zone wall or ceiling (with the Save Block) loads with Mario's
+    gravity back to down, so he falls off and can be stuck (found by the user in sp4_06). The save
+    keeps his gravity (AP_GSW_GRAVITY, written as it saves), and once a loaded save gives Mario
+    control, it's put back.
+*/
+static bool sRestoreGravity;  // a save is being loaded: put its gravity back once Mario has control
+
+void onNoSaveLoaded()
+{
+    sRestoreGravity = true;
+}
+
 void tick()
 {
+    if (sRestoreGravity && !spm::mario::marioCtrlOffChk())
+    {
+        sRestoreGravity = false;
+        s32 gravity = save_data::getGswByte(AP_GSW_GRAVITY);
+        if (gravity > spm::mario::MARIO_GRAVITY_DOWN && gravity < spm::mario::MARIO_GRAVITY_MAX
+            && spm::mario::marioGetPtr()->gravityType != gravity)
+        {
+            spm::mario::marioSetGravity(gravity);
+            wii::os::OSReport("[spmap] saveblock: gravity %d put back from the save\n", gravity);
+        }
+    }
     if (inRoom())
         return;
     sOutside = spm::mario::marioGetPtr()->position;

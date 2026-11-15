@@ -8,8 +8,10 @@ It writes the inventory directly through Dolphin, the same way the game's own "a
 Only the inventory changes: no location flags, and nothing is sent to the Archipelago server.
   - A removed Pixl that was selected hands the selection to the first one left. The Pixl following
     Mario stays until the next map change (or until you pick another in the Pixl menu).
-  - The character Mario is playing as can't be removed: switch to Mario first. Mario himself isn't
-    listed.
+  - The character you're playing as can't be removed: switch to someone else first.
+  - Mario (for starting_character seeds, where he's an item to find): adding him also sets the mod's
+    "Mario received" save flag, so he stays in the party; removing him clears it, and the mod keeps
+    him out of the party from then on (mod starting_character.cpp).
   - Key item storage: the mod puts key items there when all 32 slots are full (mod
     key_item_storage.cpp; kept in the save). Stored items don't count as held.
 
@@ -48,7 +50,9 @@ GSW_BYTES = 0x544                    # the save bytes, in the game's main state
 KEY_STORAGE_GSW = 1792 + 32          # key item storage (mod save_data.h AP_GSW_KEY_STORAGE): 32 x 2 bytes
 KEY_STORAGE_SLOTS = 32
 
-CHARACTER_NAMES = {217: "Peach", 218: "Bowser", 219: "Luigi"}
+CHARACTER_NAMES = {216: "Mario", 217: "Peach", 218: "Bowser", 219: "Luigi"}
+GSWF_BYTES = 0x144                   # the save flags, in the game's main state: flag n is bit n & 31 of word n >> 5
+MARIO_HELD_FLAG = 7168 + 1019        # Mario's item received (mod save_data.h AP_GSWF_MARIO_HELD)
 PIXL_NAMES = {221: "Thoreau", 222: "Boomer", 223: "Slim", 224: "Thudley", 225: "Carrie", 226: "Fleep",
               227: "Cudge", 228: "Dottie", 229: "Piccolo", 230: "Barry", 231: "Dashell"}
 KEY_ITEM_NAMES = {45: "Save Block"}  # mod save_block.h SAVE_BLOCK_ITEM_ID
@@ -75,6 +79,13 @@ def held(entries):
     return [e for e in entries if e[2] != 0]
 
 
+def set_save_flag(flag, on):
+    """Sets or clears one of the game's save flags."""
+    addr = dme.read_word(GP_PTR) + GSWF_BYTES + 4 * (flag >> 5)
+    word = dme.read_word(addr)
+    dme.write_word(addr, word | (1 << (flag & 31)) if on else word & ~(1 << (flag & 31)))
+
+
 def toggle_character(item, want):
     """Adds (want = True) or removes a character. Returns a message for the window."""
     entries = held(read_list(CHARACTERS, CHARACTER_SLOTS))
@@ -85,9 +96,11 @@ def toggle_character(item, want):
         entries.append((1, 1, item))  # what the game's "add item" writes for a character
     elif not want and have:
         if dme.read_bytes(MARIO_CHARACTER, 1)[0] == item - CHARACTER_ITEM_BASE:
-            return f"You're playing as {CHARACTER_NAMES[item]}: switch to Mario first"
+            return f"You're playing as {CHARACTER_NAMES[item]}: switch to someone else first"
         entries = [e for e in entries if e[2] != item]
     write_list(CHARACTERS, entries, CHARACTER_SLOTS)
+    if item == CHARACTER_ITEM_BASE:  # Mario: the mod's flag, or it takes him out again on a map change
+        set_save_flag(MARIO_HELD_FLAG, want)
     return f"{CHARACTER_NAMES[item]} {'added' if want else 'removed'}"
 
 

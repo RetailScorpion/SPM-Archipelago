@@ -7,7 +7,9 @@
 #include <wii/os.h>
 
 #include "cutscene_skips.h"
+#include "game_mode.h"
 #include "mailbox.h"
+#include "options_menu.h"
 #include "save_data.h"
 #include "script_patching.h"
 #include "story_progress.h"
@@ -189,17 +191,18 @@ static void setJumps(bool skip)
     Tippi's welcome and pointing tutorial at the start of 1-1 (he1_01). Below story value 12 the map's
     start-up runs the chapter opening (the book page and title card) and hands it Tippi's welcome to
     play after it (story value 12); a line about pointing follows (13), then the tutorial, where
-    pointing at the hidden spot reveals Bestovius's house (14). From 14 the start-up leaves the house
-    and its door as they are, so when skipping, the welcome is swapped for a script that only starts
-    the music and sets 14. The title card still plays. (Tippi can point from story value 9 anyway:
-    tippi_always_on.)
+    pointing at the hidden spot reveals Bestovius's house (14). Below 14 the start-up hides the house's
+    door and leaves it for Tippi to find; revealing it (a short line from Tippi) sets 14. So when
+    skipping, the welcome is swapped for a script that only starts the music and sets 13: the
+    talking is skipped, but the door is still hidden until Mario finds it with Tippi, as in vanilla.
+    The title card still plays. (Tippi can point from story value 9 anyway: tippi_always_on.)
 */
 #define TIPPI_WELCOME_ARG 0x3af74  // in he1_01's start-up: SET(LW(0), <Tippi's welcome>), its script word
-#define TUTORIAL_DONE 14
+#define TUTORIAL_TALK_DONE 13        // Tippi's welcome and pointing line over; the house still hidden
 
 EVT_BEGIN(ap_skip_tippi_tutorial)
     USER_FUNC(spm::evt_snd::evt_snd_bgmon, 0, PTR("BGM_MAP_STG1"))
-    SET(GSW(0), TUTORIAL_DONE)
+    SET(GSW(0), TUTORIAL_TALK_DONE)
     RETURN()
 EVT_END()
 
@@ -229,12 +232,66 @@ void init()
     patchTippiTutorial();
 }
 
+bool playCutscenes()
+{
+    return !options_menu::get(options_menu::OPTION_SKIP_CUTSCENES);
+}
+
+/*
+    5-1's arrival (user, 2026-11-08): Chapter 5 starts at 179 in Downtown of Crag (gn1_01), where Mario
+    drops out of the sky, the Cragnons take him to their chief Marbald, and the Floro Sapiens snatch
+    villagers ("HEEEEEELP!"); that last scene sets 181 and gives Mario control at the town's left
+    (gn1_01's scripts: 180 at relF 0x15e828, 181 at 0x15fdc0; the user's save at 181 was the reference).
+    When skipping, arriving there before 181 goes straight to 181, through the chapter door's usual
+    entrance (user: as the tower's door brings Mario once the story is past it): doa5_l, which the tower's
+    section menu uses for 5-1 (relF evt_mac_door_section_dest: Chapter 5, section 1 = gn1_01, doa5_l).
+*/
+#define CRAG_MAP "gn1_01"
+#define CRAG_DOOR "doa5_l"
+#define CRAG_START 179
+#define CRAG_FREE 181
+
+static void skipCragArrival(spm::seqdrv::SeqWork * wp)
+{
+    if (msl::string::strcmp(wp->p0, CRAG_MAP) != 0)
+        return;
+    if (game_mode::vanilla())
+    {
+        s32 & storyValue = spm::spmario::gp->gsw0;
+        if (storyValue < CRAG_START || storyValue >= CRAG_FREE)
+            return;
+        storyValue = CRAG_FREE;
+    }
+    else
+    {
+        s32 value = story_progress::getChapterValue(5);
+        if (value < CRAG_START || value >= CRAG_FREE)
+            return;
+        story_progress::advanceChapter(5, CRAG_FREE);
+    }
+    wii::os::OSReport("[spmap] cutscenes: skipping 5-1's arrival and the Cragnon chief (to %d)\n", CRAG_FREE);
+    wp->p1 = CRAG_DOOR;
+}
+
 void onMapChange(spm::seqdrv::SeqWork * wp)
 {
-    setSammerScenes(!mailbox::gMailbox.playCutscenes);
-    setJumps(!mailbox::gMailbox.playCutscenes);
-    setTippiTutorial(!mailbox::gMailbox.playCutscenes);
-    if (wp->p0 == nullptr || mailbox::gMailbox.playCutscenes)
+    // A new file gets the last played file's settings before deciding on its opening; any other map
+    // change with a file loaded remembers that file's
+    if (wp->p0 != nullptr && spm::spmario::gp->gsw0 == 0 && isOpeningMap(wp->p0))
+        options_menu::carryOverToNewFile();
+    else if (wp->p0 != nullptr && spm::spmario::gp->gsw0 != 0)
+        options_menu::remember();
+
+    bool play = playCutscenes();
+    setSammerScenes(!play);
+    setJumps(!play);
+    setTippiTutorial(!play);
+    if (wp->p0 == nullptr || play)
+        return;
+    skipCragArrival(wp);  // for vanilla files too: it's within the chapter's own story
+    // A vanilla file starts and carries on as vanilla does: the opening and the Count Bleck scenes move
+    // the story value along in ways only the randomizer's own story handling copes with (game_mode)
+    if (game_mode::vanilla())
         return;
     if (!skipOpening(wp))
         skipBleckScene(wp);

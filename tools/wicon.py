@@ -24,9 +24,14 @@ import tpl  # noqa: E402
 AP_ICONS = [os.path.join(ROOT, "assets", "icons", "ap_progression.png"),
             os.path.join(ROOT, "assets", "icons", "ap_filler.png"),
             os.path.join(ROOT, "assets", "icons", "ap_blank.png"),  # traps: Mario holds up nothing
-            os.path.join(ROOT, "assets", "icons", "save_block.png"),  # from the save block's textures
+            # (the Save Block's icon, 406, comes next: the patcher draws it from the disc's save block)
             os.path.join(ROOT, "assets", "title", "archipelago_banner.png"),  # the title screen's banner
-            os.path.join(ROOT, "assets", "title", "archipelago_flower.png")]  # and the flower behind the title
+            os.path.join(ROOT, "assets", "title", "archipelago_flower.png"),  # and the flower behind the title
+            # the Throne Room Key (RetailScorpion's picture, 2026-11-05), icon 409
+            os.path.join(ROOT, "assets", "icons", "throne_room_key.png"),
+            # the Progressive Wallet, icon 410: Mario Party: Star Rush's Coin Bag (RetailScorpion's pick, 2026-11-08), from
+            # the Super Mario Wiki (File:CoinBag_MPSR.png; credited in README.md)
+            os.path.join(ROOT, "assets", "icons", "progressive_wallet.png")]
 # Pictures drawn at another size than their PNG: each is cropped to what it shows, then shrunk to
 # this width, the size it's drawn at (the title logo is 380 wide)
 ICON_WIDTHS = {"archipelago_banner.png": 320, "archipelago_flower.png": 360}
@@ -56,7 +61,8 @@ def build(clean_dir: str, out_dir: str) -> list[int]:
     """Writes wicon.tpl/wicon.bin with the AP icons added to out_dir; returns the new icon ids."""
     write_icons()
     tpl_data, bin_data, icons = patcher.patch_icons(open(os.path.join(clean_dir, "wicon.tpl"), "rb").read(),
-                                                    open(os.path.join(clean_dir, "wicon.bin"), "rb").read())
+                                                    open(os.path.join(clean_dir, "wicon.bin"), "rb").read(),
+                                                    open(os.path.join(clean_dir, "a", "MOBJ_save_block-"), "rb").read())
     open(os.path.join(out_dir, "wicon.tpl"), "wb").write(tpl_data)
     open(os.path.join(out_dir, "wicon.bin"), "wb").write(bin_data)
     return icons

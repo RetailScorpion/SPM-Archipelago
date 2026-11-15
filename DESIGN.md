@@ -1,437 +1,235 @@
 # Super Paper Mario Archipelago: Design
 
-Status: a playable no-logic build is out (0.2.1). This doc covers both what's built and what's still planned.
-Target: US release (1.0 for development, 1.1 and 1.2 later).
+How the randomizer works, what each part does and where its code is. Version 0.2.2, US release (revision 0) only.
 
-Items marked (verify) come from the Super Mario Wiki and still need to be confirmed against the game's own scripts.
+Each feature's details (addresses, script offsets, what was tried) are in the comment at the top of its file, mostly `mod/include/<feature>.h`. This doc is the map. Older notes are in the git history.
 
 ---
 
-## 1. Goal
+## 1. The big picture
 
-- Beat the final boss (Super Dimentio, 8-4).
-- Pure Heart 8 opens the Chapter 8 door, like any other heart.
-- Reaching the final fight also requires holding `pure_hearts_required` Pure Hearts (1–8).
-  The game blocks the path to the boss fight in 8-4 until you have enough, with a message saying how many you need.
-- "Holding" means received from Archipelago, whether or not the heart has been placed in its pillar.
-
-## 2. Hub and chapter structure
-
-### Heart pillars (vanilla locations, from the wiki)
-| Pillar | Hub location | Vanilla requirement to reach it |
+| Part | Where | What it does |
 |---|---|---|
-| 1 | Flipside 3F (left) | none |
-| 2 | Flipside 1F outskirts (right), high platform | Peach (float) |
-| 3 | Flipside B1 outskirts (right) | Slim (get past a wall) |
-| 4 | Flipside 2F outskirts (left) | Thudley (pound pegs in a pattern) |
-| 5 | Flopside 3F (right) | Fleep |
-| 6 | Flopside 1F outskirts (left) | Fleep + Cudge (break disguised stone, hit switch) |
-| 7 | Flopside B1 outskirts (left) | Fleep + Luigi (jump over high wall) |
-| 8 | Flopside 2F outskirts (right) | Fleep; invisible until after Ch7, we make it visible from the start |
+| **Patched disc** | `apworld/spm/patcher.py` | The player extracts their own disc with Dolphin; the patcher adds the mod and a few pictures in place (originals kept as `.orig`). The same patched disc works for every seed. |
+| **Mod** | `mod/` (C++) | Runs inside the game: turns item spots into locations, gives received items, reworks the story so chapters can be played in any order, and adds the quality-of-life settings. |
+| **Mailbox** | `mod/include/mailbox.h`, `apworld/spm/game_link.py` | A block of game memory the mod and the client both read and write (through Dolphin memory engine): items to give, checks found, the seed's settings. Its version number must match on both sides. |
+| **Client** | `apworld/spm/client.py` | Runs in the Archipelago Launcher. Connects the game to the server: places the seed's items in the game, sends checks, delivers received items. |
+| **APworld** | `apworld/spm/` | What Archipelago uses to make a seed: items, locations, options and logic. |
+| **Tools** | `tools/`, `client/` | Building, research, and the helpful tools for players. |
 
-Every Flopside pillar needs Fleep. Modelled as: the Flopside region requires `fleep`, and the extra requirements above apply on top of that.
+The seed's data comes from the client, not the disc. The mod copies what it needs into the save file, so a save stays tied to its seed.
 
-### Rules
-- Pillar N accepts only Pure Heart N. Interacting without it shows a message (e.g. "This pillar needs the Orange Pure Heart").
-- Activating pillar N sets our own flag `PILLAR_N` and opens only the one door mapped to it.
-  - Vanilla mapping: pillar N opens door N.
-  - With `pillar_door_shuffle` on, the seed picks a random mapping: pillar 1 still opens door 1, and pillars 2–8 open doors 2–8 in shuffled order.
-    The heart still has to go in its own pillar. Only which door that pillar opens changes.
-  - The mapping is sent in slot data. The client writes it to the mailbox on connect, and the game reads it whenever it needs to know whether a door is open.
-  - With `starting_open_doors` = X, the seed opens X random doors from 1–7 at the start, whether or not their pillars are active. Door 8 is never pre-opened.
-    A door is open if its mapped pillar is active or it was pre-opened.
-    The pillar for a pre-opened door still accepts its heart, which still counts toward `pure_hearts_required`. Examining that pillar says the door is already open.
-  - The player needs to be able to see the mapping. A pillar shows "This pillar opens the door to <chapter>" when you examine it, before and after it's activated, and the PopTracker pack shows it too.
-- Flipside is fully open from the start (all floors and elevators). Flopside needs Fleep, as in vanilla, unless `pillar_requirements: open`.
-- Inside a chapter, levels stay sequential: N-1 → N-2 → N-3 → N-4. Each level opens when the previous one is cleared.
-  This isn't an option, because each chapter's story runs on its own progress value (see §6).
-- Clearing N-4 gives the chapter-reward location (vanilla: the next Pure Heart).
+## 2. Core ideas
 
-### Chapter-specific story problems
-- **Ch1 → Peach:** in vanilla, Peach is revived in a Flipside chain after Ch1: she lies unconscious in mac_01 with Merlon, Saffron cooks a Fire Burst into Spicy Soup, talking to Peach with the soup collects her check. With `skip_cutscenes` off and Peach in the party, vanilla's soup scene and Merlon's house join scene play instead (both are played as Peach, so never without her). The mod keeps the chain up to the soup but gives it its own story value (`AP_GSW_PEACH_CHAIN`, 60-63, read and set by the patched mac_01, mac_02 and Saffron scripts), so it is there from the start of the file with no logic requirement (Fire Burst is always sold in Flipside).
-- **Ch4 Helmet interlude:** partway through 4-1 you can't breathe, and you're sent back to Flipside. Merlon sends you after the boy with the Goldfish Bowl, and the goldfish trade gets you the Helmet. Then you return to 4-1. So most of Chapter 4 requires the Helmet (STG4_HELMET), and the Goldfish Bowl and Helmet steps are hub checks.
-- **Ch6 ending:** Sammer's Kingdom is destroyed, the heart turns to stone, and you play the "???" level in the World of Nothing. After that, Dimentio defeats the party in Flipside and you play the Underwhere intermission. There Luigi joins (seq 297) and you get the revitalised Pure Heart (seq 300).
-  We keep that whole run (World of Nothing, then the defeat, then the Underwhere intermission) as the end of Chapter 6. Its locations are "Luigi joins" and "Revitalised Pure Heart" (the Ch6 reward).
-- **Ch6 layout (confirmed by the user from playing):** the story only uses the first map group (`wa1`, Sammer's Kingdom). Going through the Ch6 door again after that loads the white "???" map (World of Nothing). `wa2`–`wa4` (gates 26–100) are post-game only.
-- **Sammer's gauntlet (always available after Ch6):** once Ch6 is cleared, Chapter 6's own saved story value is set to the post-game state. That's easy with per-chapter story values, and the hubs and other chapters aren't affected. So the Ch6 door then leads to the full 100-duel Sammer's Kingdom.
-  - **Locations:** in vanilla, King Sammer hands over all seven TTYD partner Catch Cards at once after the 100th Sammer Guy: Goombella, Koops, Madame Flurrie, Yoshi, Vivian, Admiral Bobbery and Ms. Mowz (items 496–502).
-    That gives seven locations on one event ("King Sammer Reward 1–7"). They're all checked together when he hands them over, and the game shows each item received in turn.
-  - **Items:** the seven partner cards go into the item pool as filler, so they can still be found somewhere.
-  - **`sammer_gauntlet` option** controls what those locations can hold:
-    - `off` (default): the locations are marked excluded and only ever hold filler. The gauntlet is long and hard, so nothing important is stuck behind it.
-    - `on`: the locations are normal and can hold progression items.
-- **Ch7 entry:** door 7 leads to 7-1 with your party intact. In vanilla, Bowser rejoins in 7-2 (seq 313–314) and Peach in 7-3 (seq 330–331). Those scenes become locations that give whatever's placed there, whether or not character rando is on.
-- **Ch8 party splits:** Bowser holds up the roof, Peach falls through the floor, Luigi gets trapped. With character randomization on, entering Ch8 requires all three characters. The game enforces this at door 8, and the logic does too. The alternative would be rewriting those scenes for any party, which is far more work and risk.
+**Each chapter has its own story progress.** The game tracks the story with one number (the story value, GSW 0). The mod keeps a separate value for each chapter in the save file and swaps in the right one whenever Mario changes map (`story_progress`). So chapters can be played in any order, and each remembers where you were. Flipside and Flopside always see a fixed value, 11 (the end of the prologue), so no town scene waits for a story point; town features that the low value would lock are patched open (`hub_story_fixes`).
 
-## 3. Item pool
+**No location can be missed.** The game hides many item spots, join scenes and gifts once the story passes them. Out of order, that would lose them. Every location is instead tied to its own "collected" flag: join scenes check whether the location is collected (`pixl_joins`, `character_joins`), and spots under a story test get a "stage" of their own (`check_stages`).
 
-### Always randomized
-- **Pure Hearts 1–8** (8 items)
-- **Story Pixls** (verify each chapter):
+**Kinds of location** (`data/ap_locations.json`, generated by `tools/gen_ap_data.py`):
+- `flagged`: an item spot with its own save flag in the game.
+- `spot`: an item spot without one; the mod gives it a flag (`spot_flags`).
+- `join`: a Pixl joining (`pixl_joins`).
+- `gift`: something the story gives: Peach, Luigi, Bowser, Bestovius's lesson, the Helmet, Brobot L-type beaten (`story_gifts`, `character_joins`).
+- `heart`: the Pure Heart at the end of each of Chapters 1-7 (`pure_hearts`).
+- `tattle`: one per kind of enemy, tattled with Tatl (`tattle_checks`).
 
-  | Pixl | Vanilla location | Ability (logic name) |
-  |---|---|---|
-  | Thoreau | 1-2, Yold Town chest | `throw` |
-  | Boomer | Gloam Valley (Ch2) | `bomb` |
-  | Slim | Merlee's Mansion (Ch2) | `thin` |
-  | Thudley | 3-2 Tile Pool | `ground_pound` |
-  | Carrie | 3-4 Fort Francis basement | `carry` (platform, spike crossing) |
-  | Fleep | 4-2 Planet Blobule outhouse | `fleep` (flip objects between dimensions) |
-  | Cudge | 5-2 Gap of Crag | `hammer` |
-  | Dottie | 5-3 Floro Caverns | `shrink` |
+**Items arrive like the game's own.** A received item appears on Mario and he picks it up with the normal item-get (`received_items`). A spot holding another world's item shows the Archipelago icon and "Sent X to Y!" (`archipelago_item`).
 
-- **Key items** (wiki's "Important Things" list, 32 entries). Known story items include:
-  Ruins Key ×3 (1-4), Door Key (Gloam Valley), Door Key (Planet Blobule), Door Key (Underwhere),
-  Paper / Ancient Clue (4-2, Fleep's quest), Fire / Water / Stone Tablet (5-2, Cudge's shrine),
-  Fort Key, Cave Key, Card Key, Red/Yellow/Blue Orb, Floro Sprout, Diet Book, Castle Bleck Key.
-  The rest (Golden Card, Crystal Ball, Cooking Disk, Training Machine, Goldfish Bowl, Random House Key, Pit Key, Autograph, Helmet, House Key, Old Key, Dimension Key, You-Know-What) still need sorting into story items vs. side-quest items while mapping locations.
+**Archipelago and vanilla files.** A new file asks which it is (`game_mode`). Every change the mod makes to the game goes through a journal, so on a vanilla file the game's own code and scripts are put back; only the quality-of-life settings stay.
 
-### Never randomized
-- **Mario:** the game assumes he's always in the party.
-  He does not start out able to flip: Bestovius teaches flipping in 1-1 (seq 016). See `flip` in §5.
-- **Tippi:** she's the pointer, needed for hidden objects and for most of the story's assumptions.
-- **Return Pipe:** given at the start. It's our protection against getting stuck (softlocks).
-- **Tiptron:** post-game purchase. Excluded.
+**Before the client connects.** A fresh Archipelago file waits at "Please connect to an Archipelago server." until the client has connected once (`connect_gate`). Checks collected while the client isn't connected are logged in the save and sent later (`offline_checks`).
 
-### Optional (see §5)
-- Peach, Bowser, Luigi
-- Barry (3-1 bush), Dashell (Flipside Pit floor 100), Piccolo (end of the Flopside trading sequence)
-- Overworld items, blocks, shops, Pit rewards, side quests, and so on
+## 3. Mod features and their files
 
-### How "not randomized" works in the apworld
-Every optional category still exists as items and locations. When its option is off, each item is locked to its vanilla location (`place_locked_item`). The logic code is the same either way: "needs float" always means "has Peach". The only difference is whether Peach can be found anywhere or only after clearing Ch1.
+Every feature is one file pair: `mod/source/<name>.cpp` and `mod/include/<name>.h`. `main.cpp` wires them together (startup, every frame, every map change).
 
-## 4. Abilities and logic
+**Locations and items**
 
-### Abilities
-| Ability | Comes from | Notes |
+| File | Feature |
+|---|---|
+| `archipelago_item` | The Archipelago item in the world and its item-get text; traps' curse |
+| `received_items` | Giving received items to Mario, one at a time |
+| `offline_checks` | Logging checks found before the client connects |
+| `spot_flags` | Save flags for item spots that have none |
+| `pixl_joins` | Pixl join scenes as locations; removes the rooms that trap you without the Pixl |
+| `character_joins` | Peach, Bowser and Luigi joining, as locations |
+| `story_gifts` | The other story gifts (Bestovius's lesson, the Helmet, Brobot L-type) |
+| `pure_hearts` | Pure Hearts as items and locations; the starting doors |
+| `tattle_checks` | Tatl and the tattle checks |
+| `wallet` | Progressive wallets: the coin limit and the item-get's "You can now hold X coins" |
+| `key_item_storage` | Key items beyond the 32 slots go into storage |
+| `key_groups` | A chapter's keys open any lock of their kind in it |
+| `save_block` | The Save Block key item, and where a save reloads |
+| `starting_character` | Starting as Peach, Bowser or Luigi, with Mario as an item |
+
+**Story and progression**
+
+| File | Feature |
+|---|---|
+| `story_progress` | Each chapter's own story value; the towns' fixed value |
+| `check_stages` | Checks under a story test stay collectable whatever the story value |
+| `tower_doors` | Flipside Tower's doors open from Pure Heart flags; section menus from each chapter's own progress |
+| `endgame_requirements` | What Chapter 8's door and the final battle need; the throne room padlock and sign |
+| `hub_story_fixes` | Town scenes the fixed value skips: Chapter 6's end and door, the Castle Bleck door, town locks patched open |
+| `flopside_pipe` | The blue pipe to Flopside works once you have Boomer, Fleep and Mario |
+| `npc_story_fixes` | Characters and locks that followed the story value now follow items (Watchitt's bridge, the 7-2, 5-3 and 7-1 locks) |
+| `flip_ability` | When Mario can flip |
+| `sammer_duels` | Fewer Sammer Guy duels: the seed picks which play |
+| `tippi_always_on` | Keeps Tippi with Mario, and her pointer working in the towns |
+| `cutscene_skips` | The Skip cutscenes setting |
+| `connect_gate` | A fresh file waits for the server |
+| `game_mode` | Archipelago or vanilla files; the change journal |
+| `pose_waits` | Scenes that wait on Mario's animations don't freeze as other characters |
+
+**Settings, menus and screens**
+
+| File | Feature |
+|---|---|
+| `options_menu` | The pause menu and file select Options windows; the settings and their defaults |
+| `music_shuffle` | Music shuffle and Shuffle fanfares |
+| `sound_effect_shuffle` | Shuffle sound effects and Low health beeping |
+| `text_skip` | Hold 1 to skip text |
+| `climb_speed` | Fast climbing |
+| `elevator_skips` | Fast elevators |
+| `npc_culling` | Cull far enemies |
+| `squirps_shots` | Remove Squirps projectile limit, and Hold 2 for rapid fire Squirps |
+| `sammer_ninjas` | No ninjas in Sammer duels |
+| `dorguy_answers` | Highlight Dorguy answers |
+| `block_hints` | Hints for the block codes in 5-1 |
+| `fast_travel` | Fast travel from the pause menu's Chapters tab |
+| `pause_chapters` | The Chapters tab shows what the doors allow |
+| `connection_status` | "CONNECTED" / "DISCONNECTED" in the pause menu |
+| `file_select_hearts` | The file select shows a save's real Pure Hearts and an Archipelago icon |
+| `title_banner` | The Archipelago banner and flower on the title screen |
+| `tower_top` | Mario no longer falls through the top of Flipside Tower |
+
+**Shared tools** (not features): `code_patching` and `script_patching` (changing the game's code and scripts), `game_messages` (the mod's own text), `save_data` (the save file layout), `mailbox`, `game_addresses`, `debug_warp` (developer warps), and two generated headers, `location_flags.h` and `sound_effect_loops.h`.
+
+## 4. APworld files
+
+| File | What it holds |
+|---|---|
+| `__init__.py` | The world: picks the starting chapters, builds the item pool, adds the Launcher entries |
+| `options.py` | The YAML options (their text is what players see) |
+| `rules.py` | The logic (section 6) |
+| `items.py`, `locations.py` | Item and location names and ids |
+| `data.py` | Generated by `tools/gen_ap_data.py`: the location table |
+| `placement.py` | Writing each location's item into the game (client) |
+| `checks.py` | Reading checks and sending items (client) |
+| `game_link.py` | The mailbox, from the client's side |
+| `client.py` | The Super Paper Mario Client |
+| `patcher.py` | The Super Paper Mario Patcher |
+| `tracker_app.py`, `tracker_logic.py` | The map tracker and the logic it shows |
+
+## 5. Options
+
+The YAML options and their text are in `apworld/spm/options.py` (the template is `release/Super Paper Mario.yaml`). In short:
+
+| Option | Default | What it does |
 |---|---|---|
-| `flip` | Bestovius (1-1) | Depends on the `flip` option: from the start, at Bestovius, or anywhere |
-| `reveal` | Tippi | always available |
-| `float` | Peach | |
-| `fire` | Bowser | |
-| `super_jump` | Luigi | |
-| `throw`, `bomb`, `thin`, `ground_pound`, `carry`, `fleep`, `hammer`, `shrink` | story Pixls | |
-| `barrier` | Barry | optional Pixl |
-| `dash` | Dashell | optional Pixl |
-| `music` | Piccolo | optional Pixl; cures Cursya curses |
+| `logic` | wip_logic | `wip_logic`: the logic mapped so far. `no_logic`: only what the game enforces |
+| `shuffle_pixls` | anywhere | The eight story Pixls: vanilla, anywhere, or only on Pixl spots |
+| `shuffle_optional_pixls` | vanilla | Barry, Dashell and Piccolo, the same choices |
+| `shuffle_key_items` | on | Chapter keys, orbs, tablets, Cooking Disks, the Golden Card |
+| `shuffle_overworld_items` | on | Items in chests and lying around |
+| `shuffle_catch_cards` | off | Catch cards in chests and lying around |
+| `randomize_characters` | vanilla | Peach, Luigi and Bowser: vanilla, anywhere, or only on character spots |
+| `starting_character` | mario | Start as someone else; Mario becomes an item |
+| `tattle_checks`, `pit_tattles`, `afk_tattles` | off | Tatl and one check per enemy kind; whether the Pits count; whether the Megabite and Gigabite get checks |
+| `progressive_wallet` | off | Start with a 99-coin limit; wallets raise it (optionally to no limit) |
+| `starting_chapter_mode` (+ `starting_chapters`, `starting_chapter_count`, `starting_chapter_max`) | chosen, Chapter 1 | Which doors start open |
+| `shuffle_pure_hearts` | on | The chapters' Pure Hearts are locations and items |
+| `castle_requirement` (+ `castle_chapters`, `castle_hearts`) | chapters, 7 | What opens Chapter 8's door |
+| `final_requirement` (+ `final_chapters`, `final_hearts`) | pure_hearts, 8 | What the final battle needs |
+| `save_block` | start_with | The Save Block: shuffled, start with it, or none |
+| `trap_percentage` | 10 | Share of filler replaced by Cursya Traps |
+| `sammer_duels` | 25 | Duels per part of Sammer's Kingdom |
+| `sammer_gauntlet` | off | Whether the 100-duel rewards can hold progression |
+| `brobot_with_fleep` | off | Logic: Brobot L-type with Fleep as well as Boomer |
+| `bowser_with_items` | off | Logic: Bowser's 7-2 fight with items only |
+| `big_cloud_requires_peach_reunion` | on | 7-3's big cloud only after reuniting with Peach, as in vanilla |
 
-### Region graph
-```
-Menu
- └─ Flipside                                  (open from the start)
-     ⇄ Flopside  [needs fleep, unless pillar_requirements: open]
-     ├─ Pillar N area [ability req, §2]  →  "Activate Pillar N"  [needs Pure Heart N]
-     └─ Door D  [pre-opened, OR needs PILLAR_P where map[P] = D; identity unless pillar_door_shuffle]
-         └─ N-1 → N-2 → N-3 → N-4 → "Chapter N Clear" location
-             (each level split into sub-regions at ability gates)
- Door 8 (+ all characters if character rando) → 8-1 … 8-4
-     └─ Final boss [needs pure_hearts_required hearts]  →  Victory
-```
+The in-game settings (pause menu Options) are listed in the README, with their defaults. They're saved per file as bits that differ from the defaults (`AP_GSW_OPTIONS`); the defaults changed on 2026-11-14, so older saves read those five settings the other way round once.
 
-- Every level is split into sub-regions wherever a Pixl, character or key item is needed. Every location sits in the smallest sub-region that contains it.
-- "Level N-k clear" is an event (no item) that opens N-(k+1).
-- Story fights inside a chapter count as part of that chapter's path. If a boss needs an ability, it's a requirement on the next sub-region.
-- Duplicate key items (three Ruins Keys, for example) are tracked by count. Using a key on any matching door works.
+## 6. Logic
 
-### Known requirements (found while testing; fold into the logic pass)
-- **Old Man Watchitt, 1-2 (Yold Town, next build):** he calls the bridge builder (the green bridge) based on Chapter 1's story value, i.e. after Thoreau's vanilla join. With Thoreau shuffled, it should check whether Mario has Thoreau instead (found by the user, 2026-10-26). Done (2026-10-27): his talk script (`he2_03`, relF 0xf0214) is a SWITCH on the story value: `CASE_SMALL(25)` "go get help", `CASE_SMALL(26)` sends for the builder (sets 26; the builder's scene in `he2_05` sets 27, which the bridge `hasi_2` checks). The first CASE now compares with `AP_GSW_WATCHITT`, which `joins::tick()` sets every frame: 26 without Thoreau, 0 with him, so the builder comes once Mario has Thoreau, whatever the value. Tested in game (user, 2026-11-02): works. Logic (user, 2026-10-26): once that's fixed, every Chapter 1 check past Watchitt's bridge needs `throw` (Thoreau, so the bridge gets built) or `float` (Peach, who floats across the gap without the bridge; tested 2026-10-26): the rest of 1-2 beyond the bridge, and all of 1-3 and 1-4. Possible exception: the Paratroopa Card chest in 1-2 (`he2_01`), to confirm. 1-3 (user, 2026-10-26, playing before the Watchitt fix): progress past `he3_03` (Yold Desert) needs `throw` (Thoreau) or `float` (Peach); Peach tested (added straight to the party slots, which works).
-- **Chapter 6 never reaches the destroyed world (user, 2026-10-26):** after the world ends, going back through door 6 still gives the normal Sammer's Kingdom, not the empty white world (`wa1_27`, story values 284-286, where Chapter 6 ends). The world's end is story value 281, set in a Flipside Tower scene (`mac_02`); the mod discards story values written in the hub, so Chapter 6's value never gets there. To fix: hub scenes that move a chapter's story on (281 for Chapter 6; check the others listed below) must write to that chapter's slot, or their effect must be given another trigger.
-- **Luigi and Peach couldn't join (found 2026-10-26; fixed in 0.1.2, see the hub story fix below):** Luigi joins at story value 297 in `an1_07`, during the Underwhere sequence (293-301) that vanilla plays right after Chapter 6, in Chapter 7's maps (`an1_*`). The mod starts Chapter 7 at 303, so his scene never happens. Peach joins in a Flipside Tower scene (`mac_02`) after Chapter 1, which the fixed hub value most likely skips (the user needed her added by hand). Bowser (3-1, `ta1_04`) should be fine. To fix (user's plan for Luigi, 2026-10-26): Luigi's room (`an1_07`) checks whether Luigi is in the party instead of the story value, and plays his join scene if he isn't, the same pattern as the Pixl joins. Once `randomize_characters` exists, it should check the join location's own flag instead (like `AP_GSWF_JOIN` for Pixls), so the location can hold another item. Give Peach's join its own trigger the same way, as with the other hub events below. With `randomize_characters` this becomes three character locations. Trap room (user, 2026-10-26): entering Luigi's room (`an1_07`) without Luigi leaves Mario stuck in the room (not a full softlock: the Return Pipe gets him out). No scene plays at all (Chapter 7's value is already past his join), so the room just can't be left on foot without him, probably an exit that needs Luigi (`super_jump`). Until fixed it's a `return_pipe_escapes`-style room; the real fix is making his join happen (see above), which would also give the room its scene back.
-- **Hub story fix, 0.1.2 (`mod/source/hub_story_fixes.cpp`; user's decision, 2026-10-26: give results directly, so the hub's story value means as little as possible):** Peach joins when Chapter 1 is finished; Luigi on first entering a Chapter 7 map; the Helmet on first entering a Chapter 4 map; Chapter 6 advances 280 -> 281 (the world's end); Flopside Tower gets story value 357 while Mario is there once Chapters 1-7 are finished, which opens the Castle Bleck door through the game's own door event. These gifts are locations (done 2026-10-27): each is gated on its own flag (`AP_GSWF_GIFT`, GSWF 7184-7186), not the story value, and gives what the seed placed there (mailbox v9 `giftItems`, written by the client). New option `randomize_characters` (default off) shuffles Peach and Luigi; the Helmet is always vanilla (category `fixed`) until something blocks Chapter 4 without it. The gift locations come last in the location list, so earlier location ids didn't change. Join scenes (2026-10-27, user's request: the check is talking to the character / their scene): Peach, Luigi and Bowser are now collected by their vanilla join scenes, not given directly (`character_joins.cpp` CHAR_JOIN / GIFT_GATE / CASE_PEACH patches; `ap_char_join` collects gift location, then switches character only if Mario has them). Peach: Flipside Tower (`mac_02`) entered from Merlon's house (`dearu_ie`) once Chapter 1 is finished, until collected (the tower's CASE_SMALL(63) compares with `AP_GSW_PEACH_SCENE`). Luigi: `an1_07` scene re-gated on his gift flag. Bowser: new gift location 3 (GSWF 7187), his 3-1 fight in `ta1_04`, still on Chapter 3's value (< 104). Untested in game.
-- **Hub story events past the hub value never happen (found 2026-10-26, user noticed the Helmet):** the hubs are pinned at story value 65, but vanilla hub scenes and items keep checking later values: 99-100, 127-134 (incl. the Goldfish Bowl in `mac_01`, which needs exactly 132, and so the Helmet for Chapter 4), 175-178, 222-224, 281-303, and 355-358 (Nolrem and the Castle Bleck door, the way into Chapter 8). So the prototype's goal, finishing Chapter 8, couldn't be reached. The Chapter 8 door and the Helmet are fixed now (hub story fix, above); the other events are still to do. The design's answer: rewrite each hub event we want to its own trigger (a flag, an item, a finished chapter), starting with the Chapter 8 door and the Helmet quest.
-- **Merlon skipped, file select hearts (2026-10-27, user's request):** with `skip_cutscenes`, a new file skips Merlon's scenes as well as the opening: it starts in Flipside Tower at story value 11 (the prologue's end), so the hub gets its fixed value (Pure Heart 1 in its pillar, the Lineland door open), and the mod gives the Return Pipe (vanilla: Merlon, value 8, not a location). The file select drew a save's hearts from its one story value (heart 1 from 4, heart N+1 from Chapter N's finished value; table 0x803E9108), so a save made in the hub showed hearts it doesn't have. `file_select_hearts.cpp` replaces that test (0x8017EF8C) with the save's own chapter slots: heart N+1 once Chapter N is finished. Untested in game.
-- **Bestovius's lesson is a location (2026-10-27, user's request):** gift location 4 (GSWF 7188, `he1_06`). His talk script (relF 0x213418) offered the lesson below Chapter 1's value 15 and only chatted from 16; its ten story comparisons now read `AP_GSW_LESSON` (0 until the location is collected, then 17), and the lesson's `SET(GSW(0), 16)` became `ap_lesson`, which collects the location and advances Chapter 1 to 16. The flip itself still follows the `flip` option (start_with for now); a Shroom Shake stands in as the location's vanilla item. Same commit: the character join patches (CHAR_JOIN) expected `EVT_CMD(1, USER_FUNC)` where relF has 2, so they never applied. Bestovius's lesson tested in game (user, 2026-11-02): works.
-- **Starting chapters and Pure Heart items (2026-10-27, user's request):** options `starting_chapter_mode` (chosen / random_chapters / random_amount), `starting_chapters` (OptionSet, `Chapter 1`-`Chapter 7`, default Chapter 1), `starting_chapter_count` (1-7), `starting_chapter_max` (1-7, default 7: the most `random_amount` can open; user's request 2026-10-29). Pure Hearts 1-7 for the other chapters go in the pool (SPM ids 1001-1007, server-only: shown as the AP item, never "given here"); they replace filler, freeing unshuffled filler locations if the pool runs short. Logic: an `N-x` location needs heart N unless chapter N starts open; `8-x` and the goal need all closed chapters' hearts; Peach's join needs heart 1. Mod: door N is open when GSWF `AP_GSWF_HEART(N)` (7192+) is set (`tower_doors.cpp` `ap_door_open` replaces the vanilla count test); the client writes the starting hearts (mailbox v11 `startingHearts`), set into the save on map changes; received hearts set the flag. Without a client every door is open. Pillars aren't involved yet. The file select shows held hearts.
-- **Cursya Traps (2026-10-27, user's request):** `trap_percentage` (default 10) replaces that share of shuffled filler with "Cursya Trap" (SPM id 1100). A trap at one of this world's spawned-item locations looks like a random key item not yet received (the client picks it; Pixls have no world-item sprite, characters crash the pickup); joins and gifts show the AP item. The client marks the location LOC_KIND_TRAP in the location-name table; on the item-get's first frame the mod switches the item to the AP item with a blank icon (404), the text is "You are a FOOL!", and when it ends Mario gets a curse via `marioStatusApplyStatuses(status, 2)`, weighted by Cursya spawns in the map setups: slow 8 (Cursya), flipped controls 6 (Reversya), no jump 6 (Heavy), no skills 3 (Tech). Back Cursya (2) maps to no status; Dark Cursyas only spawn in the Pits. Traps found in other worlds arrive from the server and play the same way. Tested in game (user, 2026-11-02): works.
-- **Save Block (2026-10-27, user's request):** option `save_block` (shuffle / start_with / off, default start_with). A key item that saves from the key item menu anywhere. Every key item id 16-64 is used except 63 (the AP item), so it takes item 45 (`STG7_PEACH`), whose only use is a prop in two 7-3 scenes (`an3_06`, `an3_15`: Peach shown as a world item, never collected); those spawns now use item 11 (an unused pickup) given icon 90 (Peach). Icon 406: built from the save block's own textures (`a/MOBJ_save_block-`: rainbow RGB565 + "S" IA8 mask) as `assets/icons/save_block.png`. Using it: the key item menu (`pluswinKeyItemMain`, 0x80188374) runs a script for the Floro Sprout (0x24) and the Return Pipe (0x32); a stub adds item 45, running `SET(LW(0), 0); RUN_CHILD_EVT(evt_memcard_save)` like the save block's `mobj_save_blk_sysevt`. A save records `savePosition`. Start-with arrives as start inventory from the server. Pits (user's request): in `dan_` maps it's greyed out like the Return Pipe (the key item drawing's `cmpwi r25, 0x32` tests at 0x80188B1C icon / 0x80188C18 name get a stub that sends item 45 to the greyed path) and using it prints the mod's "You can't use this here." (the game has no generic line). Tested in game (user, 2026-11-02): saving works. Bug found (user): a save made inside a house (Saffron's, `mac_09`) reloaded Mario behind the closed house. Rooms entered by a door are part of their map, and a loaded save starts with every room shut, so the saved position (depth 1671 inside, about 2105 outside) lands behind the walls. Fix (tested in game, user 2026-11-02: reloads outside Saffron's door): `save_block.cpp` hooks `nandUpdateSave` (every save, the game's save blocks included); in a room (`evtDoorGetActiveDoorDesc`, or a room door open) it saves Mario's last position outside a room instead, recorded every frame and reset on map changes. Still untested: where a save made mid-air reloads.
-- **Skipped Bleck scene lands Mario oddly (user, 2026-10-26):** after Chapter 6 (and maybe Chapter 4), `skip_cutscenes` sends Mario to `mac_02` by the entrance the skipped scene uses (`doa12_l`, `doa10_l`). He arrives where walking drops him through the floor; he lands somewhere fine, but it looks wrong. Vanilla probably repositions him in the scene that follows. Fix to try: use the tower's default entrance for every chapter in `cutscene_skips.cpp` (Chapters 5 and 7 already do), then test each chapter's exit.
-- **Chapter 6 needs a way to hurt spiked enemies (user, 2026-10-26):** the duels have enemies with spikes on their heads, so stomping doesn't work. Any one of: `fire` (Bowser), `carry` (Carrie), `bomb` (Boomer), `hammer` (Cudge), `barrier` (Barry). Not Thoreau (nothing in the duels to throw) and not Dashell (his dash doesn't deal damage). Attack items count only as optional logic (a future "items in logic" setting, off by default), and only where few spiked enemies stand in the way:
-  - **Chapter 6 as the story plays it** (the duels before the world ends): 3 spiked enemies to beat, so attack items are enough with that setting on.
-  - **The 100-duel gauntlet** (`sammer_gauntlet`): too many for items; needs one of the abilities above, whatever the setting.
-- **Bowser's fights, 3-1 and 7-2, need a way to hurt spiked enemies (user, 2026-10-30):** beating Bowser takes damaging spiked enemies, so it needs one of the abilities in the Chapter 6 entry above (`fire`, `carry`, `bomb`, `hammer`, `barrier`). In 3-1 (`ta1_04`, his join location) `fire` can't count, since he's the one you're fighting and joins only after. In 7-2 this gates the Door Key he leaves (`an2_03`, next build's location) and everything behind its lock.
-- **Chapter 5, the rest (user, 2026-10-26, as far as they could tell):** every remaining Chapter 5 check needs `float` (Peach), except the Cooking Disk 6 check in the first room (`gn1_01`, needs Dottie, below). Maybe Dashell (`dash`) too: check with the other Peach gaps.
-- **5-1 Downtown of Crag, Cooking Disk 6 (`gn1_01`, flag GSWF 1035; user, 2026-10-26):** needs `shrink` (Dottie).
-- **5-1 `gn1_04` chest (flag GSWF 1045; user, 2026-10-26):** a dead-end room (one pipe, from `gn1_02`). Two enemies spawn there, and only `bomb` (Boomer) can beat them; killing them reveals a chest holding a Bowser (2) catch card. It's one of the "item 0" chests (the reveal script supplies the item), so it isn't a location yet: add it with the other item-0 chests (patch the script that gives the card).
-- **4-1 Outer Space needs the Helmet (user, 2026-10-26):** past the first entrance into 4-1, Mario without the Helmet (item 24) walks on invisible floor instead of floating ("swimming") through space, and movement breaks. In vanilla you can't get there without it. To do: the door (or the way into Outer Space after the first visit) must stay blocked until Mario has the Helmet, and the logic needs the Helmet for everything past it. The Helmet's own spots (`mac_04` in Flipside, `sp1_01`) are unflagged key spots, so they need the key-spot pass too.
-- **3-1 takes Tippi (user, 2026-10-26, to fix later):** entering Chapter 3 plays the scene where Tippi is taken (Francis's minions), and she stays gone through Chapter 3 (vanilla story values 102-124). The mod's Tippi code (`tippi_always_on.cpp`) switches her back on at each map change, but the scene still runs, so prevent the scene itself (or her removal) in 3-1. Other chapters should keep her, since each chapter has its own story value; the user will report if not.
-- **2-1 Gloam Valley, right at the start (`mi1_01`, user, 2026-10-26):** a gap that needs `float` (Peach) to progress. To check: Dashell (`dash`) may cross it too (seen in a video). More generally, check every Peach-only gap with Dashell later.
-- **"Item 548" blocks are Ghost Shroom blocks** (user, 2026-10-26): the ? blocks in `he3_01` and `he3_03` (1-3) whose scanned content is 548 (not a valid item id) spawn a fake Mushroom that turns into a Ghost Shroom. So 548 is a block content code, not an item; `item_blocks` must treat these blocks as giving a Ghost Shroom (item 77). Vanilla 1-3 has three Ghost Shrooms: these two blocks plus the one lying in `he3_06`.
-- **Carrie's location** (`ta4_12`, Fort Francis): needs `ground_pound` (Thudley presses the switch that opens her cage), plus `carry` unless `return_pipe_escapes` is on (leaving on foot means hovering over spikes with Carrie; the Return Pipe works there, tested).
-- **Fleep's location** (`sp2_01` outhouse, Planet Blobule): needs the Ancient Clue (item 25, found in `sp2_08`), which you hand to the outhouse.
-- **Cudge's location** (`gn2_02`, Gap of Crag): needs the Water, Stone and Fire Tablets (items 30, 31, 32) placed in the three stone slots.
-- **Dottie's location** (`gn4_03`, Cragnon cave): leaving on foot needs `shrink` (Dottie) or `super_jump` (Luigi, tested), unless `return_pipe_escapes` is on; the Return Pipe works there.
-- **Dashell's location** (`dan_30`, Flipside Pit floor 100): the Wracktail fight before him needs `throw` (Thoreau).
-- **`sp2_01` door `doa2_l`** (toward `sp2_03`, the Ancient Clue in `sp2_08`, and every other check beyond it): blocked by a wall of blocks (`b_10`–`b_42`, while Chapter 4 < 142) that needs a way to break blocks: `hammer` (Cudge), `ground_pound` (Thudley) or `bomb` (Boomer). So the Ancient Clue, and with it Fleep's location, needs one of those three.
-- **Every Pixl join scene** calls `evt_pouch_set_pixl_selected(<pixl>)` right after the gift. Without that Pixl the game deselects every Pixl. Fixed: `ap_join_select` only selects a Pixl Mario has, and map loads repair saves with none selected.
-- **Switching to a Pixl with none selected (user, 2026-11-02):** Dolphin warned "Invalid read from 0x00000000, PC = 0x80147938" (ignoring it was harmless). Mario's flip looks up his current Pixl by the id in `mario+0x1484` (`bl 0x8011DEB0` at 0x80147934, `fairy_work_by_id`) and sets bit 2 of the result's first halfword without checking it found one; with no Pixl in the party the lookup returns 0. Fixed (untested in game): that call goes through `pixl_joins.cpp` `flipPixlLookup`, which returns a spare word when there's no Pixl. Other unchecked uses of the lookup are in the Pixls' own ability code, which only runs while that Pixl is out.
-- **Fleep's join scene** then calls `0x800f2838(1)` and `0x800f2878(1)` (a Fleep mode for something Tippi's pointer uses). Without Fleep, pointing at the screen afterwards freezes the game (found by the user). Fixed: both run only if Mario has Fleep (`FLEEP_ONLY`); re-entering `sp2_01` never calls them either.
+All in `apworld/spm/rules.py`. A rule is a list of alternatives, each a list of items: `[["Peach"], ["Luigi"]]` means Peach or Luigi. Starting as Mario, "Mario" (his flip to 3D) is dropped from every rule.
 
-### Logic difficulty
-v1 has a single "intended" logic: no tricks, no damage boosts. A `logic_difficulty` option can come later, once speedrun tricks are documented.
+**Always on** (what the game enforces, also with `no_logic`):
+- A Chapter 1-7 location needs its chapter's Pure Heart, unless its door starts open.
+- Flopside, its Pit and Chapter 8 need Boomer, Fleep and Mario (the blue pipe).
+- Chapter 8 needs `castle_requirement`, Peach and Luigi; past 8-1 also Bowser. The goal also needs `final_requirement` and Slim (8-4).
 
-## 5. Options (draft)
+**The WIP logic** (`wip_logic`): mapped out by playing. The full per-location list is `logic/checks.md`, generated by `tools/checks_list.py`. How it's written:
+- `ROOM_NEEDS`: whole rooms past a gap, pipe or lock, by room-name prefix.
+- `LOCATION_NEEDS`: single locations.
+- `LOCATION_AFTER`: a location that needs another one reachable first (Barry after Chapter 4, Piccolo after Chapter 1).
+- The section rule: anything in section 2, 3 or 4 of a chapter needs the previous section's Star Block room reachable (`SECTION_END_ROOMS`, `SECTION_END_NEEDS`).
+- `TATTLE_NEEDS`: tattles whose enemy hides somewhere its room's rule doesn't cover.
+- Special cases in `set_rules`: Brobot L-type, Peach's Fire Burst (coins to buy one), 7-3's big cloud, the Underwhere's side lock.
+- Keys are counted by group: locks in a row need one more key each.
 
-Rows marked **Built** are YAML options in 0.2.1, under the names in `apworld/spm/options.py`. Rows marked **in-game Options** are pause menu settings. Everything else is planned.
+**What's mapped so far**, by chapter (details and dates are in the comments in `rules.py`):
+- **Chapter 1:** Mario's flip for most of 1-1 past the first room and all of 1-2 to 1-4; Thoreau or Peach past Watchitt's bridge (1-3, 1-4); the Ruins Keys' three locks.
+- **Chapter 2:** Peach for the gap at the start; the Door Key for everything but itself; Boomer past his join; the House Key in 2-2.
+- **Chapter 3:** Mario, Luigi or Peach past 3-1's tall pipe; Boomer for Bowser's fight; a way to hurt spiked enemies; the Fort Keys; Thudley for Carrie.
+- **Chapter 4:** Mario's flip for some 4-1 checks; a block breaker past 4-2's wall of blocks; the Ancient Clue for Fleep; Door Key 26 for 4-3 and 4-4; Fleep for most of 4-3 and all of 4-4; the Dimension Keys.
+- **Chapter 5:** Peach or Luigi past the gap (all but Cooking Disk 6, which needs Dottie); Cudge past his spot; the three tablets for Cudge; Mario's flip for several checks; the Cave Keys; Dottie and the Card Key in 5-4.
+- **Chapter 6:** a way to hurt spiked enemies; Boomer (or Fleep with `brobot_with_fleep`) for Brobot L-type and the post-game duels.
+- **Chapter 7:** Mario or Luigi past 7-1's pipe; the Underwhere Door Keys (five locks); Carrie, Boomer or Cudge for Bowser in 7-2; Peach and Luigi for 7-4; the three orbs for 7-4's rainbow; Luigi for the Frost Piranha and Gigabite tattles.
+- **Chapter 8:** the seven Castle Bleck Keys in order; Slim for 8-4.
+- **Flipside:** Mario's flip for every check but Peach's; a block breaker for Cooking Disk 2; Cudge and Flopside for the InterChet Card.
 
-| Option | Values | Default | Notes |
-|---|---|---|---|
-| `shuffle_pixls` | on / off | on | **Built.** The eight story Pixls (Thoreau to Dottie). Off: each joins at its vanilla spot |
-| `shuffle_key_items` | on / off | on | **Built.** The key items whose spots the mod handles (the Stone, Water and Fire Tablets among them). Off: they stay at their vanilla spots |
-| `starting_chapter_mode` | chosen / random_chapters / random_amount | chosen | **Built.** How the chapters open at the start are picked; every other chapter's door opens when its Pure Heart is received. See "Starting chapters and Pure Heart items" in §4 |
-| `starting_chapters` | Chapter 1–7 (set) | Chapter 1 | **Built.** The open chapters for `chosen` |
-| `starting_chapter_count` | 1–7 | 1 | **Built.** How many chapters `random_chapters` opens |
-| `starting_chapter_max` | 1–7 | 7 | **Built.** The most chapters `random_amount` can open |
-| `save_block` | shuffle / start_with / off | start_with | **Built.** A key item that saves from the key item menu anywhere (not in the Pits). See "Save Block" in §4 |
-| `shuffle_pure_hearts` | on / off | on | **Built (2026-11-02, user's request; untested in game).** The Pure Heart each of Chapters 1-7 ends with is a location (kind `heart`, after every other location so earlier ids kept): Chapter N's ending gives heart N + 1 in vanilla (Chapter 7: Pure Heart 8, a new item that opens nothing yet, classed useful), collected on the first map change once the chapter is finished (`pure_hearts.cpp`; flags GSWF 8176-8182, `AP_GSWF_CHAPTER_HEART`; mailbox v16 `heartLocItems`; without a client the vanilla heart is given). On: the hearts for the chapters that start closed go in the pool, and the seven locations hold anything (they add filler to the pool). Off: each location keeps its vanilla heart, and Chapter 1 is always among the starting chapters (added to `chosen`; a random pick swaps one of its chapters for Chapter 1), since with hearts vanilla each chapter opens the next and later doors alone would leave the earlier chapters closed forever (user's example: doors 6 and 7) |
-| `pure_hearts_required` | 1–8 | 8 | Hearts needed to fight the final boss |
-| `merlon_gift` | pure_heart / random_item | pure_heart | What Merlon gives at the start. `pure_heart`: the heart picked by `starting_pure_heart`. `random_item`: Merlon is a normal location |
-| `starting_pure_heart` | chapter_1 / random | chapter_1 | Which heart Merlon gives. Ignored when `merlon_gift: random_item`. See "Starting heart rule" below |
-| `open_hubs` | on / off | on | On: every hub check tied to the story is available from the start. Off: each one waits for its vanilla story trigger. See "Hub checks" below |
-| `randomize_characters` | on / off | off | **Built.** Peach, Bowser, Luigi in the pool; their join scenes are locations |
-| `random_starting_character` | off / on | off | **Planned (user, 2026-10-29).** Start the file as Peach, Bowser or Luigi (or Mario) instead of Mario, picked by the seed. Mario goes in the item pool like the other characters (needs `randomize_characters`, or implies it). See "Random starting character" below |
-| `pillar_requirements` | vanilla / open | vanilla | `open` removes the ability gates around pillars 2–8, including the Fleep requirement for Flopside |
-| `pillar_door_shuffle` | on / off | off | Pillars 2–8 open doors 2–8 in random order; pillar 1 always opens door 1 |
-| `starting_open_doors` | 0–7 | 0 | X random chapter doors (from 1–7, never 8) open at the start, regardless of pillars |
-| `flip` | start_with / vanilla / random | start_with | `start_with`: you can flip from the start. `vanilla`: Flip is locked to Bestovius in 1-1. `random`: Flip can be anywhere in the multiworld. Bestovius's lesson is a location in all three. Not a YAML option yet: the mod always uses `start_with` |
-| `sammer_gauntlet` | on / off | off | **Built (2026-11-02).** The 100-duel Sammer's Kingdom always opens after Ch6, and its TTYD partner card rewards are always checks. `off`: they only hold filler. `on`: they can hold progression. See §2 |
-| `sammer_duels` | 1–25 | 25 | **Built (2026-11-02, user's request; untested in game).** How many Sammer Guy duels play in each part of Sammer's Kingdom; the seed picks which (user's request: random, not the first or last N). The story's own room table (relF section 5 `0xd1938`, 0x28 per room: state, gate, story value at the duel's start, story value when won; a room counts as beaten once Chapter 6 reaches its won value) has 20 real duels, gates 1-20 in `wa1_02`-`wa1_21` (gate 17 Forbidden Slap, state 2; gate 20 Rolling Thwomp, state 3). Gates 21-29 are state 1, whose Sammer Guys give up as Mario walks in (the room script marks them won at once): `wa1_22`-`wa1_26`, King Sammer's Pure Heart scene in `wa2_01` (272-275), `wa2_02`-`wa2_05`; gate 30 (`wa2_06`, state 4) is the stage that ends the world (280). The post-game has four groups of 25 (`wa1_02`-`wa1_26`, then `wa2`/`wa3`/`wa4` `_01`-`_25`) and tracks them with one counter, `LSW(1)` = highest gate beaten (set when a duel is won at 421+; post-game table `0xd1de8`, native `0x24d54`), cleared whenever the map prefix changes (`swReInit`, `0x8017a450`); a room's duel is only there while its gate is above it. Picked gates (APworld `sammer_gates`, slot data `sammer_gates`, mailbox v14 `sammerGates[5]` bitmasks): each group's last gate always; the story's and the post-game's first group also their first gate (the intro duel; so N = 1 and 2 both give first + last there); random others up to N. N >= 20 plays every story duel. `sammer_duels.cpp`, on the map change: entering a duel room forwards (its `doa1_l`, or a group's start with no door) goes on to the next gate that plays. Story: Chapter 6 moves to the won value of the gate before that one, so skipped rooms count as beaten; after Rolling Thwomp, entering `wa1_22` goes to `wa1_26` with 271 (gate 25 won), so Mario walks on to the vanilla save prompt and the Pure Heart scene; the walk-through rooms after it stay. Post-game: the counter makes skipped rooms count as beaten. A mask of 0 (no client) or all gates plays as in vanilla. |
-| `return_pipe_escapes` | on / off | off | Rooms you can only leave on foot with the Pixl found there (but can always leave with the Return Pipe). On: the logic may expect that check before you have its Pixl, and you pipe out afterwards. Off: the check is in logic only once you have that Pixl (you can still get it earlier). Rooms so far: Carrie's (`ta4_12`), Dottie's (`gn4_03`). See "Known requirements" in §4 |
-| `shuffle_optional_pixls` | on / off | off | **Built.** Barry, Dashell, Piccolo and their locations. Their joins: Barry `ta1_01` (3-1 bush), Dashell `dan_30` (Flipside Pit floor 100; also scripted in `dan_70`, Flopside), Piccolo `mac_19`. Their scenes aren't gated by story value (Barry tested at Chapter 3 = 126). `GIFT` patches added (Piccolo `0x33684`, Barry `0x7b024`, Dashell `0x15b6d4`); test with `nojoin` / `placeholder` |
-| `shuffle_overworld_items` | on / off | on | **Built.** Items in chests and lying around in levels and hubs (only the spots the mod handles so far) |
-| `item_blocks` | on / off | off | ? blocks and hidden blocks that give items (not coins) |
-| `shop_items` | on / off | off | Each hub shop slot sells an Archipelago item |
-| `pit_rewards` | off / flipside / both | off | Pit of 100 Trials chests; Dashell needs `flipside` or higher |
-| `side_quests` | on / off | off | Piccolo trading sequence, NPC rewards in the hubs |
-| `level_shuffle` | off / chapters / levels / both | off | **Later.** Shuffle which chapter is behind each door, and/or which level (N-k) comes next within or across chapters. Needs the per-chapter story values to cope with entering a chapter at a later level |
-| `shuffle_catch_cards` | on / off | off | **Built.** Catch cards found in chests or lying around. Later: the rest of the 256 cards (a lot; maybe "every Nth card") |
-| `recipes` | off / on | off | **Later.** First cook of each recipe |
-| `cooking_disks` | off / on | off | **On:** the unused Cooking Disk 1 (item 63, `DISK_PI`) goes in the pool, and Saffron in Flipside won't cook without it. A new custom item, "Flopside Cooking Disk" (name to decide; "Cooking Disk 2" is taken by the vanilla red disk), goes in the pool too, and Dyllis in Flopside won't cook without it. Both need item-table entries (CD1 exists but has no way to be obtained) and a check in each cook's script |
-| `piccolo_chain` | vanilla / shuffle_first / shuffle_house_key / shuffle_all | vanilla | Piccolo's trading sequence: Training Machine (Bestovius's house, 1-1) → Merluvlee gives the Crystal Ball → Merlee (Flopside) gives the Random House Key → Piccolo's house. See "Piccolo chain" below |
-| `coinsanity` | off / every_coin | off | **Design only, not implemented yet.** Every placed coin is a check (~900: ~600 spawned by map scripts, 299 from setup files; coin blocks to decide). See "Coinsanity" below |
-| `skip_cutscenes` | on / off | on | **Built.** Skips the story interludes outside the chapters: Count Bleck & minions (story values 10, 54, 96), the memory flashbacks after Chapters 1–7 (57, 98, 126, 174, 221, 287, 354), the Peach intermission (55–56) and the Luigi intermission (97). Off: they play after the chapter that triggers them. Also King Sammer's scenes before and after the first Sammer Guy duel (`wa1_02`, story values 227-228; user's request 2026-11-02, untested in game): the room's "below 228: scripted scenes" case (`CASE_SMALL(228)`, relF `0x186478`) compares with `AP_GSW_SAMMER_SCENES` (0 when skipping), and its story-table entry gets a normal room's values (227 at the start, 228 when won; vanilla 0, 0, since the scenes run that duel), so it's an ordinary duel room and the duel stays (`cutscene_skips.cpp`). A first try that only moved Chapter 6 to 228 skipped the duel too: 228 counts that room as beaten. Also Dimentio and Mr. L's scene after Brobot L-type (`wa1_27`; user's request 2026-11-02, untested in game): when skipping, the command after `SET(GSW(0), 286)` (relF 0x18a694) becomes `GOTO(77)` and the wait before the save prompt (0x18b318) `LBL(77)`, so the fight's script goes straight to the save prompt and the map change (labels are collected when a script starts, up to its END_SCRIPT; put back to vanilla when not skipping). Also Tippi's welcome and pointing tutorial at the start of 1-1 (`he1_01`; user's request 2026-11-02, untested in game): below 12 the map's start-up runs the chapter opening (`0x803CC788`, book page and title card) and hands it Tippi's welcome (relF 0xe9a58, sets 12); then a line about pointing (13) and the tutorial that reveals Bestovius's house (14). When skipping, the welcome's script word in the start-up (relF 0xea274) points at a mod script that starts the music and sets 14, so the title card still plays and the start-up then leaves the house and its door visible. Scenes with checks (the Ch4 Helmet interlude, the Underwhere) always play |
-| `trap_percentage` | 0–100% of filler | 10 | **Built.** Cursya Traps: a random Cursya curse (slow, flipped controls, no jump, no skills). See "Cursya Traps" in §4 |
-| `death_link` | on / off | off | Standard Archipelago option |
-| `music_shuffle` | in-game Options | off | **Done (2026-10-30).** Every track plays in place of another (`music_shuffle.cpp`, hooking `spsndBGMOn_f_d`), seeded by the save file's name (`gp->saveName`). Tracks that play once (32: fanfares, the chapter starts, credits, opening book, inn, Chapter 6 world end..., found from each .brstm header's loop flag, not the names) only swap with each other: the game waits for some to end, and a jingle in a looping song's place leaves silence (user, 3-1). A shuffled jingle plays all the way through (user, 2026-10-30): while it plays, the game's stop / next track on its player, and bringing the other players' volume back up (the item window does both after 1-3 s), wait until it ends (at most 20 s). Later (user, 2026-10-30): split the play-once tracks into length groups (short stings, medium, long like the credits) so a jingle is replaced by one of similar length; each track's length is in its .brstm header (sample count / sample rate) |
-| `fortune_hints` | off / on | off | **Planned (user, 2026-10-30).** Merluvlee, the fortune teller in Flipside, gives Archipelago hints (where an item is) instead of her vanilla fortunes. How many, what they cost and what they point at to decide later |
-| `hold_to_skip_text` | in-game Options | on | **Done (2026-10-30).** Holding the 1 button mashes through text: the message code (`msgMain`, `msgWindow_Main`, `msgWindow_Clear_Main`) sees 2 pressed every frame while 1 is held (`text_skip.cpp`). Choice prompts (`selectWindow_Main`) still wait for a real press |
+**Starting chapters for a non-Mario start:** a random pick always includes a chapter with at least 3 checks the starting character can do alone (`rules.open_checks`), so the seed has somewhere to begin.
 
-**Starting heart rule** (`merlon_gift: pure_heart`). Merlon's gift is a location like any other, with the chosen heart locked to it (`place_locked_item`). So the heart is handed over in-game by Merlon, not just added to your inventory. The heart has to give the player somewhere to go in sphere 1, before any items are found:
-- `chapter_1`: Merlon gives Pure Heart 1. Pillar 1 needs no abilities and always opens door 1, so Chapter 1 is open from the start.
-- `random`: pick from the hearts whose pillar can be reached with what's available in sphere 1.
-  With `pillar_requirements: vanilla` and nothing else changed, that's only pillar 1 (every Flopside pillar needs Fleep).
-  The list grows with other options: for example, with `open_hubs` on and characters not randomized, Peach is available in Flipside from the start, so pillar 2 joins the list. With `pillar_requirements: open`, all eight are in it.
-  The heart opens whatever door its pillar maps to, so with `pillar_door_shuffle` on, the starting chapter is random too.
-  A heart whose pillar opens door 8 is never picked. Starting in the final chapter makes no sense, and with character randomization on it would leave nothing to do in sphere 1.
-- A starting heart can be the heart for a door that's already pre-opened. That's allowed: it still counts toward the boss, and the other open doors give sphere 1 somewhere to go.
+## 7. Planned
 
-**`merlon_gift: random_item`.** Merlon's gift goes into the normal fill, so the game may start with no heart at all. Sphere 1 is then the hub checks plus any `starting_open_doors`.
-In a solo seed with `starting_open_doors: 0` and `open_hubs: off`, sphere 1 can be only one or two locations, and fill can fail. To prevent that, the world adds one heart whose pillar is reachable in sphere 1 to `local_early_items`, so fill places it early in your own world. With an open door or open hubs this isn't needed, and it's skipped.
+Not built yet, roughly in order of interest:
+- **Versions 1.1 and 1.2 of the game** (US revisions 1 and 2): support is planned for a future release. Only revision 0 works now.
+- **Shuffle more:** the Old Key, the Random House Key and the rest of Piccolo's trading chain (`piccolo_chain`), ? blocks (`item_blocks`), shops (`shop_items`), the Pit rewards (`pit_rewards`), town side quests (`side_quests`), the unused Cooking Disk 1 (`cooking_disks`), every coin (`coinsanity`), first cooks (`recipes`).
+- **The flip as an item** (`flip`): from the start (current), at Bestovius, or anywhere.
+- **Heart pillars:** each Pure Heart placed in its pillar opens a door, with an option to shuffle which pillar opens which door.
+- **Level shuffle:** which chapter is behind each door, or which level comes next.
+- **Fortune hints:** Merluvlee gives Archipelago hints.
+- **Bosses and Pit-only enemies** as tattle checks.
+- **Logic difficulty** (tricks, glitches, items in logic) once the intended logic is complete.
+- `death_link`.
 
-**Hub checks.** Every check in Flipside and Flopside that depends on the story in vanilla. Examples: Merlon's gift, Peach's revival, Merlon handing over the Old Key, the Pit rewards, the Flopside trading sequence. The full list comes from the mapping pass.
-- `open_hubs: on`: they're all there from the start. Peach has already fallen into Flipside, and you just talk to her for her check. Merlon has the Old Key ready, and so on. Flopside's checks still need Fleep, because you need him to get into Flopside.
-- `open_hubs: off`: each check waits for its vanilla trigger, as a logic event. For example, the Peach check needs "Chapter 1 Clear", and the Old Key check needs whatever unlocks it in vanilla.
-- Either way it's done with our own flags, not the story progress value, which the hubs keep fixed (see §6).
+## 8. Open questions
 
-**Piccolo chain** (`piccolo_chain`). The chain's steps, from the scan: the Training Machine pickup in Bestovius's house (`he1_06`); Merluvlee takes it and gives the Crystal Ball (`main.dol` scripts at `0x803DDCC8`/`0x803DDF30`); Merlee takes the ball and gives the Random House Key (`0x803E2308`/`0x803E2590`); the key opens Piccolo's house (`mac_19` lock).
-- `vanilla`: all as in the original game.
-- `shuffle_first`: the Training Machine goes in the pool, and its pickup spot in Bestovius's house gives a random check. Finding the Training Machine (wherever it is) starts the chain; the later trades are vanilla.
-- `shuffle_house_key`: only the Random House Key goes in the pool. Merlee's trade gives a random check instead of the key. The earlier steps are vanilla.
-- `shuffle_all`: all three chain items (Training Machine, Crystal Ball, Random House Key) go in the pool, and every step gives a random check: the Bestovius's-house pickup, Merluvlee's trade and Merlee's trade.
-- Logic: Merlee is in Flopside, so her steps need Flopside access (Fleep).
+- Native code that reads the story value directly instead of through the script functions: only found case by case.
+- Whether the town shops sell less at the fixed value 11 than they would later in the story.
+- Chapter 3 still takes Tippi on entry (changing rooms brings her back); the scene itself should be stopped.
+- How the HUD draws more than 999 coins (infinite wallet).
+- Whether any Sammer duel needs its ninjas beaten to end.
+- Where Merluvlee's Crystal Ball, Merlee's Random House Key and Cooking Disk 1 are given (for `piccolo_chain` and `cooking_disks`).
+- Gecko codes overwrite the mod loader (both live at `0x80001800`-`0x80003000`); a safer home for the loader would fix it.
 
-**Coinsanity** (design only, not implemented):
-- Vanilla only remembers collected coins for the last 32 maps visited (`coinEntries[32]`, a rolling list), so coins respawn. The mod needs its own permanent flag per coin; the game uses nothing between GSWF 1328 and 8191, so there's room.
-- **2D stacks:** coins are placed in 3D, so a line of coins running along the 2D camera's view looks like one coin in 2D. When a coin is collected in 2D (`marioCheck3d` false), the mod also collects every other coin in the map at the same position on the 2D plane (any depth) and sends all their checks. In 3D, coins count one at a time. Done at runtime using the current 2D camera axis, because some rooms are rotated.
-- Mostly filler. Probably wants a filler-only / can-hold-progression switch like `sammer_gauntlet`.
+## 9. Game facts (US revision 0, R8PE01)
 
-Filler (when the pool has more locations than progression items): coins, consumables, HP Plus / Power Plus (balance check needed).
+**Files**
+- `files/rel/relF.bin`: LZ10-compressed REL with all map code and scripts. A decompressed `relF.rel` next to it takes priority, so scripts can be patched. It loads at `0x80C16840`. Its symbols go in `mod/symbols/spm.us0.lst` as `1,<section>,<offset>` (section 1 = file offset - `0xDC`, section 5 = file offset - `0xAF300`).
+- `files/map/*.bin`: map models. Prefixes: `he` Ch1, `mi` Ch2, `ta` Ch3, `sp` Ch4, `gn` Ch5, `wa` Ch6, `an` Ch7, `ls` Ch8, `mac` Flipside/Flopside, `dan` the Pits, `aa` prologue/ending, `mg` minigames.
+- `files/setup/*.dat`: enemy spawns and coins. Item pickups come from map scripts (`itemEntry`), not these files.
+- `files/msg/US/*.txt`: `key\0text\0` pairs (`global.txt` items and places, `machi.txt` the towns, `stg1`-`stg8` the chapters).
+- `files/wicon.tpl` / `wicon.bin`: item icons (40x40 RGB5A3). The patcher adds the mod's icons from 402 on (403 is reserved by the game and skipped): 402 Archipelago colour, 404 grey, 405 blank (traps), 406 Save Block, 407 title banner, 408 title flower, 409 Throne Room Key, 410 Progressive Wallet.
 
-**Pool size warning:** with only the core pool (8 hearts + 8 Pixls + about 20 story key items) there are about 36 locations and every one holds progression. That will generate, but it's tight. Enabling `overworld_items` adds most of the space for filler.
+**Memory and save**
+- `gp` is at `0x804E2550` (pointer at `0x8056D198`); the story value is `gp + 0x140` (`0x804E2690`). Its range is 0-422 (422 = post-game).
+- The save has 8192 flags (GSWF) and 2048 bytes (GSW). Nothing in the game uses GSW above 534 or GSWF above 1327; the randomizer uses GSW 1792-2047 and GSWF 7168-8191 (`mod/include/save_data.h` has the layout).
+- Mario carries 32 key items and 10 consumables at most.
 
-**Options menu** (done 2026-10-30, user's request). The pause menu's unused Maps button (button 7, texture 7 in `win/us/pause.tpl`) is now Options, below Recipes, with the user's picture (`assets/pause/options_button.png`; the patcher writes it over the Maps texture). The game only shows Maps when a map bit is set (never in the US game), so `options_menu.cpp` makes both "maps found" counts return 1 and replaces `pluswinMapsWinOpen` with a pause window listing the settings (2 changes, 1 goes back). Settings are saved with the file in `AP_GSW_OPTIONS` (a bit per setting, set = not the default). Settings so far: Music shuffle (looping songs), Shuffle fanfares (tracks that play once; separate setting, user 2026-10-30), Shuffle sound effects (user 2026-10-30, `sound_effect_shuffle.cpp`; shuffling all effects sounded awful, so for now only two kinds swap, each among itself: the player's (characters' SFX_P_, Pixls' SFX_F_) and the interface's (SFX_SYS_ menus, text boxes, saving, HUD, and the Save Block's SFX_MOBJ_SAVE_BLOCK*); widen it once good and bad swaps are sorted out), Low health beeping (user 2026-10-30; off mutes SFX_SYS_PINCH1 / SFX_SYS_DANGER1 by the requested name, so shuffled or not), Hold 1 to skip text, Fast climbing (user 2026-11-02, on by default, tested in game: 2 units a frame; Mario's climbing, motion 13 (seen in `he4_06`), reads the stick each frame and adds its direction, 1 unit at full tilt, to his climbing move, which the movement code then applies: up and down at mario+0x138, sideways at mario+0x134. `climb_speed.cpp` makes each of those adds (2D: 0x8011A6F4, 0x8011A704 and sideways 0x8011A71C; 3D: 0x8011AB44, 0x8011AB54) call a stub that does it twice, so twice as fast; the game's own end-of-ladder checks still run. Two first tries had no effect: repeating the height change after the motion's function, and doubling the add at 0x8011B0C4, which is another path). Sound effect shuffle: hooks `__spsndSFXOn` and the two "is X playing" lookups (so they find X's replacement). Effects that loop (113 of 1234: 75 wave sounds with a looping wave in their RWSD bank, 37 sequences that jump back on themselves, found by `tools/sfxloops.py`, which writes `mod/include/sound_effect_loops.h`) only swap with each other; X_TV (TV speaker copy) follows X. Art for new UI comes from the user: ask for the image, then convert it.
+**Items**
+- Characters are items 216-219 and Pixls 220-231 (220 is an unused Tippi Pixl, which became Tatl). The copies at 458+ are ignored by the game.
+- Pure Hearts aren't items: they're story state and icons. The randomizer's hearts are server-only items that set the mod's own flags.
+- Items for other games use item 63 (the unused Cooking Disk 1) with its icon and name switched per item-get.
 
-**Connection status** (2026-11-02, user's request; untested in game). While the pause menu is open, the bottom left of the screen shows the Archipelago icon (402) and "CONNECTED" while the client is connected to the server, or the grey icon (404) and "DISCONNECTED" (user's request: "CONNECTED" in rainbow colours with its letters bobbing in a wave, drawn one letter at a time, since the game's wave is a message-box effect; tested in game: placement works) (`connection_status.cpp`, drawn on `CAM_ID_DEBUG_3D` like the key item storage notice, over the pause menu). The client writes mailbox v15 `serverConnected` and `clientFrame` (the `gameFrames` it read) on every check, twice a second; an echo more than 3 seconds behind means the client is gone. The pause menu counts as open while its own window (`pausewin_pluswinWp->entryIds[0]`) has its in-use flag (bit 0); its `state` only records the last sub-menu (0 main, 10-50 the sub-menus) and stays set after closing. Known issue (user, 2026-11-02, low priority): it also shows during item-gets, whose description window takes the freed slot. The pause menu's windows are plain button windows (table at `0x803E9D40`, 0x30 each, no functions of their own), so telling them apart needs the two windows' fields read from memory while each is up.
+**Story**
+- Story values: `ref/gsw0_values.txt`; every story value change by map: `data/story_us0.json`; every story test in the towns: `data/hub_story_tests.md`; story-gated checks: `data/story_gates.txt` (`tools/story_gates.py`).
+- Section ends used by the door menus: Ch1 18/29/38, Ch2 77/83/89, Ch3 106/112/118, Ch4 139/150/161, Ch5 187/195/203, Ch7 307/328/340.
 
-**Title banner** (2026-11-01, user's request; untested in game). The user's "Archipelago" banner (`assets/title/archipelago_banner.png`) shows under the title logo as its own picture, not drawn into the logo. `tools/wicon.py` crops it and shrinks it to 320 wide, and the patcher adds it to `wicon.tpl` as icon 407. `title_banner.cpp` draws it with `iconDispGx` on CAM_ID_2D, render mode 4, z 900, so it comes after the title layout (z 1000; in mode 4 a smaller z is drawn later). It times itself from the title's own work (`seq_title_wp`, 0x8056D0D0: `animNum`, `animFrame`). In the opening (`title_Start`, 121 frames) the logo drops in and settles by frame 40, then the banner pops in with a springy scale over 20 frames. In the loop (`title_Loop`, 860 frames) the logo sways at frames 230-380 and 630-780, and the banner hops 10 units every 50 frames in those windows. Its bottom middle is at (0, 8), with the logo at (0, 100), 380x177 (35 overlapped "PAPER MARIO" in game). A flower behind the A was tried and dropped (user, 2026-11-01). Instead the user's flower (`assets/title/archipelago_flower.png`, 500x500, shrunk to 360, icon 408) sits behind the whole title, like Atlyss's AP title (user, 2026-11-01). It's centred at (0, 70): `iconDispGx` places a picture by its bottom middle (so the banner's (0, 8) is its bottom edge), and the flower's bottom goes at (0, -110). It's drawn over the sky and clouds but under the characters and logo, and pops in with the banner. To fit it in between, `animateTitle` hides every pane after `kumo` (the clouds). The mod's draw callback then draws the flower, the panes up to `mario`, the banner, then Tippi and the copyright line and "Press 2" panes, in the layout's own order. The characters it would cover move out of its way (user's request): Mario (4, -24) and Peach (28, -12), each with its shadow, and Thoreau (`torunage`, 30, -24) with his sparkles. Mario and Peach go straight away from the banner. Thoreau goes into the gap between Bowser's spikes and Mario's cap, since straight away from the banner put him over Bowser's face (user, 2026-11-01). The offsets came from rendering the title's final layout from `title.bin.us`, checking overlaps pixel by pixel. Tippi (`anna`) and her trail (`anna_laster`) are drawn over the banner (user: her sparkles may cover it); she only moves 5 to the right. Moving her 59 to the right put her starting position, off the left edge, into view. The user also moved Bowser (`koopa`) 2 down and Boomer (`bom`) 2 right and 4 up, each with its shadow or trail. In game, the title's display callback (0x8017AC14) animates, positions and draws the layout in one call, so the mod redirects its animate call (`bctrl` at 0x8017AD10) to `animateTitle`. That function animates, adds the offsets and clears the visible bit (pane flags +0xB7, bit 0) of the panes the mod draws. The mod's draw callback sets each bit again, calls the pane's CalculateMtx (pane vtable +0x10) and Draw (+0x14) with the title's DrawInfo, and clears it. Every moved pane has its x and y animated in both animations, so the offsets never add up.
+**Building the mod**
+- `-fno-ivopts` is needed: without it GCC can address a table from before its section, which a REL can't encode.
+- The rel loader is built into `main.dol` as a new code section at `0x80001900` (`tools/patch_dol.py`); `0x80001800` itself is overwritten by Dolphin's boot.
 
-**Random starting character** (`random_starting_character`, planned, user's request 2026-10-29). The file starts with one random character from Mario, Peach, Bowser and Luigi; the other three are items in the pool, Mario included.
-- Only Mario can flip, so a non-Mario start has no flipping until Mario is found. The logic must treat `flip` as needing Mario (and Bestovius's lesson, per the `flip` option), and every flip-gated check moves behind him.
-- The game always has Mario in the party (`pouch` characters, `MarioWork` character id). Needs checking: can the party start without Mario, can his slot be removed and re-added like the others (SPM Archipelago Tools can't remove the character you're playing as), and do scenes that switch to or from Mario (`ap_char_join`, chapter starts, cutscenes that force Mario) cope with him missing.
-- Scenes that hand control back "as Mario" may need to switch to whoever is held instead.
-- Chapter 8's party split needs Peach, Bowser and Luigi, and Mario carries on alone, so Chapter 8 also requires Mario.
-- Mario's join needs a location to give him from (a new item id; the start character's join spot gives a check instead).
-
-## 6. Technical approach (summary)
-
-1. **Story value virtualization.** Our code hooks every read and write of the story progress value (GSW 0). Each chapter keeps its own saved value in unused save-file space, and that's the one the game sees while you're in that chapter's maps. The hubs see one fixed "hub value": 11, the end of the prologue, so no hub cutscene is waiting to play. The hub tests that low value would close (the elevators, a Flopside house door, the Old Key gate, the recipe terminals) are patched open (`hub_story_fixes.cpp`), and hub events we still want (Peach's revival, side quests) are rewritten to use our own flags. Up to 0.2.0 the hub value was 65.
-2. **Location hooks.** Every vanilla event that gives an item, Pixl, character or heart is replaced: it sets `CHECKED[loc_id]` instead and does nothing else. The item arrives from the client.
-   **Rule: no missable locations.** Vanilla gates many of these events on a story-value window that's impossible to skip past in normal play. The randomizer can skip it (an item from another world can let you skip ahead), so each location must stay collectable until its own flag is set, whatever the chapter's story value. Patch the scripts to check "location not collected" instead of "story value below X".
-   Example: Bestovius only teaches flipping while Chapter 1 is below 15; at 16+ he has other lines. If you can already flip (`flip: start_with`) and hit 1-1's Star Block first, his check would be lost. His higher-value dialogue needs a branch that gives the check if it hasn't been collected.
-3. **Mailbox.** A fixed block of memory the client reads and writes through Dolphin memory engine: received-item index, an outgoing queue of checked locations, a seed hash (so you can't connect with the wrong save), and slot options. The current version is 16 (`MAILBOX_VERSION` in `mod/include/mailbox.h`, `VERSION` in `apworld/spm/game_link.py`); older version numbers in this doc are history.
-4. **Party control.** Character join and leave events go through our code, which only allows a character in the party once you've received them (when character rando is on).
-5. **In-world appearance.** SPM items placed in SPM show their real icon. Items for other games use one of two Archipelago icons (`assets/icons/`, 40×40; since 0.1.4 RetailScorpion's own icon, and its greyscale copy for filler. Up to 0.1.3 they were generated by a script from the AP logo, now removed: see AI_DISCLOSURE.md):
-   - `ap_progression.png` (colour): progression and useful items.
-   - `ap_filler.png` (greyscale): filler and traps. Traps look like junk, which is standard Archipelago practice.
-   - In-game, item icons are 40×40 RGB5A3 textures in `files/wicon.tpl`, with icon definitions in `files/wicon.bin`. Icon id 403 is reserved by the game (iconDispGx2 and others check `== 0x193` and draw the missing-texture image), so the patcher skips it: the added icons are 402 colour, 404 grey, 405 blank (traps), 406 Save Block (found 2026-10-31: the grey icon showed as missing). The patcher adds the textures there. There are no new item-table entries: items for other games use item 63 (Cooking Disk 1, unused in vanilla), whose icon the mod switches per item-get, with the real item name shown through our own message (see 8 below).
-6. **End-to-end prototype (tested 2026-10-26, multiworld with Ship of Harkinian):** APworld (`apworld/spm`, `tools/build_apworld.py`), client in the Launcher, mod mailbox v7. Confirmed in game: items for other worlds are sent from SPM locations; this world's own items found in SPM are given on the spot and not delivered again; items from SoH arrive (a received Pixl works); reloading an unsaved game re-delivers what the save hadn't handled. Placements need the client connected before entering a level.
-7. **Client log** (requested by the user; `client/watch.py` is the stand-in for now). Every item event gets one line naming the item and the location:
-   - `Received <item> from <location>`: an item for this game, found here or in another world (then also `from <player>`).
-   - `Sent <AP item name> to <player> from <location>`: an item for another world, found here.
-   Needs Archipelago location names and the server's item/player info; until then the watcher prints raw checks.
-8. **AP item-get (built, tested 2026-10-25):** a location holding another world's item plays the normal item-get with Mario holding up the AP icon and "Sent <item> to <player>!". Item 63 (Cooking Disk 1) is retargeted at runtime to icon 402 and the mod's messages (`archipelago_item.cpp`); icons 402/403 are added by `tools/wicon.py`; the `item_get` message is swapped in the mod's `msgSearch` hook. Real names (prototype tested 2026-10-26, shows the placeholder): the client writes a name table keyed by location flag (works), but the mod's `swSet` hook fires too late: a pickup sets its `switchNumber` flag *after* the item-get message is built, and chests spawn their item through the default chest script (`main.dol 0x803DB424`: `evt_item_entry(0, LW(0), …, flag 0, …)`) with no flag at all. Fix: hook `itemCollectPouchItem` (`0x8007A640`, the pickup's per-frame state machine; state halfword `+0x36`, 0 on the first frame) to read the entry's `switchNumber` before the message; for chests, pass the chest's flag into that script (it gets the item in `LW(0)` from `mobj+0x230`). Also: a late `swSet` match leaves the names pending, which could mislabel the next non-pouch item-get. Done since: the `itemCollectPouchItem` hook (`archipelago_item.cpp`) and the location-name table give real names, and the entry's icon is switched per item-get (402 colour, 404 grey, 405 blank for traps). Still to do: a different item than 63 once `cooking_disks` needs it. This world's Pure Hearts (server-only items) still use item 63, but the client marks their location `LOC_KIND_PURE_HEART + N` (16 + N) in the names table, and the mod shows the game's own heart icon (`ICON_PURE_HEART_RED` 0x31 + N - 1) on the item lying in the level and in the item-get, with "You got Pure Heart N!" (user's request 2026-11-02, tested in game; no mailbox change). Spots whose item the save already got delivered (`placement.delivered_not_found`) used to hold a coin; collecting a coin treats one of the spot's arguments as a coin number, and in a spot with a pickup script that's a script pointer, so the coin code (`0x800386F0`) read far out of range (user, 2026-11-02: Dolphin warning, ignorable; a crash on a Wii). Those spots now hold a Mistake (175); joins, gifts and chapter hearts still give a coin, which arrives like a server item.
-
-## 7. Open questions
-
-- [ ] Confirm the level and trigger script for each Pixl, character and key item (the mapping pass).
-- [ ] Sort the remaining key items into story vs. side-quest.
-- [ ] Which in-chapter scenes depend on Tippi being absent (Ch3 Francis kidnapping, the Underwhere) and how they behave if the party is different.
-- [x] ~~How the game picks a level when you go through a chapter door~~: a section menu built from the story value; the mod builds it from each chapter's own value (§8, "Chapter doors").
-- [ ] Open the whole hub (user, 2026-11-01). The hubs are fixed at 65 (`STORY_HUB_VALUE`, `story_progress.h`), which leaves parts of Flipside and Flopside locked. First idea: a later hub value. Scan of every story value test in the `mac_` scripts (2026-11-01):
-  - **Elevators** ("elv" in the scripts, button `ereve_botan_NN`): Flipside 2F (`mac_02`, `elv1`) opens at 53, so it's open now. Flipside 1F (`mac_09`, `elv2`, down to B1 and B2) opens at 73. Flopside 1F (`mac_19`, `elv2`) opens at 192. Below its value an elevator is switched off and its button is grey. No other elevator has a story value test.
-  - **Other areas:** a house door in Flopside (`mac_12`, `ie_02_doa`) opens at 174. The Old Key gate in Flipside (`mac_02`, `mon_lock`) is only locked below 64, so it's already open.
-  - **What a hub value of 192 or more would also change:** the pillars show their hearts (pillar 3 in `mac_07` from 100, pillar 4 in `mac_02` from 128, pillar 5 in `mac_11` from 177), which clashes with the planned pillar system. The Goldfish Bowl (132) and goldfish (133) and Nolrem's scenes (175-177, 222-223) are skipped, so those checks need their own triggers first. Door 6 leads to the World of Nothing (`wa1_27`) when the hub value is 280-420, else to `wa1_01`, so a value of 280+ would also send every visit there.
-  - **Code built on 65:** `PEACH_SCENE_ON` (`character_joins.cpp`) and the Castle Bleck door value (357, `hub_story_fixes.cpp`).
-  - **Decision (user, 2026-11-01): lower the hub value instead, and make every hub check depend on its own location flag, not the story value.** A low value keeps the hub close to its early state (empty pillars, no later scenes), and nothing in the hub can be missed or skipped because of the value. The work:
-    1. Pick the value. Done: 11 (`STORY_HUB_VALUE`), where `skip_cutscenes` starts a new file. It's the lowest usable value, because door 1 leads to the prologue below it.
-    2. Sort every story value test in the `mac_` scripts into checks, access and the rest. Done (2026-11-01): `data/hub_story_tests.md`.
-    3. Checks: gate each on "location not collected", as the Pixl joins are. The scan only sees two hub item spots tied to the story value (the Goldfish Bowl at 132, the Return Pipe at 8); the others (Merlon's Old Key, Merluvlee's and Merlee's trades, the Peach chain) are in `main.dol` scripts or NPC dialogue and need finding.
-    4. Access: anything the low value closes is patched open or tied to an item. Done (2026-11-01, `hub_story_fixes.cpp`, untested in game): the elevators (53, 73, 192), the Flopside house door (174) and the recipe terminals (64) always work. The Old Key gate (64) is patched open for now, because vanilla gives the Old Key in Peach's join scene, which doesn't play without Peach; once the Old Key is a location, the gate should stay locked until it's used, as §8 wants. Two more patches keep the Peach chain working at 11: Flipside Tower's scene SWITCH had cases below 54 and 59 that caught the low value before Peach's join scene, and the soup talk's "before Saffron" test.
-    4b. The blue pipe between Flipside Tower (`mac_02` `aodokan_2`) and Flopside Tower (`mac_12` `aodokan_1`) is shown and switched on by GSWF 534 (both towers' setup, relF 0xe94a0 / 0xe95d8; 533 and 535 are the towers' pipes to their Pit floors). The mod sets 534 on the first map change once Mario has Fleep (user's request 2026-11-02, untested in game; `hub_story_fixes.cpp`).
-    4c. Tippi's pointer (user, 2026-11-02): her pointer code (`0x802421E4`, just before `searchGetNpcMsg`) turns pointing off while the story value is 1-11 (vanilla: until her pointing tutorial at the start of 1-1), so it was off in the hubs at 11 (pointing worked at a test hub value of 65). The mod changes that `cmpwi r3, 12` to 9, where the real Tippi joins (`tippi_always_on.cpp`). Found by checking every story value read for a compare with 12-65, after the hub scripts and the main program's scripts came up empty.
-    5. The rest (dialogue, decorations, scenes without checks) stays on the low value.
-    6. Update the code built on 65. Done: `PEACH_SCENE_ON` follows `STORY_HUB_VALUE` (12 now), and the Castle Bleck door sets its own value (357). Door 6's destination: done (2026-11-02), see the Chapter 6 entry below.
-    7. Check what else the hub value drives. Native code reads it in about 40 places (`data/hub_story_tests.md`, "Native code"). The one that may matter is the shop code, which picks something by story value bands (11, 18, 29, 38, ... and 11, 66, 101, 129, the chapter starts): check in game whether the hub shops sell less at 11 than they did at 65.
-- [x] ~~Bowser's exact recruitment level~~: 3-1, after his fight in `ta1_04` (gift location 3).
-- [ ] Flipside Pit: when it opens in vanilla, and what its chest rewards are.
-- [ ] Full list of hub checks and the vanilla story trigger for each (used by `open_hubs: off`).
-- [ ] Peach's revival scene: can the "fallen Peach" state be shown at any time, or is it built into the post-Ch1 cutscene?
-  (Vanilla chain: see Peach unconscious → cook Spicy Soup → Peach tutorial → unlock Flipside 2F door, seq 061–064.)
-- [x] ~~Chapter 6 level layout~~: the story uses `wa1` then "???", and `wa2`–`wa4` are post-game only (see §2).
-- [x] ~~Sammer gauntlet rewards~~: King Sammer gives all seven cards after gate 100 (user confirmed). Seven locations on one event.
-- [x] ~~Which story value turns the post-game Sammer's Kingdom on~~: 421 or more (`wa1_01` sets GSWF 1106 at >= 421; `wa1_26` runs its story script below 421). Vanilla's post-game value is 422.
-- [x] ~~How the game decides you can flip~~: native code at `0x80147A08` reads the story value through `evtGetValue`; the mod replaces that call (§8, "Flip (solved)").
-- [x] ~~Fleep's recruitment~~: the `sp2_01` outhouse, which sets Chapter 4 to 145. Slim's join has no story value gate (§8, "Pixl join status").
-- [ ] Find native code that reads `gp->gsw0` directly, bypassing `swByteGet` (needs disassembly).
-- [x] First thing in the next build (user, 2026-10-28; built 2026-11-02, untested in game): Chapter 6's World of Nothing, and a check for beating Mr. L. When Sammer's Kingdom ends (the mod moves Chapter 6 from 280 to 281 on a map change, `hub_story_fixes.cpp`), set Chapter 6's value high enough that door 6 leads to the white void (`wa1_27`, "???"; vanilla 282 is "after entering the World of Nothing door", 284-286 are the void). Find which value door 6 and `wa1_27` check. Found (hub scan, 2026-11-01): door 6's destination is set in `mac_02` from the hub's own value (`wa1_27` for 280-420, else `wa1_01`), so with the hub fixed at 65 door 6 always leads to Sammer's Kingdom. The door needs to read Chapter 6's slot instead. Done (2026-11-02, user's request; untested in game): the door's two tests (relF `0xca028` >= 280, `0xca034` < 421) read save byte `AP_GSW_DOOR_6`, which `hub_story_fixes.cpp` sets on every map change from Chapter 6's value: 0 Sammer's Kingdom (below 280), 1 the World of Nothing (280-421), 2 post-game Sammer's Kingdom. Once Brobot L-type is beaten (286, the chapter's end) and Mario has left Chapter 6's maps, Chapter 6's value jumps to 422 (vanilla's post-game), so door 6 then leads to the 100-duel Sammer's Kingdom; the chapter still counts as finished. Then make beating the Brobot L-type fight at the void's end (vanilla 285 -> 286) a new location: a gift-style flag, added at the end of the location list so earlier ids don't change.
-  - **Also next build (user, 2026-10-28): 7-2's Door Key from beating Bowser becomes a location and a shuffled item.** Likely `an2_03`'s Door Key (item 37): spawned without a save flag by the script at relF 0x1a1680 (`evt_item_entry("key", 37, ...)`), and opening `lock2` there (story value < 316). Confirm it's the one after the Bowser fight, give the spot a flag (`save_data.h` reserves `AP_GSWF_LOC_BASE` for spots with no flag of their own; nothing uses it yet), and put item 37 in the pool with logic for the locked door.
-  - **And 7-2's other Door Key (item 38), the one for getting the Diet Book (user, 2026-10-28), same treatment.** Dropped by `an2_07`'s item-drop script (relF 0x1a6438, entry at 0x1a6cec, story value < 322, the case `LW(0) == 39`) and opening `lock2` in `an2_06` (< 323). Flag the spot, shuffle item 38, logic for that door.
-  - **And 7-2's Diet Book (item 39), same treatment (user, 2026-10-28).** Spawned without a save flag in `an2_01` (relF script 0x19eca8, item entry at 0x19ecfc, story value < 321) and by `an2_07`'s item-drop script (0x1a6438, entry at 0x1a6bf8, the case `LW(0) == 39`, which also drops the Door Key 38). Find which is the real pickup, flag it, shuffle item 39, and add logic for whatever needs it.
-  - **Then post-game Sammer's Kingdom (same request):** beating the void sets Chapter 6 to Sammer's Kingdom's post-game state (the 100 Sammer Guys, `wa1`–`wa4`, gates 26–100), whose rewards along the way are checks (about 8, user's estimate: find them all). They go behind a new option, `sammer_guys_gauntlet` (default false): off, those locations aren't in the seed (or hold nothing anyone needs), so beating the 100 Sammer Guys is never required; on, they're normal locations, in logic after the void.
-  - **Door 6 never shows the section menu** (user, 2026-11-02): it leads to one place at a time, so `tower_doors.cpp` counts Chapter 6 as one section even once it's finished (it showed "the only section, 6-1" with four entries). The menu also bypassed the door 6 fix: picking a section takes its map from `mac_02`'s section table (relF native `0xe28`), where Chapter 6's only section is `wa1_27`, so after the chapter the menu led back to the World of Nothing (user, 2026-11-02).
-  - **Built (2026-11-02, user's request; untested in game).** Beating Brobot L-type is story gift 6 (`GIFT_BROBOT`, GSWF 7189, `story_gifts.cpp`), collected on the first map change once Chapter 6 is finished (286), so its item-get doesn't land in Dimentio's scene; an Ultra Shroom Shake (82) stands in as its vanilla item (vanilla gives nothing), so it's shuffled with `shuffle_overworld_items`. Post-game Sammer's Kingdom has only seven rewards, not about 8: King Sammer's TTYD partner Catch Cards (496-502) after the 100th duel (`wa4_26`, script relF 0x192c34, one `evt_item_entry` each with no save flag, one after another; the scene ends with GSWF 1102 and only plays once). `spot_flags.cpp` gives each spawn its own flag (`AP_GSWF_LOC_BASE` + n, GSWF 7200-7206), and they're `spot` locations (`UNFLAGGED_SPOTS` in `gen_ap_data.py`), shuffled with `shuffle_catch_cards`. The option is `sammer_gauntlet` (not `sammer_guys_gauntlet`): off (default), those seven are excluded locations, so they only hold filler (traps included); on, they can hold progression (tested in generation: both work). The eight new locations come after the old ones, so earlier location ids didn't change. Logic: only Pure Heart 6 so far; the gauntlet also needs a way to hurt spiked enemies (§4).
-
-## 8. Findings from the disc (US 1.0, R8PE01 rev 0)
-
-Disc extracted to `disc/DATA/` (game partition only). Reference repos are in `ref/`, along with the downloaded sequence list (`ref/gsw0_values.txt`) and map-name list (`ref/map_names.txt`).
-
-### File layout
-- `files/rel/relF.bin`: LZ10-compressed REL. It holds all map code and evt scripts. `relmgr` loads it, and a decompressed `relF.rel` takes priority if present, so we can patch scripts statically. `rel.bin` next to it is an older build that the game never loads.
-- `files/map/*.bin`: map models and geometry, LZ10-compressed. 382 maps.
-  Prefixes: `he` Ch1, `mi` Ch2, `ta` Ch3, `sp` Ch4, `gn` Ch5, `wa` Ch6, `an` Ch7 (Underwhere/Overthere), `ls` Ch8, `mac` Flipside/Flopside, `dan` the Pits, `aa` prologue and ending, `mg` minigames.
-- `files/setup/*.dat`: enemy spawns, plus coins only. Real item pickups come from map scripts calling `itemEntry`, not from these files.
-- `files/msg/US/*.txt`: plain `key\0text\0` pairs. `global.txt` has item names and place names; `machi.txt` is the hubs; `stg1`–`stg8` are the chapters. Easy to add our own messages.
-
-### Things that change the design
-1. **Pure Hearts aren't items.** There's no Pure Heart in the item table. They exist only as story state and as icons (`ICON_PURE_HEART_RED` … `_WHITE`). So "holding heart N" is our own saved flag, and the pause menu or HUD has to show them with those icons. Upside: they don't take up key item slots.
-2. **There are only 32 key item slots** (`POUCH_KEY_ITEM_MAX`). In vanilla you never carry many at once, but with randomization you could receive dozens of key items early. Over 32, items are lost. We need our own key item storage in save data, and we either show the overflow ourselves or only put a chapter's keys into the real pouch while you're in that chapter.
-3. **There are only 10 consumable slots.** Filler items received while full need a queue (or go into the shop storage, which has 32 slots) instead of being lost.
-4. **Characters and Pixls are items with a "selectable" flag** (`pouchMakeCharSelectable` / `pouchMakePixlSelectable`). Story scenes remove party members by clearing that flag. That's the hook for party control: we decide whether the flag is set.
-5. **evt scripts read the story value through `swByteGet(0)`**, which we can hook, so virtualization works for scripts. Native C code that reads `gp->gsw0` directly gets around the hook and has to be found one by one (open question).
-6. **Story value range is 0–422** (422 is the post-game). On US 1.0, `gp` (pointer at `0x8056D198`) is `0x804E2550`, so the story value is at `0x804E2690` (`gp + 0x140`, s32). Verified in-game. The community doc's `0x4E4092` is wrong for this version.
-7. **Save space:** 8192 GSWF flags and 2048 GSW bytes in `SpmarioGlobals`. Plenty of room for our flags (pillars, hearts, checked locations, received-item index) once we find unused ranges.
-8. **Hub interludes with checks** (from the sequence list): Merlon's gift and pillar 1 (seq 4–8); Peach's revival chain (61–65); the Helmet / Goldfish Bowl chain (130–135); meeting Nolrem in Flopside (175–177); Merlon after the Underwhere (301–303). All of these are covered by the `open_hubs` design.
-9. **Overworld items** are spawned by scripts calling `itemEntry(name, …)`. Every spawned item has a name, so (map, item name) is a natural location ID. Hooking `itemEntry` to swap the item lets `overworld_items` work without patching each script.
-10. **The mod loader is a Gecko code** (spm-rel-loader) that loads `/mod/mod.rel` from the disc. Decision: ship a patched disc (see "Distribution" below).
-
-### Distribution (decided: patched disc)
-- **The disc is the same for every seed.** It contains:
-  - `main.dol` with the rel-loader built in (the loader's code is added to the dol as a new code section, and a call to it is patched into boot, so no Gecko code is needed);
-  - `/mod/mod.rel` (our mod);
-  - our extra messages;
-  - a static `relF.rel` if we patch scripts that way.
-- **Seed data comes from the client**, not the disc. On connect, the client writes slot data (options, pillar→door mapping, pre-opened doors, location→item display info) to the mailbox. The mod copies it into the save file, so a save stays tied to its seed. One patched disc works for every seed, and updates only change the disc when the mod itself changes.
-- **Patcher (built, `apworld/spm/patcher.py`):** the Super Paper Mario Patcher in the Archipelago Launcher. The player extracts their rev 0 disc with Dolphin (Extract Entire Disc) and picks that folder; the patcher adds and replaces the files above in place, keeping the originals as `.orig`, and Dolphin boots the folder's `sys/main.dol`. No ISO is rebuilt. Rebuilding an ISO (with `wit` or our own rebuilder) and other disc revisions are possible later.
-- **Where the loader lives:** `tools/patch_dol.py` puts the rel-loader's code in a new dol text section at `0x80001900`.
-  `0x80001800` itself doesn't work, because Dolphin writes a `STUBHAXX` marker at `0x80001804` on boot (that crashed the first test).
-  **Known limitation:** `0x80001800`–`0x80003000` is also where Dolphin installs the Gecko codehandler, so enabling Gecko cheats for the patched game would overwrite the loader. Fine for now. Before release, consider a home that can't collide: a dead function in the dol, or a section above the end of BSS with the arena start moved up.
-- **Development shortcut:** Dolphin can boot an extracted disc folder directly (`disc/DATA/sys/main.dol`), so during development we just copy files into the folder, with no rebuild each time.
-
-### Proof-of-concept results (US 1.0, Dolphin)
-- **Mod loading:** the rel-loader built into `main.dol` (no Gecko) loads `/mod/mod.rel`, and the title-screen banner shows.
-- **Mailbox:** the client finds it by scanning MEM1 for the magic string. Two copies exist (the rodata literal and the live struct), so the client picks the one with a valid version field.
-- **Item IDs:** characters are 216–219 and Pixls 220–231 (Tippi 220, Thoreau 221 … Dashell 231). The later entries with the same names (458+, e.g. Thoreau 477) are separate copies that `pouchAddItem` silently ignores.
-- **Delivery that works:** spawn the received item as a world item on Mario (`itemEntry(name, id, 0, mario pos, nullptr, 0)`). He collects it at once, and the game plays its own pickup: hold-up pose and the "You got X!" box. Pixls also get their usage tutorial box. The mod only marks an item delivered (`commitReceived`) when `pouchAddItem` sees it, one at a time. If a map change happens first, it respawns in the next map.
-  - Polish needed: the `item_get` message adds an article ("You got a Thoreau!"). For Pixls, the item-get backdrop (the green star) shows but the Pixl's sprite that normally hovers over it is missing. The world-item path has no sprite for Pixl item IDs. Fix with our own message, plus the Pixl's sprite (from its join scene) or its icon, for Pixls and characters.
-- **Drawing text:** drawing from the seq main function only shows on the title screen; in maps the world is drawn over it. Use `dispEntry` on `CAM_ID_DEBUG_3D` (as spm-practice-codes does), though in-game notices should normally go through the game's own message system.
-- **Pickup reporting:** hooking `pouchAddItem` catches everything, including story events (a new file adds Mario through it). Real location checks have to be tied to specific events or world items, not to "an item was added".
-
-### Per-chapter story value experiment (mod 0.2-story): it works
-Implementation (`mod/source/story_progress.cpp`): in the `SEQ_MAPCHANGE` init hook (`wp->p0` = destination map, before any of its scripts run), save `gp->gsw0` into the slot of the context being left, then load the slot of the context being entered.
-- Contexts come from the map prefix: `mac_` = hub, `he/mi/ta/sp/gn/wa/an/ls` = chapters 1–8, anything else = carry the value over.
-- The hub value is fixed, so anything a hub script writes is dropped (for example, the "entered the door" values).
-- Writing the real `gsw0`, not hooking `swByteGet`, means native code sees the same value as scripts.
-
-Tested in Dolphin, with the hub fixed at 65:
-| Step | Story values (hub / ch1 / ch2) | Result |
-|---|---|---|
-| Load save in Flipside | 65 / 11 / 66 | Pillar 1 has its heart, doors 1 and 2 open |
-| Gloam Valley first | ch2 66 → 67 → 68 → 69 | Tippi's intro, Door Key, locked door: all normal |
-| Return Pipe → Lineland | ch1 11 → 16 | Chapter 1 starts fresh; no flip until Bestovius |
-| Back to Gloam Valley | ch2 resumes at 69 | Door still unlocked, no intro cutscene |
-
-**Conclusion: chapters can be played out of order, and each keeps its own progress.** The core of §6 works.
-
-Problems found, all now design requirements:
-1. **Tippi is the "guide" (`guide.h`), not a Pixl.** The jump left guide `flag0` bit `0x80` (disable) set, so Tippi was gone everywhere. Clearing it brought her back after the next map change. The mod must force Tippi on (clear `0x80`) whenever she should be present. On US 1.0: `guideGetWork` = `0x8011EFD0`, guide work = `0x804CD398`.
-2. **Item 220 ("Tippi" Pixl) is an unused leftover.** Giving it adds a broken Tippi to the Pixl menu, and switching Pixls then crashes in `mot_pixl_change`. Never give it.
-3. **Flipping is gated by the story value (16 = Bestovius)**, per chapter: blocked in Ch1 at 11, allowed in Ch2 at 66+ without Bestovius. The `flip` option needs a hook on that check, driven by our own flag.
-4. **Chapter doors offer level select from the hub's value.** At 65, Chapter 1 counted as finished, so the door offered 1-1 to 1-4 although Chapter 1 was at 11. The mod has to decide what each door offers from that chapter's own progress.
-5. **Story items aren't given by the jump.** Peach, Thoreau, the Old Key and so on come from story events. In the randomizer they come from Archipelago anyway, but the start of a file must give everything the skipped prologue would (Tippi's guide flag, the Return Pipe).
-6. **Hub cutscenes keyed to earlier values don't run.** Merlon's Peach scene didn't trigger at 65. That's expected, and it's what the `open_hubs` flags are for.
-7. **The slots live in mod memory.** They reset when the game restarts. Fixed: they're kept in the save file now (see "Save data layout" below).
-8. **Character items crash the world-item pickup.** Characters are added directly for now and need their own "joined" presentation.
-
-### Fixes after the experiment (mod 0.3, in progress)
-Found with Dolphin's debugger (memory breakpoints) and the new `tools/evtdis.py` (script disassembler that resolves `relF` relocations) and `tools/dolasm.py` (Capstone + symbol names).
-
-- **Save data layout** (`mod/include/save_data.h`): a scan of every script in `main.dol` and `relF`, every native `swByteGet`/`swSet` call with a constant, and the coin flag table found nothing above GSW 534 or GSWF 1327. Reserved for the randomizer: GSW 1792–2047 and GSWF 7168–8191. Chapter slots are GSW 1792–1807 (8 × big-endian u16, 0 = not started). The current chapter's slot syncs from GSW 0 every frame, so a save made mid-chapter is current.
-- **Tippi:** the save code (`nandUpdateSave`) writes GSWF 403 = Tippi present (guide `flag0` bit `0x80` clear). Loading a save restores it (function at `0x800E4970`, which also restores GSWF 401/402/404 states, HP and the flip timer). The test save was made at story value 7, when the hub shows Tippi as an NPC stand-in and the real guide is off, so it loaded without her. The jump wasn't the cause. Fix: on every map change, set GSWF 403 and clear `0x80`, except in the prologue (value < 9). Decision (user): Tippi stays with Mario through the stretches where vanilla removes her (Chapter 3 values 102–124 after Francis swallows her; 286–302, the Underwhere). Needs testing: cutscenes there assume she's gone (Barry giving hints, Francis's room, the rescue scene). Per-map guide reset: `0x8011F020` (keeps `0x80`). Per-frame update: `0x8011FAA8` region.
-- **Chapter doors:** `relF` script `0xB906C` (`mac_door_setup_evt`), run from the tower init at `0xCA09C`, decides open doors and section menus from GSW 0. Every finished chapter gets the menu; the newest needs GSW 0 ≥ 54/96/126/174/221/287/354 (`relF` func `0x1308`). The menu is a fixed message (`mac_door_stgN_01`) and `mac_door_select_evt` (`0xB8DCC`) accepts choices 0–3 (Chapter 6's door: only 0). Mod: its own copies of both scripts. A door gets the menu once its chapter reaches its second section, and the menu lists only the reached sections (built through a `msgSearch` hook on `ap_door_sel_N` keys). Leaving mid-chapter no longer means replaying from X-1.
-  Section-end values used (X-1/X-2/X-3 end): Ch1 18/29/38, Ch2 77/83/89, Ch3 106/112/118, Ch4 139/150/161, Ch5 187/195/203, Ch7 307/328/340.
-- **`relF` load address on US 1.0: `0x80C16840`** (`relWork` at `0x804F1F90`). Symbols in `relF` go in `mod/symbols/spm.us0.lst` as `1,<section>,<offset>` (section 1 = file offset − `0xDC`, section 5 = file offset − `0xAF300`), merged with spm-headers' list at build time.
-- **Build note:** GCC's induction variable optimisation rewrote a loop to address a `const` table from a base before its section (`.rodata - 0x60c`), and REL can't encode a negative relocation addend (`elf2rel` fails with a `struct.error`). Built with `-fno-ivopts`. To check a failing build: `powerpc-eabi-readelf -rW out/us0.elf`, look for `- <hex>` addends.
-- **Flip (solved):** the ability check at `0x80147A08` switches on the character (`mario+0x38`). For Mario it calls `evtGetValue(GSW(0))` at `0x80147AB4` and refuses when the result is 1–15. The mod replaces that `bl` with its own function (0 = allowed, 1 = blocked), driven by the `flip` option (`mod/source/flip_ability.cpp`). Earlier searches missed it because the read goes through `evtGetValue` with a constant, not `gp->gsw0`. The pause menus (`charPixlItemWin`, `pluswin`) also compare GSW(0) with 16 the same way; check what they hide.
-- **Tested (mod 0.3):** fresh file through the prologue; flipping before Bestovius; 1-1 finished without Bestovius (his lesson is then lost, see the no-missable-locations rule); section menus on the Ch1 and Ch2 doors listing only reached sections; revisiting cleared sections and "None of them" without changing chapter values; save and reload mid-chapter (slots and Tippi restored).
-- **Seen once:** "Invalid read from 0x81815bd2, PC = 0x80272014" (inside `OSLink`, applying a REL14 relocation) right after Dolphin's Emulation → Reset; never on a fresh start, and not reproduced with a breakpoint. Probably the OS module list surviving Dolphin's soft reset. Revisit if it comes back.
-- **Watch for:** practice-codes' `mapfixes.cpp` notes crashes when entering `ta4_13` (Francis's room) below story value 124, and `bos_01` (Dimension D) between 117 and 178. Per-chapter values could hit these.
-
-### Location mapping (in progress)
-`tools/locscan.py` → `data/locations_us0.md` / `.json` (locations), `data/story_us0.json` (all 319 story-value changes with maps), hand-checked notes in `data/location_notes.json`.
-- 470 locations (items, chests, item blocks, gifts). 322 have no vanilla collected flag (138 items, 122 blocks, 48 chests, 14 gifts), so the mod must give them flags; 30 of those are gated on the story value (missable).
-- Five Pixls (Thoreau, Boomer, Slim, Carrie, Dottie) have vanilla safety nets (`party_hoken_NN`): if the section ends without the Pixl, the game gives it. Decision (user): remove them entirely in the randomizer; the join scene stays a normal (unmissable) location.
-- **Pixl join scenes vanish once the chapter's story value passes them** (found by tracing what starts each join): Thoreau needs GSW 0 < 25, Boomer < 72/73, Thudley < 108, Carrie < 123, Fleep < 145, Cudge < 192, Dottie < 209. Slim: no story-value gate found at the first level (probably a flag; check). Barry, Piccolo, Dashell: flag-based. With the safety nets removed, the mod must replace each of these story-value checks with "join location not collected" so the scene stays available. Confirm in-game for at least one (e.g. raise Chapter 1 past 25 without the Thoreau scene and check the basement chest still appears after the fix).
-- **Return Pipe availability:** `func_800d4de4(off, index)` clears pause-menu byte `pluswin work + 0x39 + index` when `off` != 0 (sets it to 1 otherwise); both bytes reset to 1 on map load. Using the pipe (item 0x32, in the key item menu at 0x801883c0) is refused with `modoridokan_03` "can't use the Return Pipe here" when index 0 is cleared, and `modoridokan_04` "... now" when index 1 is cleared or during some Mario motions. `(1, 0)` (here) is used in `mi2_09`–`mi2_11` and some later rooms; `(1, 1)` (now) in boss rooms, story scenes and Merlee's Mansion. Only the mansion was a softlock (needs Slim to finish); the others are left vanilla for now.
-- **Story-gated locations (confirmed in-game with the House Key):** the House Key in `mi2_03` only spawns while Chapter 2 is below 80 ("door unlocked, dog freed"). With the key received from elsewhere and the door opened, the chest shows as opened and empty and the location is lost. All ~30 story-gated locations need the join treatment (gate on "location collected"), done in one pass once every location has an ID and flag. Known so far: the House Key (`mi2_03`, Chapter 2 < 80); the Ancient Clue (`sp2_08`, only while Chapter 4 < 143/144; Fleep's outhouse sets 145, so getting Fleep from his location first would lose it). The Old Key / old gate in Flipside (user, 2026-10-26): the Old Key (item 47, given in `mac_02`) must be shuffled later, and the gate it opens must stay locked until the key is used, whatever the story value (vanilla opens or handles it by story progress). One of many story-value checks to rework. Door 2 opens early (user, 2026-10-26): the hub value (65) is past vanilla's "Chapter 1 cleared" point, so entering Flipside (for example with the Return Pipe) opens the Chapter 2 door before Chapter 1 is finished. Doors 3+ need higher values and stay shut. Fixed since 0.1.x: doors open from Pure Heart flags (`tower_doors.cpp`), never from the story value. The planned pillar system will keep it that way.
-- **Join rooms that trap you until the Pixl frees you must lose the trap** (the join location can hold any item). Thoreau's room (`he2_07`): iron bars close and the exit is locked until Thoreau throws you out; the mod skips both. Check every other join (cages, sealed rooms) for the same problem.
-- **Pixl join status** (reviewed one Pixl at a time with the user). Decision (user): all joins are shuffled; a room that traps you without its Pixl is escaped with the Return Pipe (which you start with). Each room still needs a test that the Return Pipe works there. Other ways to make a room safe, if the pipe doesn't work: remove the trap (as for Thoreau), or require that Pixl in logic for the location (only safe if the Return Pipe works there, since players can still walk in out of logic). The trap itself is tied to the location flag, so once collected (or after piping out) it won't trap again.
-
-  | Pixl | Gate patched | Trap | Status |
-  |---|---|---|---|
-  | Thoreau | yes | bars + locked exit: removed | **shuffled** (tested) |
-  | Boomer | yes (chest stage switch) | none: room doesn't trap you | **shuffled** (tested out of order, Chapter 2 at 74) |
-  | Slim | yes ("have Slim" check removed) | room: none. 2-3 (Merlee's Mansion, "Breaking the Bank") needs Slim to finish and the Return Pipe is disabled there (2-2 always allows it): softlock without him | **shuffled**; fix built: the mansion's Return Pipe disable (`IF_SMALL(GSW(0), 89)` in `mi3_01`–`mi3_06`) never runs (`pixl_joins.cpp`). Untested |
-  | Thudley | yes (scene stage switch) | room (`ta2_04`): dead end; bars close behind Mario and only pounding the pile (needs Thudley) opens them; Return Pipe always off there | **shuffled**; bars never close or reopen (`SKIP` patches); the pile still sets 108. Tested: no trap without him |
-  | Carrie | yes | user: needs Carrie to leave. Room (`ta4_12`): no lock or Return Pipe disable in its scripts; pipes back to `ta4_03` and on to `ta4_15`. Her cage switch needs Thudley (logic) | **shuffled**; tested: leaving on foot needs Carrie (spikes), the Return Pipe works. Logic per `return_pipe_escapes` |
-  | Fleep | yes (outhouse stage switch) | none: `sp2_01` has a pipe to Flipside and the Return Pipe works. Scene's pointer-mode calls froze the game without him (fixed, `FLEEP_ONLY`) | **shuffled**. Tested: no trap, no freeze |
-  | Cudge | yes | first visit: the entry pipe closes behind Mario; re-entering at 189–192 kept it hidden (removed). Join needs the three tablets | **shuffled**. Tested: no issues without him |
-  | Dottie | yes | needs Dottie or Luigi to leave on foot (tested); Return Pipe works | **shuffled**; in `return_pipe_escapes` |
-- **Pit Keys** are dropped by a random enemy on each Pit floor and open that floor's door (the `dan_01` locks). Leave the Pit Key system completely untouched.
-- Pillar and chapter-clear scenes found for all 8 hearts (see `story_us0.json`).
-- **Still to find:** where the Crystal Ball, Random House Key and Cooking Disk 1 are given (probably main.dol scripts or NPC dialogue the scan doesn't cover).
-- Next: logic pass (requirements per location) with the user.
-
-### Useful tools found
-- `ref/spm-practice-codes`: warps, story-value editing and other debug features. Very useful for testing chapters out of order.
-- Skawo's Setup File Editor & Randomizer (linked from spm-docs): edits enemy and coin setups. It's not a progression randomizer, but it's useful for reading setup files.
-- `evt-disassembler` works on a RAM dump, so mapping scripts means running the game in Dolphin and dumping memory per map, or writing a REL parser of our own for `relF`.
+**Research tools:** `tools/locscan.py` (location scan), `tools/evtdis.py` (script disassembler), `tools/dolasm.py` (code disassembler with symbols), `tools/story_gates.py`, `tools/talk_swaps.py`, `tools/maprender/` (room renders and the map graph), and `ref/spm-practice-codes` for warps and story editing.

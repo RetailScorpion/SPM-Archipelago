@@ -3,6 +3,7 @@
 #include <spm/swdrv.h>
 #include <wii/os.h>
 
+#include "game_mode.h"
 #include "code_patching.h"
 #include "flip_ability.h"
 #include "game_addresses.h"
@@ -52,7 +53,7 @@ void init()
         wii::os::OSReport("[spmap] flip: unexpected instruction %08x, not patched\n", instruction);
         return;
     }
-    code_patching::writeBranch(game_addresses::mario_flip_story_check, reinterpret_cast<void *>(flipStoryCheck), true);
+    game_mode::writeBranch(game_addresses::mario_flip_story_check, reinterpret_cast<void *>(flipStoryCheck), true);
     wii::os::OSReport("[spmap] flip: story check replaced\n");
 }
 

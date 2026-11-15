@@ -1,170 +1,126 @@
-"""Writes logic/checks.md: every check from the location scan, under chapter and level headings.
+"""Writes logic/checks.md: every location in the randomizer, by level, with what the WIP logic says it
+needs inside its level.
 
-Leaves out what the scan finds that isn't a check: "check"/"lock" entries (scripts that look for or use
-up an item), the Pixl safety nets (party_hoken, removed by the mod), empty chests (item 0), and repeats
-of the same item, map and flag reached by more than one script. Story checks the scan can't see
-(Pure Hearts, lessons, ...) are added by hand from EXTRA_CHECKS.
+Reads the location list (data/ap_locations.json) and the logic (apworld/spm/rules.py). The logic is
+loaded without Archipelago: the few Archipelago modules it imports are stubbed out.
 
 Usage: py -3 -E tools/checks_list.py
 """
 
 import json
 import os
-import re
+import sys
+import types
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-LOCATIONS = os.path.join(ROOT, "data", "locations_us0.json")
-MESSAGES = os.path.join(ROOT, "build", "devdisc", "files", "msg", "US", "global.txt")
+LOCATIONS = os.path.join(ROOT, "data", "ap_locations.json")
+ITEM_NAMES = os.path.join(ROOT, "data", "item_names_us0.json")
 OUT = os.path.join(ROOT, "logic", "checks.md")
 
-# map prefix -> chapter (levels are the prefix's digit: he1 = 1-1, he2 = 1-2, ...)
-CHAPTERS = {"he": 1, "mi": 2, "ta": 3, "sp": 4, "gn": 5, "wa": 6, "an": 7, "ls": 8}
 
-# Checks that aren't item pickups, so the scan doesn't find them: (chapter, level, map, check, item, kind)
-EXTRA_CHECKS = [
-    ("hub", None, "mac_02", "Merlon's gift", "Pure Heart (merlon_gift)", "story"),
-    (1, 1, "he1_06", "Bestovius's lesson", "Flip", "story (flip option)"),
-    (1, 4, "he4_*", "Fracktail defeated", "Pure Heart", "story"),
-    (2, 4, "mi4_*", "Mimi defeated", "Pure Heart", "story"),
-    (3, 4, "ta4_*", "Francis defeated", "Pure Heart", "story"),
-    (4, 4, "sp4_*", "Mr. L / Brobot defeated", "Pure Heart", "story"),
-    (5, 4, "gn4_*", "King Croacus defeated", "Pure Heart", "story"),
-    (6, 4, "wa4_*", "King Sammer defeated", "Pure Heart", "story"),
-    (7, 4, "an4_*", "Bonechill defeated", "Pure Heart", "story"),
-]
-
-
-# World pickups (ids 1-15) have no display name; readable names where they're clear
-WORLD_ITEM_NAMES = {
-    "[COIN]": "Coin", "[COIN_x3]": "3 Coins", "[SPEED_FLOWER]": "Speed Flower",
-    "[SLOW_FLOWER]": "Slow Flower", "[HAPPY_FLOWER]": "Happy Flower", "[KINOKO]": "Mushroom",
-    "[SUPER_KINOKO]": "Super Mushroom", "[ULTRA_KINOKO]": "Ultra Mushroom",
-}
+def load_rules():
+    """Imports apworld/spm/rules.py with stand-ins for the Archipelago modules it needs."""
+    base = types.ModuleType("BaseClasses")
+    base.Item = type("Item", (), {"__init__": lambda self, *a, **k: None})
+    base.ItemClassification = type("ItemClassification", (), {
+        "filler": 0, "progression": 1, "useful": 2, "trap": 4, "skip_balancing": 8,
+        "progression_skip_balancing": 9})
+    sys.modules["BaseClasses"] = base
+    for name in ("worlds", "worlds.generic"):
+        module = types.ModuleType(name)
+        module.__path__ = []
+        sys.modules[name] = module
+    rules_module = types.ModuleType("worlds.generic.Rules")
+    rules_module.add_rule = lambda location, rule: None
+    sys.modules["worlds.generic.Rules"] = rules_module
+    package = types.ModuleType("spm")
+    package.__path__ = [os.path.join(ROOT, "apworld", "spm")]
+    sys.modules["spm"] = package
+    import importlib
+    return importlib.import_module("spm.rules")
 
 
-def level_names():
-    """Each level's name, from the game's message file: {(chapter, level): name}."""
-    names = {}
-    if os.path.exists(MESSAGES):
-        parts = open(MESSAGES, "rb").read().split(b"\0")
-        for key, text in zip(parts, parts[1:]):
-            m = re.fullmatch(rb"place_stg(\d)_(\d)", key)
-            if m:
-                names[(int(m[1]), int(m[2]))] = text.decode()
-    return names
+def item_text(item) -> str:
+    """One item of a rule, readable: a name, "2 x name", or "3 of: a, b"."""
+    if isinstance(item, tuple) and isinstance(item[0], tuple):
+        return f"{item[1]} of {'/'.join(item[0])}"
+    if isinstance(item, tuple):
+        return f"{item[1]} x {item[0]}"
+    return item
 
 
-def kind(loc):
-    """What kind of check a location is, in words (chest, ? block, shop...)."""
-    t, item = loc["type"], loc.get("item")
-    if t == "block":
-        return "? block (item_blocks)"
-    if t == "shop":
-        return "shop (shop_items)"
-    if t == "gift":
-        if 216 <= (item or 0) < 220:
-            return "character (randomize_characters)"
-        if 229 <= (item or 0) < 232:
-            return "optional Pixl (optional_pixls)"
-        if 220 <= (item or 0) < 232:
-            return "Pixl"
-        return "gift"
-    if isinstance(item, int):
-        if 16 <= item < 65:
-            return "key item"
-        if 282 <= item < 538:
-            return "catch card in a chest (catch_cards)" if t == "chest" else "catch card, lying around (catch_cards)"
-    return "item in a chest (overworld_items)" if t == "chest" else "item, lying around (overworld_items)"
+def rule_text(alternatives) -> str:
+    """A rule (a list of alternatives, each a list of items) as "A + B, or C"."""
+    options = [" + ".join(item_text(item) for item in items) or "nothing" for items in alternatives]
+    return " or ".join(options)
 
 
-def notes(loc):
-    """Notes about a location for the list (story-gated in vanilla, and any manual note)."""
-    out = []
-    if any("GSW(0)" in c for c in loc.get("conditions", [])):
-        out.append("story-gated in vanilla")
-    if loc.get("note"):
-        out.append(loc["note"])
-    return "; ".join(out)
-
-
-def place(loc):
-    """(chapter, level) of a location, from its first map's name."""
-    m = loc["maps"][0]
-    prefix = m[:2]
-    if prefix in CHAPTERS and m[2].isdigit():
-        return CHAPTERS[prefix], int(m[2])
-    if m.startswith("mac_"):
-        return "hub", None
-    if m.startswith("dan_"):
-        return "pit", None
-    if m == "main.dol":
-        return "dol", None
-    return "other", None
+def needs_text(rules, name: str) -> str:
+    """Everything the WIP logic adds for a location inside its chapter, as one line."""
+    parts = [rule_text(alternatives) for alternatives in rules.location_requirements(name)]
+    before = rules.previous_section_end(rules.room_of(name))
+    if before is not None:
+        parts.append(f"the previous section beaten ({before})")
+    after = rules.LOCATION_AFTER.get(name)
+    if after:
+        parts.append(f"after {after}")
+    if name in rules.AFTER_BROBOT or any(prefix in name for prefix in rules.AFTER_BROBOT_MAPS):
+        parts.append("Brobot L-type beaten (" + rule_text(rules.BEATS_BROBOT) + ")")
+    return "; ".join(f"({part})" if " or " in part and len(parts) > 1 else part for part in parts) or "-"
 
 
 def main():
-    """Writes logic/checks.md, the list of every check by chapter and level."""
-    locations = json.load(open(LOCATIONS))
-    rows, seen = {}, set()
-    for loc in locations:
-        if loc["type"] in ("check", "lock") or (loc.get("note") or "").startswith("party_hoken"):
-            continue
-        if loc.get("item") == 0:
-            continue
-        key = (loc["maps"][0], loc.get("item"), loc.get("flag"), loc["type"])
-        if loc.get("flag") not in (None, "0") and key in seen:
-            continue
-        seen.add(key)
-        name = loc.get("item_name") or (f"item {loc['item']}" if loc.get("item") is not None else "?")
-        if loc["type"] == "shop":
-            name = "Shop stock"
-        name = WORLD_ITEM_NAMES.get(name, name)
-        rows.setdefault(place(loc), []).append((loc["maps"][0], name, kind(loc), notes(loc), loc.get("at", "")))
-    for chapter, level, map_name, check, item, k in EXTRA_CHECKS:
-        rows.setdefault((chapter, level), []).append((map_name, f"{check}: {item}", k, "added by hand (not an item pickup)", ""))
+    """Writes logic/checks.md."""
+    rules = load_rules()
+    data = json.load(open(LOCATIONS, encoding="utf-8"))
+    item_names = json.load(open(ITEM_NAMES, encoding="utf-8"))
+    locations = data["locations"]
 
-    levels = level_names()
-    total = sum(len(v) for v in rows.values())
     lines = [
-        "# Every check, by chapter and level",
+        "# Every check",
         "",
-        f"Generated by `tools/checks_list.py` from the location scan (`data/locations_us0.json`); {total} checks.",
-        "Each row: map, what's there in vanilla, the kind of check (and the option that turns it on), notes.",
-        "Rows marked *added by hand* are story checks the scan can't see. The scan may still miss some checks",
-        "and include a few props from cutscenes; treat this as the starting list, not the final one.",
+        "Generated by `tools/checks_list.py` from `data/ap_locations.json` and the WIP logic",
+        "(`apworld/spm/rules.py`). Don't edit by hand.",
+        "",
+        "**Needs** is what the WIP logic expects inside the level, on top of the chapter's door (its Pure",
+        "Heart, unless the door starts open; Flopside and Chapter 8 also need Boomer, Fleep and Mario, and",
+        "Chapter 8 Peach and Luigi, then Bowser past 8-1). \"Mario\" means Mario's flip to 3D: it only matters when you",
+        "start as someone else. A rule like `Peach or Luigi` means either one is enough.",
+        "If you find a check that needs something not listed here, please report it.",
         "",
     ]
-
-    def table(entries):
-        """Adds a Markdown table of locations to the output lines."""
-        lines.append("| Map | Check (vanilla item) | Kind | Notes |")
-        lines.append("|---|---|---|---|")
-        for map_name, name, k, n, _ in sorted(entries):
-            lines.append(f"| `{map_name}` | {name} | {k} | {n} |")
+    by_level = {}
+    for location in locations:
+        if location["kind"] == "tattle":
+            continue
+        level = location["name"].split(" - ")[0]
+        by_level.setdefault(level, []).append(location)
+    order = data["levels"]
+    for level, rows in sorted(by_level.items(), key=lambda entry: (
+            order.index(entry[0]) if entry[0] in order else len(order), entry[0])):
+        lines += [f"## {level}", "", "| Location | Vanilla item | Needs |", "|---|---|---|"]
+        for location in rows:
+            check = location["name"].split(" - ", 1)[1]
+            item = item_names.get(str(location["item"]), str(location["item"]))
+            lines.append(f"| {check} | {item} | {needs_text(rules, location['name'])} |")
         lines.append("")
 
-    for chapter in range(1, 9):
-        lines.append(f"## Chapter {chapter}")
-        lines.append("")
-        for level in range(1, 5):
-            entries = rows.get((chapter, level))
-            lines.append(f"### {chapter}-{level} {levels.get((chapter, level), '')}".rstrip())
-            lines.append("")
-            if entries:
-                table(entries)
-            else:
-                lines.append("No checks found by the scan.")
-                lines.append("")
-    for key, title in [("hub", "Flipside and Flopside"), ("pit", "Pits of 100 Trials"),
-                       ("dol", "Hub scripts in main.dol (shops, the Piccolo chain, ...)"), ("other", "Other maps")]:
-        if rows.get((key, None)):
-            lines.append(f"## {title}")
-            lines.append("")
-            table(rows[(key, None)])
+    tattles = [location for location in locations if location["kind"] == "tattle"]
+    lines += [
+        "## Tattles (`tattle_checks`)", "",
+        "One check per kind of enemy: tattle it with Tatl. The logic counts any of its rooms (the Pits",
+        "only with `pit_tattles`; the Megabite and Gigabite only with `afk_tattles`).", "",
+        "| Enemy | Rooms | Extra needs |", "|---|---|---|",
+    ]
+    for location in tattles:
+        extra = rules.TATTLE_NEEDS.get(location["name"])
+        rooms = ", ".join(location.get("maps") or [location["map"]])
+        lines.append(f"| {location['label']} | {rooms} | {rule_text(extra) if extra else '-'} |")
+    lines.append("")
 
-    os.makedirs(os.path.dirname(OUT), exist_ok=True)
-    open(OUT, "w", encoding="utf-8").write("\n".join(lines))
-    print(f"Wrote {OUT}: {total} checks")
+    with open(OUT, "w", encoding="utf-8", newline="\n") as f:
+        f.write("\n".join(lines))
+    print(f"Wrote {OUT}: {len(locations) - len(tattles)} checks and {len(tattles)} tattles")
 
 
 if __name__ == "__main__":

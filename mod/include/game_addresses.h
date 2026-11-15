@@ -15,8 +15,13 @@
 #include <common.h>
 #include <evt_cmd.h>
 #include <spm/evtmgr.h>
+#include <spm/npcdrv.h>
 #include <spm/seq_title.h>
 #include <spm/spmario_snd.h>
+#include <spm/seq_load_sub.h>
+#include <spm/wpadmgr.h>
+#include <wii/gx.h>
+#include <wii/mtx.h>
 
 namespace mod::game_addresses {
 
@@ -31,6 +36,13 @@ void * guideGetWork();
 // evt_door_select_entry(5, 1, hitobjA, hitobjB, script, slot); evt_door_select_set(slot, field, value)
 EVT_DECLARE_USER_FUNC(evt_door_select_entry, 6)
 EVT_DECLARE_USER_FUNC(evt_door_select_set, 3)
+
+// evt_map_set_anim_speed(anim name, f32 speed): a map animation's playback speed (1 = normal)
+EVT_DECLARE_USER_FUNC(evt_map_set_anim_speed, 2)
+
+// evt_cam_reset_to_mario(): what every vanilla elevator ride calls right after moving Mario. The camera
+// catches up at once, road cameras included (Fort Francis's; tested by the user, 2026-11-05)
+EVT_DECLARE_USER_FUNC(evt_cam_reset_to_mario, 0)
 
 // Script that plays Mario going through a door; LW(0) = the door's name
 extern const spm::evtmgr::EvtScriptCode door_enter_evt[];
@@ -92,9 +104,50 @@ EVT_DECLARE_USER_FUNC(evt_fleep_mode_set, 1)
 // The title screen's work, while the title screen is up: its animation (animNum 0 = the opening,
 // 1 = the loop) and the frame it's at
 extern spm::seq_title::SeqTitleWork * seq_title_wp;
+
+// The file select's bottom row (Erase Data, Copy Data, Back): each button's picture and position
+struct FileselBottomButton
+{
+    u32 picture;
+    f32 x;
+    f32 y;
+};
+extern FileselBottomButton fileselect_bottom_buttons[3];
+// Its buttons' cursor table: 0-3 the files, 4-6 the bottom row; copy mode's table follows
+extern spm::seq_load_sub::SeqLoadButtonDef fileselect_button_defs[14];
+// Draws one of the current TPL's pictures (the file select's buttons) at a position, tinted
+void fileselDrawPicture(s32 picture, wii::mtx::Mtx34 * mtx, wii::gx::GXColor * colour);
+
+// The Wii Remotes' state; each controller's buttons this frame are statuses[controller][0]
+extern spm::wpadmgr::WpadWork * wpadmgr_wp;
 // In the title's drawing: the instruction that animates its layout (a call through the layout's
 // list of functions, with r3 = the layout and r4 = 0), just before the panes' positions are worked out
 extern u32 title_layout_animate_call[];
+
+// The Pixl ability table: what pressing 1 does for each Pixl id (0-terminated). Each function gets the
+// Pixl id and a mode and returns whether the ability started
+struct PixlAbility
+{
+    s32 pixl;
+    s32 (*use)(s32 pixl, s32 mode);
+};
+extern PixlAbility pixl_ability_table[];
+// Tippi's tattle text for an NPC (her pointer): its catch card's text with its HP and attack, or her own
+const char * searchGetNpcMsg(spm::npcdrv::NPCEntry * npc);
+// Fleep's ability (what pressing 1 does with him): starts his pointer motion (0x26)
+s32 fleep_ability(s32 pixl, s32 mode);
+// In Fleep's motion and its end: "li r3, 0xe2", his Pixl id, before looking up his Pixl
+extern u32 fleep_motion_pixl_id_load[];
+extern u32 fleep_end_pixl_id_load[];
+// Changes a Pixl's animation (by name; the Pixl's display sets it)
+void fairy_change_anim(void * fairy, const char * anim);
+// Fleep's ability (what pressing 1 does with him): starts his pointer motion (0x26)
+s32 fleep_ability(s32 pixl, s32 mode);
+// In Fleep's motion and its end: "li r3, 0xe2", his Pixl id, before looking up his Pixl
+extern u32 fleep_motion_pixl_id_load[];
+extern u32 fleep_end_pixl_id_load[];
+// Changes a Pixl's animation (by name; the Pixl's display sets it)
+void fairy_change_anim(void * fairy, const char * anim);
 
 // A Pixl's work by its id, or nullptr if there's none
 void * fairy_work_by_id(s32 id);

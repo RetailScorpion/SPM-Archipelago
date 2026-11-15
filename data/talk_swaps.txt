@@ -1,0 +1,19 @@
+7-1 The Underwhere - Door Key (an1_04): "enma" property 9 = 0x198830 (set at 0x19ad10)
+    swapped to 0x197490 at 0x19807c
+    swapped to 0x198668 at 0x19a748
+    swapped to 0x198740 at 0x19ae2c, under GSW(0) >= 295
+    swapped to 0x198668 at 0x19b108, under SWITCH GSW(0): CASE_SMALL(301)
+    swapped to 0x1974f8 at 0x19b124, under SWITCH GSW(0): CASE_SMALL(305)
+    swapped to 0x197490 at 0x19b158, under SWITCH GSW(0): CASE_SMALL(354)
+    swapped to 0x1974c4 at 0x19b18c, under SWITCH GSW(0): CASE_SMALL(421)
+7-4 The Overthere - Door Key (an4_04): "tenshi" property 9 = 0x1bd490 (set at 0x1bd994)
+    swapped to 0x1bd428 at 0x1bed80, under GSW(0) >= 354
+7-4 The Overthere - Door Key (an4_04): "tenshi" property 9 = 0x1bd490 (set at 0x1bed1c, under SWITCH GSW(0): CASE_SMALL(344))
+    swapped to 0x1bd428 at 0x1bed80, under GSW(0) >= 354
+7-4 The Overthere - Blue Orb (an4_04): "me" property 9 = 0x1bde50 (set at 0x1be5f0)
+    swapped to 0x1bb728 at 0x1bb948
+7-4 The Overthere - Blue Orb (an4_04): "big" property 9 = 0x1bde50 (set at 0x1bef98, under GSWF(1235) == 0 and not (GSWF(1234) == 0))
+    swapped to 0x1be314 at 0x1bf054, under GSW(0) >= 354
+7-4 The Overthere - Red Orb (an4_07): "big" property 9 = 0x1c10cc (set at 0x1c1ddc)
+    swapped to 0x1c1098 at 0x1c1c80
+    swapped to 0x1c14f0 at 0x1c2628, under GSW(0) >= 354

@@ -8,7 +8,10 @@
 #include <spm/swdrv.h>
 #include <wii/os.h>
 
+#include "game_mode.h"
+#include "starting_character.h"
 #include "character_joins.h"
+#include "cutscene_skips.h"
 #include "game_addresses.h"
 #include "mailbox.h"
 #include "save_data.h"
@@ -50,6 +53,9 @@ enum PatchKind
                  // command on Peach's chain value instead
     PEACH_JOIN,  // RUN_EVT(Peach's join scene, at relF offset a) -> RUN_EVT(ap_peach_join_evt)
     PEACH_TALK,  // Peach's talk script (at relF offset a) -> ap_peach_soup_evt
+    REUNION,     // a reunion's "make character a selectable again" call (0x8010c27c(1, a)) -> ap_reunion:
+                 // collects gift location b first
+    SWITCH_HELD, // a scene's "switch to character a" call -> ap_switch_if_held (no location)
 };
 
 struct Patch
@@ -97,6 +103,13 @@ static const Patch sPatches[] = {
     {ALWAYS, 0xede18, 297, 0, "Luigi: join scene (upper bound)"},
     {SKIP, 0xeda4c, 1, CALL_ADD_ITEM, "Luigi: vanilla join"},
     {CHAR_JOIN, 0xeda20, CHARACTER_LUIGI, story_gifts::GIFT_LUIGI, "Luigi join"},
+
+    // The reunions (user, 2026-11-05): Bowser in 7-2 (an2_04, the end of the scene after his fight,
+    // relF file 0x1a30e4) and Peach in 7-3 (an3_06, her talk script, 0x1b29f4). Peach's scene also
+    // switches Mario to her (0x1b28f4), which breaks his controls without her
+    {REUNION, 0xf3de4, CHARACTER_BOWSER, story_gifts::GIFT_BOWSER_REUNION, "Bowser rejoins"},
+    {REUNION, 0x1036f4, CHARACTER_PEACH, story_gifts::GIFT_PEACH_REUNION, "Peach rejoins"},
+    {SWITCH_HELD, 0x1035f4, CHARACTER_PEACH, 0, "Peach rejoins: switch to Peach"},
 };
 
 // Saffron's cooking script (in the main program), offsets from saffronCookingScript: her Spicy
@@ -156,6 +169,36 @@ static EVT_DEFINE_USER_FUNC(ap_char_join)
     return spm::evt_mario::evt_mario_set_character(evt, isFirstCall);
 }
 
+// The game's "make a character selectable or not" script function (0x8010c27c(on, character item))
+#define SET_CHARACTER_SELECTABLE 0x8010c27c
+static s32 (*const sSetCharacterSelectable)(spm::evtmgr::EvtEntry *, bool) =
+    reinterpret_cast<s32 (*)(spm::evtmgr::EvtEntry *, bool)>(SET_CHARACTER_SELECTABLE);
+
+// Which gift location each reunion collects (filled in from the REUNION patches)
+static story_gifts::Gift sReunionGift[CHARACTER_LUIGI + 1];
+
+// ap_reunion(1, character item): a reunion's end. Collects its location (once), then does what the
+// vanilla call did (the character selectable again; nothing if Mario hasn't got them).
+static EVT_DEFINE_USER_FUNC(ap_reunion)
+{
+    s32 character = spm::evtmgr_cmd::evtGetValue(evt, evt->pCurData[1]) - CHARACTER_ITEM_BASE;
+    if (isFirstCall && character >= CHARACTER_PEACH && character <= CHARACTER_LUIGI)
+        story_gifts::collectGift(sReunionGift[character]);
+    return sSetCharacterSelectable(evt, isFirstCall);
+}
+
+// ap_switch_if_held(character): a scene's switch to a character, only if Mario has them.
+static EVT_DEFINE_USER_FUNC(ap_switch_if_held)
+{
+    s32 character = spm::evtmgr_cmd::evtGetValue(evt, evt->pCurData[0]);
+    if (!haveCharacter(character))
+    {
+        wii::os::OSReport("[spmap] joins: character %d not in the party, staying as is\n", character);
+        return 2;
+    }
+    return spm::evt_mario::evt_mario_set_character(evt, isFirstCall);
+}
+
 // Peach's vanilla join scene (found by the PEACH_JOIN patch)
 static const EvtScriptCode * sPeachJoinScene;
 
@@ -197,7 +240,7 @@ static EVT_DEFINE_USER_FUNC(ap_peach_soup)
 {
     (void) isFirstCall;
     const EvtScriptCode * scene = nullptr;
-    if (mailbox::gMailbox.playCutscenes && haveCharacter(CHARACTER_PEACH))
+    if (cutscene_skips::playCutscenes() && haveCharacter(CHARACTER_PEACH))
         scene = sPeachSoupScene;
     else if (spm::mario_pouch::pouchCheckHaveItem(ITEM_SPICY_SOUP))
     {
@@ -243,7 +286,7 @@ static void applyPatch(const Patch & p, EvtScriptCode * at)
             if (matches(at, expected, 3, p.what))
             {
                 sCharacterGift[p.a] = static_cast<story_gifts::Gift>(p.b);
-                at[1] = reinterpret_cast<s32>(ap_char_join);
+                game_mode::set<s32>(&at[1], reinterpret_cast<s32>(ap_char_join));
             }
             break;
         }
@@ -252,9 +295,9 @@ static void applyPatch(const Patch & p, EvtScriptCode * at)
             const s32 expected[] = {EVT_CMD(2, OP_IF_LARGE_EQUAL), GSW_VAR(0), p.a};
             if (matches(at, expected, 3, p.what))
             {
-                at[0] = EVT_CMD(2, OP_IF_EQUAL);
-                at[1] = GSWF_VAR(AP_GSWF_GIFT(p.b));
-                at[2] = 0;
+                game_mode::set<s32>(&at[0], EVT_CMD(2, OP_IF_EQUAL));
+                game_mode::set<s32>(&at[1], GSWF_VAR(AP_GSWF_GIFT(p.b)));
+                game_mode::set<s32>(&at[2], 0);
             }
             break;
         }
@@ -262,7 +305,7 @@ static void applyPatch(const Patch & p, EvtScriptCode * at)
         {
             const s32 expected[] = {EVT_CMD(2, OP_IF_SMALL), GSW_VAR(0), p.a};
             if (matches(at, expected, 3, p.what))
-                at[2] = STORY_VALUE_NEVER;
+                game_mode::set<s32>(&at[2], STORY_VALUE_NEVER);
             break;
         }
         case CASE_GSW:
@@ -276,7 +319,7 @@ static void applyPatch(const Patch & p, EvtScriptCode * at)
             // A SWITCH has no value word to check, only the command and the story value
             const s32 expected[] = {p.b, GSW_VAR(0), p.a};
             if (matches(at, expected, p.b == EVT_CMD(1, OP_SWITCH) ? 2 : 3, p.what))
-                at[1] = GSW_VAR(AP_GSW_PEACH_CHAIN);
+                game_mode::set<s32>(&at[1], GSW_VAR(AP_GSW_PEACH_CHAIN));
             break;
         }
         case PEACH_JOIN:
@@ -285,8 +328,25 @@ static void applyPatch(const Patch & p, EvtScriptCode * at)
             if (matches(at, expected, 2, p.what))
             {
                 sPeachJoinScene = reinterpret_cast<const EvtScriptCode *>(at[1]);
-                at[1] = reinterpret_cast<s32>(ap_peach_join_evt);
+                game_mode::set<s32>(&at[1], reinterpret_cast<s32>(ap_peach_join_evt));
             }
+            break;
+        }
+        case REUNION:
+        {
+            const s32 expected[] = {EVT_CMD(3, OP_USER_FUNC), static_cast<s32>(SET_CHARACTER_SELECTABLE), 1, CHARACTER_ITEM_BASE + p.a};
+            if (matches(at, expected, 4, p.what))
+            {
+                sReunionGift[p.a] = static_cast<story_gifts::Gift>(p.b);
+                game_mode::set<s32>(&at[1], reinterpret_cast<s32>(ap_reunion));
+            }
+            break;
+        }
+        case SWITCH_HELD:
+        {
+            const s32 expected[] = {EVT_CMD(2, OP_USER_FUNC), reinterpret_cast<s32>(spm::evt_mario::evt_mario_set_character), p.a};
+            if (matches(at, expected, 3, p.what))
+                game_mode::set<s32>(&at[1], reinterpret_cast<s32>(ap_switch_if_held));
             break;
         }
         case PEACH_TALK:
@@ -299,7 +359,7 @@ static void applyPatch(const Patch & p, EvtScriptCode * at)
             if (matches(at, expected, 5, p.what))
             {
                 sPeachSoupScene = reinterpret_cast<const EvtScriptCode *>(at[4]);
-                at[4] = reinterpret_cast<s32>(ap_peach_soup_evt);
+                game_mode::set<s32>(&at[4], reinterpret_cast<s32>(ap_peach_soup_evt));
             }
             break;
         }
@@ -320,6 +380,22 @@ void init()
 
 void onMapChange()
 {
+    // Every character Mario has is selectable again. The story turns characters off in scenes
+    // (Castle Bleck: Bowser after 8-1's O'Chunks, Peach after Mimi, Luigi with Dimentio; the
+    // Underwhere: Peach and Bowser until 7-2 and 7-3), which in vanilla lasts until the story gives
+    // them back. Here characters are items, so that would lock them away for good (user, 2026-11-05).
+    // The room's own scripts still run after this, so a scene in the room being entered still turns
+    // its characters off while it plays
+    for (auto & info : spm::mario_pouch::pouchGetPtr()->characters)
+    {
+        if (info.itemType >= CHARACTER_ITEM_BASE && info.itemType <= CHARACTER_ITEM_BASE + CHARACTER_LUIGI
+            && !info.selectable && (info.itemType != CHARACTER_ITEM_BASE || starting_character::marioHeld()))
+        {
+            info.selectable = true;
+            wii::os::OSReport("[spmap] joins: character %d selectable again\n", info.itemType - CHARACTER_ITEM_BASE);
+        }
+    }
+
     // Peach's chain value: done once her location is collected; otherwise back to the start if it
     // holds anything outside 60-62 (a save from before the chain had its own value)
     s32 chain = save_data::getGswByte(AP_GSW_PEACH_CHAIN);

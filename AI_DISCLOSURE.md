@@ -2,7 +2,7 @@
 
 This statement covers the whole Super Paper Mario Archipelago project (this repository: the game mod, the APworld, the client, the patcher, the helper tools and the documentation). I, RetailScorpion, am the project's only developer until further notice, and I'm making this statement for all of it.
 
-*Last updated: 2026-10-31*
+*Last updated: 2026-11-15*
 
 ## How AI was used
 
@@ -24,7 +24,10 @@ This project was made with heavy use of AI. **Claude** (Anthropic's AI model), u
 - **The pause menu's Options button** (`assets/pause/options_button.png`) was made by me, without AI.
 - **The Archipelago item icon** (`assets/icons/ap_progression.png`) was made by me, without AI. The grey icon for filler items (`ap_filler.png`) is a straight greyscale conversion of it.
   - Early builds (up to and including 0.1.3) used a different icon, produced by a script Claude wrote that restyled the Archipelago logo. All versions from 0.1.4 onward use my icon, and that script and its images have been removed from the project.
-- **The Save Block icon** (`assets/icons/save_block.png`) was put together by a script Claude wrote, from the game's own save block textures.
+- **The Save Block icon** is drawn by the patcher, with code Claude wrote, from the save block textures on the player's own disc. No picture of it is in the project (up to 0.2.1 it was a PNG in `assets/icons/`).
+- **The title screen's banner and flower** (`assets/title/`) and **the Throne Room Key icon** (`assets/icons/throne_room_key.png`) are my pictures; Claude only resized them.
+- **The file select's Options button:** only my "Options" lettering (`assets/fileselect/options_text.png`, Gamtex font by FG Studios) is in the project. The patcher draws it onto the game's own Back button, taken from the player's disc.
+- **The Progressive Wallet icon** (`assets/icons/progressive_wallet.png`) is the Coin Bag from *Mario Party: Star Rush*, from the Super Mario Wiki (credited in the README), shrunk by a script.
 - `assets/icons/ap_blank.png` is an empty, fully transparent icon (shown when a trap gives nothing), so it contains no art.
 
 From now on, all art in this project will be made by real people. When a feature needs an image, I'll either supply it or commission it, and Claude will only convert it to the game's format.

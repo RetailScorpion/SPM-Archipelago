@@ -48,3 +48,17 @@ def chapter_of(location_name: str) -> int | None:
     if location_name[0].isdigit() and location_name[1] == "-":
         return int(location_name[0])
     return None
+
+
+# Flopside's maps: the town (mac_11-mac_19) and its Pit of 100 Trials (dan_41-dan_70)
+FLOPSIDE_MAPS = {f"mac_{n}" for n in range(11, 20)} | {f"dan_{n}" for n in (41, 42, 43, 44, 61, 62, 63, 64, 70)}
+
+
+def map_of(location_name: str) -> str:
+    """The map a location is in, from its name ("... (mac_18)" or "... (ls2_16) #1" is in that map)."""
+    return location_name[location_name.rindex("(") + 1:location_name.rindex(")")]
+
+
+def in_flopside(location_name: str) -> bool:
+    """Whether a location is in Flopside (the town or its Pit)."""
+    return map_of(location_name) in FLOPSIDE_MAPS

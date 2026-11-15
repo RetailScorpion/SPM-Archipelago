@@ -24,7 +24,7 @@ from CommonClient import logger
 
 from .data import ID_BASE
 from .game_link import (GIFT_FLAG_BASE, HEART_LOC_FLAG_BASE, JOIN_ITEM_OTHER_WORLD, LOC_KIND_OTHER_WORLD, LOC_KIND_OTHER_WORLD_FILLER,
-                        LOC_KIND_PURE_HEART, LOC_KIND_TRAP, Mailbox)
+                        LOC_KIND_OWN_SERVER_ITEM, LOC_KIND_PURE_HEART, LOC_KIND_TRAP, Mailbox)
 from .locations import LOCATION_LIST, is_location_index, location_id, location_index
 
 AP_ITEM = 63               # the mod's stand-in for other worlds' items (archipelago_item.h AP_ITEM_ID)
@@ -36,6 +36,7 @@ DELIVERED_SPOT = 175
 SERVER_ONLY_FIRST = 1001   # item numbers from here (Pure Hearts, traps) aren't game items
 HEARTS = range(1001, 1009) # the Pure Hearts (pure_hearts.h PURE_HEART_ITEM_FIRST), always delivered
 TRAP = 1100                # the Cursya Trap (archipelago_item.h TRAP_ITEM_ID)
+WALLET = 1200              # the Progressive Wallet (wallet.h WALLET_ITEM_ID), always delivered
 
 # What a trap can look like: one of the key items placed in the game's own spots. (Pixls can't be shown
 # as world items, and characters crash the pickup.)
@@ -60,11 +61,13 @@ def disguise(ctx, location: int) -> int:
 def delivered_not_found(ctx, flags) -> set[int]:
     """Locations (positions in LOCATION_LIST) holding this world's items that the loaded save got
     delivered instead of finding them there (found after the save was made, or sent by mistake).
-    They hold a coin instead. Pure Hearts never come from their spot."""
+    They hold a coin instead. That includes this world's Pure Hearts: one never comes from its spot (the
+    spot shows the Archipelago item, the heart comes from the server), but once the save has it, its spot
+    showing it again looks like it hasn't arrived (user, 2026-11-05: 8-2's row of Mistakes)."""
     found = set()
     for item in ctx.items_received[:ctx.queued_upto or 0]:
         index = location_index(item.location)
-        if (item.player == ctx.slot and is_location_index(index) and item.item - ID_BASE not in HEARTS
+        if (item.player == ctx.slot and is_location_index(index)
                 and not Mailbox.flag_set(flags, LOCATION_LIST[index].flag)):
             found.add(index)
     return found
@@ -99,6 +102,8 @@ def write_placements(ctx):
     mb = ctx.mailbox
     names, failed = [], 0
     for i, location in enumerate(LOCATION_LIST):
+        if location.kind == "tattle":
+            continue  # nothing in the game to show: its item comes from the server
         network_item = ctx.scouted.get(location_id(i))
         if network_item is None:
             continue
@@ -127,11 +132,16 @@ def write_placements(ctx):
             # One of this world's Pure Hearts: the Archipelago item, shown with the heart's own icon
             heart = network_item.item - ID_BASE - HEARTS.start + 1
             names.append((location.flag, f"Pure Heart {heart}", "", LOC_KIND_PURE_HEART + heart))
+        elif foreign and network_item.player == ctx.slot:
+            # Another of this world's server items (a Progressive Wallet): the Archipelago item, "You got X!"
+            names.append((location.flag, ctx.item_names.lookup_in_slot(network_item.item, network_item.player), "",
+                          LOC_KIND_OWN_SERVER_ITEM))
         elif foreign:
             names.append(other_world_names(ctx, network_item, location.flag))
         failed += write_location(mb, location, shown, foreign, (placed, COIN, DELIVERED_SPOT))
 
     mb.write_loc_names(names)
+    mb.set_seed_placed()
     if failed:
         logger.warning(f"{failed} item placements didn't match the game; are you on US 1.0 with the matching mod?")
     logger.info(f"Placed items at {len(ctx.scouted)} locations")

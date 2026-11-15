@@ -18,7 +18,6 @@ from NetUtils import ClientStatus
 from .data import ID_BASE
 from .game_link import NO_SAVE, RECV_SIZE, SERVER_CHECKS_HEARTBEAT, Mailbox, write_server_checks
 from .locations import LOCATION_LIST, is_location_index, location_id, location_index
-from .placement import HEARTS
 
 GOAL_CHAPTER = 8
 GOAL_STORY_VALUE = 417     # map ls4_12, the final boss arena
@@ -60,10 +59,15 @@ def check_locations(ctx, flags: bytes):
 def found_in_this_save(ctx, item, flags: bytes) -> bool:
     """Whether a received item is one of this world's, found in the game at a location the loaded save
     has collected: the game already gave it then, so the mod only counts it. (A save from before it
-    was found, or a location sent by mistake, gets it delivered instead.)"""
+    was found, or a location sent by mistake, gets it delivered instead. So does a location collected
+    offline, before the client had put the seed's items in the game: it gave nothing.)"""
     index = location_index(item.location)
     return (item.player == ctx.slot and is_location_index(index)
-            and item.item - ID_BASE not in HEARTS
+            # A Pure Heart or wallet found here showed its item-get there; marked "already given", the
+            # mod opens the heart's door (raises the wallet) without a second pickup
+            # a tattle check gives nothing in the game: its item always comes from the server
+            and LOCATION_LIST[index].kind != "tattle"
+            and index not in ctx.offline_checks
             and Mailbox.flag_set(flags, LOCATION_LIST[index].flag))
 
 
@@ -96,7 +100,9 @@ def share_checks(ctx):
         try:
             write_server_checks(ctx.seed_name or "", ctx.auth or "", flags)
         except OSError as e:
-            logger.warning(f"Couldn't share checks with the tracker: {e}")
+            # Still locked by a read (or another hiccup): tried again on the next pass, half a second on
+            logger.debug(f"Couldn't share checks with the tracker this time: {e}")
+            return
         ctx.shared_checks, ctx.shared_at = shared, time.time()
 
 

@@ -23,7 +23,7 @@
 namespace mod::mailbox {
 
 #define MAILBOX_MAGIC "SPMAP_MAILBOX_v1"
-#define MAILBOX_VERSION 16
+#define MAILBOX_VERSION 21
 
 #define MAILBOX_RECV_SIZE 16  // items from the server waiting to be given
 #define MAILBOX_SENT_SIZE 32  // locations waiting to be read by the client
@@ -42,6 +42,7 @@ enum ModState : u32
     STATE_BOOT = 0,     // mod loaded, no save loaded yet
     STATE_TITLE = 1,    // no save loaded: title screen, game over or file select
     STATE_IN_GAME = 2,  // playing in a map: items can be given
+    STATE_IN_GAME_VANILLA = 3,  // playing a vanilla file (game_mode): the client leaves it alone
 };
 
 struct Mailbox
@@ -79,7 +80,7 @@ struct Mailbox
 /* 0x12C */ u32 locNamesMax;
 
     // Seed settings, written by the client
-/* 0x130 */ u32 playCutscenes;    // 1 = play the story scenes the mod can skip; 0 = skip them
+/* 0x130 */ u32 playCutscenes;    // unused since 2026-11-05: skipping is an in-game setting now (options_menu)
 
     // What each story gift location holds (story_gifts order), written by the client:
     // 0 = its vanilla item, JOIN_ITEM_OTHER_WORLD = another world's item
@@ -108,8 +109,40 @@ struct Mailbox
     // the client: 0 = its vanilla heart, JOIN_ITEM_OTHER_WORLD = an Archipelago item (another world's,
     // or one of this world's Pure Hearts), else a game item
 /* 0x168 */ u16 heartLocItems[8];
+
+    // What opens Chapter 8's door and what the final battle needs (endgame_requirements), written by
+    // the client: a kind (ENDGAME_*) and a count each. Kind 0 (no client): the door needs Chapters 1-7
+    // finished, and the battle nothing
+/* 0x178 */ u32 castleRequirement[2];
+/* 0x180 */ u32 finalRequirement[2];
+
+    // 1 when the starting doors' Pure Hearts are items to find (a requirement counts Pure Hearts):
+    // those doors still start open, but their hearts aren't given. Written by the client
+/* 0x188 */ u32 startingHeartsInPool;
+
+    // 1 once the client has put the seed's items in the game for the loaded save; the mod sets 0
+    // whenever no save is loaded (loading one reloads the vanilla items). While 0, locations give
+    // nothing and are logged as collected offline (offline_checks)
+/* 0x18C */ u32 seedPlaced;
+
+    // The seed's yes/no settings (SEED_FLAG_* bits). Written by the client; 0 without one
+/* 0x190 */ u32 seedFlags;
 };
-static_assert(sizeof(Mailbox) == 0x178);
+static_assert(sizeof(Mailbox) == 0x194);
+
+// seedFlags: 7-3's big cloud is there from the start (big_cloud_requires_peach_reunion off)
+#define SEED_FLAG_BIG_CLOUD_EARLY 0x1
+// seedFlags: the starting character, 0 Mario, 1 Peach, 2 Bowser, 3 Luigi (starting_character.h)
+// seedFlags: tattle checks are on (tattle_checks.h)
+#define SEED_FLAG_TATTLE_CHECKS 0x2
+#define SEED_START_CHARACTER_SHIFT 8
+#define SEED_START_CHARACTER_MASK 0x3
+// seedFlags: progressive wallets (wallet.h): 0 off, 1 four wallets (99 to 999), 2 a fifth with no limit
+#define SEED_WALLET_SHIFT 12
+#define SEED_WALLET_MASK 0x3
+#define SEED_WALLET_OFF 0
+#define SEED_WALLET_ON 1
+#define SEED_WALLET_INFINITE 2
 
 #define STARTING_HEARTS_NO_CLIENT 0xFFFFFFFF
 

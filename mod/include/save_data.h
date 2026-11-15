@@ -38,14 +38,37 @@ namespace mod::save_data {
 #define AP_GSW_PEACH_CHAIN (AP_GSW_BASE + 24)
 // The pause menu's settings: one bit per setting, set = changed from its default (options_menu)
 #define AP_GSW_OPTIONS (AP_GSW_BASE + 25)
+// The options menu's settings 9-16 (bit n - 8 = setting n), next to the first eight's
+#define AP_GSW_OPTIONS_2 (AP_GSW_BASE + 28)
 // Where Chapter 6's door leads, which Flipside Tower's patched door tests read (hub_story_fixes):
 // 0 Sammer's Kingdom (the story's duels), 1 the World of Nothing, 2 post-game Sammer's Kingdom
 #define AP_GSW_DOOR_6 (AP_GSW_BASE + 26)
+// How many Progressive Wallets the save has received (wallet)
+#define AP_GSW_WALLET (AP_GSW_BASE + 29)
+// Archipelago or vanilla file, asked when a new file starts (game_mode): 0 not asked yet (a file from
+// before the question counts as Archipelago), 1 Archipelago, 2 vanilla
+#define AP_GSW_MODE (AP_GSW_BASE + 30)
+#define FILE_MODE_UNSET 0
+#define FILE_MODE_ARCHIPELAGO 1
+#define FILE_MODE_VANILLA 2
 // What the first Sammer duel room's patched "scripted scenes" case compares with (cutscene_skips):
 // 228 plays King Sammer's scenes as in vanilla, 0 never does
 #define AP_GSW_SAMMER_SCENES (AP_GSW_BASE + 27)
 // Key items in storage: 32 slots x 2 bytes, 0 = empty slot (key_item_storage)
 #define AP_GSW_KEY_STORAGE (AP_GSW_BASE + 32)
+// Locations collected offline, before the client put the seed's items in the game: 32 bytes, bit
+// (index & 7) of byte (index >> 3) for the location at that index (offline_checks)
+#define AP_GSW_OFFLINE_CHECKS (AP_GSW_BASE + 96)
+#define AP_GSW_OFFLINE_CHECKS_BYTES 32
+// Mario's gravity when the game was saved (mario.h MarioGravityType, 0 = down): the game doesn't keep
+// it, so a save made on a Whoa Zone wall would load with Mario the right way up, off his wall (save_block)
+#define AP_GSW_GRAVITY (AP_GSW_BASE + 128)
+// The step reached in checks whose scene spans several visits, 8 bytes, 0 = none (check_stages)
+#define AP_GSW_CHECK_STEPS (AP_GSW_BASE + 129)
+// The seed's starting doors, kept from the client's last connection so a save loaded before the client
+// connects has them open (pure_hearts): bit N - 1 = door N, STARTING_DOORS_SAVED once written
+#define AP_GSW_STARTING_DOORS (AP_GSW_BASE + 137)
+#define STARTING_DOORS_SAVED 0x80
 
 // The values of AP_GSW_PEACH_CHAIN, copied from vanilla's story values for the same steps:
 // 60 Peach lies unconscious in Flipside, 61 Saffron was asked for soup, 62 the Spicy Soup is
@@ -74,8 +97,25 @@ namespace mod::save_data {
 // reserved range so the item spots below can keep growing
 #define AP_GSWF_CHAPTER_HEART_BASE (AP_GSWF_BASE + 1008)
 #define AP_GSWF_CHAPTER_HEART(chapter) (AP_GSWF_CHAPTER_HEART_BASE + (chapter) - 1)
+// The throne room door in 8-4 (endgame_requirements): opened with the Throne Room Key, and the key
+// given once the final battle's requirement is met
+#define AP_GSWF_THRONE_DOOR_OPEN (AP_GSWF_BASE + 1016)
+#define AP_GSWF_THRONE_KEY_GIVEN (AP_GSWF_BASE + 1017)
+// The starting character (starting_character.h): switched to once, and Mario's item received
+#define AP_GSWF_START_CHARACTER_SET (AP_GSWF_BASE + 1018)
+#define AP_GSWF_MARIO_HELD (AP_GSWF_BASE + 1019)
+// 7-2's second lock (an2_03 "lock2", Door Key 37) has been opened (npc_story_fixes)
+#define AP_GSWF_UNDERWHERE_LOCK (AP_GSWF_BASE + 1020)
+// The client has placed a seed for this file at least once (connect_gate)
+#define AP_GSWF_CONNECTED (AP_GSWF_BASE + 1021)
+// 5-3's lock (gn3_03, Cave Key 33) has been opened (npc_story_fixes)
+#define AP_GSWF_CRAG_LOCK (AP_GSWF_BASE + 1022)
+// 7-1's lock to Luigi's rooms (an1_03, Door Key 49) is open (npc_story_fixes)
+#define AP_GSWF_LUIGI_LOCK (AP_GSWF_BASE + 1023)
 // Item spots that have no save flag of their own get one from here, in spot_flags' order
 #define AP_GSWF_LOC_BASE (AP_GSWF_BASE + 32)
+// Tattle checks: one flag per kind of enemy, in location_flags.h TATTLE_CARDS' order (tattle_checks.h)
+#define AP_GSWF_TATTLE_BASE (AP_GSWF_BASE + 512)
 
 // ---- Vanilla flags the mod relies on ----
 

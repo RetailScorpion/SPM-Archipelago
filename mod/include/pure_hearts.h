@@ -8,7 +8,8 @@
     In the randomizer, Pure Heart N opens Flipside Tower's door N (Chapter N). The hearts held are
     save flags (AP_GSWF_HEART), not inventory items:
       - the seed's starting hearts come from the client (mailbox startingHearts) and are added to
-        the save on every map change
+        the save on every map change. When a requirement counts Pure Hearts, those hearts are items
+        to find instead (mailbox startingHeartsInPool): their doors open from the start anyway
       - the other hearts are items from the server, which the mod turns into the flag when received
     Without a client, every door is open.
 

@@ -29,7 +29,7 @@ static const s32 sSectionEnd[STORY_CHAPTER_COUNT + 1][3] = {
     {187, 195, 203},
     {0, 0, 0},  // Sammer's Kingdom, then the World of Nothing
     {307, 328, 340},
-    {0, 0, 0},  // Castle Bleck: entered from Flopside
+    {365, 385, 403},  // Castle Bleck: after O'Chunks (ls1_12), Mimi (ls2_18), Dimentio (ls3_13)
 };
 
 // Which chapter a map belongs to, by the start of its name. (Chapter 7's "an" maps also host the

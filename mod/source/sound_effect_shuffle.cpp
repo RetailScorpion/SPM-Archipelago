@@ -1,5 +1,6 @@
 #include <common.h>
 #include <msl/string.h>
+#include <spm/mario.h>
 #include <spm/spmario.h>
 #include <spm/spmario_snd.h>
 #include <wii/os.h>
@@ -32,18 +33,51 @@ namespace mod::sound_effect_shuffle {
       - the player's: the characters' (names starting SFX_P_: steps, jumps, landings, voices) and the
         Pixls' (SFX_F_)
       - the interface's: menus, text boxes, saving and the HUD (SFX_SYS_), and the Save Block's
+      - jingles: Piccolo's songs (SFX_F_PIKKYORON_, one per character and her "shine"). They're
+        Pixl effects by name, but a song in place of a footstep plays on every step (user, 2026-11-04),
+        so they only trade with each other, and the "Shuffle fanfares" setting turns them on
+      - footsteps: the characters' steps (SFX_P_<character>_MOVE1L/R, in water too, WATER_STEP1L/R,
+        STAIRS1L/R). They play many times a second, so any other effect in their place was too much
+        (user, 2026-11-04): they only trade with each other, one character's steps for another's
 */
 enum Kind
 {
     KIND_NONE,
     KIND_PLAYER,
     KIND_INTERFACE,
+    KIND_JINGLE,
+    KIND_FOOTSTEP,
     KIND_COUNT
 };
+
+#define PICCOLO_SONG_PREFIX "SFX_F_PIKKYORON_"
+
+// Whether `part` appears anywhere in `name`.
+static bool contains(const char * name, const char * part)
+{
+    u32 length = msl::string::strlen(part);
+    for (; *name; name++)
+    {
+        if (msl::string::strncmp(name, part, length) == 0)
+            return true;
+    }
+    return false;
+}
+
+// Whether a player effect is a footstep (the characters' walking, wading and stair steps).
+static bool isFootstep(const char * name)
+{
+    return contains(name, "_MOVE1L") || contains(name, "_MOVE1R") || contains(name, "_WATER_STEP1")
+        || contains(name, "_STAIRS1");
+}
 
 // The kind of effect a name is, from how it starts.
 static Kind kindOf(const char * name)
 {
+    if (msl::string::strncmp(name, PICCOLO_SONG_PREFIX, sizeof(PICCOLO_SONG_PREFIX) - 1) == 0)
+        return KIND_JINGLE;
+    if (msl::string::strncmp(name, "SFX_P_", 6) == 0 && isFootstep(name))
+        return KIND_FOOTSTEP;
     if (msl::string::strncmp(name, "SFX_P_", 6) == 0 || msl::string::strncmp(name, "SFX_F_", 6) == 0)
         return KIND_PLAYER;
     if (msl::string::strncmp(name, "SFX_SYS_", 8) == 0 || msl::string::strncmp(name, "SFX_MOBJ_SAVE_BLOCK", 19) == 0)
@@ -158,6 +192,10 @@ static void build(u32 seed)
     shuffleGroup(KIND_PLAYER, true, randomState);
     shuffleGroup(KIND_INTERFACE, false, randomState);
     shuffleGroup(KIND_INTERFACE, true, randomState);
+    shuffleGroup(KIND_JINGLE, false, randomState);
+    shuffleGroup(KIND_JINGLE, true, randomState);
+    shuffleGroup(KIND_FOOTSTEP, false, randomState);
+    shuffleGroup(KIND_FOOTSTEP, true, randomState);
     sSeed = seed;
     sBuilt = true;
     wii::os::OSReport("[spmap] sfxshuffle: %d effects shuffled for \"%s\"\n", sCount, spm::spmario::gp->saveName);
@@ -188,10 +226,19 @@ static const char * tvReplacement(const char * name)
     return j < 0 ? name : game_addresses::spssfxlist[j].name;
 }
 
-// The effect to play instead of `name` (itself if the setting is off or it isn't shuffled).
+// Whether a kind's setting is on: "Shuffle fanfares" for jingles, "Sound effect shuffle" for the rest.
+static bool kindOn(Kind kind)
+{
+    if (kind == KIND_NONE)
+        return false;
+    return options_menu::get(kind == KIND_JINGLE ? options_menu::OPTION_FANFARE_SHUFFLE : options_menu::OPTION_SFX_SHUFFLE);
+}
+
+// The effect to play instead of `name` (itself if its setting is off or it isn't shuffled). A TV
+// speaker copy has the same start as its base effect, so it's the same kind.
 static const char * replacement(const char * name)
 {
-    if (name == nullptr || game_addresses::spssfxlist == nullptr || !options_menu::get(options_menu::OPTION_SFX_SHUFFLE))
+    if (name == nullptr || game_addresses::spssfxlist == nullptr || !kindOn(kindOf(name)))
         return name;
     u32 seed = hashName(spm::spmario::gp->saveName);
     if (!sBuilt || seed != sSeed)
@@ -201,6 +248,75 @@ static const char * replacement(const char * name)
         return tvReplacement(name);
     s32 i = find(name);
     return i < 0 ? name : game_addresses::spssfxlist[sShuffled[i]].name;
+}
+
+// ---- The character's own voice ----
+
+/*
+    Scenes written for Mario name his voice clips directly (SFX_P_V_MARIO_NODS1 and so on) instead of
+    the game's per-character call, so playing as Peach, Bowser or Luigi there (starting_character,
+    randomize_characters) gave Mario's voice (user, 2026-11-08: Merlon's scene about Peach). Each
+    character has the same clips by name (Bowser's are KOOPA): SFX_P_V_<character>_<clip><n>. A Mario
+    clip plays the current character's clip of that name, or their first of it (<clip>1) if that
+    number is missing. Of Mario's 30 clips, 27 have every character's (read from the game's list,
+    2026-11-08); his own three get the nearest one (sVoiceStandIns). With none, Mario's plays.
+*/
+#define MARIO_VOICE_PREFIX "SFX_P_V_MARIO_"
+#define VOICE_PREFIX_LENGTH 8  // "SFX_P_V_"
+static const char * const sVoiceNames[] = {"MARIO", "PEACH", "KOOPA", "LUIGI"};
+// Mario's clips nobody else has, and the clip the others play for them
+static const char * const sVoiceStandIns[][2] = {{"HELLO1", "HI1"}, {"OK1", "NODS1"}, {"OUCH1", "DAMEGE1"}};
+
+// Whether the game's effect list has a name (the list is sorted by name, as find() uses).
+static bool effectExists(const char * name)
+{
+    s32 low = 0, high = static_cast<s32>(game_addresses::spsnd_sfx_count) - 1;
+    while (low <= high)
+    {
+        s32 middle = (low + high) / 2;
+        s32 order = msl::string::strcmp(game_addresses::spssfxlist[middle].name, name);
+        if (order == 0)
+            return true;
+        if (order < 0)
+            low = middle + 1;
+        else
+            high = middle - 1;
+    }
+    return false;
+}
+
+// `name`, or the current character's clip in place of a Mario voice clip.
+static const char * characterVoice(const char * name)
+{
+    static char sVoice[NAME_BUFFER];
+    if (name == nullptr || game_addresses::spssfxlist == nullptr
+        || msl::string::strncmp(name, MARIO_VOICE_PREFIX, sizeof(MARIO_VOICE_PREFIX) - 1) != 0)
+        return name;
+    s32 character = spm::mario::marioGetPtr()->character;
+    if (character <= 0 || character > 3)
+        return name;
+    const char * clip = name + sizeof(MARIO_VOICE_PREFIX) - 1;  // "NODS1"
+    for (const auto & standIn : sVoiceStandIns)
+        if (msl::string::strcmp(clip, standIn[0]) == 0)
+            clip = standIn[1];
+    u32 clipLength = msl::string::strlen(clip);
+    if (VOICE_PREFIX_LENGTH + 6 + clipLength + 1 > sizeof(sVoice))
+        return name;
+    msl::string::strcpy(sVoice, "SFX_P_V_");
+    msl::string::strcat(sVoice, sVoiceNames[character]);
+    msl::string::strcat(sVoice, "_");
+    msl::string::strcat(sVoice, clip);
+    if (effectExists(sVoice))
+        return sVoice;
+    // Their first clip of that name instead: the number at the end becomes 1
+    char * end = sVoice + msl::string::strlen(sVoice);
+    while (end > sVoice && end[-1] >= '0' && end[-1] <= '9')
+        end--;
+    if (*end == '\0')
+        return name;
+    end[0] = '1';
+    end[1] = '\0';
+    return effectExists(sVoice) ? sVoice : name;
 }
 
 // ---- Low health beeping ----
@@ -220,7 +336,7 @@ static s32 __spsndSFXOnHook(const char * name, u8 volume, u8 pan, s32 delay, wii
 {
     if (name != nullptr && !options_menu::get(options_menu::OPTION_LOW_HEALTH_SOUND) && isLowHealthSound(name))
         return NO_EFFECT;
-    return __spsndSFXOnReal(replacement(name), volume, pan, delay, position, param6);
+    return __spsndSFXOnReal(replacement(characterVoice(name)), volume, pan, delay, position, param6);
 }
 
 // The game's "is effect X playing?" and "which id is effect X?" look for X's replacement, since
@@ -228,13 +344,13 @@ static s32 __spsndSFXOnHook(const char * name, u8 volume, u8 pan, s32 delay, wii
 static s32 (*sfxCheckNameReal)(const char * name);
 static s32 sfxCheckNameHook(const char * name)
 {
-    return sfxCheckNameReal(replacement(name));
+    return sfxCheckNameReal(replacement(characterVoice(name)));
 }
 
 static s32 (*sfxIdPlayingNameReal)(const char * name);
 static s32 sfxIdPlayingNameHook(const char * name)
 {
-    return sfxIdPlayingNameReal(replacement(name));
+    return sfxIdPlayingNameReal(replacement(characterVoice(name)));
 }
 
 void init()

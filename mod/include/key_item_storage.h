@@ -24,6 +24,10 @@ bool keyItemsFull();
 // Puts a key item in storage and shows the notice. Returns false if storage is full too.
 bool store(s32 itemId);
 
+// Shows a red notice on screen for a few seconds (also used for other messages, like the final
+// battle's requirement).
+void showNotice(const char * text);
+
 // Draws the notice while it lasts. Call every frame in game.
 void tick();
 

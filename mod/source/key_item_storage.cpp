@@ -1,5 +1,6 @@
 #include <common.h>
 #include <msl/stdio.h>
+#include <msl/string.h>
 #include <spm/camdrv.h>
 #include <spm/dispdrv.h>
 #include <spm/fontmgr.h>
@@ -51,12 +52,20 @@ static u16 storedAt(s32 slot)
     return save_data::getGswU16(slotSaveByte(slot));
 }
 
+void showNotice(const char * text)
+{
+    msl::string::strncpy(sNotice, text, sizeof(sNotice) - 1);
+    sNotice[sizeof(sNotice) - 1] = 0;
+    sNoticeFrames = NOTICE_FRAMES;
+}
+
 // Starts showing "Key items full: X went to storage".
-static void showNotice(s32 itemId)
+static void showStoredNotice(s32 itemId)
 {
     const char * name = spm::msgdrv::msgSearch(spm::item_data::itemDataTable[itemId].nameMsg);
-    msl::stdio::sprintf(sNotice, "Key items full: %s went to storage", name);
-    sNoticeFrames = NOTICE_FRAMES;
+    char text[sizeof(sNotice)];
+    msl::stdio::sprintf(text, "Key items full: %s went to storage", name);
+    showNotice(text);
 }
 
 bool store(s32 itemId)
@@ -66,7 +75,7 @@ bool store(s32 itemId)
         if (storedAt(slot) != 0)
             continue;
         save_data::setGswU16(slotSaveByte(slot), static_cast<u16>(itemId));
-        showNotice(itemId);
+        showStoredNotice(itemId);
         wii::os::OSReport("[spmap] keystorage: key items full, item %d stored in slot %d\n", itemId, slot);
         return true;
     }
