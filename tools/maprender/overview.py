@@ -313,8 +313,8 @@ button.on{background:#556}
 .small .chk.icon{width:20px;height:20px}
 .chk.approx{outline:2px dashed #ff0;outline-offset:1px}
 .lock{position:absolute;pointer-events:none}
-.boss{position:absolute;transform:translate(-50%,-100%);width:44px;z-index:2;pointer-events:auto;filter:drop-shadow(0 0 2px #000)}
-.small .boss{width:22px}
+.boss{position:absolute;transform:translate(-50%,-100%);max-width:96px;max-height:96px;z-index:2;pointer-events:auto;filter:drop-shadow(0 0 2px #000)}
+.small .boss{max-width:40px;max-height:40px}
 .chk.done{opacity:.25;filter:grayscale(1)}
 #info{padding:6px 12px;min-height:20px;background:#1f1f26}
 #ap{float:right;padding:6px 12px}
@@ -416,7 +416,7 @@ function marker(c, x, y){
     e.classList.toggle('done', isDone(c)); info.innerHTML = describe(c); };
   wrap.appendChild(e);
 }
-// Bosses (bosses.py): each one's catch card in its room until it's beaten
+// Bosses (bosses.py): each one's model in its room until it's beaten
 function bossBeaten(b){ return reached(b.cond[0], b.cond[1], b.chapter); }
 // Locks on doors and gates (graph.py 'locks', each its own picture cut from the render): drawn until the game
 // opens them, which the room's script decides from its chapter's story value or a save flag. Without the game
@@ -458,7 +458,7 @@ function drawBosses(){
       const box = L[view.area].rooms[b.room]; if (!box) continue;
       const R = G.rooms[b.room]; x = box[0] + x * box[2] / R.width; y = box[1] + y * box[3] / R.height;
     } else if (view.room !== b.room) continue;
-    const e = document.createElement('img'); e.className = 'boss'; e.src = 'icons/' + b.item + '.png';
+    const e = document.createElement('img'); e.className = 'boss'; e.src = b.model ? 'icons/boss_' + b.model + '.png' : 'icons/' + b.item + '.png';
     e.title = b.label + ' (not beaten yet)';
     Object.assign(e.style, {left: x + 'px', top: y + 'px'});
     wrap.appendChild(e);
@@ -646,6 +646,8 @@ function throneKey(){  // [earned, progress text]
 function count(it){
   if (it.id === 'throne_key' && connected) return throneKey()[0] ? 1 : 0;
   if (!connected) return +(haveByHand[it.id] || 0);
+  // starting as Mario, he's no item to find (the server never sends him): held from the start
+  if (it.id === AP_ID_BASE + 216 && slotData && !slotData.starting_character) return 1;
   return (it.ids || [it.id]).reduce((sum, id) => sum + (received[id] || 0), 0);  // a key kind: all its items
 }
 function drawItems(){

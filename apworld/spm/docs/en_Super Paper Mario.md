@@ -12,4 +12,4 @@ It's a work in progress. With `logic: wip_logic` (the default), items are placed
 Finish Chapter 8. What opens Chapter 8's door and what the final battle needs are set by `castle_requirement` and `final_requirement`.
 
 ## What does another world's item look like?
-The Archipelago icon (grey for filler). Picking it up shows "Sent <item> to <player>!".
+The Archipelago icon (grey for filler). Picking it up shows "Sent <item> to <player>!". Tattling it with Tippi tells you what it is and who it's for, and hints it.

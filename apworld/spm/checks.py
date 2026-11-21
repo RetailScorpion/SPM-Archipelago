@@ -56,6 +56,18 @@ def check_locations(ctx, flags: bytes):
         Utils.async_start(ctx.send_msgs([{"cmd": "LocationChecks", "locations": new}]))
 
 
+def send_hints(ctx):
+    """Sends the locations whose Archipelago item Tippi tattled (the mod's item_tattles) as hints, so
+    everyone sees what's there. Only locations not checked yet: a hint for a found item says nothing."""
+    flags = set(ctx.mailbox.poll_hints())
+    if not flags:
+        return
+    hints = [location_id(i) for i, location in enumerate(LOCATION_LIST)
+             if location.flag in flags and location_id(i) in ctx.missing_locations]
+    if hints:
+        Utils.async_start(ctx.send_msgs([{"cmd": "LocationScouts", "locations": hints, "create_as_hint": 2}]))
+
+
 def found_in_this_save(ctx, item, flags: bytes) -> bool:
     """Whether a received item is one of this world's, found in the game at a location the loaded save
     has collected: the game already gave it then, so the mod only counts it. (A save from before it

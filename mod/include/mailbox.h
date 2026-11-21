@@ -23,10 +23,11 @@
 namespace mod::mailbox {
 
 #define MAILBOX_MAGIC "SPMAP_MAILBOX_v1"
-#define MAILBOX_VERSION 21
+#define MAILBOX_VERSION 23
 
 #define MAILBOX_RECV_SIZE 16  // items from the server waiting to be given
 #define MAILBOX_SENT_SIZE 32  // locations waiting to be read by the client
+#define MAILBOX_HINT_SIZE 8   // hint requests waiting to be read by the client
 
 // recvItems: this bit marks an item that was already given in the game (one of this world's items
 // found here); the mod only counts it as handled
@@ -127,8 +128,18 @@ struct Mailbox
 
     // The seed's yes/no settings (SEED_FLAG_* bits). Written by the client; 0 without one
 /* 0x190 */ u32 seedFlags;
+
+    // Game -> client: locations to hint (item_tattles: Tippi tattled their Archipelago item), as save
+    // flags. A ring buffer like sentLocations; the client sends each one as a hint
+/* 0x194 */ u32 hintCount;        // written by the mod
+/* 0x198 */ u32 hintAcked;        // written by the client
+/* 0x19C */ u16 hintFlags[MAILBOX_HINT_SIZE];
+
+    // The seed and slot the client is connected to, as a number (never 0), written by the client while
+    // it's in a slot; 0 = none. A file keeps the first one it sees, and won't play with another (save_lock)
+/* 0x1AC */ u32 seedId;
 };
-static_assert(sizeof(Mailbox) == 0x194);
+static_assert(sizeof(Mailbox) == 0x1B0);
 
 // seedFlags: 7-3's big cloud is there from the start (big_cloud_requires_peach_reunion off)
 #define SEED_FLAG_BIG_CLOUD_EARLY 0x1
@@ -162,5 +173,8 @@ void commitReceived();
 
 // Puts a location on the list for the client. Returns false if the list is full.
 bool sendLocation(u32 locationId);
+
+// Asks the client to hint the location with this save flag. Returns false if the list is full.
+bool requestHint(u16 flag);
 
 }

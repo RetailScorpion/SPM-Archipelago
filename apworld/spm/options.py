@@ -128,7 +128,7 @@ class ProgressiveWallet(Choice):
     off: no wallets; you can carry 999 coins from the start, as in vanilla.
     on: three Progressive Wallets in the item pool.
     with_infinite: a fourth one that lifts the limit (no coin cap).
-    Nothing in the logic needs more than 99 coins, so wallets are never required."""
+    The Ancient Clue (for Fleep) costs more than 99 coins, so with wallets on, Fleep needs one."""
     display_name = "Progressive Wallet"
     option_off = 0
     option_on = 1
@@ -206,13 +206,15 @@ class ShufflePureHearts(DefaultOnToggle):
 
 class CastleRequirement(Choice):
     """What opens Chapter 8's door (Castle Bleck, in Flopside Tower).
-    vanilla: Pure Heart 8.
+    pure_heart_8: Pure Heart 8, as in vanilla (it's found in the item pool, or at Chapter 7's end with
+    shuffle_pure_hearts off).
     chapters: castle_chapters of Chapters 1-7 finished.
     pure_hearts: castle_hearts Pure Hearts (the starting doors' hearts count, unless shuffle_pure_hearts
     puts them in the pool).
     always_open: open from the start."""
     display_name = "Castle Requirement"
-    option_vanilla = 0
+    option_pure_heart_8 = 0
+    alias_vanilla = 0
     option_chapters = 1
     option_pure_hearts = 2
     option_always_open = 3
@@ -238,11 +240,12 @@ class CastleHearts(Range):
 class FinalRequirement(Choice):
     """What the final battle needs. Count Bleck's throne room door in 8-4 is locked, and a sign beside it
     says what's left; once you meet this, you get the Throne Room Key that opens it.
-    vanilla: Pure Heart 8.
+    pure_heart_8: Pure Heart 8.
     chapters: final_chapters of Chapters 1-7 finished.
     pure_hearts: final_hearts Pure Hearts (the ones you start with count)."""
     display_name = "Final Requirement"
-    option_vanilla = 0
+    option_pure_heart_8 = 0
+    alias_vanilla = 0
     option_chapters = 1
     option_pure_hearts = 2
     default = 2

@@ -43,7 +43,7 @@ Depending on your YAML options:
 ## Doors and the goal
 - **Chapter doors:** some doors in Flipside Tower are open from the start (`starting_chapter_mode`: the ones you list, a set number at random, or a random number). Every other door opens when you receive its Pure Heart.
 - **Flopside:** the blue pipe between the towers works once you have Boomer, Fleep and Mario.
-- **Chapter 8:** its door in Flopside Tower follows `castle_requirement` (default: Chapters 1-7 finished). Chapter 8 also needs Peach and Luigi, and Bowser past 8-1.
+- **Chapter 8:** its door in Flopside Tower follows `castle_requirement`: Pure Heart 8 (`pure_heart_8`), a number of chapters finished (the default: all of 1-7), a number of Pure Hearts, or open from the start. Chapter 8 also needs Peach and Luigi, and Bowser past 8-1.
 - **The final battle:** Count Bleck's throne room door in 8-4 is padlocked, with a sign saying what's left. Once you meet `final_requirement` (default: all 8 Pure Hearts) you get the Throne Room Key.
 - **Goal:** finish Chapter 8.
 
@@ -71,6 +71,8 @@ Items for other worlds show up as the Archipelago icon (grey for filler). Items 
 - **Fast travel:** in the pause menu's Chapters tab, pick a section you've reached and press 2 to go there.
 - **Connection status:** while paused, the bottom left shows whether the client is connected.
 - **Key item storage:** Mario can carry 32 key items. Any more go into storage (with a red notice on screen); use SPM Archipelago Tools to swap them.
+- **Tippi on an Archipelago item:** tattling one says what it is and who it's for, and sends that as a hint to everyone.
+- **Files belong to a seed:** a file remembers the first seed and slot it plays. Loading it while connected to a different one shows a message and returns to the title screen, so a check from the wrong file never gets sent.
 - **Vanilla files** play the normal game, keeping the Options settings (except the cutscene skips) and the block hints in 5-1.
 
 ## Known issues

@@ -25,3 +25,6 @@ apworld/spm/bin/
 
 # Personal notes, kept local
 CHEATSHEET.md
+
+# Other games' files (local tools for the map renderer)
+tools/maprender/Games/

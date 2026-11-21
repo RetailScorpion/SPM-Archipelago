@@ -29,13 +29,16 @@ sys.path.insert(0, os.path.join(ROOT, 'tools'))
 import projection  # noqa: E402
 from dolasm import Dol  # noqa: E402
 import tpl  # noqa: E402
+sys.path.insert(0, HERE)
+import bosses  # noqa: E402
+
+BLENDER = r'C:\Program Files\Blender Foundation\Blender 5.1\blender.exe'
 
 OUT_DIR = os.path.join(ROOT, 'build', 'maps')
 DISC = os.path.join(ROOT, 'disc', 'DATA')
 ITEM_DATA_TABLE = 0x803B6978  # itemDataTable (spm-headers), 0x2c per item; iconId at +4
 ITEM_DATA_SIZE = 0x2C
 ICON_ITEMS = list(range(216, 220)) + list(range(221, 232))  # Mario, Peach, Bowser, Luigi; Thoreau to Dashell (Mario: the viewer's live marker)
-ICON_ITEMS += __import__('bosses').CARD_ITEMS  # the bosses' catch cards (bosses.py)
 AP_ID_BASE = 0x53504D00     # apworld/spm/data.py ID_BASE: an item's Archipelago id is this + its number
 HEART_ITEM_FIRST = 1001     # Pure Hearts 1-8 are numbers 1001-1008 (apworld/spm/items.py)
 ICON_PURE_HEART_FIRST = 0x31  # the game's Pure Heart icons, red (1) to white (8) (mod archipelago_item.cpp)
@@ -124,7 +127,6 @@ PINNED = {
     '3-1 The Bitlands - Bowser joins (ta1_04)': ('pos', [3575, 0, -6]),  # by the castle (user's spot, 2026-11-04)
     '7-1 The Underwhere - Super Shroom Shake (an1_02)': ('pos', [1225, 150, 4]),  # comes out of pipe dokan_6
     # Inside a room that isn't drawn and has no door the map knows: on the door into it, in a drawn room
-    '1-2 Mount Lineland - Red & Green Card (he2_05)': ('room_px', 'he2_03', [2289, 559]),  # the house in the background
 }
 
 
@@ -236,6 +238,8 @@ def to_pixels(room, pos):
 
 def main():
     extract_icons()
+    # the bosses' pictures: their models, rendered once (bosses.py)
+    bosses.make_pictures(os.path.join(OUT_DIR, 'icons'), os.path.join(OUT_DIR, 'raw', 'npc'), BLENDER)
     graph = json.load(open(os.path.join(OUT_DIR, 'graph.json')))
     rooms = graph['rooms']
     locations = json.load(open(os.path.join(ROOT, 'data', 'ap_locations.json')))['locations']

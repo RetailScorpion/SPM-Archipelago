@@ -11,6 +11,7 @@ Connect before entering a level: a level's items are only changed once the clien
 """
 
 import asyncio
+import zlib
 
 import Utils
 from CommonClient import ClientCommandProcessor, CommonContext, get_base_parser, gui_enabled, logger, server_loop
@@ -65,6 +66,7 @@ class SPMContext(CommonContext):
         self.progressive_wallet = 0  # progressive_wallet: 0 off, 1 on, 2 with_infinite
         self.playing_vanilla = False  # a vanilla file is loaded (the mod's STATE_IN_GAME_VANILLA)
         self.big_cloud_early = False  # 7-3's big cloud there from the start (seeds from before the option: vanilla)
+        self.wrong_save = False      # the loaded save belongs to another seed or slot (save_lock)
         self.shared_checks = None    # (seed, slot, flags) last written for the tracker
         self.shared_at = 0.0         # when it was written
 
@@ -93,9 +95,13 @@ class SPMContext(CommonContext):
             every_location = list(self.missing_locations | self.checked_locations)
             Utils.async_start(self.send_msgs([{"cmd": "LocationScouts", "locations": every_location, "create_as_hint": 0}]))
         elif cmd == "LocationInfo":
+            # Hints (send_hints) answer with items already known: only something new needs placing again
+            changed = False
             for item in args["locations"]:
+                changed |= self.scouted.get(item.location) != item
                 self.scouted[item.location] = item
-            self.placed = False
+            if changed:
+                self.placed = False
 
     def make_gui(self):
         ui = super().make_gui()
@@ -121,10 +127,16 @@ def find_mailbox(ctx: SPMContext):
         logger.info(status)
 
 
+def seed_id(ctx: SPMContext) -> int:
+    """A number for the seed and slot the client is in, never 0 (the mod's save_lock keeps it in each save)."""
+    return zlib.crc32(f"{ctx.seed_name}:{ctx.slot}".encode()) or 1
+
+
 def send_seed_settings(ctx: SPMContext):
     """Writes the seed's settings into the mailbox. Done before a save is loaded too, since a new
     file's opening reads them right away. (Skipping cutscenes is an in-game setting now, in the
     options menu, not a seed setting.)"""
+    ctx.mailbox.set_seed_id(seed_id(ctx))
     ctx.mailbox.set_sammer_gates(ctx.sammer_gates)
     ctx.mailbox.set_endgame_requirements(ctx.castle_requirement, ctx.final_requirement)
     ctx.mailbox.set_starting_hearts_in_pool(ctx.starting_hearts_in_pool)
@@ -137,6 +149,15 @@ def send_seed_settings(ctx: SPMContext):
 
 def update_game(ctx: SPMContext):
     """Places items, reads checks and sends items, while a save is loaded."""
+    # A save from another seed or slot (save_lock): the mod sends the player back to the title; until
+    # then nothing is placed, sent or given. One with no number yet is claimed by the mod first
+    saved = ctx.mailbox.save_seed_id()
+    if saved != seed_id(ctx):
+        if saved != 0 and not ctx.wrong_save:
+            logger.info("This save belongs to a different seed or slot: the client leaves it alone.")
+        ctx.wrong_save = saved != 0
+        return
+    ctx.wrong_save = False
     # The mod forgets the placements when the save is left (loading one reloads the vanilla items): if
     # that happened between two checks, place them again
     if ctx.placed and not ctx.mailbox.seed_placed():
@@ -153,6 +174,7 @@ def update_game(ctx: SPMContext):
         return
     flags = ctx.mailbox.read_flags()
     checks.check_locations(ctx, flags)
+    checks.send_hints(ctx)
     checks.feed_items(ctx, flags)
     # Spots whose item the loaded save already got hold a coin (from the next map load)
     coins = placement.delivered_not_found(ctx, flags)

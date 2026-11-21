@@ -1,6 +1,7 @@
 #pragma once
 
 #include <common.h>
+#include <spm/itemdrv.h>
 
 /*
     The Archipelago item: what Mario finds where another world's item is placed.
@@ -74,6 +75,11 @@ void armWallet();
 // Makes the next Archipelago item-get Pure Heart `heart` (1-8) from the server: its own icon and "You got
 // Pure Heart N!" (user, 2026-11-08: a tattle check's heart arrived without a word).
 void armHeart(s32 heart);
+
+// The names for the location a world item (the Archipelago item lying in a level) comes from: its own
+// flag, else the nearest unopened chest. Returns the offline entry (flag 0, "Archipelago Item") for one
+// collected offline, or nullptr if the location isn't listed (no client yet).
+const LocName * locationOf(const spm::itemdrv::ItemEntry * item);
 
 // The mod's text for a game message name, or nullptr to use the game's own.
 const char * message(const char * msgName);

@@ -41,4 +41,14 @@ bool sendLocation(u32 locationId)
     return true;
 }
 
+bool requestHint(u16 flag)
+{
+    if (gMailbox.hintCount - gMailbox.hintAcked >= MAILBOX_HINT_SIZE)
+        return false;
+
+    gMailbox.hintFlags[gMailbox.hintCount % MAILBOX_HINT_SIZE] = flag;
+    gMailbox.hintCount++;
+    return true;
+}
+
 }

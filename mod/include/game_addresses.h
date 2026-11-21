@@ -15,6 +15,7 @@
 #include <common.h>
 #include <evt_cmd.h>
 #include <spm/evtmgr.h>
+#include <spm/itemdrv.h>
 #include <spm/npcdrv.h>
 #include <spm/seq_title.h>
 #include <spm/spmario_snd.h>
@@ -134,6 +135,9 @@ struct PixlAbility
 extern PixlAbility pixl_ability_table[];
 // Tippi's tattle text for an NPC (her pointer): its catch card's text with its HP and attack, or her own
 const char * searchGetNpcMsg(spm::npcdrv::NPCEntry * npc);
+// Tippi's tattle text for an item lying in a level (her pointer's kind 5): by item number, "that's an
+// item", "that's important"...
+const char * search_item_msg(spm::itemdrv::ItemEntry * item);
 // Fleep's ability (what pressing 1 does with him): starts his pointer motion (0x26)
 s32 fleep_ability(s32 pixl, s32 mode);
 // In Fleep's motion and its end: "li r3, 0xe2", his Pixl id, before looking up his Pixl

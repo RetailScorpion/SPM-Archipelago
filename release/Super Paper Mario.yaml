@@ -113,7 +113,8 @@ Super Paper Mario:
     # Coins need a bigger wallet: you start able to carry 99, and each Progressive Wallet raises the
     # limit: 200, 500, then 999 (the game's own).
     # off: 999 from the start, as in vanilla. on: three wallets in the pool.
-    # with_infinite: a fourth one with no limit. Nothing in the logic needs more than 99 coins.
+    # with_infinite: a fourth one with no limit. The Ancient Clue (for Fleep) costs more than 99 coins,
+    # so with wallets on, Fleep needs one.
     'off': 50
     'on': 0
     with_infinite: 0
@@ -166,12 +167,12 @@ Super Paper Mario:
     'true': 50
     'false': 0
   castle_requirement:
-    # What opens Chapter 8's door in Flopside Tower. vanilla: Pure Heart 8. chapters: castle_chapters
-    # of Chapters 1-7 finished. pure_hearts: castle_hearts Pure Hearts. With either requirement on
+    # What opens Chapter 8's door in Flopside Tower. pure_heart_8: Pure Heart 8, as in vanilla.
+    # chapters: castle_chapters of Chapters 1-7 finished. pure_hearts: castle_hearts Pure Hearts. With either requirement on
     # pure_hearts and shuffle_pure_hearts on, the starting chapters' hearts are items to find too
     # (their doors still start open) and only found hearts count; otherwise the starting ones count.
     # always_open: open from the start.
-    vanilla: 0
+    pure_heart_8: 0
     chapters: 50
     pure_hearts: 0
     always_open: 0
@@ -184,7 +185,7 @@ Super Paper Mario:
   final_requirement:
     # What the final battle needs (Count Bleck's throne room door in 8-4 is padlocked; you get the
     # Throne Room Key once you meet this). Same choices as castle_requirement, except always_open.
-    vanilla: 0
+    pure_heart_8: 0
     chapters: 0
     pure_hearts: 50
   final_chapters:

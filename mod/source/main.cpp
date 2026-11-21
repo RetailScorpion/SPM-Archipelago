@@ -48,6 +48,8 @@
 #include "save_block.h"
 #include "sound_effect_shuffle.h"
 #include "tattle_checks.h"
+#include "item_tattles.h"
+#include "save_lock.h"
 #include "starting_character.h"
 #include "spot_flags.h"
 #include "story_gifts.h"
@@ -65,6 +67,7 @@
 #include "fast_travel.h"
 #include "wallet.h"
 #include "flopside_pipe.h"
+#include "boss_fall_guard.h"
 #include "game_mode.h"
 
 namespace mod {
@@ -108,6 +111,7 @@ static void noSaveLoaded()
     received_items::onNoSaveLoaded();
     save_block::onNoSaveLoaded();
     connect_gate::onNoSaveLoaded();
+    save_lock::onNoSaveLoaded();
 }
 
 static spm::seqdef::SeqFunc * titleScreenReal;
@@ -163,6 +167,7 @@ static void gameFrame(spm::seqdrv::SeqWork * wp)
 
     climb_speed::tick();
     tower_top::tick();
+    boss_fall_guard::tick();
     squirps_shots::tick();
     sammer_ninjas::tick();
     block_hints::tick();
@@ -170,7 +175,9 @@ static void gameFrame(spm::seqdrv::SeqWork * wp)
     if (!randomizer)
         return;
     story_progress::sync();
-    connect_gate::tick();
+    save_lock::tick();
+    if (!save_lock::mismatched())
+        connect_gate::tick();
     pause_chapters::tick();
     fast_travel::tick();
     npc_story_fixes::tick();
@@ -203,6 +210,7 @@ static void mapChange(spm::seqdrv::SeqWork * wp)
     game_mode::apply();
     elevator_skips::onMapChange();
     npc_culling::onMapChange();
+    boss_fall_guard::onMapChange();
     sammer_ninjas::onMapChange();
     if (game_mode::vanilla())
     {
@@ -282,6 +290,7 @@ void main()
     endgame_requirements::init();
     archipelago_item::init();
     tattle_checks::init();
+    item_tattles::init();
 
     using spm::seqdef::seq_data;
     using namespace spm::seqdrv;

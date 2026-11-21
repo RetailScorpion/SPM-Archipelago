@@ -1,6 +1,6 @@
 # Super Paper Mario Archipelago: Design
 
-How the randomizer works, what each part does and where its code is. Version 0.2.2, US release (revision 0) only.
+How the randomizer works, what each part does and where its code is. Version 0.2.3, US release (revision 0) only.
 
 Each feature's details (addresses, script offsets, what was tried) are in the comment at the top of its file, mostly `mod/include/<feature>.h`. This doc is the map. Older notes are in the git history.
 
@@ -56,6 +56,8 @@ Every feature is one file pair: `mod/source/<name>.cpp` and `mod/include/<name>.
 | `story_gifts` | The other story gifts (Bestovius's lesson, the Helmet, Brobot L-type) |
 | `pure_hearts` | Pure Hearts as items and locations; the starting doors |
 | `tattle_checks` | Tatl and the tattle checks |
+| `item_tattles` | Tippi on the Archipelago item says what it is and who it's for, and the client hints it |
+| `save_lock` | A file belongs to the first seed and slot it meets; loading it with another shows a box and goes to the game over screen |
 | `wallet` | Progressive wallets: the coin limit and the item-get's "You can now hold X coins" |
 | `key_item_storage` | Key items beyond the 32 slots go into storage |
 | `key_groups` | A chapter's keys open any lock of their kind in it |
@@ -102,6 +104,7 @@ Every feature is one file pair: `mod/source/<name>.cpp` and `mod/include/<name>.
 | `file_select_hearts` | The file select shows a save's real Pure Hearts and an Archipelago icon |
 | `title_banner` | The Archipelago banner and flower on the title screen |
 | `tower_top` | Mario no longer falls through the top of Flipside Tower |
+| `boss_fall_guard` | O'Chunks knocked through the floor (Barry, 1-3) is put back, so his defeat scene can end |
 
 **Shared tools** (not features): `code_patching` and `script_patching` (changing the game's code and scripts), `game_messages` (the mod's own text), `save_data` (the save file layout), `mailbox`, `game_addresses`, `debug_warp` (developer warps), and two generated headers, `location_flags.h` and `sound_effect_loops.h`.
 
@@ -139,8 +142,8 @@ The YAML options and their text are in `apworld/spm/options.py` (the template is
 | `progressive_wallet` | off | Start with a 99-coin limit; wallets raise it (optionally to no limit) |
 | `starting_chapter_mode` (+ `starting_chapters`, `starting_chapter_count`, `starting_chapter_max`) | chosen, Chapter 1 | Which doors start open |
 | `shuffle_pure_hearts` | on | The chapters' Pure Hearts are locations and items |
-| `castle_requirement` (+ `castle_chapters`, `castle_hearts`) | chapters, 7 | What opens Chapter 8's door |
-| `final_requirement` (+ `final_chapters`, `final_hearts`) | pure_hearts, 8 | What the final battle needs |
+| `castle_requirement` (+ `castle_chapters`, `castle_hearts`) | chapters, 7 | What opens Chapter 8's door: Pure Heart 8, chapters finished, Pure Hearts held, or always open |
+| `final_requirement` (+ `final_chapters`, `final_hearts`) | pure_hearts, 8 | What the final battle needs: Pure Heart 8, chapters finished or Pure Hearts held |
 | `save_block` | start_with | The Save Block: shuffled, start with it, or none |
 | `trap_percentage` | 10 | Share of filler replaced by Cursya Traps |
 | `sammer_duels` | 25 | Duels per part of Sammer's Kingdom |
@@ -170,13 +173,13 @@ All in `apworld/spm/rules.py`. A rule is a list of alternatives, each a list of 
 - Keys are counted by group: locks in a row need one more key each.
 
 **What's mapped so far**, by chapter (details and dates are in the comments in `rules.py`):
-- **Chapter 1:** Mario's flip for most of 1-1 past the first room and all of 1-2 to 1-4; Thoreau or Peach past Watchitt's bridge (1-3, 1-4); the Ruins Keys' three locks.
+- **Chapter 1:** Mario's flip for most of 1-1 past the first room and all of 1-2 to 1-4; Thoreau or Peach past Watchitt's bridge (1-3, 1-4); the Ruins Keys' three locks; Dottie or Thoreau for the Ruins Key in he4_05 (2026-11-16).
 - **Chapter 2:** Peach for the gap at the start; the Door Key for everything but itself; Boomer past his join; the House Key in 2-2.
 - **Chapter 3:** Mario, Luigi or Peach past 3-1's tall pipe; Boomer for Bowser's fight; a way to hurt spiked enemies; the Fort Keys; Thudley for Carrie.
-- **Chapter 4:** Mario's flip for some 4-1 checks; a block breaker past 4-2's wall of blocks; the Ancient Clue for Fleep; Door Key 26 for 4-3 and 4-4; Fleep for most of 4-3 and all of 4-4; the Dimension Keys.
-- **Chapter 5:** Peach or Luigi past the gap (all but Cooking Disk 6, which needs Dottie); Cudge past his spot; the three tablets for Cudge; Mario's flip for several checks; the Cave Keys; Dottie and the Card Key in 5-4.
+- **Chapter 4:** Mario's flip for some 4-1 checks; a block breaker past 4-2's wall of blocks; the Ancient Clue for Fleep and Space Food, which also need Slim or Dottie (2026-11-16); with `progressive_wallet`, a Progressive Wallet for Fleep, as the Ancient Clue costs more than 99 coins (2026-11-16); Door Key 26 for 4-3 and 4-4; Fleep for most of 4-3 and all of 4-4; the Dimension Keys.
+- **Chapter 5:** Peach or Luigi past the gap (all but Cooking Disk 6, which needs Dottie and Mario, 2026-11-16); Cudge past his spot; the three tablets for Cudge; Bowser and Mario for the Fire Tablet (Mario added 2026-11-16); Mario's flip for several checks; the Cave Keys; Dottie and the Card Key in 5-4.
 - **Chapter 6:** a way to hurt spiked enemies; Boomer (or Fleep with `brobot_with_fleep`) for Brobot L-type and the post-game duels.
-- **Chapter 7:** Mario or Luigi past 7-1's pipe; the Underwhere Door Keys (five locks); Carrie, Boomer or Cudge for Bowser in 7-2; Peach and Luigi for 7-4; the three orbs for 7-4's rainbow; Luigi for the Frost Piranha and Gigabite tattles.
+- **Chapter 7:** Mario or Luigi past 7-1's pipe; Mario's flip for all of Luigi's room, an1_07 (2026-11-16); the Underwhere Door Keys (five locks); Carrie, Boomer or Cudge for Bowser in 7-2; Peach and Luigi for 7-4; the three orbs for 7-4's rainbow; Luigi for the Frost Piranha and Gigabite tattles.
 - **Chapter 8:** the seven Castle Bleck Keys in order; Slim for 8-4.
 - **Flipside:** Mario's flip for every check but Peach's; a block breaker for Cooking Disk 2; Cudge and Flopside for the InterChet Card.
 
@@ -186,6 +189,7 @@ All in `apworld/spm/rules.py`. A rule is a list of alternatives, each a list of 
 
 Not built yet, roughly in order of interest:
 - **Versions 1.1 and 1.2 of the game** (US revisions 1 and 2): support is planned for a future release. Only revision 0 works now.
+- **Play on a Wii with no client:** the mod connects to the Archipelago server itself through the Wii's network connection, and the player enters the server address, slot and password in game (the file select's name entry). It would also work in Dolphin, which emulates the Wii's network. The work: a WebSocket and JSON layer in the mod (plain ws; encrypted wss would be much heavier on a Wii); keeping only this seed's item and location names from the server's data package, to fit in memory; and moving the client's jobs into the mod (placing items, traps and disguises, coins for delivered items, hints). Start with a test that only connects to a local server and logs its first message.
 - **Shuffle more:** the Old Key, the Random House Key and the rest of Piccolo's trading chain (`piccolo_chain`), ? blocks (`item_blocks`), shops (`shop_items`), the Pit rewards (`pit_rewards`), town side quests (`side_quests`), the unused Cooking Disk 1 (`cooking_disks`), every coin (`coinsanity`), first cooks (`recipes`).
 - **The flip as an item** (`flip`): from the start (current), at Bestovius, or anywhere.
 - **Heart pillars:** each Pure Heart placed in its pillar opens a door, with an option to shuffle which pillar opens which door.

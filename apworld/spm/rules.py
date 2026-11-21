@@ -32,7 +32,7 @@ from worlds.generic.Rules import add_rule
 
 from .items import HEART_8, TOWER_CHAPTERS, VICTORY_ITEM
 from .data import TATTLE_MAPS
-from .items import FIRE_BURST_ITEM, MARIO_ITEM, TATL_ITEM
+from .items import FIRE_BURST_ITEM, MARIO_ITEM, TATL_ITEM, WALLET_ITEM
 from .locations import LOCATION_LIST, chapter_of, in_flopside
 
 VICTORY_LOCATION = "Chapter 8 complete"
@@ -87,8 +87,13 @@ HURTS_SPIKED = [["Bowser"], ["Carrie"], ["Boomer"], ["Cudge"], ["Barry"]]  # dam
 # 1 damage and Bowser has at least 1 defence here (user, 2026-11-13). With bowser_with_items, items
 # alone are enough, so the requirement is dropped (set_rules)
 BEATS_BOWSER_7_2 = [["Carrie"], ["Boomer"], ["Cudge"]]
+# Locations that need a wallet holding at least 100 coins: with progressive_wallet you start able to carry
+# 99, so one Progressive Wallet. The Ancient Clue (unshuffled) costs more than 99, and Fleep joins takes it
+# (user, 2026-11-16)
+NEEDS_100_COIN_WALLET = ("4-2 Planet Blobule - Fleep joins (sp2_01)",)
 KNOCKS_FRUIT = [["Thudley"], ["Cudge"]]  # knocks fruit off the trees (7-3's apples)
 BREAKS_BLOCKS = [["Cudge"], ["Thudley"], ["Boomer"]]                       # breaks a wall of blocks
+BLOCKS_AND_SLIM_OR_DOTTIE = [b + [p] for b in BREAKS_BLOCKS for p in ("Slim", "Dottie")]  # 4-2 (sp2_04, sp2_08)
 CROSSES_1_2_GAP = [["Thoreau"], ["Peach"]]  # Watchitt's bridge (Thoreau gets it built) or Peach's float
 CROSSES_5_1_GAP = [["Peach"], ["Luigi"]]  # 5-1's gap: Peach's float or Luigi's high jump (user, 2026-11-14)
 # Flipside's Peach check (her revival: Saffron's Spicy Soup) needs a Fire Burst: one found in the game,
@@ -167,6 +172,9 @@ ROOM_NEEDS = [
     (("wa",), HURTS_SPIKED),
     # 7-1: every check is past an1_02's pipe (and so is the rest of Chapter 7, through the section rule)
     (("an1_",), GETS_PAST_7_1_PIPE),
+    # 7-1: Luigi's room (an1_07) needs Mario's flip: Luigi's join (user, 2026-11-08: seed10 put Mario there,
+    # starting as Luigi), and the Long-Last Shake and Dry Bones Card too (user, 2026-11-16)
+    (("an1_07",), FLIPS_TO_3D),
     # Chapter 7's locks (each a door; the keys are shuffled, user, 2026-11-05):
     # 7-1: an1_03's lock, on the door to an1_06 (and on to Luigi's room, an1_07, and an1_09): its rule is in
     # set_rules (it depends on how many main-line locks could take a key first). 7-1's Star Block (an1_05)
@@ -245,8 +253,6 @@ LOCATION_NEEDS = {
     # 3-1: the Catch Card SP needs Peach's float (user, 2026-11-08; bouncing off an enemy with precise
     # timing also works: for glitched logic, DESIGN.md "Known requirements")
     "3-1 The Bitlands - Catch Card SP (ta1_02)": [["Peach"]],
-    # 7-1: Luigi's join (an1_07) needs Mario's flip (user, 2026-11-08: seed10 put Mario there, starting as Luigi)
-    "7-1 The Underwhere - Luigi joins (an1_07)": FLIPS_TO_3D,
     # 5-3: these need Mario's flip (user, 2026-11-09, starting as Peach)
     "5-3 Floro Caverns - Shroom Shake (gn3_05)": FLIPS_TO_3D,
     "5-3 Floro Caverns - Spania Card (gn3_08)": FLIPS_TO_3D,
@@ -290,7 +296,9 @@ LOCATION_NEEDS = {
     # 3-4: Thudley presses the switch that opens Carrie's cage
     "3-4 Fort Francis - Carrie joins (ta4_12)": [["Thudley"]],
     # 4-2: the outhouse takes the Ancient Clue (sp2_08, unshuffled), which is past the wall of blocks
-    "4-2 Planet Blobule - Fleep joins (sp2_01)": BREAKS_BLOCKS,
+    # and needs Slim or Dottie as well (user, 2026-11-16); Space Food (sp2_04) needs the same (user, 2026-11-16)
+    "4-2 Planet Blobule - Fleep joins (sp2_01)": BLOCKS_AND_SLIM_OR_DOTTIE,
+    "4-2 Planet Blobule - Space Food (sp2_04)": BLOCKS_AND_SLIM_OR_DOTTIE,
     # 2-1: the checks besides Boomer's join and the Door Key need Boomer (user, 2026-11-13; 2-2 to 2-4
     # through SECTION_END_NEEDS)
     "2-1 Gloam Valley - Shlurp Card (mi1_04)": [["Boomer"]],
@@ -298,12 +306,14 @@ LOCATION_NEEDS = {
     "2-1 Gloam Valley - Watchitt Card (mi1_07)": [["Boomer"]],
     # 4-4: the first Dimension Key's box (sp4_04/05) needs Mario (user, 2026-11-14)
     "4-4 The Whoa Zone - Dimension Key (sp4_04)": [[MARIO_ITEM]],
-    # 5-1: Cooking Disk 6 in the first room needs Dottie (not Peach)
-    "5-1 Downtown of Crag - Cooking Disk 6 (gn1_01)": [["Dottie"]],
+    # 1-4: the Ruins Key in he4_05 needs Dottie or Thoreau (user, 2026-11-16)
+    "1-4 Yold Ruins - Ruins Key (he4_05)": [["Dottie"], ["Thoreau"]],
+    # 5-1: Cooking Disk 6 in the first room needs Dottie (not Peach), and Mario as well (user, 2026-11-16)
+    "5-1 Downtown of Crag - Cooking Disk 6 (gn1_01)": [["Dottie", MARIO_ITEM]],
     # 5-2: Cudge's stone takes the three tablets
     "5-2 Gap of Crag - Cudge joins (gn2_02)": [["Water Tablet", "Stone Tablet", "Fire Tablet"]],
-    # 5-2: the Fire Tablet's spot needs Bowser (user, 2026-11-05)
-    "5-2 Gap of Crag - Fire Tablet (gn2_04)": [["Bowser"]],
+    # 5-2: the Fire Tablet's spot needs Bowser (user, 2026-11-05) and Mario (user, 2026-11-16)
+    "5-2 Gap of Crag - Fire Tablet (gn2_04)": [["Bowser", MARIO_ITEM]],
     # 7-2: Bowser rejoins after his fight, which takes hurting spiked enemies (not with his own fire, not
     # Barry: user, 2026-11-13); the D-Men give their Door Key after it
     "7-2 Underwhere Road - Bowser rejoins (an2_04)": BEATS_BOWSER_7_2,
@@ -480,7 +490,7 @@ def heart_needed(chapter: int, starting_chapters: list[int]) -> str | None:
 
 def requirement(choice, chapters, hearts) -> list[int]:
     """A castle_requirement / final_requirement option as the mod reads it: [kind, count]."""
-    if choice == choice.option_vanilla:
+    if choice == choice.option_pure_heart_8:
         return [ENDGAME_VANILLA, 0]
     if getattr(choice, "option_always_open", None) == choice.value:
         return [ENDGAME_OPEN, 0]
@@ -525,6 +535,7 @@ def set_rules(world) -> None:
     starts_as_mario = world.starting_character == 0
     beats_brobot = BEATS_BROBOT_WITH_FLEEP if world.options.brobot_with_fleep else BEATS_BROBOT
     bowser_with_items = bool(getattr(world.options, "bowser_with_items", False))
+    wallets = bool(getattr(getattr(world.options, "progressive_wallet", None), "value", 0))
     # logic: no_logic keeps only what the game enforces (doors, Flopside, Chapter 8's party); wip_logic
     # adds everything mapped out by playing (old seeds without the option had it)
     wip = getattr(getattr(world.options, "logic", None), "value", 1) != 0
@@ -588,6 +599,8 @@ def set_rules(world) -> None:
             needs.append(lambda state, alternatives=in_level(alternatives): requirement_met(state, player, alternatives))
         if room_of(name).startswith(UNDERWHERE_SIDE_ROOMS):
             needs.append(underwhere_side)
+        if wip and wallets and name in NEEDS_100_COIN_WALLET:
+            needs.append(lambda state: state.has(WALLET_ITEM, player))
         return needs
 
     # The Underwhere's side lock (an1_03, to Luigi's rooms) takes a key the main-line locks haven't: with

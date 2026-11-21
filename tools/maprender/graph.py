@@ -41,6 +41,12 @@ CORRECTIONS = {
     # Pipe); the way on is falling into the pit between them, into the retro underground (now found by
     # scripts.pits, as are mac_06's pit and mac_08's spring that used to be added here by hand)
     'ta1_01': {'no_dest': {'dokan_m', 'dokan_m2'}},
+    # 1-2: Green's house (he2_05) is loaded over the village as a frame by the bridge-building scenes, with no
+    # door of its own; this one on the house in the village's background opens it on the map (user,
+    # 2026-11-16: its check, the Red & Green Card, now shows in the house itself)
+    'he2_03': {'add': [{'name': "Green's house", 'name_l': None, 'name_r': None, 'kind': 'door',
+                        'px': [2321, 600], 'box': [2299, 579, 2344, 621], 'dest_room': 'he2_05', 'dest_door': None,
+                        'located_by': 'by hand'}]},
 }
 
 

@@ -69,6 +69,8 @@ namespace mod::save_data {
 // connects has them open (pure_hearts): bit N - 1 = door N, STARTING_DOORS_SAVED once written
 #define AP_GSW_STARTING_DOORS (AP_GSW_BASE + 137)
 #define STARTING_DOORS_SAVED 0x80
+// Which seed and slot this file belongs to (save_lock): 4 bytes, high byte first, 0 = none yet
+#define AP_GSW_SEED_ID (AP_GSW_BASE + 138)
 
 // The values of AP_GSW_PEACH_CHAIN, copied from vanilla's story values for the same steps:
 // 60 Peach lies unconscious in Flipside, 61 Saffron was asked for soup, 62 the Spicy Soup is

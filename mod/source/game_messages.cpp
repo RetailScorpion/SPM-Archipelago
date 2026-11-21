@@ -7,6 +7,7 @@
 #include "game_messages.h"
 #include "options_menu.h"
 #include "save_block.h"
+#include "save_lock.h"
 #include "starting_character.h"
 #include "game_mode.h"
 #include "dorguy_answers.h"
@@ -39,6 +40,8 @@ static const char * msgSearchHook(const char * msgName)
     if (const char * text = pause_chapters::message(msgName))
         return text;
     if (const char * text = connect_gate::message(msgName))
+        return text;
+    if (const char * text = save_lock::message(msgName))
         return text;
     if (const char * text = dorguy_answers::message(msgName))
         return text;

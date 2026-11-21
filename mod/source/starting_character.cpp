@@ -62,6 +62,16 @@ void giveMario()
     wii::os::OSReport("[spmap] start: Mario received\n");
 }
 
+void onMarioAdded()
+{
+    // Only once the seed's starting character is in place: a new file adds Mario too, before that
+    if (startingCharacter() == 0 || !spm::swdrv::swGet(AP_GSWF_START_CHARACTER_SET)
+        || spm::swdrv::swGet(AP_GSWF_MARIO_HELD))
+        return;
+    spm::swdrv::swSet(AP_GSWF_MARIO_HELD);
+    wii::os::OSReport("[spmap] start: Mario joined (found in a level)\n");
+}
+
 const char * message(const char * msgName)
 {
     if (msl::string::strcmp(msgName, MARIO_JOINED) == 0)

@@ -79,7 +79,7 @@ class _World:
     def __init__(self, slot_data):
         options = dict(slot_data.get("options") or {})
         for key in ("big_cloud_requires_peach_reunion", "tattle_checks", "brobot_with_fleep", "pit_tattles",
-                    "bowser_with_items"):
+                    "bowser_with_items", "progressive_wallet"):
             options.setdefault(key, slot_data.get(key, 0))
         # seeds from before afk_tattles had the Megabite and Gigabite tattles
         options.setdefault("afk_tattles", slot_data.get("afk_tattles", 1))
@@ -92,7 +92,7 @@ class _World:
             **{key: _Option(value) for key, value in options.items()
                if key not in ("castle_requirement", "final_requirement")})
         for key in ("brobot_with_fleep", "big_cloud_requires_peach_reunion", "tattle_checks", "pit_tattles",
-                    "bowser_with_items"):
+                    "bowser_with_items", "progressive_wallet"):
             if not hasattr(self.options, key):
                 setattr(self.options, key, _Option(0))
         self.player = 1

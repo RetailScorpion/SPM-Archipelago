@@ -127,10 +127,12 @@ class AnimGroup:
             rot = _s(1 / p[0], 1 / p[1], 1 / p[2]) @ rot
         return _t(*t) @ rot @ scale
 
+    hidden = frozenset()  # group names left out with everything under them (a boss without its sprout or helmet)
+
     def _walk(self, gi, parent_gi, parent_mtx):
         while gi != -1:
             g = self.groups[gi]
-            if g['vis'] >= len(self.vis) or self.vis[g['vis']]:
+            if g['name'] not in self.hidden and (g['vis'] >= len(self.vis) or self.vis[g['vis']]):
                 ssc = self.groups[parent_gi]['node'] if g['ssc'] and parent_gi >= 0 else -1
                 m = parent_mtx @ self._node_matrix(g['node'], ssc)
                 if g['shape'] != -1:

@@ -18,9 +18,10 @@ import dolphin_memory_engine as dme
 # ---- The mailbox's layout (mod/include/mailbox.h) ----
 
 MAGIC = b"SPMAP_MAILBOX_v1"  # the text the client searches memory for
-VERSION = 21                 # the mod and client must agree on this
+VERSION = 23                 # the mod and client must agree on this
 RECV_SIZE = 16               # items waiting to be given
 SENT_SIZE = 32               # locations waiting (developer tools only)
+HINT_SIZE = 8                # hint requests waiting (item_tattles)
 
 # The Wii's main memory, where the mailbox is searched for, one piece at a time
 MEM1_START = 0x80000000
@@ -60,6 +61,10 @@ OFF_FINAL_REQUIREMENT = 0x180
 OFF_STARTING_HEARTS_IN_POOL = 0x188
 OFF_SEED_PLACED = 0x18C
 OFF_SEED_FLAGS = 0x190
+OFF_HINT_COUNT = 0x194
+OFF_HINT_ACKED = 0x198
+OFF_HINT_FLAGS = 0x19C  # HINT_SIZE halfwords: save flags of locations to hint
+OFF_SEED_ID = 0x1AC  # the client's seed and slot as a number (save_lock)
 SEED_FLAG_BIG_CLOUD_EARLY = 0x1  # mailbox.h SEED_FLAG_BIG_CLOUD_EARLY
 SEED_FLAG_TATTLE_CHECKS = 0x2  # mailbox.h SEED_FLAG_TATTLE_CHECKS
 SEED_WALLET_SHIFT = 12  # mailbox.h SEED_WALLET_SHIFT: progressive_wallet's value (0-2)
@@ -90,6 +95,7 @@ STORY_SLOTS_GSW = 1792  # each chapter's own story value (save_data.h AP_GSW_STO
 STORY_SLOT_COUNT = 9
 OFFLINE_CHECKS_GSW = 1792 + 96  # locations collected offline, a bit per location (save_data.h AP_GSW_OFFLINE_CHECKS)
 OFFLINE_CHECKS_BYTES = 32
+SEED_ID_GSW = 1792 + 138  # which seed and slot the loaded save belongs to, 4 bytes (save_data.h AP_GSW_SEED_ID)
 
 # ---- The file shared with the tracker ----
 
@@ -351,6 +357,27 @@ class Mailbox:
         dme.write_bytes(gp + GSW_OFFSET + STORY_SLOTS_GSW + 2 * (chapter - 1), struct.pack(">H", value))
         if self.story_state()[0] == chapter:
             dme.write_word(gp + GSW0_OFFSET, value)
+
+    def set_seed_id(self, seed_id: int):
+        """Tells the mod which seed and slot the client is in (save_lock); 0 = none."""
+        dme.write_word(self.addr + OFF_SEED_ID, seed_id)
+
+    def save_seed_id(self) -> int:
+        """Which seed and slot the loaded save belongs to (0 = none yet)."""
+        return struct.unpack(">I", dme.read_bytes(dme.read_word(GP_PTR) + GSW_OFFSET + SEED_ID_GSW, 4))[0]
+
+    def poll_hints(self) -> list[int]:
+        """Save flags of locations to hint (Tippi tattled their Archipelago item) since the last call,
+        and acknowledges them."""
+        count = dme.read_word(self.addr + OFF_HINT_COUNT)
+        acked = dme.read_word(self.addr + OFF_HINT_ACKED)
+        flags = []
+        for i in range(acked, count):
+            slot = self.addr + OFF_HINT_FLAGS + (i % HINT_SIZE) * 2
+            flags.append(struct.unpack(">H", dme.read_bytes(slot, 2))[0])
+        if count != acked:
+            dme.write_word(self.addr + OFF_HINT_ACKED, count)
+        return flags
 
     def poll_sent(self) -> list[int]:
         """Returns location ids reported since the last call, and acknowledges them."""

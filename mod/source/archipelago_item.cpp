@@ -241,6 +241,16 @@ void onMapChange()
     sOfflineCount = 0;
 }
 
+const LocName * locationOf(const spm::itemdrv::ItemEntry * item)
+{
+    s32 flag;
+    if (flagFromScriptValue(item->switchNumber, &flag))
+        return isOffline(flag) ? &sOffline : findLocation(flag);
+    if (offlineChestNear(item->position))
+        return &sOffline;
+    return nearestChest(item->position);
+}
+
 // ---- Traps ----
 
 /*
@@ -471,7 +481,7 @@ const char * message(const char * msgName)
     }
     if (sActiveFrames > 0 && msl::string::strcmp(msgName, ITEM_GET_KEY) == 0)
     {
-        msl::stdio::sprintf(sItemGetText, "Sent <col c00000ff>%s</col>\nto %s!", sCurrent->item, sCurrent->player);
+        msl::stdio::sprintf(sItemGetText, "Sent <col c00000ff>%s</col> \nto %s!", sCurrent->item, sCurrent->player);
         return sItemGetText;
     }
     return nullptr;

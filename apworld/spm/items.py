@@ -99,7 +99,8 @@ def create_item(name: str, player: int) -> SPMItem:
     if name == SAVE_BLOCK_ITEM:
         return SPMItem(name, ItemClassification.useful, ID_BASE + SAVE_BLOCK_GAME_ID, player)
     if name == WALLET_ITEM:
-        return SPMItem(name, ItemClassification.useful, ID_BASE + WALLET_GAME_ID, player)
+        # progression: the Ancient Clue needs a wallet holding 100 coins (rules.NEEDS_100_COIN_WALLET)
+        return SPMItem(name, ItemClassification.progression, ID_BASE + WALLET_GAME_ID, player)
     if name == TRAP_ITEM:
         return SPMItem(name, ItemClassification.trap, ID_BASE + TRAP_GAME_ID, player)
 

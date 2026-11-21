@@ -277,6 +277,7 @@ static bool isPixl(s32 itemId)
       - a grouped key goes in as its chapter's key (key_groups)
       - a key item with all 32 slots full goes to storage instead
       - a first Pixl gets selected (the game's function doesn't select it)
+      - Mario joining any way (his item found in a level, not only delivered) counts as held
 */
 static bool (*pouchAddItemReal)(s32 itemId);
 static bool pouchAddItemHook(s32 itemId)
@@ -301,6 +302,8 @@ static bool pouchAddItemHook(s32 itemId)
     bool added = pouchAddItemReal(itemId);
     if (isPixl(itemId))
         pixl_joins::repairPixlSelection();
+    if (itemId == ITEM_ID_CHAR_START)
+        starting_character::onMarioAdded();
     return added;
 }
 

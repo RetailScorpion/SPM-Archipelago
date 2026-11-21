@@ -47,7 +47,7 @@ If you find a check that needs something not listed here, please report it.
 | Buzzy Beetle Card (he4_07) | Buzzy Beetle | Mario; (Thoreau or Peach); Ruins Key; 2 x Ruins Key; the previous section beaten (he3_08) |
 | Pure Heart 2 (he4_11) | 1002 | Mario; (Thoreau or Peach); Ruins Key; 2 x Ruins Key; 3 x Ruins Key; the previous section beaten (he3_08) |
 | Ruins Key (he4_04) | Ruins Key | Mario; (Thoreau or Peach); the previous section beaten (he3_08) |
-| Ruins Key (he4_05) | Ruins Key | Mario; (Thoreau or Peach); Ruins Key; the previous section beaten (he3_08) |
+| Ruins Key (he4_05) | Ruins Key | Mario; (Thoreau or Peach); Ruins Key; (Dottie or Thoreau); the previous section beaten (he3_08) |
 | Ruins Key (he4_07) | Ruins Key | Mario; (Thoreau or Peach); Ruins Key; 2 x Ruins Key; the previous section beaten (he3_08) |
 
 ## 2-1 Gloam Valley
@@ -124,9 +124,9 @@ If you find a check that needs something not listed here, please report it.
 
 | Location | Vanilla item | Needs |
 |---|---|---|
-| Fleep joins (sp2_01) | Fleep | (Cudge or Thudley or Boomer); the previous section beaten (sp1_06) |
+| Fleep joins (sp2_01) | Fleep | (Cudge + Slim or Cudge + Dottie or Thudley + Slim or Thudley + Dottie or Boomer + Slim or Boomer + Dottie); the previous section beaten (sp1_06) |
 | Ultra Shroom Shake (sp2_01) | Ultra Shroom Shake | Mario; the previous section beaten (sp1_06) |
-| Space Food (sp2_04) | Space Food | (Cudge or Thudley or Boomer); the previous section beaten (sp1_06) |
+| Space Food (sp2_04) | Space Food | (Cudge or Thudley or Boomer); (Cudge + Slim or Cudge + Dottie or Thudley + Slim or Thudley + Dottie or Boomer + Slim or Boomer + Dottie); the previous section beaten (sp1_06) |
 | Door Key (sp2_01) | Door Key | Fleep; the previous section beaten (sp1_06) |
 
 ## 4-3 Outer Limits
@@ -150,7 +150,7 @@ If you find a check that needs something not listed here, please report it.
 
 | Location | Vanilla item | Needs |
 |---|---|---|
-| Cooking Disk 6 (gn1_01) | Cooking Disk 6 | Dottie |
+| Cooking Disk 6 (gn1_01) | Cooking Disk 6 | Dottie + Mario |
 | Moon Cleft Card (gn1_02) | Moon Cleft | (Peach or Luigi); Mario |
 
 ## 5-2 Gap of Crag
@@ -163,7 +163,7 @@ If you find a check that needs something not listed here, please report it.
 | Mighty Tonic (gn2_02) | Mighty Tonic | (Peach or Luigi); Mario; the previous section beaten (gn1_03) |
 | Ultra Shroom Shake (gn2_02) | Ultra Shroom Shake | (Peach or Luigi); the previous section beaten (gn1_03) |
 | Stone Tablet (gn2_03) | Stone Tablet | (Peach or Luigi); Mario; the previous section beaten (gn1_03) |
-| Fire Tablet (gn2_04) | Fire Tablet | (Peach or Luigi); Bowser; the previous section beaten (gn1_03) |
+| Fire Tablet (gn2_04) | Fire Tablet | (Peach or Luigi); Bowser + Mario; the previous section beaten (gn1_03) |
 | Stone Buzzy Card (gn2_05) | Stone Buzzy | (Peach or Luigi); Cudge; Mario; the previous section beaten (gn1_03) |
 
 ## 5-3 Floro Caverns
@@ -209,8 +209,8 @@ If you find a check that needs something not listed here, please report it.
 | Location | Vanilla item | Needs |
 |---|---|---|
 | Super Shroom Shake (an1_02) | Super Shroom Shake | Mario or Luigi |
-| Long-Last Shake (an1_07) | Long-Last Shake | Mario or Luigi |
-| Dry Bones Card (an1_07) | Dry Bones | Mario or Luigi |
+| Long-Last Shake (an1_07) | Long-Last Shake | (Mario or Luigi); Mario |
+| Dry Bones Card (an1_07) | Dry Bones | (Mario or Luigi); Mario |
 | Luigi joins (an1_07) | Luigi | (Mario or Luigi); Mario |
 | Door Key (an1_04) | Door Key | Mario or Luigi |
 

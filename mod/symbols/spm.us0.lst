@@ -126,6 +126,9 @@
 // searchGetNpcMsg: EU 0x8024602c (ghidra map export), US -0x2750 like the rest of the search module;
 // reads npc+0x49c (tribe) and the card's descMsg with maxHp/attackStrength
 802438DC:searchGetNpcMsg
+// The item tattle (kind 5 of the search module's switch at 0x80242588, table 0x804A31DC): reads
+// item+0x10 (type) and returns the anna_* text for it
+80244184:search_item_msg
 // Tatl's pointer (2026-11-07): Fleep's ability (sets mario+0xe7c, starts motion 0x26), the two
 // "li r3, 0xe2" (Fleep's Pixl id) before fairy_work_by_id in his motion and its end, and the Pixl
 // animation change (fairy, name), which stores the name for the Pixl's display

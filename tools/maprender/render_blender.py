@@ -412,12 +412,14 @@ def mobj_model(room, kind, typ):
     return name if name and os.path.exists(os.path.join(A_DIR, name)) else None
 
 
-def parse_model(name):
+def parse_model(name, hide=()):
     """(TPL textures, [(material dict with the model's own texture index, cull, mesh)]) for a model in
-    its idle pose. Cached per process: Blender jobs render many rooms in a row."""
-    if name in _models:
-        return _models[name]
+    its idle pose, without the groups named in hide. Cached per process: Blender jobs render many rooms in a row."""
+    key = (name, tuple(sorted(hide)))
+    if key in _models:
+        return _models[key]
     ag = AnimGroup(open(os.path.join(A_DIR, name), 'rb').read())
+    ag.hidden = frozenset(hide)
     bright = any(g['name'] == 'hatena_C' for g in ag.groups)
     if not bright:
         for a in IDLE_ANIMS:
@@ -426,8 +428,8 @@ def parse_model(name):
     tpl_path = next((os.path.join(A_DIR, n + '-') for n in (ag.tex_name, name)
                      if n and os.path.exists(os.path.join(A_DIR, n + '-'))), None)
     if tpl_path is None:
-        _models[name] = ([], [])
-        return _models[name]
+        _models[key] = ([], [])
+        return _models[key]
     tpl = decode_tpl(open(tpl_path, 'rb').read())
     parts = list(ag.meshes())
     shapes = {p[0] for p in parts}
@@ -442,8 +444,8 @@ def parse_model(name):
                'samplers': [{'texture': tex, 'wrap_s': ws, 'wrap_t': wt}] if tex >= 0 else []}
         # vertex colours carry real colour (black outlines, the save block's star) and per-face shading
         out.append((mat, {0: 1, 1: 0}.get(cull, 2), mesh))
-    _models[name] = (tpl, out)
-    return _models[name]
+    _models[key] = (tpl, out)
+    return _models[key]
 
 
 # Ground-pound stakes (evt_mobj_hip_kui): the game's heights, in game units, set as it spawns them

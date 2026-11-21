@@ -22,6 +22,12 @@ namespace mod::starting_character {
 // hasn't arrived.
 bool marioHeld();
 
+// Mario went into the party some other way (his item found in a level, which the game's own item-get
+// gives): he counts as held from now on. Called from the inventory hook (received_items). User,
+// 2026-11-16: seed21 put Mario in 1-1's Squiglet Card spot; picked up there, the flag was never set, so
+// the next map change took him out again.
+void onMarioAdded();
+
 // Mario's item arrived: he's back in the party, with a "Mario has joined your party!" text box.
 void giveMario();
 
